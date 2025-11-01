@@ -11,10 +11,19 @@ config_version=5
 [application]
 
 config/name="Dragon Jump Remaster"
-run/main_scene="uid://dftg1r8abfeyn"
+run/main_scene="uid://dfft0y1vi3qmt"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
-NetworkHandler="*res://src/scripts/network_handler.gd"
+EnvironmentVariables="*res://src/scripts/network/environment_variables.gd"
+BetterTerrain="*res://addons/better-terrain/BetterTerrain.gd"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/better-terrain/plugin.cfg")
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0

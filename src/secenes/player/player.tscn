@@ -1,26 +1,35 @@
-[gd_scene load_steps=5 format=3 uid="uid://cw8cw6fpq5n63"]
+[gd_scene load_steps=8 format=3 uid="uid://cw8cw6fpq5n63"]
 
-[ext_resource type="Texture2D" uid="uid://bcfjeeqq7rmrh" path="res://icon.svg" id="1_5l7b2"]
 [ext_resource type="Script" uid="uid://c306bigp8honi" path="res://src/secenes/player/player.gd" id="1_uug8f"]
+[ext_resource type="Texture2D" uid="uid://dmbvyulj3wysa" path="res://assets/player/DinoSprites - doux.png" id="2_74gfc"]
+[ext_resource type="Script" uid="uid://td15gffk6sym" path="res://src/scripts/components/states/state_machine.gd" id="3_7p4af"]
+[ext_resource type="Script" uid="uid://dx2ry6r7fymd8" path="res://src/secenes/player/states/idle_state.gd" id="4_3m013"]
+[ext_resource type="Script" uid="uid://smgwcfp3t3mr" path="res://src/secenes/player/states/move_state.gd" id="5_ii60e"]
+[ext_resource type="Script" uid="uid://dcy2d5ldqq0er" path="res://src/secenes/player/states/fall_state.gd" id="6_8m0h4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uug8f"]
-size = Vector2(128, 128)
-
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_5l7b2"]
-properties/0/path = NodePath(".:position")
-properties/0/spawn = true
-properties/0/replication_mode = 1
+size = Vector2(16, 16)
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_uug8f")
 
 [node name="Icon" type="Sprite2D" parent="."]
-texture = ExtResource("1_5l7b2")
+texture = ExtResource("2_74gfc")
+hframes = 24
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_uug8f")
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
-delta_interval = 0.1
-replication_config = SubResource("SceneReplicationConfig_5l7b2")
-visibility_update_mode = 1
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("3_7p4af")
+
+[node name="Idle" type="Node" parent="StateMachine"]
+script = ExtResource("4_3m013")
+
+[node name="Move" type="Node" parent="StateMachine"]
+script = ExtResource("5_ii60e")
+
+[node name="Fall" type="Node" parent="StateMachine"]
+script = ExtResource("6_8m0h4")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
