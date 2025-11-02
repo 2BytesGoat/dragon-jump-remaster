@@ -147,3 +147,8 @@ func _update_facing_direction() -> void:
 func _apply_modifiers() -> void:
 	for modifier in modifiers.values():
 		velocity *= modifier.get("velocity", 1.0) 
+
+
+func _on_hurt_box_body_entered(body: Node2D) -> void:
+	if body is TileMapLayer:
+		reset()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cw8cw6fpq5n63"]
+[gd_scene load_steps=20 format=3 uid="uid://cw8cw6fpq5n63"]
 
 [ext_resource type="Script" uid="uid://c306bigp8honi" path="res://src/secenes/player/player.gd" id="1_uug8f"]
 [ext_resource type="Texture2D" uid="uid://pg78dcequ8ep" path="res://assets/sprites/player/DinoSprites - doux-sheet.png" id="2_6uujk"]
@@ -15,6 +15,9 @@ size = Vector2(16, 16)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6uujk"]
 size = Vector2(16, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i6xdb"]
+size = Vector2(13, 15)
 
 [sub_resource type="Animation" id="Animation_62cf5"]
 resource_name = "Fall"
@@ -146,6 +149,15 @@ shape = SubResource("RectangleShape2D_uug8f")
 visible = false
 shape = SubResource("RectangleShape2D_6uujk")
 
+[node name="HurtBox" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+visible = false
+position = Vector2(-0.5, -0.5)
+shape = SubResource("RectangleShape2D_i6xdb")
+
 [node name="ControllerContainer" type="Node" parent="."]
 
 [node name="StateMachine" type="Node" parent="."]
@@ -195,5 +207,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("8_yu3wn")
 
+[connection signal="body_entered" from="HurtBox" to="." method="_on_hurt_box_body_entered"]
 [connection signal="transitioned" from="StateMachine" to="StateLabel" method="_on_state_machine_transitioned"]
 [connection signal="timeout" from="StateMachine/Jump/JumpTimer" to="StateMachine/Jump" method="_on_jump_timer_timeout"]
