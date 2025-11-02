@@ -1,11 +1,12 @@
+class_name Player
 extends CharacterBody2D
 
 # movement properties
-@export var max_speed: float = 125.0
+@export var max_speed: float = 110.0
 @export var default_friction: float = 1000.0     # Default friction when on normal surfaces
 
 # jump properties
-@export var jump_height: float = 64.0            # Height in pixels
+@export var jump_height: float = 56.0            # Height in pixels
 @export var jump_time_to_peak: float = 0.4       # Time in seconds to reach peak
 @export var jump_time_to_descent: float = 0.3    # Time in seconds to descent
 
@@ -18,11 +19,16 @@ var fall_gravity: float  = (2.0 * jump_height) / (jump_time_to_descent ** 2)  # 
 @onready var state_machine: StateMachine = $StateMachine
 @onready var initial_state: State = $StateMachine/Idle
 
-# Nodes
-@onready var sprite = $Sprite
-@onready var animation_player = $AnimationPlayer
+# Controllers
+@onready var controller_container: Node = $ControllerContainer
+var active_controller: PlayerController = null
 
-# State
+
+# Nodes
+@onready var sprite: Sprite2D = $Sprite
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
+
+# Reset params
 var current_friction: float = default_friction   # Current friction based on surface
 var facing_direction: int = Vector2i.RIGHT.x
 var started_walking: bool = false
@@ -34,20 +40,37 @@ var starting_position: Vector2 = Vector2.ZERO
 
 func _ready() -> void:
 	starting_position = global_position
+	set_controller(HumanController.new(self))
+	
 	reset()
 
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("player_jump"):
+		set_jump(true)
+	elif event.is_action_released("player_jump"):
+		set_jump(false)
+	elif event.is_action_pressed("player_reset"):
+		reset()
+
+
+func set_controller(controller: PlayerController) -> void:
+	for child in controller_container.get_children():
+		child.queue_free()
+	
+	active_controller = controller
+	controller_container.add_child(controller)
+
+
+func set_jump(input: bool) -> void:
+	if input:
 		if not started_walking:
 			started_walking = true
 			return
 		wants_to_jump = true
-	elif event.is_action_released("player_jump"):
+	else:
 		wants_to_jump = false
 		needs_to_release = false
-	elif event.is_action_pressed("player_reset"):
-		reset()
 
 
 func reset() -> void:

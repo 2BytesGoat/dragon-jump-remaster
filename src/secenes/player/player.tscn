@@ -129,11 +129,14 @@ _data = {
 script = ExtResource("1_uug8f")
 
 [node name="Sprite" type="Sprite2D" parent="."]
+position = Vector2(0, -1)
 texture = ExtResource("2_6uujk")
 hframes = 28
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_uug8f")
+
+[node name="ControllerContainer" type="Node" parent="."]
 
 [node name="StateMachine" type="Node" parent="."]
 script = ExtResource("3_7p4af")
@@ -177,9 +180,9 @@ grow_vertical = 0
 size_flags_horizontal = 4
 size_flags_vertical = 0
 theme_override_font_sizes/font_size = 8
-text = "State
-Velocity"
+text = "State"
 horizontal_alignment = 1
+vertical_alignment = 1
 script = ExtResource("8_yu3wn")
 
 [connection signal="transitioned" from="StateMachine" to="StateLabel" method="_on_state_machine_transitioned"]
