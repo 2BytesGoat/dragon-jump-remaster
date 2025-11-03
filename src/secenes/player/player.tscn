@@ -104,6 +104,18 @@ tracks/0/keys = {
 "update": 1,
 "values": [0]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite:offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_824xm"]
 resource_name = "Walled"
@@ -118,7 +130,19 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [27]
+"values": [11]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite:offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-1, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_i6xdb"]
@@ -137,7 +161,7 @@ script = ExtResource("1_uug8f")
 [node name="Sprite" type="Sprite2D" parent="."]
 position = Vector2(0, -1)
 texture = ExtResource("2_6uujk")
-hframes = 28
+hframes = 27
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
