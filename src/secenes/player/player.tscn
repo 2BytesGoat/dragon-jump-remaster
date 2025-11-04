@@ -11,7 +11,7 @@
 [ext_resource type="Script" uid="uid://behnqth2nvqyu" path="res://src/secenes/player/state_label.gd" id="8_yu3wn"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uug8f"]
-size = Vector2(16, 16)
+size = Vector2(11, 15)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6uujk"]
 size = Vector2(16, 16)
@@ -104,18 +104,6 @@ tracks/0/keys = {
 "update": 1,
 "values": [0]
 }
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite:offset")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, 0)]
-}
 
 [sub_resource type="Animation" id="Animation_824xm"]
 resource_name = "Walled"
@@ -131,18 +119,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [11]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite:offset")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(-1, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_i6xdb"]
@@ -161,10 +137,11 @@ script = ExtResource("1_uug8f")
 [node name="Sprite" type="Sprite2D" parent="."]
 position = Vector2(0, -1)
 texture = ExtResource("2_6uujk")
+offset = Vector2(-1, 0)
 hframes = 27
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
+position = Vector2(-0.5, 0.5)
 shape = SubResource("RectangleShape2D_uug8f")
 
 [node name="InteractBox" type="Area2D" parent="."]
@@ -181,6 +158,13 @@ collision_mask = 4
 visible = false
 position = Vector2(-0.5, -0.5)
 shape = SubResource("RectangleShape2D_i6xdb")
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="."]
+
+[node name="CheckpointTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+autostart = true
 
 [node name="ControllerContainer" type="Node" parent="."]
 
@@ -232,5 +216,6 @@ vertical_alignment = 1
 script = ExtResource("8_yu3wn")
 
 [connection signal="body_entered" from="HurtBox" to="." method="_on_hurt_box_body_entered"]
+[connection signal="timeout" from="CheckpointTimer" to="." method="_on_checkpoint_timer_timeout"]
 [connection signal="transitioned" from="StateMachine" to="StateLabel" method="_on_state_machine_transitioned"]
 [connection signal="timeout" from="StateMachine/Jump/JumpTimer" to="StateMachine/Jump" method="_on_jump_timer_timeout"]

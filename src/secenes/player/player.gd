@@ -1,6 +1,9 @@
 class_name Player
 extends CharacterBody2D
 
+@export var camera: Camera2D
+@onready var remote_transform: RemoteTransform2D = $RemoteTransform2D
+
 # movement properties
 @export var max_speed: float = 110.0
 @export var default_friction: float = 1000.0     # Default friction when on normal surfaces
@@ -40,17 +43,9 @@ var starting_position: Vector2 = Vector2.ZERO
 func _ready() -> void:
 	starting_position = global_position
 	set_controller(HumanController.new(self))
+	remote_transform.remote_path = camera.get_path()
 	
 	reset()
-
-
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("player_jump"):
-		set_jump(true)
-	elif event.is_action_released("player_jump"):
-		set_jump(false)
-	elif event.is_action_pressed("player_reset"):
-		reset()
 
 
 func set_controller(controller: PlayerController) -> void:
@@ -152,3 +147,7 @@ func _apply_modifiers() -> void:
 func _on_hurt_box_body_entered(body: Node2D) -> void:
 	if body is TileMapLayer:
 		reset()
+
+
+func _on_checkpoint_timer_timeout() -> void:
+	starting_position = global_position

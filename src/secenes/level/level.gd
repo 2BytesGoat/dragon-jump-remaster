@@ -30,6 +30,15 @@ const symbol_to_tile_info: Dictionary = {
 		"callable": "_get_4sides_alt_tile",
 		"debug_alt": null,
 		"scene": null
+	},
+	"q": { # blending wall
+		"type": CELL.STATIC,
+		"autotile": false,
+		"source": 0,
+		"coords": Vector2i(2, 0),
+		"callable": null,
+		"debug_alt": null,
+		"scene": null
 	}
 }
 # These get populated at runtime
