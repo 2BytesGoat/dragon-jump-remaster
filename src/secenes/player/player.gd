@@ -75,7 +75,6 @@ func reset() -> void:
 	wants_to_jump = false
 	needs_to_release = false
 	modifiers = {}
-	#powerups = []
 	
 	velocity = Vector2.ZERO
 	global_position = starting_position
@@ -100,6 +99,15 @@ func play_animation(animation_name: String) -> void:
 func set_speedup_progress(progress: float) -> void:
 	progress = clamp(progress, 0.0, 1.0)
 	velocity.x = lerp(0.0, max_speed * facing_direction, progress)
+
+
+func has_powerups() -> bool:
+	return len(powerups) > 0
+
+
+func consume_powerup() -> String:
+	# TODO: find a better way to do this
+	return powerups.pop_back()[1] 
 
 
 func _physics_process(delta: float) -> void:
