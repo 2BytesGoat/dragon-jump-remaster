@@ -37,6 +37,7 @@ var started_walking: bool = false
 var wants_to_jump: bool = false
 var needs_to_release: bool = false
 var modifiers: Dictionary = {}
+var powerups: Array = []
 var starting_position: Vector2 = Vector2.ZERO
 
 
@@ -74,6 +75,7 @@ func reset() -> void:
 	wants_to_jump = false
 	needs_to_release = false
 	modifiers = {}
+	#powerups = []
 	
 	velocity = Vector2.ZERO
 	global_position = starting_position
@@ -147,6 +149,15 @@ func _apply_modifiers() -> void:
 func _on_hurt_box_body_entered(body: Node2D) -> void:
 	if body is TileMapLayer:
 		reset()
+
+
+func _on_interact_box_area_entered(area: Area2D) -> void:
+	if area.is_in_group("Powerup") and len(powerups) < 3:
+		var interacted_areas = powerups.map(func(x): return x[0])
+		if area.name in interacted_areas:
+			return
+		powerups.append([area.name, area.get_powerup()])
+		print(powerups)
 
 
 func _on_checkpoint_timer_timeout() -> void:

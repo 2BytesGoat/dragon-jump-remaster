@@ -13,7 +13,7 @@ const symbol_to_tile_info: Dictionary = {
 		"debug_alt": null,
 		"scene": null
 	},
-	"V": { # disolve wall
+	"D": { # disolve wall
 		"type": CELL.OBJECT,
 		"autotile": false,
 		"source": 0,
@@ -30,6 +30,15 @@ const symbol_to_tile_info: Dictionary = {
 		"callable": "_get_4sides_alt_tile",
 		"debug_alt": null,
 		"scene": null
+	},
+	"P": { # powerup
+		"type": CELL.OBJECT,
+		"autotile": false,
+		"source": 0,
+		"coords": Vector2i(1, 3),
+		"callable": null,
+		"debug_alt": null,
+		"scene": preload("res://src/secenes/powerups/powerup.tscn")
 	},
 	"q": { # blending wall
 		"type": CELL.STATIC,
