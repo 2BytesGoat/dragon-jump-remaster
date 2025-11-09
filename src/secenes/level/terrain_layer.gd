@@ -40,7 +40,7 @@ func update_visual_tiles(cell_coords: Vector2i) -> void:
 		visual_layer.set_cell(visual_cell_coords, source_id, atlas_coords)
 
 
-func get_visual_tile_atlas_coords(cell_coords: Vector2i) -> Vector2i:
+func get_visual_cell_atlas_coords(cell_coords: Vector2i) -> Vector2i:
 	return visual_layer.get_cell_atlas_coords(cell_coords)
 
 

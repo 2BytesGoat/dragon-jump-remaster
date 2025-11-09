@@ -60,7 +60,8 @@ var object_atlas_coords_to_symbol: Dictionary = {}
 @onready var static_layer : TileMapLayer = $StaticLayer
 @onready var objects_layer: TileMapLayer = $ObjectsLayer
 @onready var secrets_layer: TileMapLayer = $SecretsLayer
-@onready var terrain_visual_layer: TileMapLayer = $TerrainLayer/VisualLayer
+
+@onready var secrets_visual_layer: TileMapLayer = $SecretsLayer/VisualLayer
 
 
 func _ready() -> void:
@@ -68,7 +69,7 @@ func _ready() -> void:
 	_init_terrain_layer()
 	_update_static_alt_tiles()
 	_populate_objects()
-	#_init_hidden_areas()
+	_init_hidden_areas()
 
 
 func _init_atlas_symbol_mapping() -> void:
@@ -194,14 +195,18 @@ func _generate_area_for_island(tilemap: TileMapLayer, island: Array, island_inde
 
 func _replace_secret_cells(cell_array: Array) -> void:
 	for cell_coords in cell_array:
-		var atlas_coords = terrain_layer.get_visual_tile_atlas_coords(cell_coords)
-		secrets_layer.set_cell(cell_coords, 0, atlas_coords)
+		var directions = [Vector2i(0, 0), Vector2i(0, 1), Vector2i(1, 0), Vector2i(1, 1)]
+		for direction in directions:
+			var visual_cell_coords = cell_coords + direction
+			var atlas_coords = terrain_layer.get_visual_cell_atlas_coords(visual_cell_coords)
+			secrets_visual_layer.set_cell(visual_cell_coords, 0, atlas_coords)
 		
-	# TODO: fix this
-	cell_array.reverse()
-	for cell_coords in cell_array:
-		terrain_layer.erase_cell(cell_coords)
+		var atlas_coords = secrets_layer.get_cell_atlas_coords(cell_coords)
+		secrets_layer.set_cell(cell_coords, 0, atlas_coords, 1)
+	
+		terrain_layer.set_cell(cell_coords, 0, hidden_area_atlas_coors)
 		terrain_layer.update_visual_tiles(cell_coords)
+
 
 
 func _get_4sides_alt_tile(cell: Vector2i) -> int:
@@ -217,10 +222,9 @@ func _get_alt_tile(cell: Vector2i, directions: Array[Vector2i]) -> int:
 
 func _on_secret_area_entered(_area: Area2D):
 	var tween = create_tween()
-	tween.tween_property(secrets_layer, "modulate:a", 0.5, 0.2) # fade out over 0.5s
+	tween.tween_property(secrets_layer, "modulate:a", 0.3, 0.2) # fade out over 0.5s
 
 
 func _on_secret_area_exited(_area: Area2D):
-	secrets_layer.modulate.a = 0.0
 	var tween = create_tween()
-	tween.tween_property(secrets_layer, "modulate:a", 1.0, 0.5)
+	tween.tween_property(secrets_layer, "modulate:a", 1.0, 0.2)
