@@ -37,6 +37,10 @@ func update_visual_tiles(cell_coords: Vector2i) -> void:
 		visual_layer.set_cell(visual_cell_coords, 0, atlas_coords)
 
 
+func get_visual_tile_atlas_coords(cell_coords: Vector2i) -> Vector2i:
+	return visual_layer.get_cell_atlas_coords(cell_coords)
+
+
 func _get_neighbour_count(cell_coords: Vector2i, tilemap_layer: TileMapLayer, as_binary: bool = false) -> int:
 	var neighbours = []
 	var directions = [Vector2i(0, 0), Vector2i(0, 1), Vector2i(1, 0), Vector2i(1, 1)]

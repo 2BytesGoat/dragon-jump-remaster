@@ -66,7 +66,7 @@ func _ready() -> void:
 	_init_terrain_layer()
 	_update_static_alt_tiles()
 	_populate_objects()
-	#_init_hidden_areas()
+	_init_hidden_areas()
 
 
 func _init_atlas_symbol_mapping() -> void:
@@ -192,9 +192,13 @@ func _generate_area_for_island(tilemap: TileMapLayer, island: Array, island_inde
 
 func _replace_secret_cells(cell_array: Array) -> void:
 	for cell_coords in cell_array:
-		var atlas_coords = terrain_layer.get_cell_atlas_coords(cell_coords)
+		var atlas_coords = terrain_layer.get_visual_tile_atlas_coords(cell_coords)
 		secrets_layer.set_cell(cell_coords, 0, atlas_coords)
 		terrain_layer.erase_cell(cell_coords)
+	
+	## TODO: fix this
+	#for cell_coords in cell_array:
+		#terrain_layer.update_visual_tiles(cell_coords)
 
 
 func _get_4sides_alt_tile(cell: Vector2i) -> int:
