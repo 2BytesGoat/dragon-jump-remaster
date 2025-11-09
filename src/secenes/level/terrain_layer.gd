@@ -1,7 +1,9 @@
+@tool
 extends TileMapLayer
 
 @onready var visual_layer: TileMapLayer = $VisualLayer
 
+const hidden_area_atlas_coors = Vector2i(1, 0)
 const autotileMap: Array = [
 	[Vector2i(0, 0)], 
 	[Vector2i(0, 2)], 
@@ -36,12 +38,17 @@ func update_visual_tiles(cell_coords: Vector2i) -> void:
 		var visual_cell_probabilities = [1.0]
 		if len(visual_cell_choices) > 1:
 			visual_cell_probabilities = _get_cell_probabilites(visual_cell_choices, visual_layer, 0)
-		var atlas_coords = Utils.get_weighted_array_item(visual_cell_choices, visual_cell_probabilities)
+		var atlas_coords = get_weighted_array_item(visual_cell_choices, visual_cell_probabilities)
 		visual_layer.set_cell(visual_cell_coords, source_id, atlas_coords)
 
 
 func get_visual_cell_atlas_coords(cell_coords: Vector2i) -> Vector2i:
 	return visual_layer.get_cell_atlas_coords(cell_coords)
+
+
+func set_tile_hidden_area(cell_coords: Vector2i) -> void:
+	self.set_cell(cell_coords, 0, hidden_area_atlas_coors)
+	self.update_visual_tiles(cell_coords)
 
 
 func _get_neighbour_count(cell_coords: Vector2i, tilemap_layer: TileMapLayer, as_binary: bool = false) -> int:
@@ -72,3 +79,24 @@ func _get_cell_probabilites(atlas_coords: Array, layer: TileMapLayer, source_id:
 		var p = snapped(source.get_tile_data(coords, 0).probability, 0.0001)
 		probabilities.append(p)
 	return probabilities
+
+
+func get_weighted_array_item(array: Array, weights=[]) -> Vector2i:
+	if array.is_empty():
+		return Vector2i(-1, -1)
+
+	if array.size() == 1:
+		return array[0]
+
+	var sum_of_weight = 0.0
+	for i in weights:
+		sum_of_weight += i
+	
+	var rnd = randf() * sum_of_weight
+	for i in range(array.size()):
+		if rnd < weights[i]:
+			return array[i]
+		rnd -= weights[i]
+
+	# Fallback (shouldn’t happen)
+	return array[0]

@@ -1,3 +1,4 @@
+@tool
 extends Node2D
 
 enum CELL {TERRAIN, STATIC, OBJECT}
@@ -50,7 +51,6 @@ const symbol_to_tile_info: Dictionary = {
 		"scene": null
 	}
 }
-const hidden_area_atlas_coors = Vector2i(1, 0)
 
 # These get populated at runtime
 var static_atlas_coords_to_symbol: Dictionary = {}
@@ -63,6 +63,31 @@ var object_atlas_coords_to_symbol: Dictionary = {}
 
 @onready var secrets_visual_layer: TileMapLayer = $SecretsLayer/VisualLayer
 
+# These are used to debug in editor
+var is_initialized = false
+var terrain_layer_uesed_cells = []
+var emplased_time = 0
+var update_interval = 1
+
+
+func _enter_tree() -> void:
+	if Engine.is_editor_hint():
+		set_process(true)
+
+
+func _exit_tree() -> void:
+	set_process(false)
+
+
+func _process(delta: float) -> void:
+	if not Engine.is_editor_hint() and is_initialized:
+		return
+	
+	emplased_time += delta
+	if emplased_time >= update_interval:
+		_init_terrain_layer()
+		emplased_time = 0
+
 
 func _ready() -> void:
 	_init_atlas_symbol_mapping()
@@ -70,6 +95,7 @@ func _ready() -> void:
 	_update_static_alt_tiles()
 	_populate_objects()
 	_init_hidden_areas()
+	is_initialized = true
 
 
 func _init_atlas_symbol_mapping() -> void:
@@ -83,8 +109,14 @@ func _init_atlas_symbol_mapping() -> void:
 
 
 func _init_terrain_layer() -> void:
-	for cell_coords in terrain_layer.get_used_cells():
+	var used_cells = terrain_layer.get_used_cells()
+	if terrain_layer_uesed_cells == used_cells:
+		return
+	
+	for cell_coords in used_cells:
 		terrain_layer.update_visual_tiles(cell_coords)
+	
+	terrain_layer_uesed_cells = used_cells
 
 
 func _update_static_alt_tiles() -> void:
@@ -112,11 +144,7 @@ func _populate_objects() -> void:
 
 
 func _init_hidden_areas() -> void:
-	var islands = _get_islands(secrets_layer)
-	for i in range(len(islands)):
-		var island = islands[i]
-		_generate_area_for_island(secrets_layer, island, i)
-		_replace_secret_cells(island)
+	secrets_layer._init_secrets()
 
 
 func _get_cell_symbol(cell_coords: Vector2i, cell_type: CELL) -> String:
@@ -131,87 +159,6 @@ func _get_cell_symbol(cell_coords: Vector2i, cell_type: CELL) -> String:
 	return "E"
 
 
-func _get_islands(tilemap: TileMapLayer) -> Array:
-	var used = tilemap.get_used_cells()
-	var visited := {}
-	var islands := []
-
-	for cell in used:
-		if cell in visited:
-			continue
-		
-		var island := []
-		var stack := [cell]
-		
-		while stack:
-			var current = stack.pop_back()
-			if current in visited:
-				continue
-			visited[current] = true
-			island.append(current)
-
-			# Check 4-way or 8-way neighbors depending on your definition
-			for dir in [Vector2i(1,0), Vector2i(-1,0), Vector2i(0,1), Vector2i(0,-1)]:
-				var neighbor = current + dir
-				if neighbor in used and not neighbor in visited:
-					stack.append(neighbor)
-		
-		islands.append(island)
-	
-	return islands
-
-
-func _generate_area_for_island(tilemap: TileMapLayer, island: Array, island_index: int) -> void: 
-	# Create Area2D for this island
-	var area := Area2D.new()
-	tilemap.add_child(area)
-	area.name = "Island_%d" % island_index
-	area.set_collision_mask_value(1, false)
-	area.set_collision_mask_value(5, true)
-	area.area_entered.connect(_on_secret_area_entered)
-	area.area_exited.connect(_on_secret_area_exited)
-	
-	# Add CollisionPolygon2D for the whole island
-	var polygon := CollisionPolygon2D.new()
-	area.add_child(polygon)
-
-	# Convert cell coords → local positions
-	var points := []
-	var cell_size = tilemap.tile_set.tile_size
-	for cell in island:
-		var pos = tilemap.map_to_local(cell)
-		# You can approximate shape as tile-sized boxes
-		points.append_array([
-			pos + Vector2(-cell_size.x/2, -cell_size.y/2),
-			pos + Vector2(cell_size.x/2, -cell_size.y/2),
-			pos + Vector2(cell_size.x/2, cell_size.y/2),
-			pos + Vector2(-cell_size.x/2, cell_size.y/2),
-		])
-	
-	# Convex hull: creates a simple outer contour from all tile corners
-	points = Geometry2D.convex_hull(points)
-	polygon.polygon = points
-
-
-func _replace_secret_cells(cell_array: Array) -> void:
-	for cell_coords in cell_array:
-		var source_id = terrain_layer.get_cell_source_id(cell_coords)
-		if source_id == -1:
-			continue
-		
-		var directions = [Vector2i(0, 0), Vector2i(0, 1), Vector2i(1, 0), Vector2i(1, 1)]
-		for direction in directions:
-			var visual_cell_coords = cell_coords + direction
-			var atlas_coords = terrain_layer.get_visual_cell_atlas_coords(visual_cell_coords)
-			secrets_visual_layer.set_cell(visual_cell_coords, 0, atlas_coords)
-	
-		terrain_layer.set_cell(cell_coords, 0, hidden_area_atlas_coors)
-		terrain_layer.update_visual_tiles(cell_coords)
-	
-	for cell_coords in cell_array:
-		secrets_layer.erase_cell(cell_coords)
-
-
 func _get_4sides_alt_tile(cell: Vector2i) -> int:
 	return _get_alt_tile(cell, [Vector2i.DOWN, Vector2i.UP, Vector2i.LEFT, Vector2i.RIGHT])
 
@@ -221,13 +168,3 @@ func _get_alt_tile(cell: Vector2i, directions: Array[Vector2i]) -> int:
 		if terrain_layer.get_cell_tile_data(cell + directions[i]) != null:
 			return i
 	return 0
-
-
-func _on_secret_area_entered(_area: Area2D):
-	var tween = create_tween()
-	tween.tween_property(secrets_layer, "modulate:a", 0.3, 0.2) # fade out over 0.5s
-
-
-func _on_secret_area_exited(_area: Area2D):
-	var tween = create_tween()
-	tween.tween_property(secrets_layer, "modulate:a", 1.0, 0.2)
