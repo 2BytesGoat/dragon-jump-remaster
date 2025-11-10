@@ -5,8 +5,8 @@ extends CharacterBody2D
 @onready var remote_transform: RemoteTransform2D = $RemoteTransform2D
 
 # movement properties
-@export var max_speed: float = 185.0
-@export var acceleation: float = 300.0
+@export var max_speed: float = 220.0
+@export var acceleation: float = 200.0
 @export var default_friction: float = 100.0      # Default friction when on normal surfaces
 
 # jump properties

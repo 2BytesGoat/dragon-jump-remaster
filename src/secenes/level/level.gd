@@ -93,8 +93,11 @@ func _ready() -> void:
 	_init_atlas_symbol_mapping()
 	_init_terrain_layer()
 	_update_static_alt_tiles()
-	_populate_objects()
-	_init_hidden_areas()
+	
+	if not Engine.is_editor_hint():
+		_populate_objects()
+		_init_hidden_areas()
+	
 	is_initialized = true
 
 
