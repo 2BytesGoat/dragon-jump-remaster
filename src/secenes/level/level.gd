@@ -14,23 +14,23 @@ const symbol_to_tile_info: Dictionary = {
 		"debug_alt": null,
 		"scene": null
 	},
-	"D": { # disolve wall
-		"type": CELL.OBJECT,
-		"autotile": false,
-		"source": 0,
-		"coords": Vector2i(0, 2),
-		"callable": null,
-		"debug_alt": null,
-		"scene": preload("res://src/secenes/level/tiles/disolve_block.tscn")
-	},
 	"X": { # spikes
 		"type": CELL.STATIC,
 		"autotile": false,
 		"source": 0,
-		"coords": Vector2i(0, 1),
+		"coords": Vector2i(0, 2),
 		"callable": "_get_4sides_alt_tile",
 		"debug_alt": null,
 		"scene": null
+	},
+	"D": { # disolve wall
+		"type": CELL.OBJECT,
+		"autotile": false,
+		"source": 0,
+		"coords": Vector2i(0, 3),
+		"callable": null,
+		"debug_alt": null,
+		"scene": preload("res://src/secenes/level/tiles/disolve_block.tscn")
 	},
 	"P": { # powerup
 		"type": CELL.OBJECT,
@@ -41,15 +41,15 @@ const symbol_to_tile_info: Dictionary = {
 		"debug_alt": null,
 		"scene": preload("res://src/secenes/powerups/powerup.tscn")
 	},
-	"q": { # blending wall
-		"type": CELL.STATIC,
-		"autotile": false,
-		"source": 0,
-		"coords": Vector2i(2, 0),
-		"callable": null,
-		"debug_alt": null,
-		"scene": null
-	}
+	#"q": { # blending wall
+		#"type": CELL.STATIC,
+		#"autotile": false,
+		#"source": 0,
+		#"coords": Vector2i(2, 0),
+		#"callable": null,
+		#"debug_alt": null,
+		#"scene": null
+	#}
 }
 
 # These get populated at runtime
@@ -113,6 +113,7 @@ func _init_terrain_layer() -> void:
 	if terrain_layer_uesed_cells == used_cells:
 		return
 	
+	terrain_layer.clear_visual_tiles()
 	for cell_coords in used_cells:
 		terrain_layer.update_visual_tiles(cell_coords)
 	

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dp5qrrp13uyq" path="res://src/secenes/level/tiles/disolve_block.gd" id="1_8n7rp"]
 [ext_resource type="Shader" uid="uid://b0wba1iwsluvd" path="res://assets/shaders/disolve.gdshader" id="1_a21au"]
-[ext_resource type="Texture2D" uid="uid://dcmba8urs6sej" path="res://assets/sprites/world/tileset.png" id="2_trxyg"]
+[ext_resource type="Texture2D" uid="uid://riso1kxfjte0" path="res://assets/sprites/world/tile-types.png" id="3_8n7rp"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_trxyg"]
 shader = ExtResource("1_a21au")
@@ -10,8 +10,8 @@ shader_parameter/sensitivity = 0.0
 shader_parameter/transparency = 1.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8n7rp"]
-atlas = ExtResource("2_trxyg")
-region = Rect2(0, 32, 16, 16)
+atlas = ExtResource("3_8n7rp")
+region = Rect2(0, 48, 16, 16)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1cpf4"]
 size = Vector2(16, 16)

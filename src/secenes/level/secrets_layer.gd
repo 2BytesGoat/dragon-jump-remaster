@@ -1,3 +1,4 @@
+@tool
 extends TileMapLayer
 
 @export var terrain_tilemap: TileMapLayer
@@ -94,7 +95,7 @@ func _generate_area_for_island(island: Array, island_index: int) -> void:
 
 func _on_secret_area_entered(_area: Area2D):
 	var tween = create_tween()
-	tween.tween_property(self, "modulate:a", 0.3, 0.1) # fade out over 0.5s
+	tween.tween_property(self, "modulate:a", 0.1, 0.2) # fade out over 0.5s
 
 
 func _on_secret_area_exited(_area: Area2D):
