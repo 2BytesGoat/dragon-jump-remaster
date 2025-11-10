@@ -5,8 +5,9 @@ extends CharacterBody2D
 @onready var remote_transform: RemoteTransform2D = $RemoteTransform2D
 
 # movement properties
-@export var max_speed: float = 110.0
-@export var default_friction: float = 1000.0     # Default friction when on normal surfaces
+@export var max_speed: float = 185.0
+@export var acceleation: float = 300.0
+@export var default_friction: float = 100.0      # Default friction when on normal surfaces
 
 # jump properties
 @export var jump_height: float = 56.0            # Height in pixels
@@ -114,7 +115,7 @@ func _physics_process(delta: float) -> void:
 	if not started_walking:
 		return
 	
-	velocity.x = move_toward(velocity.x, max_speed * facing_direction, current_friction * delta)
+	velocity.x = move_toward(velocity.x, max_speed * facing_direction, (acceleation - current_friction) * delta)
 	velocity.y += _get_actual_gravity() * delta
 	
 	_apply_modifiers()
@@ -169,4 +170,5 @@ func _on_interact_box_area_entered(area: Area2D) -> void:
 
 
 func _on_checkpoint_timer_timeout() -> void:
-	starting_position = global_position
+	#starting_position = global_position
+	pass

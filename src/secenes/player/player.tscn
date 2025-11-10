@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://cw8cw6fpq5n63"]
+[gd_scene load_steps=21 format=3 uid="uid://cw8cw6fpq5n63"]
 
 [ext_resource type="Script" uid="uid://c306bigp8honi" path="res://src/secenes/player/player.gd" id="1_uug8f"]
 [ext_resource type="Texture2D" uid="uid://baxhjmno0fwf4" path="res://assets/sprites/player/DragonSprites.png" id="2_6uujk"]
@@ -121,6 +121,24 @@ tracks/0/keys = {
 "values": [11]
 }
 
+[sub_resource type="Animation" id="Animation_8vrmn"]
+resource_name = "Run"
+length = 0.7
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [17, 18, 19, 20, 21, 22, 23]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_i6xdb"]
 _data = {
 &"Fall": SubResource("Animation_62cf5"),
@@ -128,6 +146,7 @@ _data = {
 &"Jump": SubResource("Animation_3hyjg"),
 &"Move": SubResource("Animation_tj7fb"),
 &"RESET": SubResource("Animation_i6xdb"),
+&"Run": SubResource("Animation_8vrmn"),
 &"Walled": SubResource("Animation_824xm")
 }
 

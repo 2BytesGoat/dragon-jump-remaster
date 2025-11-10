@@ -12,7 +12,7 @@ shader_parameter/sat_threshold = 0.0
 shader_parameter/val_threshold = 0.0
 shader_parameter/rainbow_speed = 0.0999999977648
 shader_parameter/rainbow_animate = true
-shader_parameter/rainbow_band_size = 1.8499999586487998
+shader_parameter/rainbow_band_size = 1.8499999586488
 shader_parameter/rainbow_alpha = 0.50000002375
 shader_parameter/precision = 0.05
 shader_parameter/thickness = 2.000000095
@@ -132,7 +132,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_h3iy3"]
-size = Vector2(16, 16)
+size = Vector2(16, 20)
 
 [node name="Powerup" type="Area2D" groups=["Powerup"]]
 collision_layer = 8
