@@ -1,6 +1,10 @@
 extends Area2D
 
+var powerups = [
+	"DoubleJump",
+	"Stomp"
+]
+
 
 func get_powerup() -> String:
-	# TODO: maybe have an object type for this
-	return "Stomp"
+	return powerups.pick_random()

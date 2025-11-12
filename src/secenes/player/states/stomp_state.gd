@@ -3,6 +3,7 @@ extends State
 
 
 func enter(_msg := {}) -> void:
+	owner.show_afterimage = true
 	owner.velocity.y = -owner.jump_velocity
 	owner.add_modifier("stomp", {"velocity": Vector2(0, 1)})
 	owner.play_animation(self.name)

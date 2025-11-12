@@ -5,6 +5,10 @@ extends State
 var was_on_wall: bool = false
 
 
+func _ready() -> void:
+	jump_timer.timeout.connect(_on_jump_timer_timeout)
+
+
 func enter(_msg := {}) -> void:
 	was_on_wall = false
 	jump_timer.start(owner.jump_time_to_peak)
@@ -34,7 +38,6 @@ func exit() -> void:
 	owner.wants_to_jump = false
 	owner.velocity.y = max(owner.velocity.y, 0)
 	owner.remove_modifier("spiderman")
-	owner.show_afterimage = false
 
 
 func _on_jump_timer_timeout() -> void:

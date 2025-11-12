@@ -6,7 +6,7 @@ extends CharacterBody2D
 
 # movement properties
 @export var max_speed: float = 220.0
-@export var acceleation: float = 200.0
+@export var acceleation: float = 150.0
 @export var default_friction: float = 100.0      # Default friction when on normal surfaces
 
 # jump properties
@@ -111,7 +111,6 @@ func has_powerups() -> bool:
 
 func consume_powerup() -> String:
 	# TODO: find a better way to do this
-	show_afterimage = true
 	return powerups.pop_back()[1] 
 
 
@@ -119,11 +118,11 @@ func _physics_process(delta: float) -> void:
 	if not started_walking:
 		return
 	
-	velocity.x = move_toward(velocity.x, max_speed * facing_direction, (acceleation - current_friction) * delta)
+	velocity.x = move_toward(velocity.x, max_speed * facing_direction, acceleation * delta)
 	velocity.y += _get_actual_gravity() * delta
 	
 	_apply_modifiers()
-	_update_friction()
+	#_update_friction()
 	_update_facing_direction()
 	
 	move_and_slide()
