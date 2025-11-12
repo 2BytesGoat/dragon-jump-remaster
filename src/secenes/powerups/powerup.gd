@@ -7,4 +7,5 @@ var powerups = [
 
 
 func get_powerup() -> String:
-	return powerups.pick_random()
+	#return powerups.pick_random()
+	return "Dash"
