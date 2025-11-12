@@ -5,7 +5,7 @@ extends JumpState
 func enter(_msg := {}) -> void:
 	super()
 	owner.velocity.y = 0
-	owner.velocity.x = owner.max_speed * 1.75
+	owner.velocity.x = owner.max_speed * 1.65 * owner.facing_direction
 	owner.show_afterimage = true
 
 
