@@ -1,3 +1,4 @@
+class_name Powerup
 extends Area2D
 
 var powerups = [
