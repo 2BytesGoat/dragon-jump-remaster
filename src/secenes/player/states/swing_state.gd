@@ -10,9 +10,6 @@ func physics_update(_delta: float) -> void:
 	if owner.is_on_wall():
 		state_machine.transition_to("Walled")
 	
-	if owner.is_on_floor():
-		state_machine.transition_to("Move")
-	
 	if not owner.wants_to_jump:
 		state_machine.transition_to("Fall")
 

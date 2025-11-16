@@ -247,10 +247,11 @@ lifetime = 0.2
 process_material = SubResource("ParticleProcessMaterial_62cf5")
 
 [node name="GaplingHook" type="Node2D" parent="Sprite"]
+show_behind_parent = true
 position = Vector2(0, 1)
 script = ExtResource("4_8vrmn")
 rest_length = 0.1
-stiffness = 50.0
+stiffness = 40.0
 
 [node name="GrapplingPoints" type="Node2D" parent="Sprite/GaplingHook"]
 
@@ -264,7 +265,9 @@ scale = Vector2(0.0546875, 0.0546875)
 texture = ExtResource("5_b7xrc")
 
 [node name="Line2D" type="Line2D" parent="Sprite/GaplingHook"]
+show_behind_parent = true
 points = PackedVector2Array(0, 0, 0, 0)
+width = 2.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
