@@ -3,6 +3,7 @@ extends State
 
 
 func enter(_msg := {}) -> void:
+	owner.show_afterimage = true
 	owner.launch_grappling_hook()
 
 
@@ -15,6 +16,7 @@ func physics_update(_delta: float) -> void:
 
 
 func exit() -> void:
+	owner.show_afterimage = false
 	owner.release_grappling_hook()
 
 
