@@ -117,12 +117,13 @@ func set_speedup_progress(progress: float) -> void:
 	velocity.x = lerp(0.0, max_speed * facing_direction, progress)
 
 
-func pick_powerup(powerup: Area2D) -> void:
+func pick_powerup(area: Area2D) -> void:
 	var interacted_areas = powerups.map(func(x): return x[0])
-	if powerup.name in interacted_areas:
+	if area.name in interacted_areas:
 		return
-	powerups.append([powerup.name, powerup.get_powerup()])
-	picked_powerup.emit(powerup.name, len(powerups) - 1)
+	var powerup_type = area.get_powerup()
+	powerups.append([area.name, powerup_type])
+	picked_powerup.emit(powerup_type, len(powerups) - 1)
 
 
 func has_powerups() -> bool:

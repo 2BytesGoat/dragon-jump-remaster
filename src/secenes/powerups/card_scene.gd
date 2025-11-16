@@ -2,13 +2,19 @@ class_name CardUI
 extends Control
 
 @onready var container: MarginContainer = $MarginContainer
+@onready var texture: TextureRect = $MarginContainer/TextureRect
+@onready var label: Label = $MarginContainer/TextureRect/Label
 
 var powerup_type: String = ""
 
 
-func draw(type: String, is_same: bool = false) -> void:
+func draw(type: String, exists: bool = false) -> void:
 	powerup_type = type
-	if not is_same:
+	
+	label.text = type
+	texture.self_modulate = Constants.POWERUPS[type]["color"]
+	
+	if not exists:
 		play_draw_new_animation()
 	else:
 		play_draw_same_animation()
