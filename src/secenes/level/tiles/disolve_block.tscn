@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://tv706pi3cf28"]
+[gd_scene load_steps=13 format=3 uid="uid://tv706pi3cf28"]
 
 [ext_resource type="Script" uid="uid://dp5qrrp13uyq" path="res://src/secenes/level/tiles/disolve_block.gd" id="1_8n7rp"]
 [ext_resource type="Shader" uid="uid://b0wba1iwsluvd" path="res://assets/shaders/disolve.gdshader" id="1_a21au"]
@@ -111,6 +111,18 @@ tracks/2/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite2D:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_pcslu"]
 resource_name = "Repair"
@@ -142,14 +154,84 @@ tracks/1/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="Animation_cjqx8"]
+resource_name = "Destroy"
+length = 0.3
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:material:shader_parameter/sensitivity")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("BodyCollision:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Area2D/AreaCollision:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Timer")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [-1],
+"method": &"start"
+}]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Sprite2D:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(2, 2)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1cpf4"]
 _data = {
+&"Destroy": SubResource("Animation_cjqx8"),
 &"Disolve": SubResource("Animation_8n7rp"),
 &"RESET": SubResource("Animation_1cpf4"),
 &"Repair": SubResource("Animation_pcslu")
 }
 
 [node name="DisolveBlock" type="StaticBody2D"]
+collision_layer = 32
+collision_mask = 0
 script = ExtResource("1_8n7rp")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -159,7 +241,7 @@ texture = SubResource("AtlasTexture_8n7rp")
 [node name="BodyCollision" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_1cpf4")
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="Area2D" type="Area2D" parent="." groups=["Destroyable"]]
 collision_layer = 8
 collision_mask = 2
 

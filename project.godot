@@ -18,8 +18,8 @@ config/icon="res://icon.svg"
 [autoload]
 
 EnvironmentVariables="*res://src/scripts/singletons/environment_variables.gd"
-Constants="*res://src/scripts/singletons/constants.gd"
 Utils="*res://src/scripts/singletons/utils.gd"
+Constants="*res://src/scripts/singletons/constants.gd"
 
 [input]
 
@@ -46,6 +46,7 @@ mouse_left={
 2d_physics/layer_3="Hazards"
 2d_physics/layer_4="Interactable"
 2d_physics/layer_5="Interacting"
+2d_physics/layer_6="Obstacles"
 
 [rendering]
 
