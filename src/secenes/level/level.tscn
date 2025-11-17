@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://oxbq6vk7mref" path="res://src/secenes/level/level.gd" id="1_sypop"]
 [ext_resource type="Texture2D" uid="uid://riso1kxfjte0" path="res://assets/sprites/world/tile-types.png" id="3_lxq08"]
-[ext_resource type="Texture2D" uid="uid://6rwx7rq1h31i" path="res://assets/sprites/world/rock-tiles-wang/tileset_rock-tiles-wang.png" id="3_n86tn"]
 [ext_resource type="Script" uid="uid://bqlmtoyls3un1" path="res://src/secenes/level/terrain_layer.gd" id="3_qnuiv"]
+[ext_resource type="Texture2D" uid="uid://dyd1lnpxc0gk5" path="res://assets/sprites/world/rock-tiles-wang/tileset_grass-tiles-wang-sheet.png" id="4_n86tn"]
 [ext_resource type="Texture2D" uid="uid://sg0wq6dg7a8n" path="res://assets/sprites/world/rock-tiles-wang/tilest-secret-rock-tiles-wang.png" id="5_n86tn"]
 [ext_resource type="Script" uid="uid://b6vvfthmemhgb" path="res://src/secenes/level/secrets_layer.gd" id="6_qnuiv"]
 
@@ -18,7 +18,7 @@ physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_n86tn")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xqg4s"]
-texture = ExtResource("3_n86tn")
+texture = ExtResource("4_n86tn")
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0
