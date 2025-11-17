@@ -5,6 +5,10 @@ extends StaticBody2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 
+func destroy():
+	animation_player.play("Destroy")
+
+
 func reset() -> void:
 	timer.stop()
 	animation_player.play("RESET")

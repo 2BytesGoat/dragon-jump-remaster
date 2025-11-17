@@ -3,7 +3,7 @@ extends TileMapLayer
 
 @onready var visual_layer: TileMapLayer = $VisualLayer
 
-const hidden_area_atlas_coors = Vector2i(1, 0)
+const hidden_area_atlas_coors = Vector2i(2, 0)
 const autotileMap: Array = [
 	[Vector2i(0, 0)], 
 	[Vector2i(0, 2)], 

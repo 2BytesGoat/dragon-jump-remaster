@@ -1,9 +1,10 @@
-[gd_scene load_steps=18 format=3 uid="uid://bvm718ddfisd7"]
+[gd_scene load_steps=20 format=3 uid="uid://bvm718ddfisd7"]
 
 [ext_resource type="Script" uid="uid://oxbq6vk7mref" path="res://src/secenes/level/level.gd" id="1_sypop"]
 [ext_resource type="Texture2D" uid="uid://riso1kxfjte0" path="res://assets/sprites/world/tile-types.png" id="3_lxq08"]
 [ext_resource type="Texture2D" uid="uid://6rwx7rq1h31i" path="res://assets/sprites/world/rock-tiles-wang/tileset_rock-tiles-wang.png" id="3_n86tn"]
 [ext_resource type="Script" uid="uid://bqlmtoyls3un1" path="res://src/secenes/level/terrain_layer.gd" id="3_qnuiv"]
+[ext_resource type="Texture2D" uid="uid://dyd1lnpxc0gk5" path="res://assets/sprites/world/rock-tiles-wang/tileset_grass-tiles-wang-sheet.png" id="4_n86tn"]
 [ext_resource type="Texture2D" uid="uid://sg0wq6dg7a8n" path="res://assets/sprites/world/rock-tiles-wang/tilest-secret-rock-tiles-wang.png" id="5_n86tn"]
 [ext_resource type="Script" uid="uid://b6vvfthmemhgb" path="res://src/secenes/level/secrets_layer.gd" id="6_qnuiv"]
 
@@ -12,13 +13,15 @@ texture = ExtResource("3_lxq08")
 0:0/0 = 0
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+2:0/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_n86tn"]
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_n86tn")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xqg4s"]
-texture = ExtResource("3_n86tn")
+texture = ExtResource("4_n86tn")
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0
@@ -41,6 +44,26 @@ texture = ExtResource("3_n86tn")
 1:3/0/probability = 0.05
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_exkae"]
+texture = ExtResource("3_n86tn")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gbsjd"]
 texture = ExtResource("5_n86tn")
 0:0/0 = 0
 1:0/0 = 0
@@ -63,6 +86,7 @@ texture = ExtResource("5_n86tn")
 [sub_resource type="TileSet" id="TileSet_exkae"]
 sources/0 = SubResource("TileSetAtlasSource_xqg4s")
 sources/1 = SubResource("TileSetAtlasSource_exkae")
+sources/2 = SubResource("TileSetAtlasSource_gbsjd")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qnuiv"]
 texture = ExtResource("3_lxq08")
@@ -76,16 +100,20 @@ sources/0 = SubResource("TileSetAtlasSource_qnuiv")
 texture = ExtResource("3_lxq08")
 0:2/next_alternative_id = 4
 0:2/0 = 0
+0:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 0, 8, 0, 8, 8, -8, 8)
 0:2/1 = 1
 0:2/1/flip_h = true
 0:2/1/flip_v = true
+0:2/1/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 0, -8, 0)
 0:2/2 = 2
 0:2/2/flip_h = true
 0:2/2/flip_v = true
 0:2/2/transpose = true
+0:2/2/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 0, -8, 0, 8, -8, 8)
 0:2/3 = 3
 0:2/3/flip_v = true
 0:2/3/transpose = true
+0:2/3/physics_layer_0/polygon_0/points = PackedVector2Array(0, -8, 8, -8, 8, 8, 0, 8)
 
 [sub_resource type="TileSet" id="TileSet_j8j4h"]
 occlusion_layer_0/light_mask = 1
@@ -99,6 +127,7 @@ texture = ExtResource("3_lxq08")
 1:3/0 = 0
 2:3/0 = 0
 3:3/0 = 0
+4:3/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_vbg06"]
 sources/1 = SubResource("TileSetAtlasSource_0fmww")
