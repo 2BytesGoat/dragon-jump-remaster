@@ -197,6 +197,13 @@ func _on_hurt_box_body_entered(body: Node2D) -> void:
 func _on_interact_box_area_entered(area: Area2D) -> void:
 	if area.is_in_group("Powerup") and len(powerups) < 3:
 		pick_powerup(area)
+	elif area.is_in_group("Slippery"):
+		add_modifier("slippery", {"velocity": Vector2(1.04, 1)})
+
+
+func _on_interact_box_area_exited(area: Area2D) -> void:
+	if area.is_in_group("Slippery"):
+		remove_modifier("slippery")
 
 
 func _on_checkpoint_timer_timeout() -> void:

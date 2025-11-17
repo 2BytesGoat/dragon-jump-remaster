@@ -368,6 +368,7 @@ script = ExtResource("8_yu3wn")
 
 [connection signal="should_release" from="Sprite/GaplingHook" to="StateMachine/Grapple" method="_on_gapling_hook_should_release"]
 [connection signal="area_entered" from="InteractBox" to="." method="_on_interact_box_area_entered"]
+[connection signal="area_exited" from="InteractBox" to="." method="_on_interact_box_area_exited"]
 [connection signal="body_entered" from="HurtBox" to="." method="_on_hurt_box_body_entered"]
 [connection signal="timeout" from="CheckpointTimer" to="." method="_on_checkpoint_timer_timeout"]
 [connection signal="transitioned" from="StateMachine" to="StateLabel" method="_on_state_machine_transitioned"]

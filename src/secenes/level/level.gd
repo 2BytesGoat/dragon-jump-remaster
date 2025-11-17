@@ -41,6 +41,15 @@ const symbol_to_tile_info: Dictionary = {
 		"debug_alt": null,
 		"scene": preload("res://src/secenes/powerups/powerup.tscn")
 	},
+	"S": { # slippery floor
+		"type": CELL.OBJECT,
+		"autotile": false,
+		"source": 0,
+		"coords": Vector2i(4, 3),
+		"callable": null,
+		"debug_alt": null,
+		"scene": preload("res://src/secenes/environment/slippery_floor.tscn")
+	},
 	#"q": { # blending wall
 		#"type": CELL.STATIC,
 		#"autotile": false,
