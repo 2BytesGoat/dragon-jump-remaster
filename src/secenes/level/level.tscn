@@ -31,7 +31,7 @@ texture = ExtResource("4_n86tn")
 4:0/0 = 0
 0:1/0 = 0
 1:1/0 = 0
-1:1/0/probability = 0.85
+1:1/0/probability = 0.98
 2:1/0 = 0
 3:1/0 = 0
 4:1/0 = 0
@@ -41,9 +41,9 @@ texture = ExtResource("4_n86tn")
 3:2/0 = 0
 4:2/0 = 0
 0:3/0 = 0
-0:3/0/probability = 0.1
+0:3/0/probability = 0.01
 1:3/0 = 0
-1:3/0/probability = 0.05
+1:3/0/probability = 0.01
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_exkae"]
 texture = ExtResource("3_n86tn")
@@ -54,6 +54,7 @@ texture = ExtResource("3_n86tn")
 4:0/0 = 0
 0:1/0 = 0
 1:1/0 = 0
+1:1/0/probability = 0.98
 2:1/0 = 0
 3:1/0 = 0
 4:1/0 = 0
@@ -63,7 +64,9 @@ texture = ExtResource("3_n86tn")
 3:2/0 = 0
 4:2/0 = 0
 0:3/0 = 0
+0:3/0/probability = 0.01
 1:3/0 = 0
+1:3/0/probability = 0.01
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gbsjd"]
 texture = ExtResource("5_n86tn")

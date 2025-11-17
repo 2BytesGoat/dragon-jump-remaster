@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://cw8cw6fpq5n63"]
+[gd_scene load_steps=36 format=3 uid="uid://cw8cw6fpq5n63"]
 
 [ext_resource type="Script" uid="uid://c306bigp8honi" path="res://src/secenes/player/player.gd" id="1_uug8f"]
 [ext_resource type="Texture2D" uid="uid://baxhjmno0fwf4" path="res://assets/sprites/player/DragonSprites.png" id="2_6uujk"]
@@ -215,6 +215,23 @@ tracks/0/keys = {
 "values": [11]
 }
 
+[sub_resource type="Animation" id="Animation_74f0t"]
+resource_name = "Spawn"
+length = 1.1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [15, 16, 10]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_i6xdb"]
 _data = {
 &"Dash": SubResource("Animation_wnjjo"),
@@ -225,6 +242,7 @@ _data = {
 &"Move": SubResource("Animation_tj7fb"),
 &"RESET": SubResource("Animation_i6xdb"),
 &"Run": SubResource("Animation_8vrmn"),
+&"Spawn": SubResource("Animation_74f0t"),
 &"Stomp": SubResource("Animation_b7xrc"),
 &"Walled": SubResource("Animation_824xm")
 }
@@ -260,6 +278,7 @@ stiffness = 40.0
 [node name="RayCast2D" type="RayCast2D" parent="Sprite/GaplingHook/GrapplingPoints"]
 rotation = -2.268928
 target_position = Vector2(0, 150)
+collision_mask = 33
 
 [node name="GrappleIndicator" type="Sprite2D" parent="Sprite/GaplingHook"]
 position = Vector2(68, -68)

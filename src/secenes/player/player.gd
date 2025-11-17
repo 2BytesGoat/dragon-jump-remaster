@@ -43,6 +43,10 @@ var active_controller: PlayerController = null
 signal picked_powerup(powerup_name: String, id: int)
 signal used_powerup(id: int)
 
+# Effects
+@onready var spawn_smoke = preload("res://src/secenes/effects/spawn_smoke_effect.tscn")
+
+
 # Reset params
 var current_friction: float = default_friction   # Current friction based on surface
 var facing_direction: int = Vector2i.RIGHT.x
@@ -97,6 +101,8 @@ func reset() -> void:
 	state_machine.transition_to(initial_state.name)
 	
 	_update_facing_direction()
+	animation_player.play("Spawn")
+	Utils.instance_scene_on_main(spawn_smoke, self.global_position)
 
 
 func add_modifier(modifier_name: String, modifier_value: Dictionary) -> void:

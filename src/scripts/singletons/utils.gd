@@ -20,3 +20,11 @@ func get_weighted_array_item(array: Array, weights=[]) -> Vector2i:
 
 	# Fallback (shouldn’t happen)
 	return array[0]
+
+
+func instance_scene_on_main(scene, position):
+	var main = get_tree().current_scene
+	var instance = scene.instantiate()
+	main.add_child.call_deferred(instance)
+	instance.global_position = position
+	return instance
