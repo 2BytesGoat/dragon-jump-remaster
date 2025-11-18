@@ -2,7 +2,7 @@ extends Panel
 
 const margin_shift_draw := [-10, 0, 0, 10]
 const margin_shift_play := [10, 0, 0, -10]
-@onready var card_scene = preload("res://src/secenes/powerups/card_scene.tscn")
+@onready var card_scene = preload("res://src/scenes/powerups/card_scene.tscn")
 
 
 func shift_card_positions(backward: bool = false) -> void:

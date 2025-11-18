@@ -32,7 +32,7 @@ const symbol_to_tile_info: Dictionary = {
 		"coords": Vector2i(0, 3),
 		"callable": null,
 		"debug_alt": null,
-		"scene": preload("res://src/secenes/level/tiles/disolve_block.tscn"),
+		"scene": preload("res://src/scenes/level/tiles/disolve_block.tscn"),
 		"args": null
 	},
 	"I": { # ice
@@ -42,7 +42,7 @@ const symbol_to_tile_info: Dictionary = {
 		"coords": Vector2i(1, 3),
 		"callable": null,
 		"debug_alt": null,
-		"scene": preload("res://src/secenes/level/tiles/slippery_floor.tscn"),
+		"scene": preload("res://src/scenes/level/tiles/slippery_floor.tscn"),
 		"args": null
 	},
 	"J": { # double jump
@@ -52,7 +52,7 @@ const symbol_to_tile_info: Dictionary = {
 		"coords": Vector2i(0, 4),
 		"callable": null,
 		"debug_alt": null,
-		"scene": preload("res://src/secenes/powerups/powerup.tscn"),
+		"scene": preload("res://src/scenes/powerups/powerup.tscn"),
 		"args": ["DoubleJump"]
 	},
 	"S": { # stomp
@@ -62,7 +62,7 @@ const symbol_to_tile_info: Dictionary = {
 		"coords": Vector2i(1, 4),
 		"callable": null,
 		"debug_alt": null,
-		"scene": preload("res://src/secenes/powerups/powerup.tscn"),
+		"scene": preload("res://src/scenes/powerups/powerup.tscn"),
 		"args": ["Stomp"]
 	},
 	"D": { # dash
@@ -72,7 +72,7 @@ const symbol_to_tile_info: Dictionary = {
 		"coords": Vector2i(2, 4),
 		"callable": null,
 		"debug_alt": null,
-		"scene": preload("res://src/secenes/powerups/powerup.tscn"),
+		"scene": preload("res://src/scenes/powerups/powerup.tscn"),
 		"args": ["Dash"]
 	},
 	"G": { # grapple
@@ -82,7 +82,7 @@ const symbol_to_tile_info: Dictionary = {
 		"coords": Vector2i(3, 4),
 		"callable": null,
 		"debug_alt": null,
-		"scene": preload("res://src/secenes/powerups/powerup.tscn"),
+		"scene": preload("res://src/scenes/powerups/powerup.tscn"),
 		"args": ["Grapple"]
 	},
 	#"q": { # blending wall

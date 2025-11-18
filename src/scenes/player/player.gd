@@ -12,18 +12,18 @@ enum CONTROLLERS {
 
 # movement properties
 @export var max_speed: float = 220.0
-@export var acceleation: float = 150.0
-@export var default_friction: float = 100.0      # Default friction when on normal surfaces
+@export var acceleration: float = 350.0
+@export var default_friction: float = 100.0     # Default friction when on normal surfaces
 
 # jump properties
-@export var jump_height: float = 56.0            # Height in pixels
+@export var jump_height: float = 72.0            # Height in pixels
 @export var jump_time_to_peak: float = 0.4       # Time in seconds to reach peak
 @export var jump_time_to_descent: float = 0.3    # Time in seconds to descent
 
 # Physics properties
-var jump_velocity: float = ((-2.0 * jump_height) / jump_time_to_peak)         # Calculated jump velocity
-var jump_gravity: float  = (2.0 * jump_height) / (jump_time_to_peak ** 2)     # Calculated gravity for jump
-var fall_gravity: float  = (2.0 * jump_height) / (jump_time_to_descent ** 2)  # Calculated gravity for fall
+@onready var jump_velocity: float = ((-2.0 * jump_height) / jump_time_to_peak)         # Calculated jump velocity
+@onready var jump_gravity: float  = (2.0 * jump_height) / (jump_time_to_peak ** 2)     # Calculated gravity for jump
+@onready var fall_gravity: float  = (2.0 * jump_height) / (jump_time_to_descent ** 2)  # Calculated gravity for fall
 
 # State
 @onready var state_machine: StateMachine = $StateMachine
@@ -44,7 +44,7 @@ signal picked_powerup(powerup_name: String, id: int)
 signal used_powerup(id: int)
 
 # Effects
-@onready var spawn_smoke = preload("res://src/secenes/effects/spawn_smoke_effect.tscn")
+@onready var spawn_smoke = preload("res://src/scenes/effects/spawn_smoke_effect.tscn")
 
 
 # Reset params
@@ -155,7 +155,7 @@ func _physics_process(delta: float) -> void:
 	if not started_walking:
 		return
 	
-	velocity.x = move_toward(velocity.x, max_speed * facing_direction, acceleation * delta)
+	velocity.x = move_toward(velocity.x, max_speed * facing_direction, acceleration * delta)
 	velocity.y += _get_actual_gravity() * delta
 	
 	_apply_modifiers()
