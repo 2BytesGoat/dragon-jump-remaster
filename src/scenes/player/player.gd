@@ -205,7 +205,7 @@ func _on_interact_box_area_entered(area: Area2D) -> void:
 		pick_powerup(area)
 	elif area.is_in_group("Slippery"):
 		# TODO: find a better way to do this
-		add_modifier("slippery", {"velocity": Vector2(1.04, 1)})
+		add_modifier("slippery", {"velocity": Vector2(1.07, 1)})
 
 
 func _on_interact_box_area_exited(area: Area2D) -> void:

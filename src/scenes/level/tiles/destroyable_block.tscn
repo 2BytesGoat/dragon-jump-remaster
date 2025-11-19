@@ -1,6 +1,6 @@
 [gd_scene load_steps=13 format=3 uid="uid://tv706pi3cf28"]
 
-[ext_resource type="Script" uid="uid://dp5qrrp13uyq" path="res://src/scenes/level/tiles/disolve_block.gd" id="1_8n7rp"]
+[ext_resource type="Script" uid="uid://dp5qrrp13uyq" path="res://src/scenes/level/tiles/dissolve_block.gd" id="1_8n7rp"]
 [ext_resource type="Shader" uid="uid://b0wba1iwsluvd" path="res://assets/shaders/disolve.gdshader" id="1_a21au"]
 [ext_resource type="Texture2D" uid="uid://riso1kxfjte0" path="res://assets/sprites/world/tile-types.png" id="3_8n7rp"]
 

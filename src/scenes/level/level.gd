@@ -25,14 +25,14 @@ const symbol_to_tile_info: Dictionary = {
 		"scene": null,
 		"args": null
 	},
-	"B": { # disolve block
+	"B": { # destroyable block
 		"type": CELL.OBJECT,
 		"autotile": false,
 		"source": 0,
 		"coords": Vector2i(0, 3),
 		"callable": null,
 		"debug_alt": null,
-		"scene": preload("res://src/scenes/level/tiles/disolve_block.tscn"),
+		"scene": preload("res://src/scenes/level/tiles/destroyable_block.tscn"),
 		"args": null
 	},
 	"I": { # ice
@@ -43,6 +43,16 @@ const symbol_to_tile_info: Dictionary = {
 		"callable": null,
 		"debug_alt": null,
 		"scene": preload("res://src/scenes/level/tiles/slippery_floor.tscn"),
+		"args": null
+	},
+	"O": { # dissolve block
+		"type": CELL.OBJECT,
+		"autotile": false,
+		"source": 0,
+		"coords": Vector2i(2, 3),
+		"callable": null,
+		"debug_alt": null,
+		"scene": preload("res://src/scenes/level/tiles/dissolve_block.tscn"),
 		"args": null
 	},
 	"J": { # double jump
@@ -84,16 +94,7 @@ const symbol_to_tile_info: Dictionary = {
 		"debug_alt": null,
 		"scene": preload("res://src/scenes/powerups/powerup.tscn"),
 		"args": ["Grapple"]
-	},
-	#"q": { # blending wall
-		#"type": CELL.STATIC,
-		#"autotile": false,
-		#"source": 0,
-		#"coords": Vector2i(2, 0),
-		#"callable": null,
-		#"debug_alt": null,
-		#"scene": null
-	#}
+	}
 }
 
 # These get populated at runtime
@@ -136,7 +137,7 @@ func _process(delta: float) -> void:
 func _ready() -> void:
 	_init_atlas_symbol_mapping()
 	_init_terrain_layer()
-	#_update_static_alt_tiles()
+	_update_static_alt_tiles()
 	
 	if not Engine.is_editor_hint():
 		_populate_objects()
