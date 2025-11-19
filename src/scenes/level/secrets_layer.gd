@@ -71,26 +71,32 @@ func _generate_area_for_island(island: Array, island_index: int) -> void:
 	area.area_entered.connect(_on_secret_area_entered)
 	area.area_exited.connect(_on_secret_area_exited)
 	
-	# Add CollisionPolygon2D for the whole island
-	var polygon := CollisionPolygon2D.new()
-	area.add_child(polygon)
-
-	# Convert cell coords → local positions
-	var points := []
-	var cell_size = self.tile_set.tile_size
+	var area_poly = PackedVector2Array()
+	var cell_size = Vector2(self.tile_set.tile_size)
+	
 	for cell in island:
 		var pos = self.map_to_local(cell)
-		# You can approximate shape as tile-sized boxes
-		points.append_array([
-			pos + Vector2(-cell_size.x/2, -cell_size.y/2),
-			pos + Vector2(cell_size.x/2, -cell_size.y/2),
-			pos + Vector2(cell_size.x/2, cell_size.y/2),
-			pos + Vector2(-cell_size.x/2, cell_size.y/2),
-		])
+		var tile_poly = [
+			pos + Vector2(-cell_size.x/2, -cell_size.y/2), 
+			pos + Vector2(cell_size.x/2, -cell_size.y/2), 
+			pos + Vector2(cell_size.x/2, cell_size.y/2), 
+			pos + Vector2(-cell_size.x/2, cell_size.y/2)
+		]
+		
+		if area_poly.is_empty():
+			area_poly = tile_poly
+			continue
+		
+		var merged = Geometry2D.merge_polygons(area_poly, tile_poly)
+		if merged.size() > 0:
+			area_poly = merged[0] # merged result
+		else:
+			print("Merge secret poly: This should not happen")
 	
-	# Convex hull: creates a simple outer contour from all tile corners
-	points = Geometry2D.convex_hull(points)
-	polygon.polygon = points
+	# Add CollisionPolygon2D for the whole island
+	var polygon := CollisionPolygon2D.new()
+	polygon.polygon = area_poly
+	area.add_child(polygon)
 
 
 func _on_secret_area_entered(_area: Area2D):
