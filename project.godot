@@ -21,6 +21,11 @@ EnvironmentVariables="*res://src/scripts/singletons/environment_variables.gd"
 Utils="*res://src/scripts/singletons/utils.gd"
 Constants="*res://src/scripts/singletons/constants.gd"
 
+[display]
+
+window/stretch/mode="canvas_items"
+window/stretch/scale_mode="integer"
+
 [input]
 
 player_reset={
