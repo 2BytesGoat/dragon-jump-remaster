@@ -3,6 +3,8 @@ extends Node2D
 @onready var camera: Camera2D = $Camera2D
 @onready var level_music: AudioStreamPlayer = $AudioStreamPlayer
 
+var first_pickup: bool = true
+
 
 func _ready():
 	SignalBus.player_touched_crown.connect(_on_player_touched_crown)
@@ -14,11 +16,12 @@ func freeze_frame(timescale: float, duration: float) -> void:
 	Engine.time_scale = 1.0
 
 
-func _on_player_touched_crown(player: Player):
-	SignalBus.player_movement_paused.emit()
-	camera.zoom_on(player.global_position)
-	camera.zoom_on(player.global_position)
-	#camera.apply_shake(20)
-	#freeze_frame(.2, .5)
-	#var tween = create_tween()
-	#tween.tween_property(level_music, "pitch_scale", 1.25, 1)
+func _on_player_touched_crown(_player: Player):
+	if not first_pickup:
+		return
+	
+	first_pickup = false
+	camera.apply_shake(20)
+	freeze_frame(.2, .5)
+	var tween = create_tween()
+	tween.tween_property(level_music, "pitch_scale", 1.25, 1)

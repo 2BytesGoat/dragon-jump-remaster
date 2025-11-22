@@ -1,10 +1,12 @@
 extends Area2D
 
-@onready var sfx = $AudioStreamPlayer2D
-var was_picked = false
+@onready var sprite: Sprite2D = $Sprite2D
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 
-func _on_area_entered(_area: Area2D) -> void:
-	if not was_picked:
-		sfx.play()
-		was_picked = true
+func pickup() -> void:
+	animation_player.play("RESET")
+
+
+func drop() -> void:
+	animation_player.play("default")

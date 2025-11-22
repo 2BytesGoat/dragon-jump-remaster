@@ -11,7 +11,6 @@ enum CONTROLLERS {
 @onready var remote_transform: RemoteTransform2D = $RemoteTransform2D
 
 # movement properties
-var movement_paused: bool = false
 @export var starting_facing_direction: int = Vector2i.RIGHT.x
 @export var max_speed: float = 220.0
 @export var acceleration: float = 350.0
@@ -40,6 +39,8 @@ var active_controller: PlayerController = null
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var afterimage: GPUParticles2D = $Flippable/GPUParticles2D
 @onready var grappling_hook: Node2D = $Flippable/GaplingHook
+@onready var hat_container: Node2D = $Flippable/HatContainer
+var has_crown: bool = false
 
 # Signals
 signal picked_powerup(powerup_name: String, id: int)
@@ -68,8 +69,7 @@ func _ready() -> void:
 	if controller_type == CONTROLLERS.PLAYER:
 		set_controller(HumanController.new(self))
 	
-	SignalBus.player_movement_paused.connect(_on_movement_paused)
-	SignalBus.player_movement_resumed.connect(_on_movement_resumed)
+	SignalBus.player_touched_crown.connect(_on_player_touched_crown)
 	reset()
 
 
@@ -93,6 +93,7 @@ func set_jump(input: bool) -> void:
 
 
 func reset() -> void:
+	drop_crown()
 	Utils.instance_scene_on_main(despawn_smoke, self.global_position)
 	current_friction = default_friction 
 	facing_direction = starting_facing_direction
@@ -157,8 +158,25 @@ func release_grappling_hook() -> void:
 	grappling_hook.release()
 
 
+func pickup_crown(hat: Area2D) -> void:
+	has_crown = true
+	hat.pickup()
+	hat.reparent(hat_container)
+	hat.global_position = hat_container.global_position
+	SignalBus.player_touched_crown.emit(self)
+
+
+func drop_crown() -> void:
+	for child in hat_container.get_children():
+		if child.is_in_group("Crown"):
+			child.reparent(get_parent())
+			child.drop()
+			has_crown = false
+			return
+
+
 func _physics_process(delta: float) -> void:
-	if not started_walking or movement_paused:
+	if not started_walking:
 		return
 	
 	velocity.x = move_toward(velocity.x, max_speed * facing_direction, acceleration * delta)
@@ -212,19 +230,13 @@ func _on_interact_box_area_entered(area: Area2D) -> void:
 	elif area.is_in_group("Slippery"):
 		# TODO: find a better way to do this
 		add_modifier("slippery", {"velocity": Vector2(1.07, 1)})
-	elif area.is_in_group("Crown"):
-		print("precious")
-		SignalBus.player_touched_crown.emit(self)
+	elif area.is_in_group("Crown") and not has_crown:
+		pickup_crown(area)
 
 
 func _on_interact_box_area_exited(area: Area2D) -> void:
 	if area.is_in_group("Slippery"):
 		remove_modifier("slippery")
-
-
-func _on_checkpoint_timer_timeout() -> void:
-	#starting_position = global_position
-	pass
 
 
 func _on_show_after_image_changed(value: bool) -> void:
@@ -239,9 +251,5 @@ func _on_interact_box_body_entered(body: Node2D) -> void:
 		starting_facing_direction = facing_direction
 
 
-func _on_movement_paused() -> void:
-	movement_paused = true
-
-
-func _on_movement_resumed() -> void:
-	movement_paused = false
+func _on_player_touched_crown(_player: Player) -> void:
+	acceleration = 1500
