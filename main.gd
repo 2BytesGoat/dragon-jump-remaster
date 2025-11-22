@@ -76,8 +76,9 @@ func _on_player_touched_crown(_player: Player):
 	first_pickup = false
 	camera.apply_shake(20)
 	freeze_frame(.2, .5)
-	var tween = create_tween()
-	tween.tween_property(level_music, "pitch_scale", 1.25, 1)
+	#var tween = create_tween()
+	#tween.tween_property(level_music, "pitch_scale", 1.25, 1)
+	level_music.pitch_scale = 1.25
 	
 	var portal_position = level.player_start_position
 	var portal = portal_scene.instantiate()
