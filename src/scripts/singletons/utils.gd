@@ -30,3 +30,11 @@ func instance_scene_on_main(scene, position, rotation=0.0, scale=Vector2.ONE):
 	instance.scale = scale
 	instance.global_position = position
 	return instance
+
+
+func format_time(time_sec: float) -> String:
+	var minutes = int(time_sec / 60)
+	var seconds = int(time_sec) % 60
+	var ms = int((time_sec - int(time_sec)) * 100)
+
+	return "%02d:%02d.%02d" % [minutes, seconds, ms]

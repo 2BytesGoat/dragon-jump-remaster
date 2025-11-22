@@ -1,6 +1,7 @@
-[gd_scene load_steps=37 format=3 uid="uid://cw8cw6fpq5n63"]
+[gd_scene load_steps=38 format=3 uid="uid://cw8cw6fpq5n63"]
 
 [ext_resource type="Script" uid="uid://c306bigp8honi" path="res://src/scenes/player/player.gd" id="1_uug8f"]
+[ext_resource type="Script" uid="uid://chhu1axyjbnac" path="res://src/scenes/player/observer.gd" id="2_4r4qr"]
 [ext_resource type="Texture2D" uid="uid://baxhjmno0fwf4" path="res://assets/sprites/player/DragonSprites.png" id="2_6uujk"]
 [ext_resource type="Script" uid="uid://td15gffk6sym" path="res://src/scripts/components/states/state_machine.gd" id="3_7p4af"]
 [ext_resource type="Texture2D" uid="uid://dqb15x3l5qeot" path="res://assets/sprites/player/AfterImage.png" id="3_tj7fb"]
@@ -481,9 +482,14 @@ collision_layer = 2
 collision_mask = 33
 script = ExtResource("1_uug8f")
 
+[node name="Observer" type="Node" parent="."]
+script = ExtResource("2_4r4qr")
+
 [node name="Flippable" type="Node2D" parent="."]
+texture_filter = 1
 
 [node name="Sprite" type="Sprite2D" parent="Flippable"]
+texture_filter = 1
 position = Vector2(0, -1)
 texture = ExtResource("2_6uujk")
 offset = Vector2(-1, 0)

@@ -114,6 +114,16 @@ const symbol_to_tile_info: Dictionary = {
 		"debug_alt": null,
 		"scene": preload("res://src/scenes/level/tiles/crown.tscn"),
 		"args": null
+	},
+	"P": { # player
+		"type": CELL.OBJECT,
+		"autotile": false,
+		"source": 0,
+		"coords": Vector2i(5, 3),
+		"callable": null,
+		"debug_alt": null,
+		"scene": preload("res://src/scenes/player/player.tscn"),
+		"args": null
 	}
 }
 
@@ -127,6 +137,12 @@ var object_atlas_coords_to_symbol: Dictionary = {}
 @onready var secrets_layer: TileMapLayer = $SecretsLayer
 
 @onready var secrets_visual_layer: TileMapLayer = $SecretsLayer/VisualLayer
+var objects_map: Dictionary = {}
+var player_start_position: Vector2 = Vector2.ZERO
+
+# Progress
+var finish_global_position = Vector2.ZERO
+var first_time_touching_crown = true
 
 # These are used to debug in editor
 var is_initialized = false
@@ -163,6 +179,7 @@ func _ready() -> void:
 		_init_hidden_areas()
 		_update_static_alt_tiles()
 	
+	SignalBus.player_touched_crown.connect(_on_player_touched_crown)
 	is_initialized = true
 
 
@@ -200,20 +217,36 @@ func _update_static_alt_tiles() -> void:
 			static_layer.set_cell(cell_coords, tile_source, tile_coords, alt_tile)
 
 
+func _update_race_finish_position(finish_symbol: String = "C") -> void:
+	for object in objects_map.get(finish_symbol, []):
+		finish_global_position = object.global_position
+		break
+	SignalBus.race_finish_position_updated.emit(finish_global_position)
+
+
 func _populate_objects() -> void:
 	for cell_coords in objects_layer.get_used_cells():
 		var symbol = _get_cell_symbol(cell_coords, CELL.OBJECT)
 		var object_scene = symbol_to_tile_info[symbol]["scene"]
 		var object_arguments = symbol_to_tile_info[symbol]["args"]
 		
+		var object_position = objects_layer.to_global(objects_layer.map_to_local(cell_coords))
+		objects_layer.erase_cell(cell_coords)
+		
+		if symbol == "P":
+			player_start_position = object_position
+			continue
+		
 		var object = object_scene.instantiate()
 		if object_arguments:
 			object.init(object_arguments)
-		var object_position = objects_layer.to_global(objects_layer.map_to_local(cell_coords))
 		
 		object.global_position = object_position
 		objects_layer.call_deferred("add_child", object)
-		objects_layer.erase_cell(cell_coords)
+		
+		if symbol not in objects_map:
+			objects_map[symbol] = []
+		objects_map[symbol].append(object)
 
 
 func _init_hidden_areas() -> void:
@@ -245,3 +278,8 @@ func _get_alt_tile(cell: Vector2i, directions: Array[Vector2i]) -> int:
 		if terrain_layer.get_cell_tile_data(cell + directions[i]) != null:
 			return i
 	return 0
+
+
+func _on_player_touched_crown(_player: Player) -> void:
+	if first_time_touching_crown:
+		_update_race_finish_position("P")

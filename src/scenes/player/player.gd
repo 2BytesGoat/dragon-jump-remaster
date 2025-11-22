@@ -7,8 +7,8 @@ enum CONTROLLERS {
 }
 @export var controller_type: CONTROLLERS = CONTROLLERS.NONE
 
-@export var camera: Camera2D
 @onready var remote_transform: RemoteTransform2D = $RemoteTransform2D
+@export var camera: Camera2D = null : set = _on_camera_updated
 
 # movement properties
 @export var starting_facing_direction: int = Vector2i.RIGHT.x
@@ -40,6 +40,7 @@ var active_controller: PlayerController = null
 @onready var afterimage: GPUParticles2D = $Flippable/GPUParticles2D
 @onready var grappling_hook: Node2D = $Flippable/GaplingHook
 @onready var hat_container: Node2D = $Flippable/HatContainer
+@onready var observer: Node = $Observer
 var has_crown: bool = false
 
 # Signals
@@ -65,9 +66,11 @@ var show_afterimage: bool = false : set = _on_show_after_image_changed
 
 func _ready() -> void:
 	starting_position = global_position
-	remote_transform.remote_path = camera.get_path()
 	if controller_type == CONTROLLERS.PLAYER:
 		set_controller(HumanController.new(self))
+	
+	if camera:
+		remote_transform.remote_path = camera.get_path()
 	
 	SignalBus.player_touched_crown.connect(_on_player_touched_crown)
 	reset()
@@ -90,6 +93,12 @@ func set_jump(input: bool) -> void:
 	else:
 		wants_to_jump = false
 		needs_to_release = false
+
+
+func get_info() -> Dictionary:
+	return {
+		"progress": observer.get_progress()
+	}
 
 
 func reset() -> void:
@@ -253,3 +262,13 @@ func _on_interact_box_body_entered(body: Node2D) -> void:
 
 func _on_player_touched_crown(_player: Player) -> void:
 	acceleration = 1500
+
+
+func _on_camera_updated(new_camera: Camera2D) -> void:
+	if not new_camera:
+		return
+	camera = new_camera
+	
+	if not remote_transform:
+		return
+	remote_transform.remote_path = camera.get_path()

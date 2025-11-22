@@ -25,7 +25,6 @@ SignalBus="*res://src/scripts/singletons/signal_bus.gd"
 [display]
 
 window/stretch/mode="canvas_items"
-window/stretch/scale_mode="integer"
 
 [input]
 
