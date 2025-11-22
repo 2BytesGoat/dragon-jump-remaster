@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://csah658s22no4"]
+
+[ext_resource type="Texture2D" uid="uid://riso1kxfjte0" path="res://assets/sprites/world/tile-types.png" id="1_b7w7a"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a321v"]
+atlas = ExtResource("1_b7w7a")
+region = Rect2(16, 48, 16, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o8dqu"]
+size = Vector2(16, 8)
+
+[node name="SlipperyFloor" type="Area2D" groups=["Slippery"]]
+collision_layer = 8
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("AtlasTexture_a321v")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -8)
+shape = SubResource("RectangleShape2D_o8dqu")

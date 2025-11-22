@@ -20,6 +20,11 @@ config/icon="res://icon.svg"
 EnvironmentVariables="*res://src/scripts/singletons/environment_variables.gd"
 Utils="*res://src/scripts/singletons/utils.gd"
 Constants="*res://src/scripts/singletons/constants.gd"
+SignalBus="*res://src/scripts/singletons/signal_bus.gd"
+
+[display]
+
+window/stretch/mode="canvas_items"
 
 [input]
 
@@ -51,3 +56,5 @@ mouse_left={
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
