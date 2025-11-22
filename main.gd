@@ -45,9 +45,9 @@ func initialize_players() -> void:
 			player.picked_powerup.connect(card_container._on_player_picked_powerup)
 			player.used_powerup.connect(card_container._on_player_used_powerup)
 		
-		player_node.add_child(player)
 		player.name = "Player%s"%(i+1)
 		player.global_position = player_position
+		player_node.add_child(player)
 		player_nodes.append(player)
 
 

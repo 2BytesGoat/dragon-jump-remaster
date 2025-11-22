@@ -217,10 +217,13 @@ func _update_static_alt_tiles() -> void:
 			static_layer.set_cell(cell_coords, tile_source, tile_coords, alt_tile)
 
 
-func _update_race_finish_position(finish_symbol: String = "C") -> void:
-	for object in objects_map.get(finish_symbol, []):
-		finish_global_position = object.global_position
-		break
+func _update_race_finish_position(new_position: Vector2 = Vector2.INF) -> void:
+	if new_position == Vector2.INF:
+		for object in objects_map.get("C", []):
+			finish_global_position = object.global_position
+			break
+	else:
+		finish_global_position = new_position
 	SignalBus.race_finish_position_updated.emit(finish_global_position)
 
 
@@ -282,4 +285,4 @@ func _get_alt_tile(cell: Vector2i, directions: Array[Vector2i]) -> int:
 
 func _on_player_touched_crown(_player: Player) -> void:
 	if first_time_touching_crown:
-		_update_race_finish_position("P")
+		_update_race_finish_position(player_start_position)
