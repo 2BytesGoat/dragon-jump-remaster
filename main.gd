@@ -1,14 +1,20 @@
-extends Node2D
+extends Node
 
-@onready var level: Node2D = $Level
-@onready var player_node: Node2D = $Players
-@onready var camera: Camera2D = $Camera2D
+@export var level: Node2D
+@export var player_node: Node2D
+@export var camera_p1: Camera2D
+@export var camera_p2: Camera2D
+@export var viewport_p1: SubViewport
+@export var viewport_p2: SubViewport
+
+
 @onready var level_music: AudioStreamPlayer = $AudioStreamPlayer
 @onready var progress_bar: MarginContainer = $CanvasLayer/ProgressBar
 @onready var card_container: Panel = $CanvasLayer/CardContainer
 @onready var end_screen: Panel = $CanvasLayer/EndScreen
 
 @onready var player_scene = preload("res://src/scenes/player/player.tscn")
+@onready var camera_scene = preload("res://src/scenes/camera_2d.tscn")
 @onready var portal_scene = preload("res://src/scenes/level/tiles/portal.tscn")
 
 var race_started: bool = false
@@ -17,7 +23,7 @@ var total_time: float = 0.0
 var delta_time: float = 0.0
 var update_interval: float = 0.2
 
-var nb_players = 1
+var nb_players = 2
 var player_nodes = []
 
 
@@ -44,10 +50,14 @@ func initialize_players() -> void:
 	for i in range(nb_players):
 		var player: Player = player_scene.instantiate()
 		if i == 0:
-			player.controller_type = player.CONTROLLERS.PLAYER
-			player.camera = camera
+			player.controller_type = player.CONTROLLERS.PLAYER_ONE
+			player.camera = camera_p1
 			player.picked_powerup.connect(card_container._on_player_picked_powerup)
 			player.used_powerup.connect(card_container._on_player_used_powerup)
+		elif i == 1:
+			player.controller_type = player.CONTROLLERS.PLAYER_TWO
+			player.camera = camera_p2
+			viewport_p2.world_2d = viewport_p1.world_2d
 		
 		player.name = "Player%s"%(i+1)
 		player.global_position = player_position
@@ -74,7 +84,8 @@ func _on_player_touched_crown(_player: Player):
 		return
 	
 	first_pickup = false
-	camera.apply_shake(20)
+	for camera in [camera_p1, camera_p2]:
+		camera.apply_shake(20)
 	freeze_frame(.2, .5)
 	#var tween = create_tween()
 	#tween.tween_property(level_music, "pitch_scale", 1.25, 1)
