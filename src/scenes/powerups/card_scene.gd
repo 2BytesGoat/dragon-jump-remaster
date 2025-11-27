@@ -5,7 +5,7 @@ extends Control
 @onready var texture: TextureRect = $MarginContainer/TextureRect
 @onready var label: Label = $MarginContainer/TextureRect/Label
 
-@export var is_splitscreen: bool = false
+var is_splitscreen: bool = false
 var powerup_type: String = ""
 var scales = {
 	"single_player": [0.72, Vector2.ONE],
