@@ -3,9 +3,14 @@ extends Node2D
 
 enum CELL {TERRAIN, STATIC, OBJECT}
 
+const WALL_SYMBOL = "W"
+const SECRET_SYMBOL = "M"
+const EMPTY_SYMBOL = "E"
+const SEPARATOR_SYMBOL = "|"
+
 # TODO: make a datatype for these
 const symbol_to_tile_info: Dictionary = {
-	"W": { # wall
+	WALL_SYMBOL: { # wall
 		"type": CELL.TERRAIN,
 		"autotile": true,
 		"source": 0,
@@ -139,6 +144,7 @@ var object_atlas_coords_to_symbol: Dictionary = {}
 @onready var secrets_visual_layer: TileMapLayer = $SecretsLayer/VisualLayer
 var objects_map: Dictionary = {}
 var player_start_position: Vector2 = Vector2.ZERO
+var populated_cells: Dictionary = {}
 
 # Progress
 var finish_global_position = Vector2.ZERO
@@ -146,7 +152,7 @@ var first_time_touching_crown = true
 
 # These are used to debug in editor
 var is_initialized = false
-var terrain_layer_uesed_cells = []
+var terrain_layer_used_cells = [] # based on this we update the map using tool
 var emplased_time = 0
 var update_interval = 1
 
@@ -178,9 +184,40 @@ func _ready() -> void:
 		_populate_objects()
 		_init_hidden_areas()
 		_update_static_alt_tiles()
+		get_level_code()
 	
 	SignalBus.player_touched_crown.connect(_on_player_touched_crown)
 	is_initialized = true
+
+
+func get_level_code():
+	# get min x,y and max x,y
+	var min_x = INF
+	var min_y = INF
+	var max_x = -INF
+	var max_y = -INF
+	var layers = [terrain_layer, static_layer, objects_layer, secrets_layer]
+	
+	for layer in layers:
+		var rect_size = terrain_layer.get_used_rect()
+		min_x = min(rect_size.position.x, min_x)
+		min_y = min(rect_size.position.y, min_y)
+		max_x = max(rect_size.end.x, max_x)
+		max_y = max(rect_size.end.y, max_y)
+	
+	# because we need them to capture all used cells
+	var level_size = Vector2(abs(max_x - min_x), abs(max_y - min_y))
+	var shift = Vector2i(min_x, min_y)
+	
+	var current_symbol = EMPTY_SYMBOL
+	var level_code = ""
+	for y in range(level_size.y):
+		for x in range(level_size.x):
+			var cell_coords = Vector2i(x, y) + shift
+			current_symbol = populated_cells.get(cell_coords, EMPTY_SYMBOL)
+			level_code += current_symbol
+		level_code += SEPARATOR_SYMBOL
+	print(len(level_code))
 
 
 func _init_atlas_symbol_mapping() -> void:
@@ -195,14 +232,15 @@ func _init_atlas_symbol_mapping() -> void:
 
 func _init_terrain_layer() -> void:
 	var used_cells = terrain_layer.get_used_cells()
-	if terrain_layer_uesed_cells == used_cells:
+	if terrain_layer_used_cells == used_cells:
 		return
 	
 	terrain_layer.clear_visual_tiles()
 	for cell_coords in used_cells:
 		terrain_layer.update_visual_tiles(cell_coords)
+		populated_cells[cell_coords] = WALL_SYMBOL
 	
-	terrain_layer_uesed_cells = used_cells
+	terrain_layer_used_cells = used_cells
 
 
 func _update_static_alt_tiles() -> void:
@@ -215,6 +253,7 @@ func _update_static_alt_tiles() -> void:
 			var callable = Callable(self, alt_tile_callable)
 			var alt_tile = callable.call(cell_coords)
 			static_layer.set_cell(cell_coords, tile_source, tile_coords, alt_tile)
+		populated_cells[cell_coords] = symbol
 
 
 func _update_race_finish_position(new_position: Vector2 = Vector2.INF) -> void:
@@ -234,6 +273,7 @@ func _populate_objects() -> void:
 		var object_arguments = symbol_to_tile_info[symbol]["args"]
 		
 		var object_position = objects_layer.to_global(objects_layer.map_to_local(cell_coords))
+		populated_cells[cell_coords] = symbol
 		objects_layer.erase_cell(cell_coords)
 		
 		if symbol == "P":
@@ -253,19 +293,22 @@ func _populate_objects() -> void:
 
 
 func _init_hidden_areas() -> void:
+	for cell_coords in secrets_layer.get_used_cells():
+		populated_cells[cell_coords] = SECRET_SYMBOL
 	secrets_layer._init_secrets()
 
 
 func _get_cell_symbol(cell_coords: Vector2i, cell_type: CELL) -> String:
 	if cell_type == CELL.TERRAIN:
-		return "W"
+		return WALL_SYMBOL
 	elif cell_type == CELL.STATIC:
 		var atlas_coords = static_layer.get_cell_atlas_coords(cell_coords)
 		return static_atlas_coords_to_symbol[str(atlas_coords)]
 	elif cell_type == CELL.OBJECT:
 		var atlas_coords = objects_layer.get_cell_atlas_coords(cell_coords)
 		return object_atlas_coords_to_symbol[str(atlas_coords)]
-	return "E"
+	# TODO: add handle for secrets
+	return EMPTY_SYMBOL
 
 
 func _get_4sides_alt_tile(cell: Vector2i) -> int:

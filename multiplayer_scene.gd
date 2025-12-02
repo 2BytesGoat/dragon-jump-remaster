@@ -23,7 +23,7 @@ var total_time: float = 0.0
 var delta_time: float = 0.0
 var update_interval: float = 0.2
 
-var nb_players = 2
+var nb_players = 1   
 var player_nodes = []
 
 
