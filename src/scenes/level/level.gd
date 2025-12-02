@@ -209,15 +209,30 @@ func get_level_code():
 	var level_size = Vector2(abs(max_x - min_x), abs(max_y - min_y))
 	var shift = Vector2i(min_x, min_y)
 	
-	var current_symbol = EMPTY_SYMBOL
+	var current_symbol = null
+	var current_symbol_cnt = 0
 	var level_code = ""
 	for y in range(level_size.y):
 		for x in range(level_size.x):
 			var cell_coords = Vector2i(x, y) + shift
-			current_symbol = populated_cells.get(cell_coords, EMPTY_SYMBOL)
-			level_code += current_symbol
-		level_code += SEPARATOR_SYMBOL
+			var cell_symbol = populated_cells.get(cell_coords, EMPTY_SYMBOL)
+			
+			if cell_symbol != current_symbol:
+				if current_symbol_cnt > 0:
+					level_code += "%s%s" % [current_symbol, current_symbol_cnt]
+				current_symbol = cell_symbol
+				current_symbol_cnt = 0
+			current_symbol_cnt += 1
+		
+		if current_symbol_cnt > 0:
+			level_code += "%s%s" % [current_symbol, current_symbol_cnt]
+		
+		if y < level_size.y - 1:
+			level_code += SEPARATOR_SYMBOL
+	# V1 - 21904
+	# V2 - 2331
 	print(len(level_code))
+	print(level_code)
 
 
 func _init_atlas_symbol_mapping() -> void:
