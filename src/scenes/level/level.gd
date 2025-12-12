@@ -1,7 +1,7 @@
 @tool
 extends Node2D
 
-enum CELL {TERRAIN, STATIC, OBJECT}
+enum CELL {TERRAIN, STATIC, OBJECT, SECRETS}
 
 const WALL_SYMBOL = "W"
 const SECRET_SYMBOL = "M"
@@ -11,10 +11,8 @@ const SEPARATOR_SYMBOL = "|"
 # TODO: make a datatype for these
 const symbol_to_tile_info: Dictionary = {
 	WALL_SYMBOL: { # wall
-		"type": CELL.TERRAIN,
-		"autotile": true,
-		"source": 0,
-		"coords": null,
+		"type": CELL.TERRAIN,		"source": 0,
+		"coords": Vector2i(0, 0),
 		"callable": null,
 		"debug_alt": null,
 		"scene": null,
@@ -22,7 +20,6 @@ const symbol_to_tile_info: Dictionary = {
 	},
 	"Y": { # spikes
 		"type": CELL.STATIC,
-		"autotile": false,
 		"source": 0,
 		"coords": Vector2i(0, 2),
 		"callable": "_get_4sides_alt_tile",
@@ -32,7 +29,6 @@ const symbol_to_tile_info: Dictionary = {
 	},
 	"R": { # reset blocks
 		"type": CELL.STATIC,
-		"autotile": false,
 		"source": 0,
 		"coords": Vector2i(1, 2),
 		"callable": "_replace_with_alt_tile",
@@ -42,7 +38,6 @@ const symbol_to_tile_info: Dictionary = {
 	},
 	"B": { # destroyable block
 		"type": CELL.OBJECT,
-		"autotile": false,
 		"source": 0,
 		"coords": Vector2i(0, 3),
 		"callable": null,
@@ -52,7 +47,6 @@ const symbol_to_tile_info: Dictionary = {
 	},
 	"I": { # ice
 		"type": CELL.OBJECT,
-		"autotile": false,
 		"source": 0,
 		"coords": Vector2i(1, 3),
 		"callable": null,
@@ -62,7 +56,6 @@ const symbol_to_tile_info: Dictionary = {
 	},
 	"O": { # dissolve block
 		"type": CELL.OBJECT,
-		"autotile": false,
 		"source": 0,
 		"coords": Vector2i(2, 3),
 		"callable": null,
@@ -72,7 +65,6 @@ const symbol_to_tile_info: Dictionary = {
 	},
 	"J": { # double jump
 		"type": CELL.OBJECT,
-		"autotile": false,
 		"source": 0,
 		"coords": Vector2i(0, 4),
 		"callable": null,
@@ -82,7 +74,6 @@ const symbol_to_tile_info: Dictionary = {
 	},
 	"S": { # stomp
 		"type": CELL.OBJECT,
-		"autotile": false,
 		"source": 0,
 		"coords": Vector2i(1, 4),
 		"callable": null,
@@ -92,7 +83,6 @@ const symbol_to_tile_info: Dictionary = {
 	},
 	"D": { # dash
 		"type": CELL.OBJECT,
-		"autotile": false,
 		"source": 0,
 		"coords": Vector2i(2, 4),
 		"callable": null,
@@ -102,7 +92,6 @@ const symbol_to_tile_info: Dictionary = {
 	},
 	"G": { # grapple
 		"type": CELL.OBJECT,
-		"autotile": false,
 		"source": 0,
 		"coords": Vector2i(3, 4),
 		"callable": null,
@@ -112,7 +101,6 @@ const symbol_to_tile_info: Dictionary = {
 	},
 	"C": { # corwn
 		"type": CELL.OBJECT,
-		"autotile": false,
 		"source": 0,
 		"coords": Vector2i(4, 3),
 		"callable": null,
@@ -122,7 +110,6 @@ const symbol_to_tile_info: Dictionary = {
 	},
 	"P": { # player
 		"type": CELL.OBJECT,
-		"autotile": false,
 		"source": 0,
 		"coords": Vector2i(5, 3),
 		"callable": null,
@@ -140,8 +127,9 @@ var object_atlas_coords_to_symbol: Dictionary = {}
 @onready var static_layer : TileMapLayer = $StaticLayer
 @onready var objects_layer: TileMapLayer = $ObjectsLayer
 @onready var secrets_layer: TileMapLayer = $SecretsLayer
-
+@onready var terrain_visual_layer: TileMapLayer = $TerrainLayer/VisualLayer
 @onready var secrets_visual_layer: TileMapLayer = $SecretsLayer/VisualLayer
+
 var objects_map: Dictionary = {}
 var player_start_position: Vector2 = Vector2.ZERO
 var populated_cells: Dictionary = {}
@@ -181,10 +169,13 @@ func _ready() -> void:
 	_init_terrain_layer()
 	
 	if not Engine.is_editor_hint():
-		_populate_objects()
-		_init_hidden_areas()
-		_update_static_alt_tiles()
-		get_level_code()
+		#_populate_objects()
+		#_init_hidden_areas()
+		#_update_static_alt_tiles()
+		var level_code = get_level_code()
+		print(level_code)
+		clear_level()
+		set_level(level_code)
 	
 	SignalBus.player_touched_crown.connect(_on_player_touched_crown)
 	is_initialized = true
@@ -229,10 +220,61 @@ func get_level_code():
 		
 		if y < level_size.y - 1:
 			level_code += SEPARATOR_SYMBOL
-	# V1 - 21904
-	# V2 - 2331
-	print(len(level_code))
-	print(level_code)
+	
+	return level_code
+
+
+func clear_level() -> void:
+	for layer: TileMapLayer in [terrain_layer, static_layer, objects_layer, secrets_layer, terrain_visual_layer, secrets_visual_layer]:
+		layer.clear()
+	
+	for child in objects_layer.get_children():
+		objects_layer.remove_child(child)
+		child.queue_free()
+
+
+func set_level(level_code: String) -> void:
+	var char_cnt = 0
+	var current_char = 0
+	
+	var y_offset = 0
+	var x_offset = 0
+	for char in level_code:
+		if char == "|":
+			if char_cnt > 0:
+				_set_multiple_cells(current_char, char_cnt, Vector2i(x_offset, y_offset))
+			y_offset += 1
+			x_offset = 0
+		if char.is_valid_int():
+			char_cnt = char_cnt * 10 + int(char)
+		else:
+			if char_cnt > 0:
+				_set_multiple_cells(current_char, char_cnt, Vector2i(x_offset, y_offset))
+			current_char = char
+			x_offset += char_cnt
+			char_cnt = 0
+	if char_cnt > 0:
+		_set_multiple_cells(current_char, char_cnt, Vector2i(x_offset, y_offset))
+
+
+func _set_multiple_cells(cell_symbol: String, cell_cnt: int, offset_coords: Vector2i) -> void:
+	if cell_symbol == EMPTY_SYMBOL:
+		return
+	
+	var cell_type_info = symbol_to_tile_info[cell_symbol]
+	var cell_layer = terrain_layer
+	match cell_type_info["type"]:
+		CELL.TERRAIN:
+			cell_layer = terrain_layer
+		CELL.STATIC:
+			cell_layer = static_layer
+		CELL.OBJECT:
+			cell_layer = objects_layer
+		CELL.SECRETS:
+			cell_layer = secrets_layer
+	
+	for i in range(cell_cnt):
+		cell_layer.set_cell(offset_coords + Vector2i(i, 0), cell_type_info["source"], cell_type_info["coords"])
 
 
 func _init_atlas_symbol_mapping() -> void:
