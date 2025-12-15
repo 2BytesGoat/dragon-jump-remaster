@@ -249,32 +249,32 @@ func clear_level() -> void:
 
 
 func set_level(level_code: String) -> void:
-	var char_cnt = 0
-	var current_char = "|"
+	var symbol_cnt = 0
+	var current_symbol = "|"
 	
 	var y_offset = 0
 	var x_offset = 0
-	for char in level_code:
-		if _is_tilemap_symbol(char) and char != current_char:
-			if char_cnt > 0:
-				_set_multiple_cells(current_char, char_cnt, Vector2i(x_offset, y_offset))
-			current_char = char
-			x_offset += char_cnt
-			char_cnt = 0
-		elif char.is_valid_int():
-			char_cnt = char_cnt * 10 + int(char)
-		elif char == "|":
-			if char_cnt > 0:
-				_set_multiple_cells(current_char, char_cnt, Vector2i(x_offset, y_offset))
+	for symbol in level_code:
+		if _is_tilemap_symbol(symbol) and symbol != current_symbol:
+			if symbol_cnt > 0:
+				_set_multiple_cells(current_symbol, symbol_cnt, Vector2i(x_offset, y_offset))
+			current_symbol = symbol
+			x_offset += symbol_cnt
+			symbol_cnt = 0
+		elif symbol.is_valid_int():
+			symbol_cnt = symbol_cnt * 10 + int(symbol)
+		elif symbol == "|":
+			if symbol_cnt > 0:
+				_set_multiple_cells(current_symbol, symbol_cnt, Vector2i(x_offset, y_offset))
 			y_offset += 1
 			x_offset = 0
-			char_cnt = 0
-	if char_cnt > 0:
-		_set_multiple_cells(current_char, char_cnt, Vector2i(x_offset, y_offset))
+			symbol_cnt = 0
+	if symbol_cnt > 0:
+		_set_multiple_cells(current_symbol, symbol_cnt, Vector2i(x_offset, y_offset))
 
 
-func _is_tilemap_symbol(char: String) -> bool:
-	return char == EMPTY_SYMBOL or char in symbol_to_tile_info
+func _is_tilemap_symbol(symbol: String) -> bool:
+	return symbol == EMPTY_SYMBOL or symbol in symbol_to_tile_info
 
 
 func _set_multiple_cells(cell_symbol: String, cell_cnt: int, offset_coords: Vector2i) -> void:
