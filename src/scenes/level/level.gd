@@ -116,6 +116,15 @@ const symbol_to_tile_info: Dictionary = {
 		"debug_alt": null,
 		"scene": preload("res://src/scenes/player/player.tscn"),
 		"args": null
+	},
+	"M": { # secret area
+		"type": CELL.SECRETS,
+		"source": 0,
+		"coords": Vector2i(0, 1),
+		"callable": null,
+		"debug_alt": null,
+		"scene": null,
+		"args": null
 	}
 }
 
@@ -169,13 +178,16 @@ func _ready() -> void:
 	_init_terrain_layer()
 	
 	if not Engine.is_editor_hint():
-		#_populate_objects()
-		#_init_hidden_areas()
-		#_update_static_alt_tiles()
+		_populate_objects()
+		_init_hidden_areas()
+		_update_static_alt_tiles()
 		var level_code = get_level_code()
 		print(level_code)
 		clear_level()
 		set_level(level_code)
+		_populate_objects()
+		_init_hidden_areas()
+		_update_static_alt_tiles()
 	
 	SignalBus.player_touched_crown.connect(_on_player_touched_crown)
 	is_initialized = true
@@ -213,6 +225,7 @@ func get_level_code():
 					level_code += "%s%s" % [current_symbol, current_symbol_cnt]
 				current_symbol = cell_symbol
 				current_symbol_cnt = 0
+			
 			current_symbol_cnt += 1
 		
 		if current_symbol_cnt > 0:
@@ -235,26 +248,33 @@ func clear_level() -> void:
 
 func set_level(level_code: String) -> void:
 	var char_cnt = 0
-	var current_char = 0
+	var current_char = "|"
 	
 	var y_offset = 0
 	var x_offset = 0
 	for char in level_code:
-		if char == "|":
+		if _is_tilemap_symbol(char) and char != current_char:
 			if char_cnt > 0:
-				_set_multiple_cells(current_char, char_cnt, Vector2i(x_offset, y_offset))
-			y_offset += 1
-			x_offset = 0
-		if char.is_valid_int():
-			char_cnt = char_cnt * 10 + int(char)
-		else:
-			if char_cnt > 0:
+				print(current_char, " ", char_cnt, " ", Vector2i(x_offset, y_offset))
 				_set_multiple_cells(current_char, char_cnt, Vector2i(x_offset, y_offset))
 			current_char = char
 			x_offset += char_cnt
 			char_cnt = 0
+		elif char.is_valid_int():
+			char_cnt = char_cnt * 10 + int(char)
+		elif char == "|":
+			if char_cnt > 0:
+				print(current_char, " ", char_cnt, " ", Vector2i(x_offset, y_offset))
+				_set_multiple_cells(current_char, char_cnt, Vector2i(x_offset, y_offset))
+			y_offset += 1
+			x_offset = 0
+			char_cnt = 0
 	if char_cnt > 0:
 		_set_multiple_cells(current_char, char_cnt, Vector2i(x_offset, y_offset))
+
+
+func _is_tilemap_symbol(char: String) -> bool:
+	return char == EMPTY_SYMBOL or char in symbol_to_tile_info
 
 
 func _set_multiple_cells(cell_symbol: String, cell_cnt: int, offset_coords: Vector2i) -> void:
@@ -273,6 +293,7 @@ func _set_multiple_cells(cell_symbol: String, cell_cnt: int, offset_coords: Vect
 		CELL.SECRETS:
 			cell_layer = secrets_layer
 	
+	#print(cell_layer, ' ', cell_type_info, ' ', cell_cnt)
 	for i in range(cell_cnt):
 		cell_layer.set_cell(offset_coords + Vector2i(i, 0), cell_type_info["source"], cell_type_info["coords"])
 
