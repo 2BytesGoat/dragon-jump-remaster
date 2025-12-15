@@ -233,6 +233,8 @@ func get_level_code():
 		
 		if y < level_size.y - 1:
 			level_code += SEPARATOR_SYMBOL
+		
+		current_symbol_cnt = 0
 	
 	return level_code
 
@@ -255,7 +257,6 @@ func set_level(level_code: String) -> void:
 	for char in level_code:
 		if _is_tilemap_symbol(char) and char != current_char:
 			if char_cnt > 0:
-				print(current_char, " ", char_cnt, " ", Vector2i(x_offset, y_offset))
 				_set_multiple_cells(current_char, char_cnt, Vector2i(x_offset, y_offset))
 			current_char = char
 			x_offset += char_cnt
@@ -264,7 +265,6 @@ func set_level(level_code: String) -> void:
 			char_cnt = char_cnt * 10 + int(char)
 		elif char == "|":
 			if char_cnt > 0:
-				print(current_char, " ", char_cnt, " ", Vector2i(x_offset, y_offset))
 				_set_multiple_cells(current_char, char_cnt, Vector2i(x_offset, y_offset))
 			y_offset += 1
 			x_offset = 0
