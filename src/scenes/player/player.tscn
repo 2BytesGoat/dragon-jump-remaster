@@ -477,7 +477,7 @@ texture_filter = 1
 
 [node name="Sprite" type="Sprite2D" parent="Flippable"]
 texture_filter = 1
-position = Vector2(1, -9)
+position = Vector2(1, -8)
 texture = ExtResource("3_4r4qr")
 offset = Vector2(-1, 0)
 hframes = 21

@@ -16,7 +16,8 @@ const symbol_to_tile_info: Dictionary = {
 		"callable": null,
 		"debug_alt": null,
 		"scene": null,
-		"args": null
+		"args": null,
+		"over_wall": false
 	},
 	"Y": { # spikes
 		"type": CELL.STATIC,
@@ -25,7 +26,8 @@ const symbol_to_tile_info: Dictionary = {
 		"callable": "_get_4sides_alt_tile",
 		"debug_alt": null,
 		"scene": null,
-		"args": null
+		"args": null,
+		"over_wall": false
 	},
 	"R": { # reset blocks
 		"type": CELL.STATIC,
@@ -34,7 +36,8 @@ const symbol_to_tile_info: Dictionary = {
 		"callable": "_replace_with_alt_tile",
 		"debug_alt": null,
 		"scene": null,
-		"args": null
+		"args": null,
+		"over_wall": false
 	},
 	"B": { # destroyable block
 		"type": CELL.OBJECT,
@@ -43,7 +46,8 @@ const symbol_to_tile_info: Dictionary = {
 		"callable": null,
 		"debug_alt": null,
 		"scene": preload("res://src/scenes/level/tiles/destroyable_block.tscn"),
-		"args": null
+		"args": null,
+		"over_wall": false
 	},
 	"I": { # ice
 		"type": CELL.OBJECT,
@@ -52,7 +56,8 @@ const symbol_to_tile_info: Dictionary = {
 		"callable": null,
 		"debug_alt": null,
 		"scene": preload("res://src/scenes/level/tiles/slippery_floor.tscn"),
-		"args": null
+		"args": null,
+		"over_wall": true
 	},
 	"O": { # dissolve block
 		"type": CELL.OBJECT,
@@ -61,7 +66,8 @@ const symbol_to_tile_info: Dictionary = {
 		"callable": null,
 		"debug_alt": null,
 		"scene": preload("res://src/scenes/level/tiles/dissolve_block.tscn"),
-		"args": null
+		"args": null,
+		"over_wall": false
 	},
 	"J": { # double jump
 		"type": CELL.OBJECT,
@@ -70,7 +76,8 @@ const symbol_to_tile_info: Dictionary = {
 		"callable": null,
 		"debug_alt": null,
 		"scene": preload("res://src/scenes/powerups/powerup.tscn"),
-		"args": ["DoubleJump"]
+		"args": ["DoubleJump"],
+		"over_wall": false
 	},
 	"S": { # stomp
 		"type": CELL.OBJECT,
@@ -79,7 +86,8 @@ const symbol_to_tile_info: Dictionary = {
 		"callable": null,
 		"debug_alt": null,
 		"scene": preload("res://src/scenes/powerups/powerup.tscn"),
-		"args": ["Stomp"]
+		"args": ["Stomp"],
+		"over_wall": false
 	},
 	"D": { # dash
 		"type": CELL.OBJECT,
@@ -88,7 +96,8 @@ const symbol_to_tile_info: Dictionary = {
 		"callable": null,
 		"debug_alt": null,
 		"scene": preload("res://src/scenes/powerups/powerup.tscn"),
-		"args": ["Dash"]
+		"args": ["Dash"],
+		"over_wall": false
 	},
 	"G": { # grapple
 		"type": CELL.OBJECT,
@@ -97,7 +106,8 @@ const symbol_to_tile_info: Dictionary = {
 		"callable": null,
 		"debug_alt": null,
 		"scene": preload("res://src/scenes/powerups/powerup.tscn"),
-		"args": ["Grapple"]
+		"args": ["Grapple"],
+		"over_wall": false
 	},
 	"C": { # corwn
 		"type": CELL.OBJECT,
@@ -106,7 +116,8 @@ const symbol_to_tile_info: Dictionary = {
 		"callable": null,
 		"debug_alt": null,
 		"scene": preload("res://src/scenes/level/tiles/crown.tscn"),
-		"args": null
+		"args": null,
+		"over_wall": false
 	},
 	"P": { # player
 		"type": CELL.OBJECT,
@@ -115,7 +126,8 @@ const symbol_to_tile_info: Dictionary = {
 		"callable": null,
 		"debug_alt": null,
 		"scene": preload("res://src/scenes/player/player.tscn"),
-		"args": null
+		"args": null,
+		"over_wall": false
 	},
 	"M": { # secret area
 		"type": CELL.SECRETS,
@@ -124,7 +136,8 @@ const symbol_to_tile_info: Dictionary = {
 		"callable": null,
 		"debug_alt": null,
 		"scene": null,
-		"args": null
+		"args": null,
+		"over_wall": true
 	}
 }
 
@@ -185,6 +198,7 @@ func _ready() -> void:
 		print(level_code)
 		clear_level()
 		set_level(level_code)
+		_init_terrain_layer()
 		_populate_objects()
 		_init_hidden_areas()
 		_update_static_alt_tiles()
@@ -281,6 +295,7 @@ func _set_multiple_cells(cell_symbol: String, cell_cnt: int, offset_coords: Vect
 	if cell_symbol == EMPTY_SYMBOL:
 		return
 	
+	var wall_info = symbol_to_tile_info[WALL_SYMBOL]
 	var cell_type_info = symbol_to_tile_info[cell_symbol]
 	var cell_layer = terrain_layer
 	match cell_type_info["type"]:
@@ -296,6 +311,8 @@ func _set_multiple_cells(cell_symbol: String, cell_cnt: int, offset_coords: Vect
 	#print(cell_layer, ' ', cell_type_info, ' ', cell_cnt)
 	for i in range(cell_cnt):
 		cell_layer.set_cell(offset_coords + Vector2i(i, 0), cell_type_info["source"], cell_type_info["coords"])
+		if cell_type_info["over_wall"]:
+			terrain_layer.set_cell(offset_coords + Vector2i(i, 0), wall_info["source"], wall_info["coords"])
 
 
 func _init_atlas_symbol_mapping() -> void:
