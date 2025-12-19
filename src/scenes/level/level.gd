@@ -187,21 +187,29 @@ func _process(delta: float) -> void:
 
 
 func _ready() -> void:
+	#clear_level()
+	var old_code = "q42/q1W40q1/q1W13E16W11q1/q1W12E18W10q1/q1W3E34W3q1/q1W2E36W2q1/q1W2E37W1q1/q1W1E38W1q1/q1W1E38W1q1/q1W1E38W1q1/q1W1E38W1q1/q1W1E38W1q1/q1W1E38W1q1/q1W1E14D1E5D1E5D1E11W1q1/q1W1E2P1E6W1E24Q1E3W1q1/q1W11E19W10q1/q9W3E19W4q7/E8q1W3E20W3q1E6/E8q1W2E22W2q1E6/E8q1W1X24W1q1E6/E8q1W26q1E6/E8q28E6"
+	var level_code = old_code.replace("q", "E").replace("X", "Y").replace("/", "|").replace("V", "O").replace("D", "J")
+	#set_level(level_code)
+	#_init_terrain_layer()
+	#_populate_objects()
+	#_init_hidden_areas()
+	#_update_static_alt_tiles()
+	#print(get_level_code())
+	#
 	_init_atlas_symbol_mapping()
 	_init_terrain_layer()
 	
 	if not Engine.is_editor_hint():
-		_populate_objects()
-		_init_hidden_areas()
-		_update_static_alt_tiles()
-		var level_code = get_level_code()
-		print(level_code)
-		clear_level()
-		set_level(level_code)
+		#old_code = "W34E19|W5E13O1E4W3E5W3E19|W4E14O1E4W2E7W2E19|W2E16O1E4W2E8W1E19|W2E16O1E4W2E8W1E19|W2E16O1E4W2E8W1E19|W2E16O1E4W2E8W1E18W1|W2E16O1E14W1E19|W2E31W1E19|W2E49W1E1|E1W15Y5W6E6W1E19|E1W26E6W1E19|E1W2E8W3E4O1E14W1E19|W2E10W2E4O1E14W1E19|W1E11W2E4O1E14W1E19|W1E11W2E4O1E14W1E19|W1E17O1E14W1E19|W1E26W7E19|W1E1P1E5W1E18W7E19|W17Y3W14E19|E16W5E32"
+		#level_code = old_code.replace("q", "E").replace("X", "Y").replace("/", "|").replace("V", "O")
+		#clear_level()
+		#set_level(level_code)
 		_init_terrain_layer()
 		_populate_objects()
 		_init_hidden_areas()
 		_update_static_alt_tiles()
+		print(get_level_code())
 	
 	SignalBus.player_touched_crown.connect(_on_player_touched_crown)
 	is_initialized = true
