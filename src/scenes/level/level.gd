@@ -1,129 +1,143 @@
 @tool
 extends Node2D
 
-enum CELL {TERRAIN, STATIC, OBJECT}
+enum CELL {TERRAIN, STATIC, OBJECT, SECRETS}
+
+const WALL_SYMBOL = "W"
+const SECRET_SYMBOL = "M"
+const EMPTY_SYMBOL = "E"
+const SEPARATOR_SYMBOL = "|"
 
 # TODO: make a datatype for these
 const symbol_to_tile_info: Dictionary = {
-	"W": { # wall
-		"type": CELL.TERRAIN,
-		"autotile": true,
-		"source": 0,
-		"coords": null,
+	WALL_SYMBOL: { # wall
+		"type": CELL.TERRAIN,		"source": 0,
+		"coords": Vector2i(0, 0),
 		"callable": null,
 		"debug_alt": null,
 		"scene": null,
-		"args": null
+		"args": null,
+		"over_wall": false
 	},
 	"Y": { # spikes
 		"type": CELL.STATIC,
-		"autotile": false,
 		"source": 0,
 		"coords": Vector2i(0, 2),
 		"callable": "_get_4sides_alt_tile",
 		"debug_alt": null,
 		"scene": null,
-		"args": null
+		"args": null,
+		"over_wall": false
 	},
 	"R": { # reset blocks
 		"type": CELL.STATIC,
-		"autotile": false,
 		"source": 0,
 		"coords": Vector2i(1, 2),
 		"callable": "_replace_with_alt_tile",
 		"debug_alt": null,
 		"scene": null,
-		"args": null
+		"args": null,
+		"over_wall": false
 	},
 	"B": { # destroyable block
 		"type": CELL.OBJECT,
-		"autotile": false,
 		"source": 0,
 		"coords": Vector2i(0, 3),
 		"callable": null,
 		"debug_alt": null,
 		"scene": preload("res://src/scenes/level/tiles/destroyable_block.tscn"),
-		"args": null
+		"args": null,
+		"over_wall": false
 	},
 	"I": { # ice
 		"type": CELL.OBJECT,
-		"autotile": false,
 		"source": 0,
 		"coords": Vector2i(1, 3),
 		"callable": null,
 		"debug_alt": null,
 		"scene": preload("res://src/scenes/level/tiles/slippery_floor.tscn"),
-		"args": null
+		"args": null,
+		"over_wall": true
 	},
 	"O": { # dissolve block
 		"type": CELL.OBJECT,
-		"autotile": false,
 		"source": 0,
 		"coords": Vector2i(2, 3),
 		"callable": null,
 		"debug_alt": null,
 		"scene": preload("res://src/scenes/level/tiles/dissolve_block.tscn"),
-		"args": null
+		"args": null,
+		"over_wall": false
 	},
 	"J": { # double jump
 		"type": CELL.OBJECT,
-		"autotile": false,
 		"source": 0,
 		"coords": Vector2i(0, 4),
 		"callable": null,
 		"debug_alt": null,
 		"scene": preload("res://src/scenes/powerups/powerup.tscn"),
-		"args": ["DoubleJump"]
+		"args": ["DoubleJump"],
+		"over_wall": false
 	},
 	"S": { # stomp
 		"type": CELL.OBJECT,
-		"autotile": false,
 		"source": 0,
 		"coords": Vector2i(1, 4),
 		"callable": null,
 		"debug_alt": null,
 		"scene": preload("res://src/scenes/powerups/powerup.tscn"),
-		"args": ["Stomp"]
+		"args": ["Stomp"],
+		"over_wall": false
 	},
 	"D": { # dash
 		"type": CELL.OBJECT,
-		"autotile": false,
 		"source": 0,
 		"coords": Vector2i(2, 4),
 		"callable": null,
 		"debug_alt": null,
 		"scene": preload("res://src/scenes/powerups/powerup.tscn"),
-		"args": ["Dash"]
+		"args": ["Dash"],
+		"over_wall": false
 	},
 	"G": { # grapple
 		"type": CELL.OBJECT,
-		"autotile": false,
 		"source": 0,
 		"coords": Vector2i(3, 4),
 		"callable": null,
 		"debug_alt": null,
 		"scene": preload("res://src/scenes/powerups/powerup.tscn"),
-		"args": ["Grapple"]
+		"args": ["Grapple"],
+		"over_wall": false
 	},
 	"C": { # corwn
 		"type": CELL.OBJECT,
-		"autotile": false,
 		"source": 0,
 		"coords": Vector2i(4, 3),
 		"callable": null,
 		"debug_alt": null,
 		"scene": preload("res://src/scenes/level/tiles/crown.tscn"),
-		"args": null
+		"args": null,
+		"over_wall": false
 	},
 	"P": { # player
 		"type": CELL.OBJECT,
-		"autotile": false,
 		"source": 0,
 		"coords": Vector2i(5, 3),
 		"callable": null,
 		"debug_alt": null,
 		"scene": preload("res://src/scenes/player/player.tscn"),
-		"args": null
+		"args": null,
+		"over_wall": false
+	},
+	"M": { # secret area
+		"type": CELL.SECRETS,
+		"source": 0,
+		"coords": Vector2i(0, 1),
+		"callable": null,
+		"debug_alt": null,
+		"scene": null,
+		"args": null,
+		"over_wall": true
 	}
 }
 
@@ -135,10 +149,12 @@ var object_atlas_coords_to_symbol: Dictionary = {}
 @onready var static_layer : TileMapLayer = $StaticLayer
 @onready var objects_layer: TileMapLayer = $ObjectsLayer
 @onready var secrets_layer: TileMapLayer = $SecretsLayer
-
+@onready var terrain_visual_layer: TileMapLayer = $TerrainLayer/VisualLayer
 @onready var secrets_visual_layer: TileMapLayer = $SecretsLayer/VisualLayer
+
 var objects_map: Dictionary = {}
 var player_start_position: Vector2 = Vector2.ZERO
+var populated_cells: Dictionary = {}
 
 # Progress
 var finish_global_position = Vector2.ZERO
@@ -146,7 +162,7 @@ var first_time_touching_crown = true
 
 # These are used to debug in editor
 var is_initialized = false
-var terrain_layer_uesed_cells = []
+var terrain_layer_used_cells = [] # based on this we update the map using tool
 var emplased_time = 0
 var update_interval = 1
 
@@ -171,16 +187,146 @@ func _process(delta: float) -> void:
 
 
 func _ready() -> void:
+	#clear_level()
+	var old_code = "q44/q1W42q1/q1W8E29W5q1/q1W3E37W2q1/q1W2E38W2q1/q1W1E25X2E13W1q1/q1W1E25W2X1E12W1q1/q1W1E25W2X1E12W1q1/q1W1E25W2X1E12W1q1/q1W1E15D1E4D1E4W2X1E11B1W1q1/q1W1E3Q1E26B2E8W1q1/q1W9E22W2E8W1q1/q1W9X8E24W1q1/q1W17E6X2E16W1q1/q1W17E5X1W2X1E11B1E1X2W1q1/q1W7E15X1W2X1E10W6q1/q1W3E20X2E11W6q1/q1W2E34W6q1/q1W1E35W6q1/q1W1E13D1E4B1E10B2E1X3W6q1/q1W1E18W1E9W13q1/q1W1E18W1E9W13q1/q1W1E28W13q1/q1W1E23W18q1/q1W1E23W18q1/q1W1E2P1E8B1E11W18q1/q1W19X5W18q1/q1W42q1/q44"
+	var level_code = old_code.replace("q", "E").replace("X", "Y").replace("/", "|").replace("V", "O").replace("D", "J")
+	#set_level(level_code)
+	#_init_terrain_layer()
+	#_populate_objects()
+	#_init_hidden_areas()
+	#_update_static_alt_tiles()
+	#print(get_level_code())
+	#
 	_init_atlas_symbol_mapping()
 	_init_terrain_layer()
 	
 	if not Engine.is_editor_hint():
+		#old_code = "W34E19|W5E13O1E4W3E5W3E19|W4E14O1E4W2E7W2E19|W2E16O1E4W2E8W1E19|W2E16O1E4W2E8W1E19|W2E16O1E4W2E8W1E19|W2E16O1E4W2E8W1E18W1|W2E16O1E14W1E19|W2E31W1E19|W2E49W1E1|E1W15Y5W6E6W1E19|E1W26E6W1E19|E1W2E8W3E4O1E14W1E19|W2E10W2E4O1E14W1E19|W1E11W2E4O1E14W1E19|W1E11W2E4O1E14W1E19|W1E17O1E14W1E19|W1E26W7E19|W1E1P1E5W1E18W7E19|W17Y3W14E19|E16W5E32"
+		#level_code = old_code.replace("q", "E").replace("X", "Y").replace("/", "|").replace("V", "O")
+		#clear_level()
+		#set_level(level_code)
+		_init_terrain_layer()
 		_populate_objects()
 		_init_hidden_areas()
 		_update_static_alt_tiles()
+		print(get_level_code())
 	
 	SignalBus.player_touched_crown.connect(_on_player_touched_crown)
 	is_initialized = true
+
+
+func get_level_code():
+	# get min x,y and max x,y
+	var min_x = INF
+	var min_y = INF
+	var max_x = -INF
+	var max_y = -INF
+	var layers = [terrain_layer, static_layer, objects_layer, secrets_layer]
+	
+	for layer in layers:
+		var rect_size = terrain_layer.get_used_rect()
+		min_x = min(rect_size.position.x, min_x)
+		min_y = min(rect_size.position.y, min_y)
+		max_x = max(rect_size.end.x, max_x)
+		max_y = max(rect_size.end.y, max_y)
+	
+	# because we need them to capture all used cells
+	var level_size = Vector2(abs(max_x - min_x), abs(max_y - min_y))
+	var shift = Vector2i(min_x, min_y)
+	
+	var current_symbol = null
+	var current_symbol_cnt = 0
+	var level_code = ""
+	for y in range(level_size.y):
+		for x in range(level_size.x):
+			var cell_coords = Vector2i(x, y) + shift
+			var cell_symbol = populated_cells.get(cell_coords, EMPTY_SYMBOL)
+			
+			if cell_symbol != current_symbol:
+				if current_symbol_cnt > 0:
+					level_code += "%s%s" % [current_symbol, current_symbol_cnt]
+				current_symbol = cell_symbol
+				current_symbol_cnt = 0
+			
+			current_symbol_cnt += 1
+		
+		if current_symbol_cnt > 0:
+			level_code += "%s%s" % [current_symbol, current_symbol_cnt]
+		
+		if y < level_size.y - 1:
+			level_code += SEPARATOR_SYMBOL
+		
+		current_symbol_cnt = 0
+	
+	return level_code
+
+
+func clear_level() -> void:
+	for layer: TileMapLayer in [terrain_layer, static_layer, objects_layer, secrets_layer, terrain_visual_layer, secrets_visual_layer]:
+		layer.clear()
+	
+	for child in objects_layer.get_children():
+		objects_layer.remove_child(child)
+		child.queue_free()
+
+
+func set_level(level_code: String) -> void:
+	var symbol_cnt = 0
+	var current_symbols = ""
+	var should_flush = false
+	
+	var y_offset = 0
+	var x_offset = 0
+	
+	for symbol in level_code:
+		if _is_tilemap_symbol(symbol):
+			if symbol_cnt > 0 and should_flush:
+				_set_multiple_cells(current_symbols, symbol_cnt, Vector2i(x_offset, y_offset))
+				current_symbols = ""
+				x_offset += symbol_cnt
+				symbol_cnt = 0
+				should_flush = false
+			current_symbols += symbol
+		elif symbol.is_valid_int():
+			symbol_cnt = symbol_cnt * 10 + int(symbol)
+			should_flush = true
+		elif symbol == "|":
+			_set_multiple_cells(current_symbols, symbol_cnt, Vector2i(x_offset, y_offset))
+			current_symbols = ""
+			symbol_cnt = 0
+			x_offset = 0
+			y_offset += 1
+	if symbol_cnt > 0:
+		_set_multiple_cells(current_symbols, symbol_cnt, Vector2i(x_offset, y_offset))
+
+
+func _is_tilemap_symbol(symbol: String) -> bool:
+	return symbol == EMPTY_SYMBOL or symbol in symbol_to_tile_info
+
+
+func _set_multiple_cells(cell_symbols: String, cell_cnt: int, offset_coords: Vector2i) -> void:
+	if cell_symbols == EMPTY_SYMBOL:
+		return
+	
+	for symbol in cell_symbols:
+		var wall_info = symbol_to_tile_info[WALL_SYMBOL]
+		var cell_type_info = symbol_to_tile_info[symbol]
+		var cell_layer = terrain_layer
+		match cell_type_info["type"]:
+			CELL.TERRAIN:
+				cell_layer = terrain_layer
+			CELL.STATIC:
+				cell_layer = static_layer
+			CELL.OBJECT:
+				cell_layer = objects_layer
+			CELL.SECRETS:
+				cell_layer = secrets_layer
+		
+		#print(cell_layer, ' ', cell_type_info, ' ', cell_cnt)
+		for i in range(cell_cnt):
+			cell_layer.set_cell(offset_coords + Vector2i(i, 0), cell_type_info["source"], cell_type_info["coords"])
+			if cell_type_info["over_wall"]:
+				terrain_layer.set_cell(offset_coords + Vector2i(i, 0), wall_info["source"], wall_info["coords"])
 
 
 func _init_atlas_symbol_mapping() -> void:
@@ -195,14 +341,15 @@ func _init_atlas_symbol_mapping() -> void:
 
 func _init_terrain_layer() -> void:
 	var used_cells = terrain_layer.get_used_cells()
-	if terrain_layer_uesed_cells == used_cells:
+	if terrain_layer_used_cells == used_cells:
 		return
 	
 	terrain_layer.clear_visual_tiles()
 	for cell_coords in used_cells:
 		terrain_layer.update_visual_tiles(cell_coords)
+		_add_to_populated_cells(cell_coords, WALL_SYMBOL)
 	
-	terrain_layer_uesed_cells = used_cells
+	terrain_layer_used_cells = used_cells
 
 
 func _update_static_alt_tiles() -> void:
@@ -215,6 +362,7 @@ func _update_static_alt_tiles() -> void:
 			var callable = Callable(self, alt_tile_callable)
 			var alt_tile = callable.call(cell_coords)
 			static_layer.set_cell(cell_coords, tile_source, tile_coords, alt_tile)
+		_add_to_populated_cells(cell_coords, symbol)
 
 
 func _update_race_finish_position(new_position: Vector2 = Vector2.INF) -> void:
@@ -234,6 +382,7 @@ func _populate_objects() -> void:
 		var object_arguments = symbol_to_tile_info[symbol]["args"]
 		
 		var object_position = objects_layer.to_global(objects_layer.map_to_local(cell_coords))
+		_add_to_populated_cells(cell_coords, symbol)
 		objects_layer.erase_cell(cell_coords)
 		
 		if symbol == "P":
@@ -253,19 +402,22 @@ func _populate_objects() -> void:
 
 
 func _init_hidden_areas() -> void:
+	for cell_coords in secrets_layer.get_used_cells():
+		_add_to_populated_cells(cell_coords, SECRET_SYMBOL)
 	secrets_layer._init_secrets()
 
 
 func _get_cell_symbol(cell_coords: Vector2i, cell_type: CELL) -> String:
 	if cell_type == CELL.TERRAIN:
-		return "W"
+		return WALL_SYMBOL
 	elif cell_type == CELL.STATIC:
 		var atlas_coords = static_layer.get_cell_atlas_coords(cell_coords)
 		return static_atlas_coords_to_symbol[str(atlas_coords)]
 	elif cell_type == CELL.OBJECT:
 		var atlas_coords = objects_layer.get_cell_atlas_coords(cell_coords)
 		return object_atlas_coords_to_symbol[str(atlas_coords)]
-	return "E"
+	# TODO: add handle for secrets
+	return EMPTY_SYMBOL
 
 
 func _get_4sides_alt_tile(cell: Vector2i) -> int:
@@ -281,6 +433,12 @@ func _get_alt_tile(cell: Vector2i, directions: Array[Vector2i]) -> int:
 		if terrain_layer.get_cell_tile_data(cell + directions[i]) != null:
 			return i
 	return 0
+
+
+func _add_to_populated_cells(cell_coords: Vector2i, symbol: String) -> void:
+	if not populated_cells.has(cell_coords):
+		populated_cells[cell_coords] = ""
+	populated_cells[cell_coords] += symbol
 
 
 func _on_player_touched_crown(_player: Player) -> void:
