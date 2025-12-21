@@ -24,6 +24,9 @@ var player_nodes = []
 
 
 func _ready():
+	var level_code = SceneManger.next_scene_data.get("level_code", "")
+	level.update_level(level_code)
+	
 	initialize_players()
 	level._update_race_finish_position()
 	SignalBus.player_touched_crown.connect(_on_player_touched_crown)

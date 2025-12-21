@@ -22,6 +22,7 @@ EnvironmentVariables="*res://src/scripts/singletons/environment_variables.gd"
 Utils="*res://src/scripts/singletons/utils.gd"
 Constants="*res://src/scripts/singletons/constants.gd"
 SignalBus="*res://src/scripts/singletons/signal_bus.gd"
+SceneManger="*res://src/scripts/singletons/scene_manger.gd"
 
 [display]
 

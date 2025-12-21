@@ -210,14 +210,14 @@ func _ready() -> void:
 		_populate_objects()
 		_init_hidden_areas()
 		_update_static_alt_tiles()
-		print(get_level_code())
+		current_level_code = get_level_code()
 	
 	SignalBus.player_touched_crown.connect(_on_player_touched_crown)
 	is_initialized = true
 
 
 func update_level(level_code: String) -> void:
-	if current_level_code == level_code:
+	if len(level_code) == 0 or current_level_code == level_code:
 		return
 	
 	clear_level()
