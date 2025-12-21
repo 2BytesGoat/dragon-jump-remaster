@@ -165,6 +165,7 @@ var is_initialized = false
 var terrain_layer_used_cells = [] # based on this we update the map using tool
 var emplased_time = 0
 var update_interval = 1
+var current_level_code = ""
 
 
 func _enter_tree() -> void:
@@ -213,6 +214,19 @@ func _ready() -> void:
 	
 	SignalBus.player_touched_crown.connect(_on_player_touched_crown)
 	is_initialized = true
+
+
+func update_level(level_code: String) -> void:
+	if current_level_code == level_code:
+		return
+	
+	clear_level()
+	set_level(level_code)
+	_init_terrain_layer()
+	_populate_objects()
+	_init_hidden_areas()
+	_update_static_alt_tiles()
+	current_level_code = level_code
 
 
 func get_level_code():
