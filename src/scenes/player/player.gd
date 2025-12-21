@@ -14,13 +14,13 @@ enum CONTROLLERS {
 # movement properties
 @export var starting_facing_direction: int = Vector2i.RIGHT.x
 @export var max_speed: float = 220.0
-@export var acceleration: float = 350.0
+@export var acceleration: float = 250.0
 @export var default_friction: float = 100.0     # Default friction when on normal surfaces
 
 # jump properties
 @export var jump_height: float = 72.0            # Height in pixels
-@export var jump_time_to_peak: float = 0.4       # Time in seconds to reach peak
-@export var jump_time_to_descent: float = 0.3    # Time in seconds to descent
+@export var jump_time_to_peak: float = 0.37       # Time in seconds to reach peak
+@export var jump_time_to_descent: float = 0.27    # Time in seconds to descent
 
 # Physics properties
 @onready var jump_velocity: float = ((-2.0 * jump_height) / jump_time_to_peak)         # Calculated jump velocity
