@@ -2,6 +2,7 @@ extends Camera2D
 
 @onready var noise = FastNoiseLite.new()
 @onready var rand = RandomNumberGenerator.new()
+@onready var player_node = null
 
 var noise_i: float = 0.0
 var noise_seed: float = 30.0
@@ -28,6 +29,13 @@ func _process(delta: float) -> void:
 		self.offset = initial_offset
 
 
+func _physics_process(_delta: float) -> void:
+	if player_node == null:
+		return
+	
+	global_position = global_position.lerp(player_node.global_position, 0.15)
+
+
 func zoom_on(target_position: Vector2, zoom_factor: float = 5.0):
 	position = target_position
 	zoom = Vector2(zoom_factor, zoom_factor)
@@ -43,3 +51,12 @@ func get_random_offset() -> Vector2:
 		rand.randf_range(-shake_strength, shake_strength),
 		rand.randf_range(-shake_strength, shake_strength)
 	)
+
+
+func _on_level_level_size_updated(level_size: Vector2i) -> void:
+	global_position = Vector2(level_size) * Vector2(0.5, 0.5)
+	
+	var padding = 16
+	limit_left = -padding * 3
+	limit_right = level_size.x + padding * 3
+	limit_bottom = level_size.y + padding

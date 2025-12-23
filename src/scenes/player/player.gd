@@ -8,9 +8,6 @@ enum CONTROLLERS {
 }
 @export var controller_type: CONTROLLERS = CONTROLLERS.NONE
 
-@onready var remote_transform: RemoteTransform2D = $RemoteTransform2D
-@export var camera: Camera2D = null : set = _on_camera_updated
-
 # movement properties
 @export var starting_facing_direction: int = Vector2i.RIGHT.x
 @export var max_speed: float = 220.0
@@ -74,9 +71,6 @@ func _ready() -> void:
 		set_controller(PlayerOneController.new(self))
 	elif controller_type == CONTROLLERS.PLAYER_TWO:
 		set_controller(PlayerTwoController.new(self))
-	
-	if camera:
-		remote_transform.remote_path = camera.get_path()
 	
 	SignalBus.player_touched_crown.connect(_on_player_touched_crown)
 	reset()
@@ -279,13 +273,3 @@ func _on_interact_box_body_entered(body: Node2D) -> void:
 
 func _on_player_touched_crown(_player: Player) -> void:
 	acceleration = 1500
-
-
-func _on_camera_updated(new_camera: Camera2D) -> void:
-	if not new_camera:
-		return
-	camera = new_camera
-	
-	if not remote_transform:
-		return
-	remote_transform.remote_path = camera.get_path()

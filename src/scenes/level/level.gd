@@ -166,6 +166,9 @@ var terrain_layer_used_cells = [] # based on this we update the map using tool
 var emplased_time = 0
 var update_interval = 1
 var current_level_code = ""
+var level_size = Vector2.ZERO
+
+signal level_size_updated(level_size: Vector2i)
 
 
 func _enter_tree() -> void:
@@ -245,7 +248,7 @@ func get_level_code():
 		max_y = max(rect_size.end.y, max_y)
 	
 	# because we need them to capture all used cells
-	var level_size = Vector2(abs(max_x - min_x), abs(max_y - min_y))
+	level_size = Vector2(abs(max_x - min_x), abs(max_y - min_y))
 	var shift = Vector2i(min_x, min_y)
 	
 	var current_symbol = null
@@ -292,6 +295,9 @@ func set_level(level_code: String) -> void:
 	var y_offset = 0
 	var x_offset = 0
 	
+	var level_width = 0
+	var level_height = 0
+	
 	for symbol in level_code:
 		if _is_tilemap_symbol(symbol):
 			if symbol_cnt > 0 and should_flush:
@@ -305,6 +311,8 @@ func set_level(level_code: String) -> void:
 			symbol_cnt = symbol_cnt * 10 + int(symbol)
 			should_flush = true
 		elif symbol == "|":
+			level_width = max(x_offset, level_width)
+			level_height += 1
 			_set_multiple_cells(current_symbols, symbol_cnt, Vector2i(x_offset, y_offset))
 			current_symbols = ""
 			symbol_cnt = 0
@@ -312,6 +320,11 @@ func set_level(level_code: String) -> void:
 			y_offset += 1
 	if symbol_cnt > 0:
 		_set_multiple_cells(current_symbols, symbol_cnt, Vector2i(x_offset, y_offset))
+		level_height += 1
+	
+	var cell_size = Vector2i(terrain_layer.rendering_quadrant_size, terrain_layer.rendering_quadrant_size)
+	level_size = Vector2i(level_width, level_height) * cell_size
+	level_size_updated.emit(level_size)
 
 
 func _is_tilemap_symbol(symbol: String) -> bool:

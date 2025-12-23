@@ -49,7 +49,7 @@ func initialize_players() -> void:
 	for i in range(nb_players):
 		var player: Player = player_scene.instantiate()
 		player.controller_type = player.CONTROLLERS.PLAYER_ONE
-		player.camera = camera_p1
+		camera_p1.player_node = player
 		
 		player.name = "Player%s"%(i+1)
 		player.global_position = player_position

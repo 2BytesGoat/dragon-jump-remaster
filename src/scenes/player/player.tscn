@@ -544,8 +544,6 @@ collision_mask = 4
 position = Vector2(-0.5, -0.5)
 shape = SubResource("RectangleShape2D_i6xdb")
 
-[node name="RemoteTransform2D" type="RemoteTransform2D" parent="."]
-
 [node name="ControllerContainer" type="Node" parent="."]
 
 [node name="StateMachine" type="Node" parent="."]
