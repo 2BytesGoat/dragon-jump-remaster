@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://cw8cw6fpq5n63"]
+[gd_scene load_steps=36 format=3 uid="uid://cw8cw6fpq5n63"]
 
 [ext_resource type="Script" uid="uid://c306bigp8honi" path="res://src/scenes/player/player.gd" id="1_uug8f"]
 [ext_resource type="Script" uid="uid://chhu1axyjbnac" path="res://src/scenes/player/observer.gd" id="2_4r4qr"]
@@ -33,6 +33,10 @@ size = Vector2(11, 14)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i6xdb"]
 size = Vector2(13, 15)
+
+[sub_resource type="Curve" id="Curve_4r4qr"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.10383746, 0.49914384), 0.0, 0.0, 0, 0, Vector2(0.5011286, 1), 0.0, 0.0, 0, 0]
+point_count = 3
 
 [sub_resource type="Animation" id="Animation_wnjjo"]
 resource_name = "Dash"
@@ -567,6 +571,7 @@ one_shot = true
 
 [node name="Walled" type="Node" parent="StateMachine"]
 script = ExtResource("8_6uujk")
+wall_slide_curve = SubResource("Curve_4r4qr")
 
 [node name="DoubleJump" type="Node" parent="StateMachine"]
 script = ExtResource("10_62cf5")
