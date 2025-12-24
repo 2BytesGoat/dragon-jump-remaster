@@ -260,7 +260,6 @@ func _on_interact_box_area_exited(area: Area2D) -> void:
 
 func _on_show_after_image_changed(value: bool) -> void:
 	show_afterimage = value
-	#afterimage.visible = value
 	afterimage.emitting = value
 	powerup_sfx.playing = value
 
