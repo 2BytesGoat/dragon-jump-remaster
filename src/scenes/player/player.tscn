@@ -494,6 +494,7 @@ self_modulate = Color(1, 1, 1, 0.69000006)
 show_behind_parent = true
 material = SubResource("CanvasItemMaterial_i6xdb")
 position = Vector2(-3, -1)
+amount = 4
 texture = ExtResource("3_tj7fb")
 lifetime = 0.2
 gravity = Vector2(0, 0)
