@@ -106,4 +106,4 @@ render_target_update_mode = 4
 unique_name_in_owner = true
 
 [node name="Camera2D" type="Camera2D" parent="SubViewport"]
-offset = Vector2(256, 240)
+offset = Vector2(316, 240)

@@ -327,6 +327,13 @@ func set_level(level_code: String) -> void:
 	level_size_updated.emit(level_size)
 
 
+func reset_objects() -> void:
+	for obj_type in objects_map:
+		for obj in objects_map[obj_type]:
+			if obj.has_method("reset"):
+				obj.call_deferred("reset")
+
+
 func _is_tilemap_symbol(symbol: String) -> bool:
 	return symbol == EMPTY_SYMBOL or symbol in symbol_to_tile_info
 

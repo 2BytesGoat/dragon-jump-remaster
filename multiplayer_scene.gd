@@ -55,6 +55,8 @@ func initialize_players() -> void:
 		player.global_position = player_position
 		player_node.add_child(player)
 		player_nodes.append(player)
+		
+		player.has_resetted.connect(level.reset_objects)
 	
 	card_container.map_player_signals(player_nodes)
 
