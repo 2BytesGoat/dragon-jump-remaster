@@ -1,0 +1,41 @@
+[gd_resource type="Theme" load_steps=6 format=3 uid="uid://se7xk3lcwng8"]
+
+[ext_resource type="FontFile" uid="uid://s7ljtadq31a4" path="res://assets/fonts/PressStart2P-Regular.ttf" id="1_lhnvj"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3ng84"]
+bg_color = Color(0.60038817, 0.60038817, 0.60038817, 0)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lhnvj"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mqe7l"]
+bg_color = Color(0.60038817, 0.60038817, 0.60038817, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0mxni"]
+bg_color = Color(0.60038817, 0.60038817, 0.60038817, 0)
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[resource]
+Button/colors/font_color = Color(0.875, 0.875, 0.875, 1)
+Button/fonts/font = ExtResource("1_lhnvj")
+Button/styles/disabled = null
+Button/styles/focus = SubResource("StyleBoxFlat_3ng84")
+Button/styles/hover = SubResource("StyleBoxEmpty_lhnvj")
+Button/styles/normal = SubResource("StyleBoxFlat_mqe7l")
+Button/styles/pressed = SubResource("StyleBoxFlat_0mxni")

@@ -1,4 +1,7 @@
-[gd_scene format=3 uid="uid://bid71r6mq0gpi"]
+[gd_scene load_steps=3 format=3 uid="uid://bid71r6mq0gpi"]
+
+[ext_resource type="Texture2D" uid="uid://ctojsl0e08r07" path="res://assets/logos/Logo2.png" id="1_wuc7m"]
+[ext_resource type="PackedScene" uid="uid://bnxudkobrdgtb" path="res://src/ui/menus/level_button.tscn" id="2_xaiw4"]
 
 [node name="MainMenu" type="MarginContainer"]
 anchors_preset = 15
@@ -10,19 +13,47 @@ grow_vertical = 2
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_constants/margin_top = 25
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(264, 0)
+layout_mode = 2
+texture = ExtResource("1_wuc7m")
+expand_mode = 5
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PlayButton" parent="MarginContainer/VBoxContainer" instance=ExtResource("2_xaiw4")]
+custom_minimum_size = Vector2(176, 32)
+layout_mode = 2
+size_flags_horizontal = 4
 size_flags_vertical = 4
+text = "PLAY"
 
-[node name="PracticeButton" type="Button" parent="MarginContainer/VBoxContainer"]
+[node name="SettingsButton" parent="MarginContainer/VBoxContainer" instance=ExtResource("2_xaiw4")]
+custom_minimum_size = Vector2(176, 32)
 layout_mode = 2
-text = "PRACTICE"
-
-[node name="SettingsButton" type="Button" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 text = "SETTINGS"
 
-[node name="CreditsButton" type="Button" parent="MarginContainer/VBoxContainer"]
+[node name="CreditsButton" parent="MarginContainer/VBoxContainer" instance=ExtResource("2_xaiw4")]
+custom_minimum_size = Vector2(176, 32)
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 text = "CREDITS"
+
+[node name="QuitButton" parent="MarginContainer/VBoxContainer" instance=ExtResource("2_xaiw4")]
+custom_minimum_size = Vector2(176, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "QUIT"
