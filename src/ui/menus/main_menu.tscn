@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://ctojsl0e08r07" path="res://assets/logos/Logo2.png" id="1_wuc7m"]
 [ext_resource type="Script" uid="uid://wt1mt72lra5s" path="res://src/ui/menus/main_menu.gd" id="1_xaiw4"]
-[ext_resource type="PackedScene" uid="uid://bnxudkobrdgtb" path="res://src/ui/menus/level_button.tscn" id="2_xaiw4"]
+[ext_resource type="PackedScene" uid="uid://bnxudkobrdgtb" path="res://src/ui/menus/menu_button.tscn" id="2_xaiw4"]
 
 [node name="MainMenu" type="MarginContainer"]
 anchors_preset = 15
