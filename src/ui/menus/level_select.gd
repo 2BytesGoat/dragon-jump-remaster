@@ -9,6 +9,11 @@ extends MarginContainer
 
 func _ready() -> void:
 	var cnt = 0
+	
+	for child in level_button_container.get_children():
+		level_button_container.remove_child(child)
+		child.queue_free()
+	
 	for level_name in Constants.LEVELS:
 		var button: Button = level_button_scene.instantiate()
 		button.name = level_name

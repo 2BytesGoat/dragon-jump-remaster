@@ -8,6 +8,7 @@ custom_minimum_size = Vector2(48, 48)
 offset_right = 40.0
 offset_bottom = 40.0
 theme = ExtResource("1_u0wb1")
+theme_override_font_sizes/font_size = 8
 script = ExtResource("1_h6yvo")
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
