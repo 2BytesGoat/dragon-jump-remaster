@@ -14,11 +14,12 @@ func _ready() -> void:
 		level_button_container.remove_child(child)
 		child.queue_free()
 	
-	for level_name in Constants.LEVELS:
+	for i in len(Constants.LEVELS):
+		var level_name = Constants.LEVELS.keys()[i]
 		var button: Button = level_button_scene.instantiate()
 		button.name = level_name
-		button.text = str(level_name)
 		level_button_container.add_child(button)
+		button.button_label = "%03d - %s" % [i, Constants.LEVELS[level_name]["name"]]
 		
 		button.focus_entered.connect(_on_level_button_hovered.bind(level_name))
 		button.pressed.connect(_on_level_button_clicked.bind(level_name))
@@ -29,10 +30,10 @@ func _ready() -> void:
 
 
 func _on_level_button_hovered(level_name: String) -> void:
-	var level_code = Constants.LEVELS[level_name]
+	var level_code = Constants.LEVELS[level_name]["code"]
 	level_node.update_level(level_code)
 
 
 func _on_level_button_clicked(level_name: String) -> void:
-	var level_code = Constants.LEVELS[level_name]
+	var level_code = Constants.LEVELS[level_name]["code"]
 	SceneManger.go_to(single_player_scene, {"level_code": level_code})

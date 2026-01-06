@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://coq21sivcbueg"]
 
-[ext_resource type="Script" uid="uid://dee1am3oj4v0h" path="res://src/ui/menus/menu_button.gd" id="1_h6yvo"]
+[ext_resource type="Script" uid="uid://bt4mplp74an6d" path="res://src/ui/menus/level_button.gd" id="1_h6yvo"]
 [ext_resource type="Theme" uid="uid://d1kdwbwfx60gf" path="res://src/ui/components/themes/level_select_theme.tres" id="1_u0wb1"]
 [ext_resource type="Texture2D" uid="uid://bcfjeeqq7rmrh" path="res://icon.svg" id="2_dq4x0"]
 
@@ -27,6 +27,7 @@ theme_override_constants/margin_right = 8
 layout_mode = 2
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "001 - JUMP"
