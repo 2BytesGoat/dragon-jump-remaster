@@ -1,7 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://dqxbwfhfhx0ng"]
+[gd_scene load_steps=6 format=3 uid="uid://dqxbwfhfhx0ng"]
 
+[ext_resource type="Theme" uid="uid://d1kdwbwfx60gf" path="res://src/ui/components/themes/level_select_theme.tres" id="1_0yetq"]
 [ext_resource type="Script" uid="uid://dfndbwlllo6cu" path="res://src/ui/menus/level_select.gd" id="1_36voa"]
 [ext_resource type="PackedScene" uid="uid://bvm718ddfisd7" path="res://src/scenes/level/level.tscn" id="1_40k0a"]
+[ext_resource type="PackedScene" uid="uid://coq21sivcbueg" path="res://src/ui/menus/level_button.tscn" id="3_x42vb"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_40k0a"]
 viewport_path = NodePath("SubViewport")
@@ -12,53 +14,122 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_0yetq")
 script = ExtResource("1_36voa")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
+theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 16
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/MarginContainer"]
-layout_mode = 2
-theme_override_constants/separation = 28
-
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+texture_filter = 1
 layout_mode = 2
-text = "Select Level"
-horizontal_alignment = 1
+theme_override_font_sizes/font_size = 16
+text = "MISSIONS"
 vertical_alignment = 1
 
-[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer/MarginContainer/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Player Speed:"
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="LevelButtons" type="ScrollContainer" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer2"]
+[node name="HSlider" type="HSlider" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Fast"
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Select Level:"
+vertical_alignment = 1
+
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 186)
+layout_mode = 2
+size_flags_vertical = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel"]
+layout_mode = 0
+offset_top = 4.0
+offset_right = 286.0
+offset_bottom = 182.0
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_right = 4
+
+[node name="LevelButtons" type="ScrollContainer" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2"]
 custom_minimum_size = Vector2(0, 178)
 layout_mode = 2
 follow_focus = true
 
-[node name="LevelButtonContainer" type="VBoxContainer" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer2/LevelButtons"]
+[node name="LevelButtonContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 2
 
-[node name="Button" type="Button" parent="HBoxContainer/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(32, 16)
+[node name="LevelButton" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/LevelButtonContainer" instance=ExtResource("3_x42vb")]
 layout_mode = 2
-size_flags_horizontal = 4
-text = "Back"
 
-[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer"]
+[node name="LevelButton2" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/LevelButtonContainer" instance=ExtResource("3_x42vb")]
+layout_mode = 2
+
+[node name="LevelButton3" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/LevelButtonContainer" instance=ExtResource("3_x42vb")]
+layout_mode = 2
+
+[node name="LevelButton4" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/LevelButtonContainer" instance=ExtResource("3_x42vb")]
+layout_mode = 2
+
+[node name="LevelButton5" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/LevelButtonContainer" instance=ExtResource("3_x42vb")]
+layout_mode = 2
+
+[node name="LevelButton6" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/LevelButtonContainer" instance=ExtResource("3_x42vb")]
+layout_mode = 2
+
+[node name="LevelButton7" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/LevelButtonContainer" instance=ExtResource("3_x42vb")]
+layout_mode = 2
+
+[node name="LevelButton8" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/LevelButtonContainer" instance=ExtResource("3_x42vb")]
+layout_mode = 2
+
+[node name="LevelButton9" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/LevelButtonContainer" instance=ExtResource("3_x42vb")]
+layout_mode = 2
+
+[node name="LevelButton10" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/LevelButtonContainer" instance=ExtResource("3_x42vb")]
+layout_mode = 2
+
+[node name="LevelButton11" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/LevelButtonContainer" instance=ExtResource("3_x42vb")]
+layout_mode = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/margin_left = 16
@@ -66,39 +137,80 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/MarginContainer2"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/MarginContainer2"]
 layout_mode = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 8
 
-[node name="Label" type="Label" parent="HBoxContainer/MarginContainer2/VBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer"]
 layout_mode = 2
 text = "LEVEL 1-1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer2/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_left = 32
 theme_override_constants/margin_right = 32
 
-[node name="Panel" type="Panel" parent="HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer"]
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 texture = SubResource("ViewportTexture_40k0a")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer/MarginContainer2/VBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_left = 0
 theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="Panel" type="Panel" parent="VBoxContainer/MarginContainer"]
+custom_minimum_size = Vector2(200, 48)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer/Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -24.0
+offset_right = 32.0
+offset_bottom = 24.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 8
+
+[node name="StartButton" type="Button" parent="VBoxContainer/MarginContainer/Panel/VBoxContainer"]
+custom_minimum_size = Vector2(64, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "START"
+
+[node name="BackButton" type="Button" parent="VBoxContainer/MarginContainer/Panel/VBoxContainer"]
+custom_minimum_size = Vector2(64, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "BACK"
 
 [node name="SubViewport" type="SubViewport" parent="."]
 transparent_bg = true

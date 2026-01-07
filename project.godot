@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Dragon Jump Remaster"
-run/main_scene="uid://dqxbwfhfhx0ng"
+run/main_scene="uid://bid71r6mq0gpi"
 config/features=PackedStringArray("4.5", "Forward Plus")
 run/max_fps=60
 config/icon="res://icon.svg"
