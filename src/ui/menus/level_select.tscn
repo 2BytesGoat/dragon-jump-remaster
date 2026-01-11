@@ -1,9 +1,20 @@
-[gd_scene load_steps=6 format=3 uid="uid://dqxbwfhfhx0ng"]
+[gd_scene load_steps=11 format=3 uid="uid://dqxbwfhfhx0ng"]
 
 [ext_resource type="Theme" uid="uid://d1kdwbwfx60gf" path="res://src/ui/components/themes/level_select_theme.tres" id="1_0yetq"]
 [ext_resource type="Script" uid="uid://dfndbwlllo6cu" path="res://src/ui/menus/level_select.gd" id="1_36voa"]
 [ext_resource type="PackedScene" uid="uid://bvm718ddfisd7" path="res://src/scenes/level/level.tscn" id="1_40k0a"]
+[ext_resource type="PackedScene" uid="uid://b5etxdni2oe0j" path="res://main.tscn" id="3_26flc"]
 [ext_resource type="PackedScene" uid="uid://coq21sivcbueg" path="res://src/ui/menus/level_button.tscn" id="3_x42vb"]
+[ext_resource type="PackedScene" uid="uid://bid71r6mq0gpi" path="res://src/ui/menus/main_menu.tscn" id="4_atnpk"]
+[ext_resource type="Script" uid="uid://cwt3nxjuhojym" path="res://src/ui/menus/speed_slider_label.gd" id="5_atnpk"]
+[ext_resource type="Texture2D" uid="uid://dolawuug5bvhc" path="res://assets/sprites/ui/silver_panel-export.png" id="5_v4mwm"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_auso1"]
+texture = ExtResource("5_v4mwm")
+texture_margin_left = 16.0
+texture_margin_top = 16.0
+texture_margin_right = 16.0
+texture_margin_bottom = 16.0
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_40k0a"]
 viewport_path = NodePath("SubViewport")
@@ -15,7 +26,13 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_0yetq")
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
 script = ExtResource("1_36voa")
+single_player_scene = ExtResource("3_26flc")
+main_menu_scene = ExtResource("4_atnpk")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
@@ -32,20 +49,24 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 16
 
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = -12
+theme_override_constants/margin_top = -12
+theme_override_constants/margin_right = -8
+theme_override_constants/margin_bottom = -14
+
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer/MarginContainer/MarginContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_auso1")
+
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/MarginContainer"]
 layout_mode = 2
-
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer"]
-texture_filter = 1
-layout_mode = 2
-theme_override_font_sizes/font_size = 8
-text = "MISSIONS"
-vertical_alignment = 1
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer"]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 4
 
 [node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -56,7 +77,7 @@ uppercase = true
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="HSlider" type="HSlider" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="SpeedSlider" type="HSlider" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 6
@@ -69,10 +90,12 @@ tick_count = 5
 ticks_on_borders = true
 ticks_position = 3
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="SpeedSliderLabel" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 2
 text = "Fast"
+uppercase = true
+script = ExtResource("5_atnpk")
 
 [node name="HSeparator2" type="HSeparator" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer"]
 self_modulate = Color(1, 1, 1, 0)
@@ -153,6 +176,17 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/MarginContainer2"]
+layout_mode = 2
+theme_override_constants/margin_left = -8
+theme_override_constants/margin_top = -12
+theme_override_constants/margin_right = -12
+theme_override_constants/margin_bottom = -14
+
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer/MarginContainer2/MarginContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_auso1")
+
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/MarginContainer2"]
 layout_mode = 2
 theme_override_constants/separation = 8
@@ -226,6 +260,24 @@ horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
+[node name="AttemptsContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer/AttemptsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Attempts:"
+vertical_alignment = 1
+uppercase = true
+
+[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer/AttemptsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
 [node name="HSeparator2" type="HSeparator" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
@@ -283,38 +335,33 @@ text = "LEADERBOARD"
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_left = 8
-theme_override_constants/margin_right = 8
+theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 8
 
-[node name="Panel" type="Panel" parent="VBoxContainer/MarginContainer"]
-custom_minimum_size = Vector2(200, 48)
+[node name="Panel2" type="Panel" parent="VBoxContainer/MarginContainer"]
+custom_minimum_size = Vector2(240, 48)
 layout_mode = 2
 size_flags_horizontal = 8
-size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxTexture_auso1")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer/Panel"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -100.0
-offset_top = -24.0
-offset_right = 100.0
-offset_bottom = 24.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+theme_override_constants/margin_right = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer/MarginContainer"]
+layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="StartButton" type="Button" parent="VBoxContainer/MarginContainer/Panel/VBoxContainer"]
+[node name="StartButton" type="Button" parent="VBoxContainer/MarginContainer/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(200, 20)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 text = "START"
 
-[node name="BackButton" type="Button" parent="VBoxContainer/MarginContainer/Panel/VBoxContainer"]
+[node name="BackButton" type="Button" parent="VBoxContainer/MarginContainer/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(200, 20)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -331,4 +378,6 @@ unique_name_in_owner = true
 [node name="Camera2D" type="Camera2D" parent="SubViewport"]
 offset = Vector2(316, 240)
 
-[connection signal="pressed" from="VBoxContainer/MarginContainer/Panel/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/SpeedSlider" to="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/SpeedSliderLabel" method="_on_speed_slider_value_changed"]
+[connection signal="pressed" from="VBoxContainer/MarginContainer/MarginContainer/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/MarginContainer/MarginContainer/VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]

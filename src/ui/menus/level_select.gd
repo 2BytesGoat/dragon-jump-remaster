@@ -5,7 +5,8 @@ extends MarginContainer
 @onready var selected_level_label = %SelectedLevelLabel
 
 @onready var level_button_scene = preload("res://src/ui/menus/level_button.tscn")
-@onready var single_player_scene = "res://main.tscn"
+@export var single_player_scene: PackedScene
+@export var main_menu_scene: PackedScene
 
 var selected_level_name = ""
 
@@ -28,6 +29,7 @@ func _ready() -> void:
 		
 		if cnt == 0:
 			_on_level_button_clicked(level_name)
+			button.grab_focus()
 		cnt += 1
 
 
@@ -49,4 +51,8 @@ func _on_start_button_pressed() -> void:
 	if not selected_level_name:
 		return
 	var level_code = Constants.LEVELS[selected_level_name]["code"]
-	SceneManger.go_to(single_player_scene, {"level_code": level_code})
+	SceneManger.go_to(single_player_scene.resource_path, {"level_code": level_code})
+
+
+func _on_back_button_pressed() -> void:
+	SceneManger.go_to(main_menu_scene.resource_path)

@@ -12,56 +12,81 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_xaiw4")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
-size_flags_horizontal = 4
-theme_override_constants/margin_top = 25
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 4
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(224, 0)
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/MarginContainer2"]
+custom_minimum_size = Vector2(192, 0)
 layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
 texture = ExtResource("1_wuc7m")
 expand_mode = 5
 
-[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/margin_top = 95
+theme_override_constants/margin_right = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="HSeparator" type="HSeparator" parent="HBoxContainer/MarginContainer/VBoxContainer"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="PlayButton" parent="MarginContainer/VBoxContainer" instance=ExtResource("2_xaiw4")]
+[node name="PlayButton" parent="HBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_xaiw4")]
 custom_minimum_size = Vector2(176, 32)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-theme_override_font_sizes/font_size = 16
-text = "PLAY"
+text = "SINGLE PLAYER"
 
-[node name="SettingsButton" parent="MarginContainer/VBoxContainer" instance=ExtResource("2_xaiw4")]
+[node name="MultiplayerButton" parent="HBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_xaiw4")]
 custom_minimum_size = Vector2(176, 32)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-theme_override_font_sizes/font_size = 16
+disabled = true
+text = "MULTIPLAYER"
+
+[node name="MapEditorButton" parent="HBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_xaiw4")]
+custom_minimum_size = Vector2(176, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+disabled = true
+text = "MAP EDITOR"
+
+[node name="SettingsButton" parent="HBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_xaiw4")]
+custom_minimum_size = Vector2(176, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 text = "SETTINGS"
 
-[node name="CreditsButton" parent="MarginContainer/VBoxContainer" instance=ExtResource("2_xaiw4")]
+[node name="CreditsButton" parent="HBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_xaiw4")]
 custom_minimum_size = Vector2(176, 32)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-theme_override_font_sizes/font_size = 16
 text = "CREDITS"
 
-[node name="QuitButton" parent="MarginContainer/VBoxContainer" instance=ExtResource("2_xaiw4")]
+[node name="QuitButton" parent="HBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_xaiw4")]
 custom_minimum_size = Vector2(176, 32)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-theme_override_font_sizes/font_size = 16
 text = "QUIT"
 
-[connection signal="pressed" from="MarginContainer/VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/MarginContainer/VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/MarginContainer/VBoxContainer/MultiplayerButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/MarginContainer/VBoxContainer/MapEditorButton" to="." method="_on_play_button_pressed"]
