@@ -2,9 +2,12 @@ extends MarginContainer
 
 @onready var level_button_container = %LevelButtonContainer
 @onready var level_node = %Level
+@onready var selected_level_label = %SelectedLevelLabel
 
 @onready var level_button_scene = preload("res://src/ui/menus/level_button.tscn")
 @onready var single_player_scene = "res://main.tscn"
+
+var selected_level_name = ""
 
 
 func _ready() -> void:
@@ -21,11 +24,10 @@ func _ready() -> void:
 		level_button_container.add_child(button)
 		button.button_label = "%03d - %s" % [i, Constants.LEVELS[level_name]["name"]]
 		
-		button.focus_entered.connect(_on_level_button_hovered.bind(level_name))
 		button.pressed.connect(_on_level_button_clicked.bind(level_name))
 		
 		if cnt == 0:
-			button.grab_focus()
+			_on_level_button_clicked(level_name)
 		cnt += 1
 
 
@@ -36,4 +38,15 @@ func _on_level_button_hovered(level_name: String) -> void:
 
 func _on_level_button_clicked(level_name: String) -> void:
 	var level_code = Constants.LEVELS[level_name]["code"]
+	level_node.update_level(level_code)
+	selected_level_name = level_name
+	
+	var i = Constants.LEVELS.keys().find(level_name)
+	selected_level_label.text = "%03d - %s" % [i, Constants.LEVELS[level_name]["name"]]
+
+
+func _on_start_button_pressed() -> void:
+	if not selected_level_name:
+		return
+	var level_code = Constants.LEVELS[selected_level_name]["code"]
 	SceneManger.go_to(single_player_scene, {"level_code": level_code})

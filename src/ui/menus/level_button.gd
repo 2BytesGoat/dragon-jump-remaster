@@ -1,4 +1,4 @@
-extends CustomMenuButton
+extends Button
 
 @onready var label = %Label
 

@@ -38,7 +38,7 @@ layout_mode = 2
 [node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer"]
 texture_filter = 1
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 8
 text = "MISSIONS"
 vertical_alignment = 1
 
@@ -51,16 +51,27 @@ theme_override_constants/separation = 12
 layout_mode = 2
 text = "Player Speed:"
 vertical_alignment = 1
+uppercase = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
 [node name="HSlider" type="HSlider" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 6
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.0
+max_value = 1.0
+step = 0.25
+value = 0.5
+tick_count = 5
+ticks_on_borders = true
+ticks_position = 3
 
 [node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 2
 text = "Fast"
 
 [node name="HSeparator2" type="HSeparator" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer"]
@@ -71,6 +82,7 @@ layout_mode = 2
 layout_mode = 2
 text = "Select Level:"
 vertical_alignment = 1
+uppercase = true
 
 [node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 186)
@@ -78,12 +90,16 @@ layout_mode = 2
 size_flags_vertical = 2
 
 [node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel"]
-layout_mode = 0
-offset_top = 4.0
-offset_right = 286.0
-offset_bottom = 182.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
 
 [node name="LevelButtons" type="ScrollContainer" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2"]
 custom_minimum_size = Vector2(0, 178)
@@ -141,7 +157,8 @@ theme_override_constants/margin_bottom = 16
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer"]
+[node name="SelectedLevelLabel" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "LEVEL 1-1"
 horizontal_alignment = 1
@@ -166,10 +183,101 @@ stretch_mode = 5
 [node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/margin_left = 0
-theme_override_constants/margin_top = 0
-theme_override_constants/margin_right = 0
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 28
 theme_override_constants/margin_bottom = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2"]
+layout_mode = 2
+
+[node name="MedalProgressContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MedalProgressContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Progress:"
+vertical_alignment = 1
+uppercase = true
+
+[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MedalProgressContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="MedalContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MedalContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "[███████████░░░░░░] 78%"
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MedalContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Gold"
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PersonalHighscoreContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer/PersonalHighscoreContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Your Best:"
+vertical_alignment = 1
+uppercase = true
+
+[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer/PersonalHighscoreContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "00:00.000"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="WorldHighscoreContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer/WorldHighscoreContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "World Best:"
+vertical_alignment = 1
+uppercase = true
+
+[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer/WorldHighscoreContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "00:00.000"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="HSeparator3" type="HSeparator" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer"]
+custom_minimum_size = Vector2(200, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 10
+text = "LEADERBOARD"
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
 layout_mode = 2
@@ -191,23 +299,23 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -32.0
+offset_left = -100.0
 offset_top = -24.0
-offset_right = 32.0
+offset_right = 100.0
 offset_bottom = 24.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 8
 
 [node name="StartButton" type="Button" parent="VBoxContainer/MarginContainer/Panel/VBoxContainer"]
-custom_minimum_size = Vector2(64, 20)
+custom_minimum_size = Vector2(200, 20)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 text = "START"
 
 [node name="BackButton" type="Button" parent="VBoxContainer/MarginContainer/Panel/VBoxContainer"]
-custom_minimum_size = Vector2(64, 20)
+custom_minimum_size = Vector2(200, 20)
 layout_mode = 2
 size_flags_horizontal = 4
 text = "BACK"
@@ -222,3 +330,5 @@ unique_name_in_owner = true
 
 [node name="Camera2D" type="Camera2D" parent="SubViewport"]
 offset = Vector2(316, 240)
+
+[connection signal="pressed" from="VBoxContainer/MarginContainer/Panel/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
