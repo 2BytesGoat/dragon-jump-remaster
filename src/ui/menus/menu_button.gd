@@ -3,7 +3,8 @@ class_name CustomMenuButton
 
 
 func _on_mouse_entered() -> void:
-	self.grab_focus()
+	if not (button_pressed or disabled):
+		self.grab_focus()
 
 
 func _on_mouse_exited() -> void:
