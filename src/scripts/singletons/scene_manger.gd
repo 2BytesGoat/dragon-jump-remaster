@@ -1,6 +1,14 @@
 extends Node
 
+@onready var particles_scene = preload("res://src/scenes/effects/background_particles.tscn")
 var next_scene_data = {}
+
+
+func _ready() -> void:
+	var particles = particles_scene.instantiate()
+	add_child(particles)
+	particles.position.x += get_viewport().size.x / 4
+
 
 func go_to(scene_path: String, data: Dictionary = {}):
 	next_scene_data = data

@@ -152,43 +152,49 @@ custom_minimum_size = Vector2(0, 178)
 layout_mode = 2
 follow_focus = true
 
-[node name="LevelButtonContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_right = 4
+
+[node name="LevelButtonContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 2
 
-[node name="LevelButton" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/LevelButtonContainer" instance=ExtResource("3_x42vb")]
+[node name="LevelButton" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" instance=ExtResource("3_x42vb")]
 layout_mode = 2
 
-[node name="LevelButton2" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/LevelButtonContainer" instance=ExtResource("3_x42vb")]
+[node name="LevelButton2" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" instance=ExtResource("3_x42vb")]
 layout_mode = 2
 
-[node name="LevelButton3" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/LevelButtonContainer" instance=ExtResource("3_x42vb")]
+[node name="LevelButton3" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" instance=ExtResource("3_x42vb")]
 layout_mode = 2
 
-[node name="LevelButton4" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/LevelButtonContainer" instance=ExtResource("3_x42vb")]
+[node name="LevelButton4" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" instance=ExtResource("3_x42vb")]
 layout_mode = 2
 
-[node name="LevelButton5" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/LevelButtonContainer" instance=ExtResource("3_x42vb")]
+[node name="LevelButton5" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" instance=ExtResource("3_x42vb")]
 layout_mode = 2
 
-[node name="LevelButton6" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/LevelButtonContainer" instance=ExtResource("3_x42vb")]
+[node name="LevelButton6" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" instance=ExtResource("3_x42vb")]
 layout_mode = 2
 
-[node name="LevelButton7" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/LevelButtonContainer" instance=ExtResource("3_x42vb")]
+[node name="LevelButton7" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" instance=ExtResource("3_x42vb")]
 layout_mode = 2
 
-[node name="LevelButton8" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/LevelButtonContainer" instance=ExtResource("3_x42vb")]
+[node name="LevelButton8" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" instance=ExtResource("3_x42vb")]
 layout_mode = 2
 
-[node name="LevelButton9" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/LevelButtonContainer" instance=ExtResource("3_x42vb")]
+[node name="LevelButton9" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" instance=ExtResource("3_x42vb")]
 layout_mode = 2
 
-[node name="LevelButton10" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/LevelButtonContainer" instance=ExtResource("3_x42vb")]
+[node name="LevelButton10" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" instance=ExtResource("3_x42vb")]
 layout_mode = 2
 
-[node name="LevelButton11" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/LevelButtonContainer" instance=ExtResource("3_x42vb")]
+[node name="LevelButton11" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" instance=ExtResource("3_x42vb")]
 layout_mode = 2
 
 [node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/HBoxContainer"]
@@ -363,7 +369,7 @@ theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 8
 
 [node name="Panel2" type="Panel" parent="VBoxContainer/MarginContainer"]
-custom_minimum_size = Vector2(240, 72)
+custom_minimum_size = Vector2(230, 72)
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_styles/panel = SubResource("StyleBoxTexture_auso1")
