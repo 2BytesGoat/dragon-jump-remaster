@@ -17,7 +17,7 @@ layout_mode = 2
 
 [node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 16
+theme_override_constants/margin_left = 32
 theme_override_constants/margin_top = 16
 
 [node name="TextureRect" type="TextureRect" parent="HBoxContainer/MarginContainer2"]
@@ -38,17 +38,12 @@ theme_override_constants/margin_right = 16
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="HSeparator" type="HSeparator" parent="HBoxContainer/MarginContainer/VBoxContainer"]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 2
-theme_override_constants/separation = 8
-
 [node name="PlayButton" parent="HBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_xaiw4")]
 custom_minimum_size = Vector2(176, 32)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-text = "SINGLE PLAYER"
+text = "PRACTICE"
 
 [node name="MultiplayerButton" parent="HBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_xaiw4")]
 custom_minimum_size = Vector2(176, 32)
@@ -64,7 +59,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 disabled = true
-text = "MAP EDITOR"
+text = "LEVEL EDITOR"
 
 [node name="SettingsButton" parent="HBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_xaiw4")]
 custom_minimum_size = Vector2(176, 32)
@@ -80,6 +75,11 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 text = "CREDITS"
 
+[node name="HSeparator" type="HSeparator" parent="HBoxContainer/MarginContainer/VBoxContainer"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+theme_override_constants/separation = 8
+
 [node name="QuitButton" parent="HBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_xaiw4")]
 custom_minimum_size = Vector2(176, 32)
 layout_mode = 2
@@ -90,3 +90,4 @@ text = "QUIT"
 [connection signal="pressed" from="HBoxContainer/MarginContainer/VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/MarginContainer/VBoxContainer/MultiplayerButton" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/MarginContainer/VBoxContainer/MapEditorButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/MarginContainer/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]

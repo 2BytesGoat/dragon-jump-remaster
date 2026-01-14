@@ -14,6 +14,7 @@ config/name="Dragon Jump Remaster"
 run/main_scene="uid://bid71r6mq0gpi"
 config/features=PackedStringArray("4.5", "Forward Plus")
 run/max_fps=60
+boot_splash/bg_color=Color(0.03529412, 0.043137256, 0.08235294, 1)
 config/icon="res://icon.svg"
 
 [autoload]
@@ -75,3 +76,4 @@ player_two_reset={
 textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+environment/defaults/default_clear_color=Color(0.03529412, 0.043137256, 0.08235294, 1)
