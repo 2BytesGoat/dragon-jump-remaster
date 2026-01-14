@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://dqxbwfhfhx0ng"]
+[gd_scene load_steps=15 format=3 uid="uid://dqxbwfhfhx0ng"]
 
 [ext_resource type="Script" uid="uid://dfndbwlllo6cu" path="res://src/ui/menus/level_select.gd" id="1_36voa"]
 [ext_resource type="PackedScene" uid="uid://bvm718ddfisd7" path="res://src/scenes/level/level.tscn" id="1_40k0a"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://cwt3nxjuhojym" path="res://src/ui/menus/speed_slider_label.gd" id="5_atnpk"]
 [ext_resource type="Texture2D" uid="uid://dolawuug5bvhc" path="res://assets/sprites/ui/silver_panel-export.png" id="5_v4mwm"]
 [ext_resource type="PackedScene" uid="uid://bnxudkobrdgtb" path="res://src/ui/menus/menu_button.tscn" id="8_auso1"]
+[ext_resource type="Script" uid="uid://etwvvclap1my" path="res://src/scenes/level_select_camera_2d.gd" id="10_5k7ll"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_auso1"]
 texture = ExtResource("5_v4mwm")
@@ -26,6 +27,19 @@ corner_radius_bottom_left = 4
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_40k0a"]
 viewport_path = NodePath("SubViewport")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5k7ll"]
+bg_color = Color(0.60038817, 0.60038817, 0.60038817, 0)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.5137255, 0.5137255, 0.5137255, 1)
+border_blend = true
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
 [node name="LevelSelect" type="MarginContainer"]
 anchors_preset = 15
@@ -211,8 +225,8 @@ vertical_alignment = 1
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/margin_left = 32
-theme_override_constants/margin_right = 32
+theme_override_constants/margin_left = 48
+theme_override_constants/margin_right = 48
 
 [node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer"]
 layout_mode = 2
@@ -223,6 +237,10 @@ layout_mode = 2
 texture = SubResource("ViewportTexture_40k0a")
 expand_mode = 3
 stretch_mode = 5
+
+[node name="Panel2" type="Panel" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_5k7ll")
 
 [node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer"]
 layout_mode = 2
@@ -335,7 +353,6 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 theme = null
-disabled = true
 text = "LEADERBORAD"
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
@@ -390,7 +407,9 @@ unique_name_in_owner = true
 
 [node name="Camera2D" type="Camera2D" parent="SubViewport"]
 offset = Vector2(316, 240)
+script = ExtResource("10_5k7ll")
 
 [connection signal="value_changed" from="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/SpeedSlider" to="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/SpeedSliderLabel" method="_on_speed_slider_value_changed"]
 [connection signal="pressed" from="VBoxContainer/MarginContainer/MarginContainer/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/MarginContainer/MarginContainer/VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="level_size_updated" from="SubViewport/Level" to="SubViewport/Camera2D" method="_on_level_level_size_updated"]
