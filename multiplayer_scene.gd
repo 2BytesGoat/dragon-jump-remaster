@@ -25,9 +25,10 @@ var player_nodes = []
 
 func _ready():
 	var level_code = SceneManger.next_scene_data.get("level_code", "")
+	var player_speed_modifier = SceneManger.next_scene_data.get("speed_modifier", "")
 	level.update_level(level_code)
 	
-	initialize_players()
+	initialize_players(player_speed_modifier)
 	level._update_race_finish_position()
 	SignalBus.player_touched_crown.connect(_on_player_touched_crown)
 	SignalBus.player_finished_run.connect(_on_player_finished_run)
@@ -48,7 +49,7 @@ func _process(delta: float) -> void:
 		delta_time = 0.0
 
 
-func initialize_players() -> void:
+func initialize_players(player_speed_modifier: float = 1.0) -> void:
 	var player_position = level.player_start_position
 	
 	for i in range(nb_players):
@@ -58,6 +59,7 @@ func initialize_players() -> void:
 		
 		player.name = "Player%s"%(i+1)
 		player.global_position = player_position
+		player.speed_modifier = player_speed_modifier
 		player_container.add_child(player)
 		player_nodes.append(player)
 		

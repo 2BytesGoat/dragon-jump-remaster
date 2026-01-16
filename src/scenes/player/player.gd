@@ -20,9 +20,9 @@ enum CONTROLLERS {
 @export var jump_time_to_descent: float = 0.23    # Time in seconds to descent
 
 # Physics properties
-@onready var jump_velocity: float = ((-2.0 * jump_height) / jump_time_to_peak)         # Calculated jump velocity
-@onready var jump_gravity: float  = (2.0 * jump_height) / (jump_time_to_peak ** 2)     # Calculated gravity for jump
-@onready var fall_gravity: float  = (2.0 * jump_height) / (jump_time_to_descent ** 2)  # Calculated gravity for fall
+@onready var jump_velocity = ((-2.0 * jump_height) / jump_time_to_peak)         # Calculated jump velocity
+@onready var jump_gravity  = (2.0 * jump_height) / (jump_time_to_peak ** 2)     # Calculated gravity for jump
+@onready var fall_gravity  = (2.0 * jump_height) / (jump_time_to_descent ** 2)  # Calculated gravity for fall
 
 # State
 @onready var state_machine: StateMachine = $StateMachine
@@ -63,6 +63,7 @@ var modifiers: Dictionary = {}
 var powerups: Array = []
 var starting_position: Vector2 = Vector2.ZERO
 var show_afterimage: bool = false : set = _on_show_after_image_changed
+var speed_modifier: float = 1.0 : set = _on_speed_modifier_changed
 
 
 func _ready() -> void:
@@ -188,6 +189,19 @@ func drop_crown() -> void:
 		child.drop()
 		has_crown = false
 		SignalBus.player_dropped_crown.emit(self)
+
+
+func _on_speed_modifier_changed(value) -> void:
+	speed_modifier = value
+	
+	jump_time_to_peak *= (1 / speed_modifier)
+	jump_time_to_descent *= (1 / speed_modifier)
+	jump_velocity = ((-2.0 * jump_height) / jump_time_to_peak)         # Calculated jump velocity
+	jump_gravity  = (2.0 * jump_height) / (jump_time_to_peak ** 2)     # Calculated gravity for jump
+	fall_gravity  = (2.0 * jump_height) / (jump_time_to_descent ** 2)  # Calculated gravity for fall
+	
+	max_speed *= value
+	acceleration *= value
 
 
 func _physics_process(delta: float) -> void:

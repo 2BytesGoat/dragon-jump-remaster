@@ -472,14 +472,6 @@ _data = {
 collision_layer = 2
 collision_mask = 33
 script = ExtResource("1_uug8f")
-controller_type = null
-starting_facing_direction = null
-max_speed = null
-acceleration = null
-default_friction = null
-jump_height = null
-jump_time_to_peak = null
-jump_time_to_descent = null
 
 [node name="Observer" type="Node" parent="."]
 script = ExtResource("2_4r4qr")

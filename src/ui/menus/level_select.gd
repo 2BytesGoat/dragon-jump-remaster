@@ -3,6 +3,7 @@ extends MarginContainer
 @onready var level_button_container = %LevelButtonContainer
 @onready var level_node = %Level
 @onready var selected_level_label = %SelectedLevelLabel
+@onready var speed_slider = %SpeedSlider
 
 @onready var level_button_scene = preload("res://src/ui/menus/level_button.tscn")
 @export var single_player_scene: PackedScene
@@ -51,7 +52,8 @@ func _on_start_button_pressed() -> void:
 	if not selected_level_name:
 		return
 	var level_code = Constants.LEVELS[selected_level_name]["code"]
-	SceneManger.go_to(single_player_scene.resource_path, {"level_code": level_code})
+	var speed_modifier = speed_slider.value + 0.5
+	SceneManger.go_to(single_player_scene.resource_path, {"level_code": level_code, "speed_modifier": speed_modifier})
 
 
 func _on_back_button_pressed() -> void:
