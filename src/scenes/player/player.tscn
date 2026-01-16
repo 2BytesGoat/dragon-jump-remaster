@@ -26,7 +26,7 @@ particles_anim_v_frames = 1
 particles_anim_loop = false
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uug8f"]
-size = Vector2(11, 15)
+size = Vector2(14, 15)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6uujk"]
 size = Vector2(11, 14)
@@ -529,8 +529,7 @@ volume_db = -25.0
 bus = &"SFX"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
-position = Vector2(-0.5, 0.5)
+position = Vector2(0, 0.5)
 shape = SubResource("RectangleShape2D_uug8f")
 
 [node name="InteractBox" type="Area2D" parent="."]
@@ -538,6 +537,7 @@ collision_layer = 16
 collision_mask = 8
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractBox"]
+visible = false
 position = Vector2(-0.5, 1)
 shape = SubResource("RectangleShape2D_6uujk")
 

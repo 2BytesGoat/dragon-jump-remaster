@@ -7,7 +7,7 @@ extends Node
 
 @onready var level_music: AudioStreamPlayer = $AudioStreamPlayer
 @onready var progress_bar: MarginContainer = $CanvasLayer/ProgressBar
-@onready var end_screen: Panel = $CanvasLayer/EndScreen
+@onready var pause_menu: MarginContainer = $CanvasLayer/PauseMenu
 
 @onready var player_scene = preload("res://src/scenes/player/player.tscn")
 @onready var camera_scene = preload("res://src/scenes/camera_2d.tscn")
@@ -31,6 +31,11 @@ func _ready():
 	level._update_race_finish_position()
 	SignalBus.player_touched_crown.connect(_on_player_touched_crown)
 	SignalBus.player_finished_run.connect(_on_player_finished_run)
+
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		pause_menu.visible = not pause_menu.visible
 
 
 func _process(delta: float) -> void:
@@ -104,7 +109,8 @@ func _on_player_finished_run(player: Player) -> void:
 		"restarts": info["restarts"],
 		"crowns_dropped": info["crowns_dropped"]
 	}
-	end_screen.show_stats(stats)
+	# TODO: remove or update endscreen
+	#end_screen.show_stats(stats)
 
 
 func _on_retry_button_pressed() -> void:

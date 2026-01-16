@@ -21,4 +21,5 @@ turbulence_enabled = true
 [node name="GPUParticles2D" type="GPUParticles2D"]
 amount = 96
 lifetime = 9.0
+preprocess = 2.0
 process_material = SubResource("ParticleProcessMaterial_81j85")

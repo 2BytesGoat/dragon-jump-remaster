@@ -279,17 +279,17 @@ vertical_alignment = 1
 [node name="MedalContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 0
+theme_override_constants/separation = 8
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MedalContainer"]
+[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MedalContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "[███████████░░░░░░] 78%"
-vertical_alignment = 1
+value = 42.0
 
 [node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MedalContainer"]
+custom_minimum_size = Vector2(48, 0)
 layout_mode = 2
-size_flags_horizontal = 3
-text = "Gold"
+text = "BRONZE"
 horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
@@ -359,6 +359,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 theme = null
+disabled = true
 text = "LEADERBORAD"
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
