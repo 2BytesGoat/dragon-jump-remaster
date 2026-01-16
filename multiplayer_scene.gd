@@ -1,17 +1,17 @@
 extends Node
 
 @export var level: Node2D
-@export var player_node: Node2D
+@export var player_container: Node2D
 @export var camera_p1: Camera2D
 @export var card_container: VBoxContainer
-
-@onready var level_music: AudioStreamPlayer = $AudioStreamPlayer
-@onready var progress_bar: MarginContainer = $CanvasLayer/ProgressBar
-@onready var pause_menu: MarginContainer = $CanvasLayer/PauseMenu
+@export var level_music: AudioStreamPlayer
+@export var progress_bar: MarginContainer
+@export var pause_screen: MarginContainer
 
 @onready var player_scene = preload("res://src/scenes/player/player.tscn")
 @onready var camera_scene = preload("res://src/scenes/camera_2d.tscn")
 @onready var portal_scene = preload("res://src/scenes/level/tiles/portal.tscn")
+var level_scene_path = "res://src/ui/menus/level_select.tscn"
 
 var race_started: bool = false
 var first_pickup: bool = true
@@ -35,7 +35,7 @@ func _ready():
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
-		pause_menu.visible = not pause_menu.visible
+		set_game_paused(not pause_screen.visible)
 
 
 func _process(delta: float) -> void:
@@ -58,7 +58,7 @@ func initialize_players() -> void:
 		
 		player.name = "Player%s"%(i+1)
 		player.global_position = player_position
-		player_node.add_child(player)
+		player_container.add_child(player)
 		player_nodes.append(player)
 		
 		player.has_resetted.connect(level.reset_objects)
@@ -78,6 +78,10 @@ func update_player_progress() -> void:
 		var player_info = player.get_info()
 		progress_data[player.name] = player_info["progress"]
 	progress_bar.update_player_progress(progress_data)
+
+
+func set_game_paused(value: bool) -> void:
+	pause_screen.visible = value
 
 
 func _on_player_touched_crown(_player: Player):
@@ -115,3 +119,17 @@ func _on_player_finished_run(player: Player) -> void:
 
 func _on_retry_button_pressed() -> void:
 	get_tree().reload_current_scene()
+
+
+func _on_resume_button_pressed() -> void:
+	set_game_paused(false)
+
+
+func _on_restart_button_pressed() -> void:
+	for player: Player in player_container.get_children():
+		player.reset()
+	set_game_paused(false)
+
+
+func _on_exit_button_pressed() -> void:
+	SceneManger.go_to(level_scene_path)

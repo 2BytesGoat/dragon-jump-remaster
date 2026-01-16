@@ -1,17 +1,17 @@
 [gd_scene load_steps=5 format=3 uid="uid://cg5ctntixs1fk"]
 
-[ext_resource type="Theme" uid="uid://se7xk3lcwng8" path="res://src/ui/components/themes/main_theme.tres" id="1_xfja3"]
-[ext_resource type="PackedScene" uid="uid://bnxudkobrdgtb" path="res://src/ui/menus/menu_button.tscn" id="2_ikjnk"]
-[ext_resource type="Texture2D" uid="uid://dolawuug5bvhc" path="res://assets/sprites/ui/silver_panel-export.png" id="2_onja0"]
+[ext_resource type="Theme" uid="uid://se7xk3lcwng8" path="res://src/ui/components/themes/main_theme.tres" id="1_5hkai"]
+[ext_resource type="Texture2D" uid="uid://dolawuug5bvhc" path="res://assets/sprites/ui/silver_panel-export.png" id="2_3fw6s"]
+[ext_resource type="PackedScene" uid="uid://bnxudkobrdgtb" path="res://src/ui/menus/menu_button.tscn" id="3_golrs"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_b38vx"]
-texture = ExtResource("2_onja0")
+texture = ExtResource("2_3fw6s")
 texture_margin_left = 16.0
 texture_margin_top = 16.0
 texture_margin_right = 16.0
 texture_margin_bottom = 16.0
 
-[node name="PauseMenu" type="MarginContainer"]
+[node name="PauseScreen" type="MarginContainer"]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -25,7 +25,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 6
 size_flags_vertical = 6
-theme = ExtResource("1_xfja3")
+theme = ExtResource("1_5hkai")
 
 [node name="Panel" type="Panel" parent="."]
 custom_minimum_size = Vector2(180, 210)
@@ -55,7 +55,6 @@ alignment = 1
 [node name="HSeparator3" type="HSeparator" parent="Panel/VBoxContainer"]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
-theme_override_constants/separation = 12
 
 [node name="Label" type="Label" parent="Panel/VBoxContainer"]
 layout_mode = 2
@@ -69,19 +68,20 @@ self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="MenuButton" parent="Panel/VBoxContainer" instance=ExtResource("2_ikjnk")]
+[node name="ResumeButton" parent="Panel/VBoxContainer" instance=ExtResource("3_golrs")]
 custom_minimum_size = Vector2(145, 32)
 layout_mode = 2
 text = "RESUME"
 
-[node name="MenuButton2" parent="Panel/VBoxContainer" instance=ExtResource("2_ikjnk")]
+[node name="RestartButton" parent="Panel/VBoxContainer" instance=ExtResource("3_golrs")]
 custom_minimum_size = Vector2(145, 32)
 layout_mode = 2
 text = "RESTART"
 
-[node name="MenuButton3" parent="Panel/VBoxContainer" instance=ExtResource("2_ikjnk")]
+[node name="SettingsButton" parent="Panel/VBoxContainer" instance=ExtResource("3_golrs")]
 custom_minimum_size = Vector2(145, 32)
 layout_mode = 2
+disabled = true
 text = "SETTINGS"
 
 [node name="HSeparator2" type="HSeparator" parent="Panel/VBoxContainer"]
@@ -89,7 +89,7 @@ self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="MenuButton4" parent="Panel/VBoxContainer" instance=ExtResource("2_ikjnk")]
+[node name="ExitButton" parent="Panel/VBoxContainer" instance=ExtResource("3_golrs")]
 custom_minimum_size = Vector2(145, 32)
 layout_mode = 2
 text = "EXIT"
