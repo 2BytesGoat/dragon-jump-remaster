@@ -77,6 +77,20 @@ func _ready() -> void:
 	reset()
 
 
+func _physics_process(delta: float) -> void:
+	if not started_walking or is_done:
+		return
+	
+	velocity.x = move_toward(velocity.x, max_speed * facing_direction, acceleration * delta)
+	velocity.y += _get_actual_gravity() * delta
+	
+	_apply_modifiers()
+	#_update_friction()
+	_update_facing_direction()
+	
+	move_and_slide()
+
+
 func set_controller(controller: PlayerCharacterController) -> void:
 	for child in controller_container.get_children():
 		child.queue_free()
@@ -105,6 +119,9 @@ func get_info() -> Dictionary:
 
 
 func reset() -> void:
+	if is_done:
+		return
+	
 	drop_crown()
 	Utils.instance_scene_on_main(despawn_smoke, self.global_position)
 	current_friction = default_friction 
@@ -204,18 +221,14 @@ func _on_speed_modifier_changed(value) -> void:
 	acceleration *= value
 
 
-func _physics_process(delta: float) -> void:
-	if not started_walking or is_done:
-		return
+func _spawn_effect(effect, was_walled=false):
+	var effect_scale = Vector2i(facing_direction, 1)
+	var effect_rotation = 0
+	if was_walled:
+		effect_rotation = PI/2 * facing_direction
+		effect_scale.x *= -1
 	
-	velocity.x = move_toward(velocity.x, max_speed * facing_direction, acceleration * delta)
-	velocity.y += _get_actual_gravity() * delta
-	
-	_apply_modifiers()
-	#_update_friction()
-	_update_facing_direction()
-	
-	move_and_slide()
+	Utils.instance_scene_on_main(effect, global_position, effect_rotation, effect_scale)
 
 
 func _get_actual_gravity() -> float:

@@ -472,14 +472,6 @@ _data = {
 collision_layer = 2
 collision_mask = 33
 script = ExtResource("1_uug8f")
-controller_type = null
-starting_facing_direction = null
-max_speed = null
-acceleration = null
-default_friction = null
-jump_height = null
-jump_time_to_peak = null
-jump_time_to_descent = null
 
 [node name="Observer" type="Node" parent="."]
 script = ExtResource("2_4r4qr")
@@ -498,13 +490,13 @@ hframes = 21
 position = Vector2(-2, -11)
 
 [node name="AfterImage" type="CPUParticles2D" parent="Flippable"]
-self_modulate = Color(1, 1, 1, 0.69000006)
+self_modulate = Color(1, 1, 1, 0.5)
 show_behind_parent = true
 material = SubResource("CanvasItemMaterial_i6xdb")
 position = Vector2(-3, -1)
-amount = 4
+amount = 6
 texture = ExtResource("3_tj7fb")
-lifetime = 0.2
+lifetime = 0.15000000000000002
 gravity = Vector2(0, 0)
 
 [node name="GaplingHook" type="Node2D" parent="Flippable"]

@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=12 format=3 uid="uid://se7xk3lcwng8"]
+[gd_resource type="Theme" load_steps=17 format=3 uid="uid://se7xk3lcwng8"]
 
 [ext_resource type="FontFile" uid="uid://s7ljtadq31a4" path="res://assets/fonts/PressStart2P-Regular.ttf" id="1_lhnvj"]
 [ext_resource type="Texture2D" uid="uid://mvxvmtl8bdjc" path="res://assets/sprites/ui/silver_button_normal-export.png" id="2_mqe7l"]
@@ -51,6 +51,16 @@ texture_margin_bottom = 8.0
 expand_margin_bottom = 4.0
 modulate_color = Color(0.3882353, 0.67058825, 0.24705882, 1)
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0mxni"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nmpq4"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0umi5"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_g7pco"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gu6du"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0mxni"]
 bg_color = Color(0.36862746, 0.36862746, 0.36862746, 1)
 corner_radius_top_left = 1
@@ -76,6 +86,12 @@ Button/styles/focus = SubResource("StyleBoxTexture_g7pco")
 Button/styles/hover = SubResource("StyleBoxTexture_gu6du")
 Button/styles/normal = SubResource("StyleBoxTexture_nmpq4")
 Button/styles/pressed = SubResource("StyleBoxTexture_0umi5")
+CheckBox/font_sizes/font_size = 6
+CheckBox/styles/disabled = SubResource("StyleBoxEmpty_0mxni")
+CheckBox/styles/focus = SubResource("StyleBoxEmpty_nmpq4")
+CheckBox/styles/hover = SubResource("StyleBoxEmpty_0umi5")
+CheckBox/styles/normal = SubResource("StyleBoxEmpty_g7pco")
+CheckBox/styles/pressed = SubResource("StyleBoxEmpty_gu6du")
 Label/font_sizes/font_size = 6
 Label/fonts/font = ExtResource("1_lhnvj")
 ProgressBar/font_sizes/font_size = 6

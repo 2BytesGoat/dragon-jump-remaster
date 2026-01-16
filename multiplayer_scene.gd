@@ -129,6 +129,7 @@ func _on_resume_button_pressed() -> void:
 
 func _on_restart_button_pressed() -> void:
 	for player: Player in player_container.get_children():
+		player.is_done = false
 		player.reset()
 	set_game_paused(false)
 
