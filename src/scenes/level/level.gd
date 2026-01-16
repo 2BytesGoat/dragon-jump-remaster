@@ -119,6 +119,16 @@ const symbol_to_tile_info: Dictionary = {
 		"args": null,
 		"over_wall": false
 	},
+	"Q": { # exit
+		"type": CELL.OBJECT,
+		"source": 0,
+		"coords": Vector2i(6, 3),
+		"callable": null,
+		"debug_alt": null,
+		"scene": preload("res://src/scenes/level/tiles/portal.tscn"),
+		"args": null,
+		"over_wall": false
+	},
 	"P": { # player
 		"type": CELL.OBJECT,
 		"source": 0,
@@ -192,15 +202,15 @@ func _process(delta: float) -> void:
 
 func _ready() -> void:
 	clear_level()
-	var old_code = "W31|W31|W31|W4E23W4|W3E25W3|W2E27W2|W2E27W2|W2E28W1|W2E28W1|W2E28W1|W2E28W1|W2E28W1|W1E12W7E10W1|W1E13W5E11W1|W1E25W5|W1E25W5|W1E25W5|W1E25W5|W1E15W7E3W5|W1E16W5E4W5|W1E1P1E6W4E13W5|W13E13W5|W13E13W5|W31"
-	var level_code = old_code.replace("q", "E").replace("X", "Y").replace("/", "|").replace("V", "O").replace("D", "J")
-	set_level(level_code)
+	#var old_code = "W42|W8E29W5|W3E37W2|W2E38W2|W1E25Y2E13W1|W1E25W2Y1E12W1|W1E25W2Y1E12W1|W1E25W2Y1E12W1|W1E15J1E4J1E4W2Y1E11B1W1|W1E30B2E8W1|W9E22W2E8W1|W9Y8E24W1|W17E6Y2E16W1|W17E5Y1W2Y1E11B1E1Y2W1|W7E15Y1W2Y1E10W6|W3E20Y2E11W6|W2E34W6|W1E35W6|W1E13J1E4B1E10B2E1Y3W6|W1E18W1E9W13|W1E18W1E9W13|W1E28W13|W1E23W18|W1E23W18|W1E2P1E8B1E11W18|W19Y5W18|W42"
+	#var level_code = old_code.replace("q", "E").replace("X", "Y").replace("/", "|").replace("V", "O").replace("D", "J")
+	#set_level(level_code)
 	#_init_terrain_layer()
 	#_populate_objects()
 	#_init_hidden_areas()
 	#_update_static_alt_tiles()
 	#print(get_level_code())
-	#
+	
 	_init_atlas_symbol_mapping()
 	_init_terrain_layer()
 	
@@ -214,6 +224,7 @@ func _ready() -> void:
 		_init_hidden_areas()
 		_update_static_alt_tiles()
 		current_level_code = get_level_code()
+		print(get_level_code())
 	
 	SignalBus.player_touched_crown.connect(_on_player_touched_crown)
 	is_initialized = true
