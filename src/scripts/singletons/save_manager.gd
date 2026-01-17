@@ -53,9 +53,28 @@ func has_level_data(level_name: String) -> bool:
 	return level_name in current_data.levels
 
 
+func update_level_progress(level_name: String) -> void:
+	var level_data: LevelData = current_data.levels.get(level_name)
+	if not level_data or level_data.best_time <= 0:
+		return
+
+	var milestones = Constants.LEVELS[level_name]["times"]
+	var total_milestones = milestones.size()
+
+	for i in range(total_milestones):
+		var time_to_beat = milestones[i]
+		level_data.progress_milestone = i
+		if level_data.best_time <= time_to_beat:
+			level_data.progress_percentage = 1.0
+		else:
+			level_data.progress_percentage = clamp(time_to_beat / level_data.best_time, 0.0, 1.0)
+			break
+
+
 func _on_new_time_submission(level_name: String, time: float) -> void:
 	var level_data: LevelData = current_data.levels[level_name]
 	if time != 0 and level_data.best_time > time:
 		current_data.levels[level_name].best_time = time
+		update_level_progress(level_name)
 		unlock_next_level(level_name)
 		save_to_disk()

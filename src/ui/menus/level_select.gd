@@ -5,6 +5,8 @@ extends MarginContainer
 @onready var selected_level_label = %SelectedLevelLabel
 @onready var speed_slider = %SpeedSlider
 @onready var your_best_time_label = %YourBestTimeLabel
+@onready var level_progress_bar = %LevelProgressBar
+@onready var level_progress_medal = %LevelProgressMedalLabel
 
 @onready var level_button_scene = preload("res://src/ui/menus/level_button.tscn")
 @export var single_player_scene: PackedScene
@@ -48,6 +50,9 @@ func _on_level_button_clicked(level_name: String) -> void:
 	var level_data = SaveManager.get_level_data(level_name)
 	var your_best_time = "Not Done Yet" if level_data.best_time == INF else Utils.format_time(level_data.best_time)
 	your_best_time_label.text = your_best_time
+	
+	level_progress_bar.value = level_data.progress_percentage
+	level_progress_medal.text = Constants.MEDAL_NAMES[level_data.progress_milestone]
 	
 	var i = Constants.LEVELS.keys().find(level_name)
 	selected_level_label.text = "%03d - %s" % [i, Constants.LEVELS[level_name]["name"]]
