@@ -10,9 +10,11 @@ enum CONTROLLERS {
 
 # movement properties
 @export var starting_facing_direction: int = Vector2i.RIGHT.x
-@export var max_speed: float = 220.0
-@export var acceleration: float = 250.0
+@export var default_max_speed: float = 220.0
+@export var default_acceleration: float = 250.0
 @export var default_friction: float = 100.0     # Default friction when on normal surfaces
+var max_speed: float = 220.0
+var acceleration: float = 250.0
 
 # jump properties
 @export var jump_height: float = 72.0             # Height in pixels
@@ -212,16 +214,18 @@ func drop_crown() -> void:
 
 
 func _on_speed_modifier_changed(value) -> void:
+	if speed_modifier == value:
+		return
 	speed_modifier = value
 	
-	jump_time_to_peak *= (1 / speed_modifier)
-	jump_time_to_descent *= (1 / speed_modifier)
-	jump_velocity = ((-2.0 * jump_height) / jump_time_to_peak)         # Calculated jump velocity
-	jump_gravity  = (2.0 * jump_height) / (jump_time_to_peak ** 2)     # Calculated gravity for jump
-	fall_gravity  = (2.0 * jump_height) / (jump_time_to_descent ** 2)  # Calculated gravity for fall
+	var new_time_to_peak = jump_time_to_peak * (1 / speed_modifier)
+	var new_time_to_descent = jump_time_to_descent * (1 / speed_modifier)
+	jump_velocity = ((-2.0 * jump_height) / new_time_to_peak)         # Calculated jump velocity
+	jump_gravity  = (2.0 * jump_height) / (new_time_to_peak ** 2)     # Calculated gravity for jump
+	fall_gravity  = (2.0 * jump_height) / (new_time_to_descent ** 2)  # Calculated gravity for fall
 	
-	max_speed *= value
-	acceleration *= value
+	max_speed = default_max_speed * value
+	acceleration = default_acceleration * value
 
 
 func _spawn_effect(effect, was_walled=false):
