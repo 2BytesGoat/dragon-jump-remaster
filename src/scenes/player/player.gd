@@ -10,21 +10,23 @@ enum CONTROLLERS {
 
 # movement properties
 @export var starting_facing_direction: int = Vector2i.RIGHT.x
-@export var default_max_speed: float = 220.0
-@export var default_acceleration: float = 250.0
-@export var default_friction: float = 100.0     # Default friction when on normal surfaces
+var default_max_speed: float = 220.0
+var default_acceleration: float = 250.0
+var default_friction: float = 100.0     # Default friction when on normal surfaces
 var max_speed: float = 220.0
 var acceleration: float = 250.0
 
 # jump properties
-@export var jump_height: float = 72.0             # Height in pixels
-@export var jump_time_to_peak: float = 0.37       # Time in seconds to reach peak
-@export var jump_time_to_descent: float = 0.23    # Time in seconds to descent
+var jump_height: float = 72.0                     # Height in pixels
+var default_jump_time_to_peak: float = 0.37       # Time in seconds to reach peak
+var default_jump_time_to_descent: float = 0.23    # Time in seconds to descent
+var jump_time_to_peak: float = 0.37
+var jump_time_to_descent: float = 0.23
 
 # Physics properties
-@onready var jump_velocity = ((-2.0 * jump_height) / jump_time_to_peak)         # Calculated jump velocity
-@onready var jump_gravity  = (2.0 * jump_height) / (jump_time_to_peak ** 2)     # Calculated gravity for jump
-@onready var fall_gravity  = (2.0 * jump_height) / (jump_time_to_descent ** 2)  # Calculated gravity for fall
+var jump_velocity: float
+var jump_gravity: float
+var fall_gravity: float
 
 # State
 @onready var state_machine: StateMachine = $StateMachine
@@ -214,15 +216,14 @@ func drop_crown() -> void:
 
 
 func _on_speed_modifier_changed(value) -> void:
-	if speed_modifier == value:
-		return
 	speed_modifier = value
 	
-	var new_time_to_peak = jump_time_to_peak * (1 / speed_modifier)
-	var new_time_to_descent = jump_time_to_descent * (1 / speed_modifier)
-	jump_velocity = ((-2.0 * jump_height) / new_time_to_peak)         # Calculated jump velocity
-	jump_gravity  = (2.0 * jump_height) / (new_time_to_peak ** 2)     # Calculated gravity for jump
-	fall_gravity  = (2.0 * jump_height) / (new_time_to_descent ** 2)  # Calculated gravity for fall
+	jump_time_to_peak = default_jump_time_to_peak * (1 / speed_modifier)
+	jump_time_to_descent = default_jump_time_to_descent * (1 / speed_modifier)
+	
+	jump_velocity = ((-2.0 * jump_height) / jump_time_to_peak)         # Calculated jump velocity
+	jump_gravity  = (2.0 * jump_height) / (jump_time_to_peak ** 2)     # Calculated gravity for jump
+	fall_gravity  = (2.0 * jump_height) / (jump_time_to_descent ** 2)  # Calculated gravity for fall
 	
 	max_speed = default_max_speed * value
 	acceleration = default_acceleration * value
