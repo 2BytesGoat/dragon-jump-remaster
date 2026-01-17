@@ -119,6 +119,16 @@ const symbol_to_tile_info: Dictionary = {
 		"args": null,
 		"over_wall": false
 	},
+	"Q": { # exit
+		"type": CELL.OBJECT,
+		"source": 0,
+		"coords": Vector2i(6, 3),
+		"callable": null,
+		"debug_alt": null,
+		"scene": preload("res://src/scenes/level/tiles/portal.tscn"),
+		"args": null,
+		"over_wall": false
+	},
 	"P": { # player
 		"type": CELL.OBJECT,
 		"source": 0,
@@ -165,6 +175,10 @@ var is_initialized = false
 var terrain_layer_used_cells = [] # based on this we update the map using tool
 var emplased_time = 0
 var update_interval = 1
+var current_level_code = ""
+var level_size = Vector2.ZERO
+
+signal level_size_updated(level_size: Vector2i)
 
 
 func _enter_tree() -> void:
@@ -187,16 +201,16 @@ func _process(delta: float) -> void:
 
 
 func _ready() -> void:
-	#clear_level()
-	var old_code = "q44/q1W42q1/q1W8E29W5q1/q1W3E37W2q1/q1W2E38W2q1/q1W1E25X2E13W1q1/q1W1E25W2X1E12W1q1/q1W1E25W2X1E12W1q1/q1W1E25W2X1E12W1q1/q1W1E15D1E4D1E4W2X1E11B1W1q1/q1W1E3Q1E26B2E8W1q1/q1W9E22W2E8W1q1/q1W9X8E24W1q1/q1W17E6X2E16W1q1/q1W17E5X1W2X1E11B1E1X2W1q1/q1W7E15X1W2X1E10W6q1/q1W3E20X2E11W6q1/q1W2E34W6q1/q1W1E35W6q1/q1W1E13D1E4B1E10B2E1X3W6q1/q1W1E18W1E9W13q1/q1W1E18W1E9W13q1/q1W1E28W13q1/q1W1E23W18q1/q1W1E23W18q1/q1W1E2P1E8B1E11W18q1/q1W19X5W18q1/q1W42q1/q44"
-	var level_code = old_code.replace("q", "E").replace("X", "Y").replace("/", "|").replace("V", "O").replace("D", "J")
+	clear_level()
+	#var old_code = "W42|W8E29W5|W3E37W2|W2E38W2|W1E25Y2E13W1|W1E25W2Y1E12W1|W1E25W2Y1E12W1|W1E25W2Y1E12W1|W1E15J1E4J1E4W2Y1E11B1W1|W1E30B2E8W1|W9E22W2E8W1|W9Y8E24W1|W17E6Y2E16W1|W17E5Y1W2Y1E11B1E1Y2W1|W7E15Y1W2Y1E10W6|W3E20Y2E11W6|W2E34W6|W1E35W6|W1E13J1E4B1E10B2E1Y3W6|W1E18W1E9W13|W1E18W1E9W13|W1E28W13|W1E23W18|W1E23W18|W1E2P1E8B1E11W18|W19Y5W18|W42"
+	#var level_code = old_code.replace("q", "E").replace("X", "Y").replace("/", "|").replace("V", "O").replace("D", "J")
 	#set_level(level_code)
 	#_init_terrain_layer()
 	#_populate_objects()
 	#_init_hidden_areas()
 	#_update_static_alt_tiles()
 	#print(get_level_code())
-	#
+	
 	_init_atlas_symbol_mapping()
 	_init_terrain_layer()
 	
@@ -209,10 +223,24 @@ func _ready() -> void:
 		_populate_objects()
 		_init_hidden_areas()
 		_update_static_alt_tiles()
+		current_level_code = get_level_code()
 		print(get_level_code())
 	
 	SignalBus.player_touched_crown.connect(_on_player_touched_crown)
 	is_initialized = true
+
+
+func update_level(level_code: String) -> void:
+	if len(level_code) == 0 or current_level_code == level_code:
+		return
+	
+	clear_level()
+	set_level(level_code)
+	_init_terrain_layer()
+	_populate_objects()
+	_init_hidden_areas()
+	_update_static_alt_tiles()
+	current_level_code = level_code
 
 
 func get_level_code():
@@ -231,7 +259,7 @@ func get_level_code():
 		max_y = max(rect_size.end.y, max_y)
 	
 	# because we need them to capture all used cells
-	var level_size = Vector2(abs(max_x - min_x), abs(max_y - min_y))
+	level_size = Vector2(abs(max_x - min_x), abs(max_y - min_y))
 	var shift = Vector2i(min_x, min_y)
 	
 	var current_symbol = null
@@ -268,6 +296,8 @@ func clear_level() -> void:
 	for child in objects_layer.get_children():
 		objects_layer.remove_child(child)
 		child.queue_free()
+	
+	objects_map = {}
 
 
 func set_level(level_code: String) -> void:
@@ -277,6 +307,9 @@ func set_level(level_code: String) -> void:
 	
 	var y_offset = 0
 	var x_offset = 0
+	
+	var level_width = 0
+	var level_height = 0
 	
 	for symbol in level_code:
 		if _is_tilemap_symbol(symbol):
@@ -291,6 +324,8 @@ func set_level(level_code: String) -> void:
 			symbol_cnt = symbol_cnt * 10 + int(symbol)
 			should_flush = true
 		elif symbol == "|":
+			level_width = max(x_offset, level_width)
+			level_height += 1
 			_set_multiple_cells(current_symbols, symbol_cnt, Vector2i(x_offset, y_offset))
 			current_symbols = ""
 			symbol_cnt = 0
@@ -298,6 +333,18 @@ func set_level(level_code: String) -> void:
 			y_offset += 1
 	if symbol_cnt > 0:
 		_set_multiple_cells(current_symbols, symbol_cnt, Vector2i(x_offset, y_offset))
+		level_height += 1
+	
+	var cell_size = Vector2i(terrain_layer.rendering_quadrant_size, terrain_layer.rendering_quadrant_size)
+	level_size = Vector2i(level_width, level_height) * cell_size
+	level_size_updated.emit(level_size)
+
+
+func reset_objects() -> void:
+	for obj_type in objects_map:
+		for obj in objects_map[obj_type]:
+			if obj.has_method("reset"):
+				obj.call_deferred("reset")
 
 
 func _is_tilemap_symbol(symbol: String) -> bool:

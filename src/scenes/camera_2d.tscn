@@ -3,10 +3,5 @@
 [ext_resource type="Script" uid="uid://jus32fpssy3l" path="res://src/scenes/camera_2d.gd" id="1_u0e42"]
 
 [node name="Camera2D" type="Camera2D"]
-offset = Vector2(0, -32)
-zoom = Vector2(2, 2)
-position_smoothing_enabled = true
-position_smoothing_speed = 4.0
-drag_horizontal_enabled = true
-drag_vertical_enabled = true
+limit_enabled = false
 script = ExtResource("1_u0e42")

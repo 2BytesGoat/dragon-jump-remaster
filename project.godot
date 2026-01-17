@@ -11,9 +11,10 @@ config_version=5
 [application]
 
 config/name="Dragon Jump Remaster"
-run/main_scene="uid://b5etxdni2oe0j"
+run/main_scene="uid://bid71r6mq0gpi"
 config/features=PackedStringArray("4.5", "Forward Plus")
 run/max_fps=60
+boot_splash/bg_color=Color(0.03529412, 0.043137256, 0.08235294, 1)
 config/icon="res://icon.svg"
 
 [autoload]
@@ -22,10 +23,19 @@ EnvironmentVariables="*res://src/scripts/singletons/environment_variables.gd"
 Utils="*res://src/scripts/singletons/utils.gd"
 Constants="*res://src/scripts/singletons/constants.gd"
 SignalBus="*res://src/scripts/singletons/signal_bus.gd"
+SceneManger="*res://src/scripts/singletons/scene_manger.gd"
 
 [display]
 
+window/size/viewport_width=640
+window/size/viewport_height=360
+window/size/window_width_override=1280
+window/size/window_height_override=720
 window/stretch/mode="canvas_items"
+
+[gui]
+
+theme/default_font_multichannel_signed_distance_field=true
 
 [input]
 
@@ -66,3 +76,4 @@ player_two_reset={
 textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+environment/defaults/default_clear_color=Color(0.03529412, 0.043137256, 0.08235294, 1)

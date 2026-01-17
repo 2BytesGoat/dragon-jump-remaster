@@ -1,0 +1,429 @@
+[gd_scene load_steps=15 format=3 uid="uid://dqxbwfhfhx0ng"]
+
+[ext_resource type="Script" uid="uid://dfndbwlllo6cu" path="res://src/ui/menus/level_select.gd" id="1_36voa"]
+[ext_resource type="PackedScene" uid="uid://bvm718ddfisd7" path="res://src/scenes/level/level.tscn" id="1_40k0a"]
+[ext_resource type="Theme" uid="uid://se7xk3lcwng8" path="res://src/ui/components/themes/main_theme.tres" id="1_v4mwm"]
+[ext_resource type="PackedScene" uid="uid://b5etxdni2oe0j" path="res://main.tscn" id="3_26flc"]
+[ext_resource type="PackedScene" uid="uid://coq21sivcbueg" path="res://src/ui/menus/level_button.tscn" id="3_x42vb"]
+[ext_resource type="PackedScene" uid="uid://bid71r6mq0gpi" path="res://src/ui/menus/main_menu.tscn" id="4_atnpk"]
+[ext_resource type="Script" uid="uid://cwt3nxjuhojym" path="res://src/ui/menus/speed_slider_label.gd" id="5_atnpk"]
+[ext_resource type="Texture2D" uid="uid://dolawuug5bvhc" path="res://assets/sprites/ui/silver_panel-export.png" id="5_v4mwm"]
+[ext_resource type="PackedScene" uid="uid://bnxudkobrdgtb" path="res://src/ui/menus/menu_button.tscn" id="8_auso1"]
+[ext_resource type="Script" uid="uid://etwvvclap1my" path="res://src/scenes/level_select_camera_2d.gd" id="10_5k7ll"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_auso1"]
+texture = ExtResource("5_v4mwm")
+texture_margin_left = 16.0
+texture_margin_top = 16.0
+texture_margin_right = 16.0
+texture_margin_bottom = 16.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_auso1"]
+bg_color = Color(0.03529412, 0.043137256, 0.08235294, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_40k0a"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5k7ll"]
+bg_color = Color(0.60038817, 0.60038817, 0.60038817, 0)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.16078432, 0.16078432, 0.16078432, 1)
+border_blend = true
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[node name="LevelSelect" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_v4mwm")
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 8
+script = ExtResource("1_36voa")
+single_player_scene = ExtResource("3_26flc")
+main_menu_scene = ExtResource("4_atnpk")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.5
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 16
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = -12
+theme_override_constants/margin_top = -12
+theme_override_constants/margin_right = -10
+theme_override_constants/margin_bottom = -12
+
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer/MarginContainer/MarginContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_auso1")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Player Speed:"
+vertical_alignment = 1
+uppercase = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="SpeedSlider" type="HSlider" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.0
+max_value = 1.0
+step = 0.25
+value = 0.5
+tick_count = 5
+ticks_on_borders = true
+ticks_position = 3
+
+[node name="SpeedSliderLabel" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "Fast"
+uppercase = true
+script = ExtResource("5_atnpk")
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Select Level:"
+vertical_alignment = 1
+uppercase = true
+
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 186)
+layout_mode = 2
+size_flags_vertical = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="LevelButtons" type="ScrollContainer" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2"]
+custom_minimum_size = Vector2(0, 178)
+layout_mode = 2
+follow_focus = true
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_right = 4
+
+[node name="LevelButtonContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="LevelButton" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" instance=ExtResource("3_x42vb")]
+layout_mode = 2
+
+[node name="LevelButton2" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" instance=ExtResource("3_x42vb")]
+layout_mode = 2
+
+[node name="LevelButton3" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" instance=ExtResource("3_x42vb")]
+layout_mode = 2
+
+[node name="LevelButton4" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" instance=ExtResource("3_x42vb")]
+layout_mode = 2
+
+[node name="LevelButton5" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" instance=ExtResource("3_x42vb")]
+layout_mode = 2
+
+[node name="LevelButton6" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" instance=ExtResource("3_x42vb")]
+layout_mode = 2
+
+[node name="LevelButton7" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" instance=ExtResource("3_x42vb")]
+layout_mode = 2
+
+[node name="LevelButton8" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" instance=ExtResource("3_x42vb")]
+layout_mode = 2
+
+[node name="LevelButton9" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" instance=ExtResource("3_x42vb")]
+layout_mode = 2
+
+[node name="LevelButton10" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" instance=ExtResource("3_x42vb")]
+layout_mode = 2
+
+[node name="LevelButton11" parent="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" instance=ExtResource("3_x42vb")]
+layout_mode = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/MarginContainer2"]
+layout_mode = 2
+theme_override_constants/margin_left = -8
+theme_override_constants/margin_top = -12
+theme_override_constants/margin_right = -12
+theme_override_constants/margin_bottom = -12
+
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer/MarginContainer2/MarginContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_auso1")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/MarginContainer2"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="SelectedLevelLabel" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "LEVEL 1-1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 48
+theme_override_constants/margin_right = 48
+
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_auso1")
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer"]
+layout_mode = 2
+texture = SubResource("ViewportTexture_40k0a")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="Panel2" type="Panel" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_5k7ll")
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2"]
+layout_mode = 2
+
+[node name="MedalProgressContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MedalProgressContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Progress:"
+vertical_alignment = 1
+uppercase = true
+
+[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MedalProgressContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="MedalContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/separation = 8
+
+[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MedalContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+value = 42.0
+
+[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MedalContainer"]
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+text = "BRONZE"
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="AttemptsContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer/AttemptsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Attempts:"
+vertical_alignment = 1
+uppercase = true
+
+[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer/AttemptsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PersonalHighscoreContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer/PersonalHighscoreContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Your Best:"
+vertical_alignment = 1
+uppercase = true
+
+[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer/PersonalHighscoreContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "00:00.000"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="WorldHighscoreContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer/WorldHighscoreContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "World Best:"
+vertical_alignment = 1
+uppercase = true
+
+[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer/WorldHighscoreContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "00:00.000"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="LeaderboardButton" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer" instance=ExtResource("8_auso1")]
+custom_minimum_size = Vector2(176, 28)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme = null
+disabled = true
+text = "LEADERBORAD"
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 8
+
+[node name="Panel2" type="Panel" parent="VBoxContainer/MarginContainer"]
+custom_minimum_size = Vector2(220, 75)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_styles/panel = SubResource("StyleBoxTexture_auso1")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+theme_override_constants/margin_top = -1
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/separation = 2
+
+[node name="StartButton" parent="VBoxContainer/MarginContainer/MarginContainer/VBoxContainer" instance=ExtResource("8_auso1")]
+custom_minimum_size = Vector2(176, 28)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = null
+text = "START"
+
+[node name="BackButton" parent="VBoxContainer/MarginContainer/MarginContainer/VBoxContainer" instance=ExtResource("8_auso1")]
+custom_minimum_size = Vector2(176, 28)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = null
+text = "BACK
+"
+
+[node name="SubViewport" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(640, 480)
+render_target_update_mode = 4
+
+[node name="Level" parent="SubViewport" instance=ExtResource("1_40k0a")]
+unique_name_in_owner = true
+
+[node name="Camera2D" type="Camera2D" parent="SubViewport"]
+offset = Vector2(316, 240)
+script = ExtResource("10_5k7ll")
+
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/SpeedSlider" to="VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/SpeedSliderLabel" method="_on_speed_slider_value_changed"]
+[connection signal="pressed" from="VBoxContainer/MarginContainer/MarginContainer/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/MarginContainer/MarginContainer/VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="level_size_updated" from="SubViewport/Level" to="SubViewport/Camera2D" method="_on_level_level_size_updated"]

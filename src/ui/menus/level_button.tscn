@@ -1,0 +1,53 @@
+[gd_scene load_steps=4 format=3 uid="uid://coq21sivcbueg"]
+
+[ext_resource type="Script" uid="uid://bt4mplp74an6d" path="res://src/ui/menus/level_button.gd" id="1_h6yvo"]
+[ext_resource type="Theme" uid="uid://d1kdwbwfx60gf" path="res://src/ui/components/themes/level_select_theme.tres" id="1_u0wb1"]
+[ext_resource type="Texture2D" uid="uid://bcfjeeqq7rmrh" path="res://icon.svg" id="2_dq4x0"]
+
+[node name="LevelButton" type="Button"]
+custom_minimum_size = Vector2(0, 16)
+theme = ExtResource("1_u0wb1")
+script = ExtResource("1_h6yvo")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -8.5
+offset_bottom = 8.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_right = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 6
+text = "001 - JUMP"
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(12, 12)
+layout_mode = 2
+texture = ExtResource("2_dq4x0")
+expand_mode = 4
+stretch_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(12, 12)
+layout_mode = 2
+size_flags_horizontal = 8
+texture = ExtResource("2_dq4x0")
+expand_mode = 4
+stretch_mode = 5
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

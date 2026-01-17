@@ -34,7 +34,7 @@ func release():
 
 
 func update_tracked_target():
-	grapple_indicator.hide()
+	#grapple_indicator.hide()
 	
 	if launched:
 		return
@@ -42,8 +42,8 @@ func update_tracked_target():
 	for ray in grappling_points.get_children():
 		if ray.is_colliding():
 			target = ray.get_collision_point()
-			grapple_indicator.global_position = target
-			grapple_indicator.show()
+			#grapple_indicator.global_position = target
+			#grapple_indicator.show()
 			can_launch = true
 			return
 	

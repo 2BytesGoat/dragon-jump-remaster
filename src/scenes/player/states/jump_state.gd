@@ -17,14 +17,8 @@ func enter(msg := {}) -> void:
 	owner.velocity.y = owner.jump_velocity
 	owner.play_animation(self.name)
 	
-	var effect_scale = Vector2i(owner.facing_direction, 1)
-	var effect_rotation = 0
 	var was_walled = msg.get("was_walled", false)
-	if was_walled:
-		effect_rotation = PI/2 * owner.facing_direction
-		effect_scale.x *= -1
-	
-	Utils.instance_scene_on_main(effect, owner.global_position, effect_rotation, effect_scale)
+	owner._spawn_effect(effect, was_walled)
 
 
 func physics_update(_delta: float) -> void:

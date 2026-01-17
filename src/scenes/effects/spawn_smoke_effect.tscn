@@ -61,15 +61,17 @@ streams_count = 1
 stream_0/stream = ExtResource("3_fljik")
 
 [node name="SpawnSmokeEffect" type="AnimatedSprite2D"]
+z_index = 1
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_fpks8")
 autoplay = "default"
 frame = 5
 frame_progress = 1.0
-offset = Vector2(-2, -8)
+offset = Vector2(0, -8)
 script = ExtResource("2_rd73v")
 
 [node name="Text" type="Sprite2D" parent="."]
+z_index = 2
 position = Vector2(2.3841858e-07, -8)
 scale = Vector2(0.1875, 0.1875)
 texture = ExtResource("3_iuxy8")

@@ -1,6 +1,8 @@
 class_name MoveState
 extends State
 
+@onready var effect = preload("res://src/scenes/effects/jump_smoke_effect.tscn")
+
 
 func enter(_msg := {}) -> void:
 	owner.play_animation(self.name)
@@ -13,6 +15,7 @@ func physics_update(_delta: float) -> void:
 	
 	if owner.velocity.x >= owner.max_speed * 0.9:
 		owner.play_animation("Run")
+		#owner._spawn_effect(effect) # TODO: make a better effect for this
 	else:
 		owner.play_animation(self.name)
 	

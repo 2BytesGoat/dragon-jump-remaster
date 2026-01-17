@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://cw8cw6fpq5n63"]
+[gd_scene load_steps=36 format=3 uid="uid://cw8cw6fpq5n63"]
 
 [ext_resource type="Script" uid="uid://c306bigp8honi" path="res://src/scenes/player/player.gd" id="1_uug8f"]
 [ext_resource type="Script" uid="uid://chhu1axyjbnac" path="res://src/scenes/player/observer.gd" id="2_4r4qr"]
@@ -26,13 +26,17 @@ particles_anim_v_frames = 1
 particles_anim_loop = false
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uug8f"]
-size = Vector2(11, 15)
+size = Vector2(14, 15)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6uujk"]
 size = Vector2(11, 14)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i6xdb"]
 size = Vector2(13, 15)
+
+[sub_resource type="Curve" id="Curve_4r4qr"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.12641083, 0), 0.0, 0.0, 0, 0, Vector2(0.5011286, 1), 0.0, 0.0, 0, 0]
+point_count = 3
 
 [sub_resource type="Animation" id="Animation_wnjjo"]
 resource_name = "Dash"
@@ -486,12 +490,13 @@ hframes = 21
 position = Vector2(-2, -11)
 
 [node name="AfterImage" type="CPUParticles2D" parent="Flippable"]
-self_modulate = Color(1, 1, 1, 0.69000006)
+self_modulate = Color(1, 1, 1, 0.5)
 show_behind_parent = true
 material = SubResource("CanvasItemMaterial_i6xdb")
 position = Vector2(-3, -1)
+amount = 6
 texture = ExtResource("3_tj7fb")
-lifetime = 0.2
+lifetime = 0.15000000000000002
 gravity = Vector2(0, 0)
 
 [node name="GaplingHook" type="Node2D" parent="Flippable"]
@@ -508,6 +513,7 @@ target_position = Vector2(0, 150)
 collision_mask = 33
 
 [node name="GrappleIndicator" type="Sprite2D" parent="Flippable/GaplingHook"]
+visible = false
 position = Vector2(68, -68)
 scale = Vector2(0.0546875, 0.0546875)
 texture = ExtResource("5_b7xrc")
@@ -523,8 +529,7 @@ volume_db = -25.0
 bus = &"SFX"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
-position = Vector2(-0.5, 0.5)
+position = Vector2(0, 0.5)
 shape = SubResource("RectangleShape2D_uug8f")
 
 [node name="InteractBox" type="Area2D" parent="."]
@@ -532,6 +537,7 @@ collision_layer = 16
 collision_mask = 8
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractBox"]
+visible = false
 position = Vector2(-0.5, 1)
 shape = SubResource("RectangleShape2D_6uujk")
 
@@ -543,8 +549,6 @@ collision_mask = 4
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
 position = Vector2(-0.5, -0.5)
 shape = SubResource("RectangleShape2D_i6xdb")
-
-[node name="RemoteTransform2D" type="RemoteTransform2D" parent="."]
 
 [node name="ControllerContainer" type="Node" parent="."]
 
@@ -569,6 +573,7 @@ one_shot = true
 
 [node name="Walled" type="Node" parent="StateMachine"]
 script = ExtResource("8_6uujk")
+wall_slide_curve = SubResource("Curve_4r4qr")
 
 [node name="DoubleJump" type="Node" parent="StateMachine"]
 script = ExtResource("10_62cf5")
@@ -595,6 +600,7 @@ libraries = {
 }
 
 [node name="StateLabel" type="Label" parent="."]
+visible = false
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0

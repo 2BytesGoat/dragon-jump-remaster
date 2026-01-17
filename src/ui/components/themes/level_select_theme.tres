@@ -1,0 +1,26 @@
+[gd_resource type="Theme" load_steps=7 format=3 uid="uid://d1kdwbwfx60gf"]
+
+[ext_resource type="FontFile" uid="uid://s7ljtadq31a4" path="res://assets/fonts/PressStart2P-Regular.ttf" id="1_ws33k"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h0mjs"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ws33k"]
+bg_color = Color(0.25490198, 0.25490198, 0.25490198, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_45own"]
+bg_color = Color(0.25490198, 0.25490198, 0.25490198, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uqwp3"]
+bg_color = Color(0.18039216, 0.18039216, 0.18039216, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uubyc"]
+
+[resource]
+Button/font_sizes/font_size = 10
+Button/styles/disabled = SubResource("StyleBoxFlat_h0mjs")
+Button/styles/focus = SubResource("StyleBoxFlat_ws33k")
+Button/styles/hover = SubResource("StyleBoxFlat_45own")
+Button/styles/normal = SubResource("StyleBoxFlat_uqwp3")
+Button/styles/pressed = SubResource("StyleBoxFlat_uubyc")
+Label/font_sizes/font_size = 8
+Label/fonts/font = ExtResource("1_ws33k")

@@ -1,15 +1,33 @@
 class_name WalledState
 extends State
 
+@export var wall_slide_curve: Curve
+
+var wall_time = 0.0
+var wall_time_duration = 1.2
+
+@export var wall_slide_start_speed := 0.0
+@export var wall_slide_max_speed := 0.8
+
 
 func enter(_msg := {}) -> void:
+	wall_time = 0.0
 	owner.velocity.x = 0
 	owner.modifiers["walled"] = {"velocity": Vector2(-0.01, 0.69)}
 	owner.play_animation(self.name)
 	_update_owner_facing_direction()
 
 
-func physics_update(_delta: float) -> void:
+func physics_update(delta: float) -> void:
+	wall_time += delta
+	
+	var t = clamp(wall_time / wall_time_duration, 0.0, 1.0)
+	var curve_value = 1.0
+	if wall_slide_curve:
+		curve_value = wall_slide_curve.sample(t)
+	var slide_speed = lerp(wall_slide_start_speed, wall_slide_max_speed, curve_value)
+	owner.modifiers["walled"] = {"velocity": Vector2(-0.01, slide_speed)}
+	
 	if owner.is_on_floor():
 		state_machine.transition_to("Idle", {"was_walled": true})
 		
@@ -17,7 +35,7 @@ func physics_update(_delta: float) -> void:
 		state_machine.transition_to("Fall", {"was_walled": true})
 		
 	elif owner.wants_to_jump:
-		owner.set_speedup_progress(0.5) # rebound jump with increased speed
+		owner.set_speedup_progress(0.75) # rebound jump with increased speed
 		state_machine.transition_to("Jump", {"was_walled": true})
 
 
