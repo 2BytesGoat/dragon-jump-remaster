@@ -167,7 +167,6 @@ offset_right = 90.0
 offset_bottom = 105.0
 
 [node name="EndScreen" parent="CanvasLayer" instance=ExtResource("12_ycdy4")]
-visible = false
 
 [node name="TimeContainer" type="MarginContainer" parent="CanvasLayer"]
 anchors_preset = 5

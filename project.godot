@@ -24,6 +24,7 @@ Utils="*res://src/scripts/singletons/utils.gd"
 Constants="*res://src/scripts/singletons/constants.gd"
 SignalBus="*res://src/scripts/singletons/signal_bus.gd"
 SceneManger="*res://src/scripts/singletons/scene_manger.gd"
+SaveManager="*res://src/scripts/singletons/save_manager.gd"
 
 [display]
 

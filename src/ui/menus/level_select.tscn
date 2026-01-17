@@ -334,7 +334,8 @@ text = "Your Best:"
 vertical_alignment = 1
 uppercase = true
 
-[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer/PersonalHighscoreContainer"]
+[node name="YourBestTimeLabel" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/VBoxContainer/PersonalHighscoreContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "00:00.000"
