@@ -139,6 +139,9 @@ func reset() -> void:
 	show_afterimage = false
 	modifiers = {}
 	
+	for i in range(len(powerups)):
+		consume_powerup()
+	
 	velocity = Vector2.ZERO
 	global_position = starting_position
 	state_machine.transition_to(initial_state.name)
