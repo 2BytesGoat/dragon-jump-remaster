@@ -57,6 +57,7 @@ signal has_resetted
 var current_friction: float = default_friction   # Current friction based on surface
 var facing_direction: int = Vector2i.RIGHT.x
 var started_walking: bool = false
+var is_paused: bool = false
 var wants_to_jump: bool = false
 var needs_to_release: bool = false
 var modifiers: Dictionary = {}
@@ -78,7 +79,7 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if not started_walking or is_done:
+	if not started_walking or is_done or is_paused:
 		return
 	
 	velocity.x = move_toward(velocity.x, max_speed * facing_direction, acceleration * delta)
@@ -103,6 +104,7 @@ func set_jump(input: bool) -> void:
 	if input:
 		if not started_walking:
 			started_walking = true
+			SignalBus.player_started_run.emit(self)
 			return
 		wants_to_jump = true
 	else:
@@ -123,6 +125,7 @@ func reset() -> void:
 		return
 	
 	drop_crown()
+	SignalBus.player_restarted_run.emit(self)
 	Utils.instance_scene_on_main(despawn_smoke, self.global_position)
 	current_friction = default_friction 
 	facing_direction = starting_facing_direction

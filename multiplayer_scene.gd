@@ -8,6 +8,7 @@ extends Node
 @export var progress_bar: MarginContainer
 @export var pause_screen: MarginContainer
 @export var end_screen: MarginContainer
+@export var time_label: Label
 
 @onready var player_scene = preload("res://src/scenes/player/player.tscn")
 @onready var camera_scene = preload("res://src/scenes/camera_2d.tscn")
@@ -15,6 +16,7 @@ extends Node
 var level_scene_path = "res://src/ui/menus/level_select.tscn"
 
 var race_started: bool = false
+var race_paused: bool = true
 var first_pickup: bool = true
 var total_time: float = 0.0
 var delta_time: float = 0.0
@@ -35,6 +37,8 @@ func _ready():
 	initialize_players()
 	level._update_race_finish_position()
 	
+	SignalBus.player_started_run.connect(_on_player_started_run)
+	SignalBus.player_restarted_run.connect(_on_player_restarted_run)
 	SignalBus.player_touched_crown.connect(_on_player_touched_crown)
 	SignalBus.player_finished_run.connect(_on_player_finished_run)
 	
@@ -48,15 +52,27 @@ func update_level(level_code):
 	level._update_race_finish_position()
 
 
+func reset_ui():
+	set_game_paused(false)
+	end_screen.visible = false
+	race_started = false
+	total_time = 0.0
+	delta_time = 0.0
+	time_label.text = "00:00.00"
+
+
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		set_game_paused(not pause_screen.visible)
 
 
 func _process(delta: float) -> void:
-	if not race_started:
+	if not(not race_paused and race_started):
 		return
+	
 	total_time += delta
+	time_label.text = Utils.format_time(total_time)
+	
 	delta_time += delta
 	if delta_time >= update_interval:
 		update_player_progress()
@@ -107,6 +123,18 @@ func update_player_progress() -> void:
 
 func set_game_paused(value: bool) -> void:
 	pause_screen.visible = value
+	race_paused = value
+	for player in player_container.get_children():
+		player.is_paused = value
+
+
+func _on_player_started_run(_player: Player):
+	race_started = true
+	race_paused = false
+
+
+func _on_player_restarted_run(_player: Player):
+	reset_ui()
 
 
 func _on_player_touched_crown(_player: Player):
@@ -126,10 +154,6 @@ func _on_player_touched_crown(_player: Player):
 	portal.global_position = portal_position
 
 
-func _on_start_timer_timeout() -> void:
-	race_started = true
-
-
 func _on_player_finished_run(player: Player) -> void:
 	var info = player.get_info()
 	
@@ -140,10 +164,8 @@ func _on_player_finished_run(player: Player) -> void:
 	}
 	
 	end_screen.visible = true
-
-
-func _on_retry_button_pressed() -> void:
-	get_tree().reload_current_scene()
+	race_started = false
+	race_paused = true
 
 
 func _on_resume_button_pressed() -> void:
@@ -154,14 +176,14 @@ func _on_pause_screen_restart_button_pressed() -> void:
 	for player: Player in player_container.get_children():
 		player.is_done = false
 		player.reset()
-	set_game_paused(false)
+	reset_ui()
 
 
 func _on_end_screen_restart_button_pressed() -> void:
 	for player: Player in player_container.get_children():
 		player.is_done = false
 		player.reset()
-	end_screen.visible = false
+	reset_ui()
 
 
 func _on_exit_button_pressed() -> void:
@@ -175,5 +197,4 @@ func _on_next_button_pressed() -> void:
 	
 	var level_code = Constants.LEVELS[level_name]["code"]
 	update_level(level_code)
-	
-	end_screen.visible = false
+	reset_ui()

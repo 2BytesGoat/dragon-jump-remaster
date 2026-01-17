@@ -1,5 +1,7 @@
 extends Node
 
+signal player_started_run(player)
+signal player_restarted_run(player)
 signal player_touched_crown(player)
 signal player_dropped_crown(player)
 signal player_finished_run(player)

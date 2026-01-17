@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://b5etxdni2oe0j"]
+[gd_scene load_steps=17 format=3 uid="uid://b5etxdni2oe0j"]
 
 [ext_resource type="Script" uid="uid://3sasinrk8fc6" path="res://multiplayer_scene.gd" id="1_lquwl"]
 [ext_resource type="PackedScene" uid="uid://bvm718ddfisd7" path="res://src/scenes/level/level.tscn" id="3_1bvp3"]
@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://cg5ctntixs1fk" path="res://src/ui/menus/pause_screen.tscn" id="6_ycdy4"]
 [ext_resource type="Texture2D" uid="uid://riso1kxfjte0" path="res://assets/sprites/world/tile-types.png" id="7_5vw27"]
 [ext_resource type="PackedScene" uid="uid://btnxex4dvvbmn" path="res://src/ui/menus/end_screen.tscn" id="12_ycdy4"]
+[ext_resource type="Theme" uid="uid://d1kdwbwfx60gf" path="res://src/ui/components/themes/level_select_theme.tres" id="13_w48qg"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kek77"]
 atlas = ExtResource("7_5vw27")
@@ -22,7 +23,7 @@ region = Rect2(64, 48, 16, 16)
 atlas = ExtResource("6_272bh")
 region = Rect2(4, 1, 16, 13)
 
-[node name="Main" type="Node" node_paths=PackedStringArray("level", "player_container", "camera_p1", "card_container", "level_music", "progress_bar", "pause_screen", "end_screen")]
+[node name="Main" type="Node" node_paths=PackedStringArray("level", "player_container", "camera_p1", "card_container", "level_music", "progress_bar", "pause_screen", "end_screen", "time_label")]
 script = ExtResource("1_lquwl")
 level = NodePath("SubViewportContainer/SubViewport/Level")
 player_container = NodePath("SubViewportContainer/SubViewport/Players")
@@ -32,6 +33,7 @@ level_music = NodePath("AudioStreamPlayer")
 progress_bar = NodePath("CanvasLayer/ProgressBar")
 pause_screen = NodePath("CanvasLayer/PauseScreen")
 end_screen = NodePath("CanvasLayer/EndScreen")
+time_label = NodePath("CanvasLayer/TimeContainer/TimeLabel")
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="."]
 offset_right = 40.0
@@ -130,6 +132,7 @@ mouse_filter = 2
 script = ExtResource("3_lquwl")
 
 [node name="ProgressBar" type="MarginContainer" parent="CanvasLayer"]
+visible = false
 offset_right = 1152.0
 offset_bottom = 42.0
 theme_override_constants/margin_left = 100
@@ -164,6 +167,24 @@ offset_right = 90.0
 offset_bottom = 105.0
 
 [node name="EndScreen" parent="CanvasLayer" instance=ExtResource("12_ycdy4")]
+visible = false
+
+[node name="TimeContainer" type="MarginContainer" parent="CanvasLayer"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -32.0
+offset_right = 32.0
+offset_bottom = 40.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+theme = ExtResource("13_w48qg")
+
+[node name="TimeLabel" type="Label" parent="CanvasLayer/TimeContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "00:00.00"
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_7mycd")
@@ -172,10 +193,6 @@ autoplay = true
 bus = &"Music"
 parameters/looping = true
 
-[node name="StartTimer" type="Timer" parent="."]
-one_shot = true
-autostart = true
-
 [connection signal="level_size_updated" from="SubViewportContainer/SubViewport/Level" to="SubViewportContainer/SubViewport/Camera2D" method="_on_level_level_size_updated"]
 [connection signal="pressed" from="CanvasLayer/PauseScreen/Panel/VBoxContainer/ResumeButton" to="." method="_on_resume_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/PauseScreen/Panel/VBoxContainer/RestartButton" to="." method="_on_pause_screen_restart_button_pressed"]
@@ -183,7 +200,6 @@ autostart = true
 [connection signal="pressed" from="CanvasLayer/EndScreen/Panel/MarginContainer/MarginContainer/HBoxContainer/RestartButton" to="." method="_on_end_screen_restart_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/EndScreen/Panel/MarginContainer/MarginContainer/HBoxContainer/NextButton" to="." method="_on_next_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/EndScreen/Panel/MarginContainer/MarginContainer/HBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]
-[connection signal="timeout" from="StartTimer" to="." method="_on_start_timer_timeout"]
 
 [editable path="SubViewportContainer/SubViewport/Level"]
 [editable path="CanvasLayer/PauseScreen"]
