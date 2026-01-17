@@ -7,6 +7,7 @@ extends Node
 @export var level_music: AudioStreamPlayer
 @export var progress_bar: MarginContainer
 @export var pause_screen: MarginContainer
+@export var end_screen: MarginContainer
 
 @onready var player_scene = preload("res://src/scenes/player/player.tscn")
 @onready var camera_scene = preload("res://src/scenes/camera_2d.tscn")
@@ -19,19 +20,32 @@ var total_time: float = 0.0
 var delta_time: float = 0.0
 var update_interval: float = 0.2
 
+var level_name = ""
+var player_speed_modifier = 1.0
 var nb_players = 1   
 var player_nodes = []
 
 
 func _ready():
-	var level_code = SceneManger.next_scene_data.get("level_code", "")
-	var player_speed_modifier = SceneManger.next_scene_data.get("speed_modifier", "")
-	level.update_level(level_code)
+	level_name = SceneManger.next_scene_data.get("level_name", "")
+	player_speed_modifier = SceneManger.next_scene_data.get("speed_modifier", "")
 	
-	initialize_players(player_speed_modifier)
+	var level_code = Constants.LEVELS[level_name]["code"]
+	level.update_level(level_code)
+	initialize_players()
 	level._update_race_finish_position()
+	
 	SignalBus.player_touched_crown.connect(_on_player_touched_crown)
 	SignalBus.player_finished_run.connect(_on_player_finished_run)
+	
+	pause_screen.visible = false
+	end_screen.visible = false
+
+
+func update_level(level_code):
+	level.update_level(level_code)
+	update_players()
+	level._update_race_finish_position()
 
 
 func _input(event: InputEvent) -> void:
@@ -49,7 +63,7 @@ func _process(delta: float) -> void:
 		delta_time = 0.0
 
 
-func initialize_players(player_speed_modifier: float = 1.0) -> void:
+func initialize_players() -> void:
 	var player_position = level.player_start_position
 	
 	for i in range(nb_players):
@@ -66,6 +80,15 @@ func initialize_players(player_speed_modifier: float = 1.0) -> void:
 		player.has_resetted.connect(level.reset_objects)
 	
 	card_container.map_player_signals(player_nodes)
+
+
+func update_players():
+	var player_position = level.player_start_position
+	for player: Player in player_container.get_children():
+		player.starting_position = player_position
+		player.speed_modifier = player_speed_modifier
+		player.is_done = false
+		player.reset()
 
 
 func freeze_frame(timescale: float, duration: float) -> void:
@@ -115,8 +138,8 @@ func _on_player_finished_run(player: Player) -> void:
 		"restarts": info["restarts"],
 		"crowns_dropped": info["crowns_dropped"]
 	}
-	# TODO: remove or update endscreen
-	#end_screen.show_stats(stats)
+	
+	end_screen.visible = true
 
 
 func _on_retry_button_pressed() -> void:
@@ -127,12 +150,30 @@ func _on_resume_button_pressed() -> void:
 	set_game_paused(false)
 
 
-func _on_restart_button_pressed() -> void:
+func _on_pause_screen_restart_button_pressed() -> void:
 	for player: Player in player_container.get_children():
 		player.is_done = false
 		player.reset()
 	set_game_paused(false)
 
 
+func _on_end_screen_restart_button_pressed() -> void:
+	for player: Player in player_container.get_children():
+		player.is_done = false
+		player.reset()
+	end_screen.visible = false
+
+
 func _on_exit_button_pressed() -> void:
 	SceneManger.go_to(level_scene_path)
+
+
+func _on_next_button_pressed() -> void:
+	level_name = Constants.get_next_level(level_name)
+	if not level_name:
+		return
+	
+	var level_code = Constants.LEVELS[level_name]["code"]
+	update_level(level_code)
+	
+	end_screen.visible = false

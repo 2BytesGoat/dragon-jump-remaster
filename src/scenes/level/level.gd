@@ -296,6 +296,8 @@ func clear_level() -> void:
 	for child in objects_layer.get_children():
 		objects_layer.remove_child(child)
 		child.queue_free()
+	
+	objects_map = {}
 
 
 func set_level(level_code: String) -> void:

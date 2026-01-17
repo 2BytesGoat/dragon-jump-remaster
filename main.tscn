@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://b5etxdni2oe0j"]
+[gd_scene load_steps=16 format=3 uid="uid://b5etxdni2oe0j"]
 
 [ext_resource type="Script" uid="uid://3sasinrk8fc6" path="res://multiplayer_scene.gd" id="1_lquwl"]
 [ext_resource type="PackedScene" uid="uid://bvm718ddfisd7" path="res://src/scenes/level/level.tscn" id="3_1bvp3"]
@@ -12,6 +12,7 @@
 [ext_resource type="Script" uid="uid://e8fwy0piod4u" path="res://src/scenes/powerups/card_container_container.gd" id="6_dg77c"]
 [ext_resource type="PackedScene" uid="uid://cg5ctntixs1fk" path="res://src/ui/menus/pause_screen.tscn" id="6_ycdy4"]
 [ext_resource type="Texture2D" uid="uid://riso1kxfjte0" path="res://assets/sprites/world/tile-types.png" id="7_5vw27"]
+[ext_resource type="PackedScene" uid="uid://btnxex4dvvbmn" path="res://src/ui/menus/end_screen.tscn" id="12_ycdy4"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kek77"]
 atlas = ExtResource("7_5vw27")
@@ -21,7 +22,7 @@ region = Rect2(64, 48, 16, 16)
 atlas = ExtResource("6_272bh")
 region = Rect2(4, 1, 16, 13)
 
-[node name="Main" type="Node" node_paths=PackedStringArray("level", "player_container", "camera_p1", "card_container", "level_music", "progress_bar", "pause_screen")]
+[node name="Main" type="Node" node_paths=PackedStringArray("level", "player_container", "camera_p1", "card_container", "level_music", "progress_bar", "pause_screen", "end_screen")]
 script = ExtResource("1_lquwl")
 level = NodePath("SubViewportContainer/SubViewport/Level")
 player_container = NodePath("SubViewportContainer/SubViewport/Players")
@@ -30,6 +31,7 @@ card_container = NodePath("CanvasLayer/CardContainerContainer")
 level_music = NodePath("AudioStreamPlayer")
 progress_bar = NodePath("CanvasLayer/ProgressBar")
 pause_screen = NodePath("CanvasLayer/PauseScreen")
+end_screen = NodePath("CanvasLayer/EndScreen")
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="."]
 offset_right = 40.0
@@ -161,6 +163,8 @@ offset_top = -105.0
 offset_right = 90.0
 offset_bottom = 105.0
 
+[node name="EndScreen" parent="CanvasLayer" instance=ExtResource("12_ycdy4")]
+
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_7mycd")
 volume_db = -15.0
@@ -174,9 +178,13 @@ autostart = true
 
 [connection signal="level_size_updated" from="SubViewportContainer/SubViewport/Level" to="SubViewportContainer/SubViewport/Camera2D" method="_on_level_level_size_updated"]
 [connection signal="pressed" from="CanvasLayer/PauseScreen/Panel/VBoxContainer/ResumeButton" to="." method="_on_resume_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/PauseScreen/Panel/VBoxContainer/RestartButton" to="." method="_on_restart_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/PauseScreen/Panel/VBoxContainer/RestartButton" to="." method="_on_pause_screen_restart_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/PauseScreen/Panel/VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/EndScreen/Panel/MarginContainer/MarginContainer/HBoxContainer/RestartButton" to="." method="_on_end_screen_restart_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/EndScreen/Panel/MarginContainer/MarginContainer/HBoxContainer/NextButton" to="." method="_on_next_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/EndScreen/Panel/MarginContainer/MarginContainer/HBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]
 [connection signal="timeout" from="StartTimer" to="." method="_on_start_timer_timeout"]
 
 [editable path="SubViewportContainer/SubViewport/Level"]
 [editable path="CanvasLayer/PauseScreen"]
+[editable path="CanvasLayer/EndScreen"]
