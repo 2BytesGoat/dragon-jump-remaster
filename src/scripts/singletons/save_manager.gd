@@ -7,6 +7,7 @@ var current_data: GameData
 
 func _ready() -> void:
 	load_game() # Try to load existing data first
+	SignalBus.new_run_attempt.connect(_on_new_run_attempt)
 	SignalBus.new_time_submission.connect(_on_new_time_submission)
 
 
@@ -69,6 +70,12 @@ func update_level_progress(level_name: String) -> void:
 		else:
 			level_data.progress_percentage = clamp(time_to_beat / level_data.best_time, 0.0, 1.0)
 			break
+
+
+func _on_new_run_attempt(level_name: String) -> void:
+	var level_data: LevelData = current_data.levels[level_name]
+	level_data.attempts += 1
+	save_to_disk()
 
 
 func _on_new_time_submission(level_name: String, time: float) -> void:

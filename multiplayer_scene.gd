@@ -44,6 +44,8 @@ func _ready():
 	
 	pause_screen.visible = false
 	end_screen.visible = false
+	
+	SignalBus.new_run_attempt.emit(level_name)
 
 
 func update_level(level_code):
@@ -135,6 +137,7 @@ func _on_player_started_run(_player: Player):
 
 func _on_player_restarted_run(_player: Player):
 	reset_ui()
+	SignalBus.new_run_attempt.emit(level_name)
 
 
 func _on_player_touched_crown(_player: Player):
