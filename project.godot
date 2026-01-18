@@ -25,6 +25,8 @@ Constants="*res://src/scripts/singletons/constants.gd"
 SignalBus="*res://src/scripts/singletons/signal_bus.gd"
 SceneManger="*res://src/scripts/singletons/scene_manger.gd"
 SaveManager="*res://src/scripts/singletons/save_manager.gd"
+SilentWolf="*res://addons/silent_wolf/SilentWolf.gd"
+LeaderboardManager="*res://src/scripts/singletons/leaderboard_manager.gd"
 
 [display]
 

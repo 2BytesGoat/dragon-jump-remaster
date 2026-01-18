@@ -85,3 +85,5 @@ func _on_new_time_submission(level_name: String, time: float) -> void:
 		update_level_progress(level_name)
 		unlock_next_level(level_name)
 		save_to_disk()
+		
+		SignalBus.new_leaderboard_submission.emit(current_data.player_name, level_name, time)
