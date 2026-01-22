@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3 uid="uid://bcsjpcbcqgnhv"]
+
+[ext_resource type="Script" uid="uid://bc4d13bg6dpi2" path="res://src/ui/components/leaderboard_entry.gd" id="1_skr1p"]
+
+[node name="LeaderboardEntry" type="HBoxContainer"]
+script = ExtResource("1_skr1p")
+
+[node name="PlayerNameLabel" type="Label" parent="."]
+layout_mode = 2
+text = "Name"
+
+[node name="Dots" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "............................................."
+clip_text = true
+
+[node name="PlayerScoreLabel" type="Label" parent="."]
+layout_mode = 2
+text = "Score"

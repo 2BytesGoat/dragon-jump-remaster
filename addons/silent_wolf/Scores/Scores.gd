@@ -354,7 +354,7 @@ func _on_WipeLeaderboard_request_completed(result, response_code, headers, body)
 	if status_check:
 		var json_body = JSON.parse_string(body.get_string_from_utf8())
 		var sw_result: Dictionary = SilentWolf.build_result(json_body)
-		if json_body.success:
+		if json_body.get("success"):
 			SWLogger.info("SilentWolf wipe leaderboard success.")
 		else:
 			SWLogger.error("SilentWolf wipe leaderboard failure: " + str(json_body.error))
