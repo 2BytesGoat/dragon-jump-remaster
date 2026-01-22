@@ -4,6 +4,7 @@ extends MarginContainer
 @onready var level_name_label = %LevelNameLabel
 @onready var current_time_label = %CurrentTimeLabel
 @onready var best_time_label = %BestTimeLabel
+@onready var leaderboard = %Leaderboard
 
 
 func update_stats(stats: Dictionary) -> void:
@@ -17,3 +18,4 @@ func update_stats(stats: Dictionary) -> void:
 	best_time_label.text = Utils.format_time(level_data.best_time)
 	
 	new_best_label.visible = level_data.best_time == stats["time"]
+	leaderboard.update_leaderboard(stats["level_name"])

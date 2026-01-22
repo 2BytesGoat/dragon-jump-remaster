@@ -10,7 +10,14 @@ func _ready() -> void:
 	SignalBus.new_leaderboard_submission.connect(_on_new_leaderboard_submission)
 
 
+func get_local_leaderboard(leaderboard_name: String):
+	return leaderboard_cache.get(leaderboard_name, {})
+
+
 func update_local_leaderboard(leaderboard_name: String):
+	if leaderboard_cache.get(leaderboard_name, {}).get("status") == "updating":
+		return
+	
 	var player_level_data: LevelData = SaveManager.get_level_data(leaderboard_name)
 	var player_best_time = player_level_data.best_time
 	

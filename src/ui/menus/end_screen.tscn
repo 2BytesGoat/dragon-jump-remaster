@@ -1,10 +1,12 @@
-[gd_scene load_steps=7 format=3 uid="uid://btnxex4dvvbmn"]
+[gd_scene load_steps=9 format=3 uid="uid://btnxex4dvvbmn"]
 
 [ext_resource type="Theme" uid="uid://se7xk3lcwng8" path="res://src/ui/components/themes/main_theme.tres" id="1_urt0p"]
 [ext_resource type="Texture2D" uid="uid://dolawuug5bvhc" path="res://assets/sprites/ui/silver_panel-export.png" id="2_f52w1"]
 [ext_resource type="Script" uid="uid://dc1fx34jumgqf" path="res://src/ui/menus/end_screen.gd" id="2_kr3gq"]
 [ext_resource type="Texture2D" uid="uid://bcfjeeqq7rmrh" path="res://icon.svg" id="3_0gc0t"]
 [ext_resource type="PackedScene" uid="uid://bnxudkobrdgtb" path="res://src/ui/menus/menu_button.tscn" id="3_kvx7a"]
+[ext_resource type="Script" uid="uid://wwotfwb13w0u" path="res://src/ui/components/leaderboard.gd" id="5_6wwvp"]
+[ext_resource type="PackedScene" uid="uid://bcsjpcbcqgnhv" path="res://src/ui/components/leaderboard_entry.tscn" id="5_yy6eg"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_kvx7a"]
 texture = ExtResource("2_f52w1")
@@ -181,9 +183,11 @@ disabled = true
 text = "hints"
 
 [node name="Leaderboard" type="MarginContainer" parent="Panel/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/margin_top = 8
+script = ExtResource("5_6wwvp")
 
 [node name="Panel" type="Panel" parent="Panel/MarginContainer/HBoxContainer/Leaderboard"]
 custom_minimum_size = Vector2(200, 130)
@@ -211,178 +215,164 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer"]
-visible = false
+[node name="EntryContainer" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="LeaderboardEntry" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer"]
+[node name="LeaderboardEntry" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer" instance=ExtResource("5_yy6eg")]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer/LeaderboardEntry"]
+[node name="HBoxContainer5" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer5"]
 layout_mode = 2
 text = "Name"
 
-[node name="Label2" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer/LeaderboardEntry"]
+[node name="Label2" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer5"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "............................................."
 clip_text = true
 
-[node name="Label3" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer/LeaderboardEntry"]
+[node name="Label3" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer5"]
 layout_mode = 2
 text = "Score"
 
-[node name="HBoxContainer5" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer6" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer5"]
+[node name="Label" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer6"]
 layout_mode = 2
 text = "Name"
 
-[node name="Label2" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer5"]
+[node name="Label2" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer6"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "............................................."
 clip_text = true
 
-[node name="Label3" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer5"]
+[node name="Label3" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer6"]
 layout_mode = 2
 text = "Score"
 
-[node name="HBoxContainer6" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer7" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer6"]
+[node name="Label" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer7"]
 layout_mode = 2
 text = "Name"
 
-[node name="Label2" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer6"]
+[node name="Label2" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer7"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "............................................."
 clip_text = true
 
-[node name="Label3" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer6"]
+[node name="Label3" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer7"]
 layout_mode = 2
 text = "Score"
 
-[node name="HBoxContainer7" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer8" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer7"]
+[node name="Label" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer8"]
 layout_mode = 2
 text = "Name"
 
-[node name="Label2" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer7"]
+[node name="Label2" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer8"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "............................................."
 clip_text = true
 
-[node name="Label3" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer7"]
+[node name="Label3" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer8"]
 layout_mode = 2
 text = "Score"
 
-[node name="HBoxContainer8" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer9" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer8"]
+[node name="Label" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer9"]
 layout_mode = 2
 text = "Name"
 
-[node name="Label2" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer8"]
+[node name="Label2" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer9"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "............................................."
 clip_text = true
 
-[node name="Label3" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer8"]
+[node name="Label3" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer9"]
 layout_mode = 2
 text = "Score"
 
-[node name="HBoxContainer9" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer10" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer9"]
+[node name="Label" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer10"]
 layout_mode = 2
 text = "Name"
 
-[node name="Label2" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer9"]
+[node name="Label2" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer10"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "............................................."
 clip_text = true
 
-[node name="Label3" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer9"]
+[node name="Label3" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer10"]
 layout_mode = 2
 text = "Score"
 
-[node name="HBoxContainer10" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer10"]
+[node name="Label" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer2"]
 layout_mode = 2
 text = "Name"
 
-[node name="Label2" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer10"]
+[node name="Label2" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "............................................."
 clip_text = true
 
-[node name="Label3" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer10"]
+[node name="Label3" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer2"]
 layout_mode = 2
 text = "Score"
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="Label" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer3"]
 layout_mode = 2
 text = "Name"
 
-[node name="Label2" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="Label2" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer3"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "............................................."
 clip_text = true
 
-[node name="Label3" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="Label3" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer3"]
 layout_mode = 2
 text = "Score"
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer4" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer3"]
+[node name="Label" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer4"]
 layout_mode = 2
 text = "Name"
 
-[node name="Label2" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer3"]
+[node name="Label2" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer4"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "............................................."
 clip_text = true
 
-[node name="Label3" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer3"]
-layout_mode = 2
-text = "Score"
-
-[node name="HBoxContainer4" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer4"]
-layout_mode = 2
-text = "Name"
-
-[node name="Label2" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer4"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "............................................."
-clip_text = true
-
-[node name="Label3" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer4"]
+[node name="Label3" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer4"]
 layout_mode = 2
 text = "Score"
 
