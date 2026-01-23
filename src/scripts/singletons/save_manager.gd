@@ -46,6 +46,10 @@ func create_new_save():
 	save_to_disk()
 
 
+func get_player_name() -> String:
+	return current_data.player_name
+
+
 func get_level_data(level_name: String) -> LevelData:
 	return current_data.levels[level_name]
 

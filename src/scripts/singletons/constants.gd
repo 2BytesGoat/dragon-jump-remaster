@@ -1,5 +1,7 @@
 extends Node
 
+var DEFAULT_PLAYER_NAME = "UNK"
+
 # TODO: make these into resources
 var POWERUPS = {
 	"DoubleJump": {
