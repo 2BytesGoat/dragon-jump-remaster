@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://bid71r6mq0gpi"]
+[gd_scene load_steps=8 format=3 uid="uid://bid71r6mq0gpi"]
 
 [ext_resource type="Texture2D" uid="uid://ctojsl0e08r07" path="res://assets/logos/Logo2.png" id="1_wuc7m"]
 [ext_resource type="Script" uid="uid://wt1mt72lra5s" path="res://src/ui/menus/main_menu.gd" id="1_xaiw4"]
 [ext_resource type="PackedScene" uid="uid://dtqsfm2jla0rs" path="res://src/ui/menus/tag_screen.tscn" id="2_jmap8"]
 [ext_resource type="PackedScene" uid="uid://bnxudkobrdgtb" path="res://src/ui/menus/menu_button.tscn" id="2_xaiw4"]
 [ext_resource type="Texture2D" uid="uid://dolawuug5bvhc" path="res://assets/sprites/ui/silver_panel-export.png" id="3_vs67m"]
+[ext_resource type="Script" uid="uid://d1v42cg1p7imp" path="res://src/ui/menus/tag_screen.gd" id="6_y3puo"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_jmap8"]
 texture = ExtResource("3_vs67m")
@@ -140,6 +141,7 @@ text = "QUIT"
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+script = ExtResource("6_y3puo")
 
 [connection signal="pressed" from="HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer/MultiplayerButton" to="." method="_on_play_button_pressed"]

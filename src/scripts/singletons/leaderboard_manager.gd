@@ -40,5 +40,6 @@ func update_local_leaderboard(leaderboard_name: String):
 
 
 func _on_new_leaderboard_submission(player_name, level_name, time) -> void:
+	print(player_name)
 	SilentWolf.Scores.save_score(player_name, -1 * time, level_name)
 	update_local_leaderboard(level_name)

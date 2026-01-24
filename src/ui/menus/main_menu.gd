@@ -4,6 +4,7 @@ extends MarginContainer
 @onready var level_select = "src/ui/menus/level_select.tscn"
 
 
+
 func _ready() -> void:
 	tag_screen.visible = false
 
@@ -20,6 +21,7 @@ func _on_quit_button_pressed() -> void:
 
 
 func _on_confirm_button_pressed() -> void:
+	SaveManager.current_player_name = tag_screen.player_tag
 	SceneManger.go_to(level_select)
 
 

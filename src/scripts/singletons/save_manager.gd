@@ -1,8 +1,8 @@
 extends Node
 
-const SAVE_PATH = "user://savegame.tres"
+const SAVE_PATH = "user://%s_savegame.tres"
 var current_data: GameData
-
+var current_player_name: String = Constants.DEFAULT_PLAYER_NAME : set = _on_player_name_changed
 
 
 func _ready() -> void:
@@ -28,18 +28,21 @@ func unlock_next_level(level_name: String):
 
 
 func save_to_disk():
-	ResourceSaver.save(current_data, SAVE_PATH)
+	var save_path = SAVE_PATH % [current_player_name]
+	ResourceSaver.save(current_data, save_path)
 
 
 func load_game():
-	if ResourceLoader.exists(SAVE_PATH):
-		current_data = ResourceLoader.load(SAVE_PATH) # Standard ResourceLoader.load works too
+	var save_path = SAVE_PATH % [current_player_name]
+	if ResourceLoader.exists(save_path):
+		current_data = ResourceLoader.load(save_path) # Standard ResourceLoader.load works too
 	if not current_data:
 		create_new_save()
 
 
 func create_new_save():
 	current_data = GameData.new()
+	current_data.player_name = current_player_name
 	# Unlock the very first level defined in your Constants
 	var first_level = Constants.LEVELS.keys()[0]
 	unlock_level(first_level)
@@ -91,3 +94,8 @@ func _on_new_time_submission(level_name: String, time: float) -> void:
 		save_to_disk()
 		
 		SignalBus.new_leaderboard_submission.emit(current_data.player_name, level_name, time)
+
+func _on_player_name_changed(value) -> void:
+	current_player_name = value
+	current_data = null
+	load_game() 
