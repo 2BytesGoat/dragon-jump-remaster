@@ -5,8 +5,7 @@
 [ext_resource type="Script" uid="uid://dc1fx34jumgqf" path="res://src/ui/menus/end_screen.gd" id="2_kr3gq"]
 [ext_resource type="Texture2D" uid="uid://bcfjeeqq7rmrh" path="res://icon.svg" id="3_0gc0t"]
 [ext_resource type="PackedScene" uid="uid://bnxudkobrdgtb" path="res://src/ui/menus/menu_button.tscn" id="3_kvx7a"]
-[ext_resource type="Script" uid="uid://wwotfwb13w0u" path="res://src/ui/components/leaderboard.gd" id="5_6wwvp"]
-[ext_resource type="PackedScene" uid="uid://bcsjpcbcqgnhv" path="res://src/ui/components/leaderboard_entry.tscn" id="5_yy6eg"]
+[ext_resource type="PackedScene" uid="uid://ciagv840u6luw" path="res://src/ui/components/leaderboard.tscn" id="5_yy6eg"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_kvx7a"]
 texture = ExtResource("2_f52w1")
@@ -182,69 +181,8 @@ size_flags_vertical = 4
 disabled = true
 text = "hints"
 
-[node name="Leaderboard" type="MarginContainer" parent="Panel/MarginContainer/HBoxContainer" unique_id=451357170]
+[node name="Leaderboard" parent="Panel/MarginContainer/HBoxContainer" unique_id=1142452174 instance=ExtResource("5_yy6eg")]
 unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/margin_top = 8
-script = ExtResource("5_6wwvp")
-
-[node name="Panel" type="Panel" parent="Panel/MarginContainer/HBoxContainer/Leaderboard" unique_id=2030999248]
-custom_minimum_size = Vector2(200, 130)
-layout_mode = 2
-size_flags_vertical = 4
-
-[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel" unique_id=1717658940]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="LeaderboardPlaceholderLabel" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer" unique_id=1144806817]
-unique_name_in_owner = true
-layout_mode = 2
-text = "~ LEADERBOARD IS UPDATING ~"
-horizontal_alignment = 1
-
-[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer" unique_id=9710080]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="EntryContainer" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer" unique_id=1909192013]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_constants/separation = 6
-
-[node name="LeaderboardEntry" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer" unique_id=767269636 instance=ExtResource("5_yy6eg")]
-layout_mode = 2
-
-[node name="LeaderboardEntry2" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer" unique_id=1849543595 instance=ExtResource("5_yy6eg")]
-layout_mode = 2
-
-[node name="LeaderboardEntry3" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer" unique_id=1718340490 instance=ExtResource("5_yy6eg")]
-layout_mode = 2
-
-[node name="LeaderboardEntry4" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer" unique_id=2033902551 instance=ExtResource("5_yy6eg")]
-layout_mode = 2
-
-[node name="LeaderboardEntry5" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer" unique_id=1304967825 instance=ExtResource("5_yy6eg")]
-layout_mode = 2
-
-[node name="LeaderboardEntry6" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer" unique_id=705362297 instance=ExtResource("5_yy6eg")]
-layout_mode = 2
-
-[node name="LeaderboardEntry7" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer" unique_id=1588658501 instance=ExtResource("5_yy6eg")]
-layout_mode = 2
-
-[node name="LeaderboardEntry8" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer" unique_id=894486176 instance=ExtResource("5_yy6eg")]
-layout_mode = 2
-
-[node name="LeaderboardEntry9" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer" unique_id=622714146 instance=ExtResource("5_yy6eg")]
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer" unique_id=367559571]

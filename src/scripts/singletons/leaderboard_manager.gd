@@ -27,10 +27,14 @@ func update_local_leaderboard(leaderboard_name: String):
 		"scores": {}
 	}
 	
-	var sw_result1 = await SilentWolf.Scores.get_score_position(player_best_time).sw_get_position_complete
-	var player_best_time_position = sw_result1.position
-	leaderboard_cache[leaderboard_name]["player_time"] = player_best_time
-	leaderboard_cache[leaderboard_name]["player_position"] = player_best_time_position
+	if player_best_time != INF:
+		var sw_result1 = await SilentWolf.Scores.get_score_position(player_best_time).sw_get_position_complete
+		var player_best_time_position = sw_result1.position
+		leaderboard_cache[leaderboard_name]["player_time"] = player_best_time
+		leaderboard_cache[leaderboard_name]["player_position"] = player_best_time_position
+	else:
+		leaderboard_cache[leaderboard_name]["player_time"] = INF
+		leaderboard_cache[leaderboard_name]["player_position"] = -1
 	
 	var sw_result2: Dictionary = await SilentWolf.Scores.get_scores(NB_RETRIEVED_ENTRIES, leaderboard_name).sw_get_scores_complete
 	var scores = {}

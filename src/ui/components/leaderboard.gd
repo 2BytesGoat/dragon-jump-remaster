@@ -32,16 +32,15 @@ func update_leaderboard(level_name: String):
 	var player_name = SaveManager.get_player_name()
 	for entry_name in results["scores"]:
 		var entry_object = leaderboard_entry_scene.instantiate()
-		if entry_name == player_name:
-			entry_name = "> %s" % player_name
-		entry_object.player_name = entry_name
-		entry_object.player_score = Utils.format_time(results["scores"][player_name])
+		entry_object.player_name = entry_name if entry_name != player_name else "> %s" % player_name
+		entry_object.player_score = Utils.format_time(results["scores"][entry_name])
 		leaderboard_entry_container.add_child(entry_object)
-		maded_to_leaderboard.append(player_name)
+		maded_to_leaderboard.append(entry_name)
 		if leaderboard_entry_container.get_child_count() >= MAX_SUPPORTED_ENTRIES:
 			break
 	
-	if player_name != Constants.DEFAULT_PLAYER_NAME and player_name not in maded_to_leaderboard:
+	var player_time = results["player_time"]
+	if player_name != Constants.DEFAULT_PLAYER_NAME and player_time != INF and player_name not in maded_to_leaderboard:
 		while leaderboard_entry_container.get_child_count() > MAX_SUPPORTED_ENTRIES - 2:
 			var last_entry = leaderboard_entry_container.get_child(leaderboard_entry_container.get_child_count() - 1)
 			leaderboard_entry_container.remove_child(last_entry)
