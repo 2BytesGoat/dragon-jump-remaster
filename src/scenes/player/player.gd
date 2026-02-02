@@ -286,6 +286,8 @@ func _on_interact_box_area_entered(area: Area2D) -> void:
 		add_modifier("slippery", {"velocity": Vector2(1.07, 1)})
 	elif area.is_in_group("Crown") and not has_crown:
 		pickup_crown(area)
+	elif area.is_in_group("BouncePad"):
+		state_machine.transition_to("Bounce", {"push_direction": area.facing_direction})
 	elif area.is_in_group("Exit"):
 		is_done = true
 		SignalBus.player_finished_run.emit(self)

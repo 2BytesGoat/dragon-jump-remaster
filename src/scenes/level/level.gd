@@ -9,9 +9,10 @@ const EMPTY_SYMBOL = "E"
 const SEPARATOR_SYMBOL = "|"
 
 # TODO: make a datatype for these
-const symbol_to_tile_info: Dictionary = {
+var symbol_to_tile_info: Dictionary = {
 	WALL_SYMBOL: { # wall
-		"type": CELL.TERRAIN,		"source": 0,
+		"type": CELL.TERRAIN,
+		"source": 0,
 		"coords": Vector2i(0, 0),
 		"callable": null,
 		"debug_alt": null,
@@ -39,14 +40,14 @@ const symbol_to_tile_info: Dictionary = {
 		"args": null,
 		"over_wall": false
 	},
-	"B": { # destroyable block
+	"B": { # bounce pad
 		"type": CELL.OBJECT,
 		"source": 0,
-		"coords": Vector2i(0, 3),
-		"callable": null,
+		"coords": Vector2i(3, 3),
+		"callable": "_get_4sides_alt_tile",
 		"debug_alt": null,
-		"scene": preload("res://src/scenes/level/tiles/destroyable_block.tscn"),
-		"args": null,
+		"scene": preload("res://src/scenes/level/tiles/bounce_pad.tscn"),
+		"args": null, # These sould get set in the callable
 		"over_wall": false
 	},
 	"I": { # ice
@@ -220,9 +221,9 @@ func _ready() -> void:
 		#clear_level()
 		#set_level(level_code)
 		_init_terrain_layer()
+		_update_static_alt_tiles()
 		_populate_objects()
 		_init_hidden_areas()
-		_update_static_alt_tiles()
 		current_level_code = get_level_code()
 		print(get_level_code())
 	
@@ -402,12 +403,10 @@ func _init_terrain_layer() -> void:
 func _update_static_alt_tiles() -> void:
 	for cell_coords in static_layer.get_used_cells():
 		var symbol = _get_cell_symbol(cell_coords, CELL.STATIC)
-		var alt_tile_callable = symbol_to_tile_info[symbol]["callable"]
-		if alt_tile_callable:
+		var alt_tile = _get_alt_tile_at_coords(cell_coords, symbol)
+		if alt_tile >= 0:
 			var tile_source = symbol_to_tile_info[symbol]["source"]
 			var tile_coords = symbol_to_tile_info[symbol]["coords"]
-			var callable = Callable(self, alt_tile_callable)
-			var alt_tile = callable.call(cell_coords)
 			static_layer.set_cell(cell_coords, tile_source, tile_coords, alt_tile)
 		_add_to_populated_cells(cell_coords, symbol)
 
@@ -437,6 +436,13 @@ func _populate_objects() -> void:
 			continue
 		
 		var object = object_scene.instantiate()
+		
+		var alt_tile = _get_alt_tile_at_coords(cell_coords, symbol)
+		if alt_tile >= 0:
+			if not object_arguments:
+				object_arguments = []
+			object_arguments.append(alt_tile)
+		
 		if object_arguments:
 			object.init(object_arguments)
 		
@@ -480,6 +486,14 @@ func _get_alt_tile(cell: Vector2i, directions: Array[Vector2i]) -> int:
 		if terrain_layer.get_cell_tile_data(cell + directions[i]) != null:
 			return i
 	return 0
+
+
+func _get_alt_tile_at_coords(cell: Vector2i, symbol: String):
+	var alt_tile_callable = symbol_to_tile_info[symbol]["callable"]
+	if alt_tile_callable:
+		var callable = Callable(self, alt_tile_callable)
+		return callable.call(cell)
+	return -1
 
 
 func _add_to_populated_cells(cell_coords: Vector2i, symbol: String) -> void:

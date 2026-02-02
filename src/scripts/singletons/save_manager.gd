@@ -80,7 +80,10 @@ func update_level_progress(level_name: String) -> void:
 
 
 func _on_new_run_attempt(level_name: String) -> void:
-	var level_data: LevelData = current_data.levels[level_name]
+	var level_data: LevelData = current_data.levels.get(level_name)
+	if not level_data:
+		unlock_level(level_name)
+		level_data = current_data.levels.get(level_name)
 	level_data.attempts += 1
 	save_to_disk()
 
