@@ -1,4 +1,4 @@
-extends Node
+class_name NetworkHandler extends Node
 
 const IP_ADDRESS: String = "localhost"
 const PORT: int = 42069

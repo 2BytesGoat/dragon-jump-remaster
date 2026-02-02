@@ -1,0 +1,67 @@
+[gd_scene format=3 uid="uid://ciagv840u6luw"]
+
+[ext_resource type="Script" uid="uid://wwotfwb13w0u" path="res://src/ui/components/leaderboard.gd" id="1_0ftxs"]
+[ext_resource type="PackedScene" uid="uid://bcsjpcbcqgnhv" path="res://src/ui/components/leaderboard_entry.tscn" id="2_ox6fj"]
+
+[node name="Leaderboard" type="MarginContainer" unique_id=1142452174]
+size_flags_horizontal = 3
+theme_override_constants/margin_top = 8
+script = ExtResource("1_0ftxs")
+
+[node name="Panel" type="Panel" parent="." unique_id=1847717227]
+custom_minimum_size = Vector2(200, 130)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=1341480697]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LeaderboardPlaceholderLabel" type="Label" parent="Panel/MarginContainer" unique_id=1259561167]
+unique_name_in_owner = true
+layout_mode = 2
+text = "~ FETCHING LEADERBOARD ~"
+horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer" unique_id=385201935]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="EntryContainer" type="VBoxContainer" parent="Panel/MarginContainer/MarginContainer" unique_id=1001909479]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="LeaderboardEntry" parent="Panel/MarginContainer/MarginContainer/EntryContainer" unique_id=1557528422 instance=ExtResource("2_ox6fj")]
+layout_mode = 2
+
+[node name="LeaderboardEntry2" parent="Panel/MarginContainer/MarginContainer/EntryContainer" unique_id=1793968339 instance=ExtResource("2_ox6fj")]
+layout_mode = 2
+
+[node name="LeaderboardEntry3" parent="Panel/MarginContainer/MarginContainer/EntryContainer" unique_id=1792262394 instance=ExtResource("2_ox6fj")]
+layout_mode = 2
+
+[node name="LeaderboardEntry4" parent="Panel/MarginContainer/MarginContainer/EntryContainer" unique_id=687673535 instance=ExtResource("2_ox6fj")]
+layout_mode = 2
+
+[node name="LeaderboardEntry5" parent="Panel/MarginContainer/MarginContainer/EntryContainer" unique_id=617991813 instance=ExtResource("2_ox6fj")]
+layout_mode = 2
+
+[node name="LeaderboardEntry6" parent="Panel/MarginContainer/MarginContainer/EntryContainer" unique_id=214828569 instance=ExtResource("2_ox6fj")]
+layout_mode = 2
+
+[node name="LeaderboardEntry7" parent="Panel/MarginContainer/MarginContainer/EntryContainer" unique_id=1045856513 instance=ExtResource("2_ox6fj")]
+layout_mode = 2
+
+[node name="LeaderboardEntry8" parent="Panel/MarginContainer/MarginContainer/EntryContainer" unique_id=44081537 instance=ExtResource("2_ox6fj")]
+layout_mode = 2
+
+[node name="LeaderboardEntry9" parent="Panel/MarginContainer/MarginContainer/EntryContainer" unique_id=1272927139 instance=ExtResource("2_ox6fj")]
+layout_mode = 2

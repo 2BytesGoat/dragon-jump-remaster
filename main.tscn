@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://b5etxdni2oe0j"]
+[gd_scene format=3 uid="uid://b5etxdni2oe0j"]
 
 [ext_resource type="Script" uid="uid://3sasinrk8fc6" path="res://multiplayer_scene.gd" id="1_lquwl"]
 [ext_resource type="PackedScene" uid="uid://bvm718ddfisd7" path="res://src/scenes/level/level.tscn" id="3_1bvp3"]
@@ -23,7 +23,7 @@ region = Rect2(64, 48, 16, 16)
 atlas = ExtResource("6_272bh")
 region = Rect2(4, 1, 16, 13)
 
-[node name="Main" type="Node" node_paths=PackedStringArray("level", "player_container", "camera_p1", "card_container", "level_music", "progress_bar", "pause_screen", "end_screen", "time_label")]
+[node name="Main" type="Node" unique_id=632715217 node_paths=PackedStringArray("level", "player_container", "camera_p1", "card_container", "level_music", "progress_bar", "pause_screen", "end_screen", "time_label")]
 script = ExtResource("1_lquwl")
 level = NodePath("SubViewportContainer/SubViewport/Level")
 player_container = NodePath("SubViewportContainer/SubViewport/Players")
@@ -35,16 +35,16 @@ pause_screen = NodePath("CanvasLayer/PauseScreen")
 end_screen = NodePath("CanvasLayer/EndScreen")
 time_label = NodePath("CanvasLayer/TimeContainer/TimeLabel")
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=858590886]
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=438010363]
 handle_input_locally = false
 size = Vector2i(640, 360)
 render_target_update_mode = 4
 
-[node name="Level" parent="SubViewportContainer/SubViewport" groups=["Level"] instance=ExtResource("3_1bvp3")]
+[node name="Level" parent="SubViewportContainer/SubViewport" unique_id=1149041736 groups=["Level"] instance=ExtResource("3_1bvp3")]
 
 [node name="TerrainLayer" parent="SubViewportContainer/SubViewport/Level" index="0"]
 tile_map_data = PackedByteArray()
@@ -58,7 +58,7 @@ tile_map_data = PackedByteArray()
 [node name="ObjectsLayer" parent="SubViewportContainer/SubViewport/Level" index="2"]
 tile_map_data = PackedByteArray()
 
-[node name="Camera2D" parent="SubViewportContainer/SubViewport" instance=ExtResource("3_4c57u")]
+[node name="Camera2D" parent="SubViewportContainer/SubViewport" unique_id=385435383 instance=ExtResource("3_4c57u")]
 position = Vector2(104, 96)
 process_callback = 0
 limit_enabled = true
@@ -66,48 +66,48 @@ position_smoothing_enabled = true
 drag_horizontal_enabled = true
 drag_vertical_enabled = true
 
-[node name="Players" type="Node2D" parent="SubViewportContainer/SubViewport"]
+[node name="Players" type="Node2D" parent="SubViewportContainer/SubViewport" unique_id=1996547677]
 
-[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+[node name="ParallaxBackground" type="ParallaxBackground" parent="." unique_id=367959416]
 visible = false
 
-[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground" unique_id=1015621716]
 texture_filter = 1
 motion_scale = Vector2(0, 0)
 motion_mirroring = Vector2(768, 0)
 
-[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer" unique_id=888741144]
 position = Vector2(192, 56)
 texture = ExtResource("4_efxa6")
 
-[node name="Sprite2D2" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+[node name="Sprite2D2" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer" unique_id=841027925]
 position = Vector2(576, 56)
 texture = ExtResource("4_efxa6")
 
-[node name="ParallaxLayer2" type="ParallaxLayer" parent="ParallaxBackground"]
+[node name="ParallaxLayer2" type="ParallaxLayer" parent="ParallaxBackground" unique_id=771614090]
 texture_filter = 1
 motion_scale = Vector2(0.05, 0.1)
 motion_mirroring = Vector2(352, 0)
 
-[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer2"]
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer2" unique_id=1737543470]
 position = Vector2(88, 192)
 texture = ExtResource("5_dg77c")
 
-[node name="Sprite2D2" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer2"]
+[node name="Sprite2D2" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer2" unique_id=1880130708]
 position = Vector2(264, 192)
 texture = ExtResource("5_dg77c")
 
-[node name="Sprite2D3" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer2"]
+[node name="Sprite2D3" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer2" unique_id=846036071]
 position = Vector2(792, 192)
 texture = ExtResource("5_dg77c")
 
-[node name="Sprite2D4" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer2"]
+[node name="Sprite2D4" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer2" unique_id=1459668298]
 position = Vector2(968, 192)
 texture = ExtResource("5_dg77c")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2084788869]
 
-[node name="CardContainerContainer" type="VBoxContainer" parent="CanvasLayer"]
+[node name="CardContainerContainer" type="VBoxContainer" parent="CanvasLayer" unique_id=1798880332]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -115,7 +115,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("6_dg77c")
 
-[node name="CardContainer1" type="Panel" parent="CanvasLayer/CardContainerContainer"]
+[node name="CardContainer1" type="Panel" parent="CanvasLayer/CardContainerContainer" unique_id=425352972]
 self_modulate = Color(1, 1, 1, 0)
 clip_contents = true
 layout_mode = 2
@@ -123,7 +123,7 @@ size_flags_vertical = 3
 mouse_filter = 2
 script = ExtResource("3_lquwl")
 
-[node name="CardContainer2" type="Panel" parent="CanvasLayer/CardContainerContainer"]
+[node name="CardContainer2" type="Panel" parent="CanvasLayer/CardContainerContainer" unique_id=1095799738]
 visible = false
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
@@ -131,7 +131,7 @@ size_flags_vertical = 3
 mouse_filter = 2
 script = ExtResource("3_lquwl")
 
-[node name="ProgressBar" type="MarginContainer" parent="CanvasLayer"]
+[node name="ProgressBar" type="MarginContainer" parent="CanvasLayer" unique_id=1399193733]
 visible = false
 offset_right = 1152.0
 offset_bottom = 42.0
@@ -140,36 +140,36 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 100
 script = ExtResource("6_5vw27")
 
-[node name="Texture" type="Panel" parent="CanvasLayer/ProgressBar"]
+[node name="Texture" type="Panel" parent="CanvasLayer/ProgressBar" unique_id=1802005608]
 visible = false
 custom_minimum_size = Vector2(10, 32)
 layout_mode = 2
 
-[node name="Crown" type="Sprite2D" parent="CanvasLayer/ProgressBar"]
+[node name="Crown" type="Sprite2D" parent="CanvasLayer/ProgressBar" unique_id=1692296867]
 visible = false
 position = Vector2(1051, 26)
 scale = Vector2(2, 2)
 texture = SubResource("AtlasTexture_kek77")
 
-[node name="IconContainer" type="Node" parent="CanvasLayer/ProgressBar"]
+[node name="IconContainer" type="Node" parent="CanvasLayer/ProgressBar" unique_id=705122386]
 
-[node name="Player1" type="Sprite2D" parent="CanvasLayer/ProgressBar/IconContainer"]
+[node name="Player1" type="Sprite2D" parent="CanvasLayer/ProgressBar/IconContainer" unique_id=238213529]
 visible = false
 position = Vector2(101, 26)
 scale = Vector2(2, 2)
 texture = SubResource("AtlasTexture_5vw27")
 
-[node name="PauseScreen" parent="CanvasLayer" instance=ExtResource("6_ycdy4")]
+[node name="PauseScreen" parent="CanvasLayer" unique_id=247255432 instance=ExtResource("6_ycdy4")]
 visible = false
 offset_left = -90.0
 offset_top = -105.0
 offset_right = 90.0
 offset_bottom = 105.0
 
-[node name="EndScreen" parent="CanvasLayer" instance=ExtResource("12_ycdy4")]
+[node name="EndScreen" parent="CanvasLayer" unique_id=127491131 instance=ExtResource("12_ycdy4")]
 visible = false
 
-[node name="TimeContainer" type="MarginContainer" parent="CanvasLayer"]
+[node name="TimeContainer" type="MarginContainer" parent="CanvasLayer" unique_id=1415512404]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -180,13 +180,13 @@ grow_horizontal = 2
 size_flags_horizontal = 4
 theme = ExtResource("13_w48qg")
 
-[node name="TimeLabel" type="Label" parent="CanvasLayer/TimeContainer"]
+[node name="TimeLabel" type="Label" parent="CanvasLayer/TimeContainer" unique_id=645836330]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "00:00.00"
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1081824087]
 stream = ExtResource("3_7mycd")
 volume_db = -15.0
 autoplay = true

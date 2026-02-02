@@ -44,6 +44,8 @@ func _ready():
 	
 	pause_screen.visible = false
 	end_screen.visible = false
+	
+	SignalBus.new_run_attempt.emit(level_name)
 
 
 func update_level(level_code):
@@ -135,6 +137,7 @@ func _on_player_started_run(_player: Player):
 
 func _on_player_restarted_run(_player: Player):
 	reset_ui()
+	SignalBus.new_run_attempt.emit(level_name)
 
 
 func _on_player_touched_crown(_player: Player):
@@ -155,13 +158,16 @@ func _on_player_touched_crown(_player: Player):
 
 
 func _on_player_finished_run(player: Player) -> void:
-	var info = player.get_info()
+	SignalBus.new_time_submission.emit(level_name, total_time)
 	
+	var info = player.get_info()
 	var stats = {
-		"time": Utils.format_time(total_time),
-		"restarts": info["restarts"],
-		"crowns_dropped": info["crowns_dropped"]
+		"level_name": level_name,
+		"time": total_time,
+		#"restarts": info["restarts"],
+		#"crowns_dropped": info["crowns_dropped"]
 	}
+	end_screen.update_stats(stats)
 	
 	end_screen.visible = true
 	race_started = false
