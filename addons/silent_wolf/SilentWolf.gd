@@ -143,7 +143,7 @@ func send_get_request(http_node: HTTPRequest, request_url: String):
 		"x-sw-godot-version: " + godot_version 
 	]
 	headers = add_jwt_token_headers(headers)
-	print("GET headers: " + str(headers))
+	# print("GET headers: " + str(headers))
 	if !http_node.is_inside_tree():
 		await get_tree().create_timer(0.01).timeout
 	SWLogger.debug("Method: GET")

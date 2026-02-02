@@ -1,5 +1,6 @@
 extends Node
 
+const NB_RETRIEVED_ENTRIES = 10
 var leaderboard_cache = {}
 
 
@@ -22,7 +23,8 @@ func update_local_leaderboard(leaderboard_name: String):
 	var player_best_time = player_level_data.best_time
 	
 	leaderboard_cache[leaderboard_name] = {
-		"status": "updating"
+		"status": "updating",
+		"scores": {}
 	}
 	
 	var sw_result1 = await SilentWolf.Scores.get_score_position(player_best_time).sw_get_position_complete
@@ -30,16 +32,18 @@ func update_local_leaderboard(leaderboard_name: String):
 	leaderboard_cache[leaderboard_name]["player_time"] = player_best_time
 	leaderboard_cache[leaderboard_name]["player_position"] = player_best_time_position
 	
-	var sw_result2: Dictionary = await SilentWolf.Scores.get_scores(200, leaderboard_name).sw_get_scores_complete
-	var scores = sw_result2["scores"]
-	for entry in scores:
-		entry["score"] = float(entry["score"]) * -1
-	leaderboard_cache[leaderboard_name]["scores"] = sw_result2
+	var sw_result2: Dictionary = await SilentWolf.Scores.get_scores(NB_RETRIEVED_ENTRIES, leaderboard_name).sw_get_scores_complete
+	var scores = {}
+	for entry in sw_result2["scores"]:
+		var player_name = entry["player_name"]
+		var player_score = float(entry["score"]) * -1
+		scores[player_name] = player_score
+	leaderboard_cache[leaderboard_name]["scores"] = scores
 	leaderboard_cache[leaderboard_name]["status"] = "done"
 	SignalBus.leaderboard_scores_updated.emit(leaderboard_name)
 
 
 func _on_new_leaderboard_submission(player_name, level_name, time) -> void:
-	print(player_name)
-	SilentWolf.Scores.save_score(player_name, -1 * time, level_name)
+	if player_name != Constants.DEFAULT_PLAYER_NAME:
+		SilentWolf.Scores.save_score(player_name, -1 * time, level_name)
 	update_local_leaderboard(level_name)

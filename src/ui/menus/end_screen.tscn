@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://btnxex4dvvbmn"]
+[gd_scene format=3 uid="uid://btnxex4dvvbmn"]
 
 [ext_resource type="Theme" uid="uid://se7xk3lcwng8" path="res://src/ui/components/themes/main_theme.tres" id="1_urt0p"]
 [ext_resource type="Texture2D" uid="uid://dolawuug5bvhc" path="res://assets/sprites/ui/silver_panel-export.png" id="2_f52w1"]
@@ -15,7 +15,7 @@ texture_margin_top = 16.0
 texture_margin_right = 16.0
 texture_margin_bottom = 16.0
 
-[node name="EndScreen" type="MarginContainer"]
+[node name="EndScreen" type="MarginContainer" unique_id=1651131074]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -32,13 +32,13 @@ size_flags_vertical = 6
 theme = ExtResource("1_urt0p")
 script = ExtResource("2_kr3gq")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="Panel" parent="." unique_id=970890772]
 custom_minimum_size = Vector2(420, 240)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxTexture_kvx7a")
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=2050084254]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -50,11 +50,11 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 16
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer" unique_id=222039693]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer" unique_id=1333360741]
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_font_sizes/font_size = 12
@@ -62,7 +62,7 @@ text = "LEVEL COMPLETE!"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="CurrentTimeLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer"]
+[node name="CurrentTimeLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer" unique_id=1901985509]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 0
@@ -71,7 +71,7 @@ text = "00:00.00"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="NewBestLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer"]
+[node name="NewBestLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer" unique_id=1010588267]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -80,23 +80,23 @@ text = "New Best!"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer" unique_id=1204666856]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
 
-[node name="GameStatsContainer" type="MarginContainer" parent="Panel/MarginContainer/HBoxContainer"]
+[node name="GameStatsContainer" type="MarginContainer" parent="Panel/MarginContainer/HBoxContainer" unique_id=2015290924]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
 theme_override_constants/margin_top = 18
 
-[node name="Panel" type="Panel" parent="Panel/MarginContainer/HBoxContainer/GameStatsContainer"]
+[node name="Panel" type="Panel" parent="Panel/MarginContainer/HBoxContainer/GameStatsContainer" unique_id=1684163765]
 custom_minimum_size = Vector2(180, 120)
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/HBoxContainer/GameStatsContainer/Panel"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/HBoxContainer/GameStatsContainer/Panel" unique_id=555608169]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -110,26 +110,26 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer/GameStatsContainer/Panel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer/GameStatsContainer/Panel/MarginContainer" unique_id=1401918334]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="LevelNameLabel" type="Label" parent="Panel/MarginContainer/HBoxContainer/GameStatsContainer/Panel/MarginContainer/VBoxContainer"]
+[node name="LevelNameLabel" type="Label" parent="Panel/MarginContainer/HBoxContainer/GameStatsContainer/Panel/MarginContainer/VBoxContainer" unique_id=1465274123]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 text = "001 - JUMP"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/GameStatsContainer/Panel/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/GameStatsContainer/Panel/MarginContainer/VBoxContainer" unique_id=1257513336]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Panel" type="Panel" parent="Panel/MarginContainer/HBoxContainer/GameStatsContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="Panel" type="Panel" parent="Panel/MarginContainer/HBoxContainer/GameStatsContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=67379706]
 custom_minimum_size = Vector2(120, 91.125)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/HBoxContainer/GameStatsContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer/Panel"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/HBoxContainer/GameStatsContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer/Panel" unique_id=793220178]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -142,59 +142,59 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer/GameStatsContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer/Panel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer/GameStatsContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer/Panel/MarginContainer" unique_id=987425347]
 layout_mode = 2
 alignment = 1
 
-[node name="BestTimeLabel" type="Label" parent="Panel/MarginContainer/HBoxContainer/GameStatsContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+[node name="BestTimeLabel" type="Label" parent="Panel/MarginContainer/HBoxContainer/GameStatsContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer" unique_id=582752584]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 text = "00:00.00"
 
-[node name="HSeparator" type="HSeparator" parent="Panel/MarginContainer/HBoxContainer/GameStatsContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="Panel/MarginContainer/HBoxContainer/GameStatsContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer" unique_id=1188483226]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/GameStatsContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/GameStatsContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer" unique_id=1163577739]
 layout_mode = 2
 
-[node name="ProgressBar" type="ProgressBar" parent="Panel/MarginContainer/HBoxContainer/GameStatsContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="ProgressBar" type="ProgressBar" parent="Panel/MarginContainer/HBoxContainer/GameStatsContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1979856969]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 
-[node name="TextureRect" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/GameStatsContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/GameStatsContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1100250401]
 layout_mode = 2
 size_flags_horizontal = 4
 texture = ExtResource("3_0gc0t")
 expand_mode = 3
 
-[node name="CheckBox" type="CheckBox" parent="Panel/MarginContainer/HBoxContainer/GameStatsContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+[node name="CheckBox" type="CheckBox" parent="Panel/MarginContainer/HBoxContainer/GameStatsContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer" unique_id=1454056000]
 layout_mode = 2
 size_flags_vertical = 4
 disabled = true
 text = "show ghost"
 
-[node name="CheckBox2" type="CheckBox" parent="Panel/MarginContainer/HBoxContainer/GameStatsContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+[node name="CheckBox2" type="CheckBox" parent="Panel/MarginContainer/HBoxContainer/GameStatsContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer" unique_id=758765249]
 layout_mode = 2
 size_flags_vertical = 4
 disabled = true
 text = "hints"
 
-[node name="Leaderboard" type="MarginContainer" parent="Panel/MarginContainer/HBoxContainer"]
+[node name="Leaderboard" type="MarginContainer" parent="Panel/MarginContainer/HBoxContainer" unique_id=451357170]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/margin_top = 8
 script = ExtResource("5_6wwvp")
 
-[node name="Panel" type="Panel" parent="Panel/MarginContainer/HBoxContainer/Leaderboard"]
+[node name="Panel" type="Panel" parent="Panel/MarginContainer/HBoxContainer/Leaderboard" unique_id=2030999248]
 custom_minimum_size = Vector2(200, 130)
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel" unique_id=1717658940]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -202,199 +202,70 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="LeaderboardPlaceholderLabel" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer"]
+[node name="LeaderboardPlaceholderLabel" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer" unique_id=1144806817]
 unique_name_in_owner = true
 layout_mode = 2
 text = "~ LEADERBOARD IS UPDATING ~"
 horizontal_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer" unique_id=9710080]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="EntryContainer" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer"]
+[node name="EntryContainer" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer" unique_id=1909192013]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="LeaderboardEntry" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer" instance=ExtResource("5_yy6eg")]
+[node name="LeaderboardEntry" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer" unique_id=767269636 instance=ExtResource("5_yy6eg")]
 layout_mode = 2
 
-[node name="HBoxContainer5" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer"]
+[node name="LeaderboardEntry2" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer" unique_id=1849543595 instance=ExtResource("5_yy6eg")]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer5"]
-layout_mode = 2
-text = "Name"
-
-[node name="Label2" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer5"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "............................................."
-clip_text = true
-
-[node name="Label3" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer5"]
-layout_mode = 2
-text = "Score"
-
-[node name="HBoxContainer6" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer"]
+[node name="LeaderboardEntry3" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer" unique_id=1718340490 instance=ExtResource("5_yy6eg")]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer6"]
-layout_mode = 2
-text = "Name"
-
-[node name="Label2" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer6"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "............................................."
-clip_text = true
-
-[node name="Label3" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer6"]
-layout_mode = 2
-text = "Score"
-
-[node name="HBoxContainer7" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer"]
+[node name="LeaderboardEntry4" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer" unique_id=2033902551 instance=ExtResource("5_yy6eg")]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer7"]
-layout_mode = 2
-text = "Name"
-
-[node name="Label2" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer7"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "............................................."
-clip_text = true
-
-[node name="Label3" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer7"]
-layout_mode = 2
-text = "Score"
-
-[node name="HBoxContainer8" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer"]
+[node name="LeaderboardEntry5" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer" unique_id=1304967825 instance=ExtResource("5_yy6eg")]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer8"]
-layout_mode = 2
-text = "Name"
-
-[node name="Label2" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer8"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "............................................."
-clip_text = true
-
-[node name="Label3" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer8"]
-layout_mode = 2
-text = "Score"
-
-[node name="HBoxContainer9" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer"]
+[node name="LeaderboardEntry6" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer" unique_id=705362297 instance=ExtResource("5_yy6eg")]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer9"]
-layout_mode = 2
-text = "Name"
-
-[node name="Label2" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer9"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "............................................."
-clip_text = true
-
-[node name="Label3" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer9"]
-layout_mode = 2
-text = "Score"
-
-[node name="HBoxContainer10" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer"]
+[node name="LeaderboardEntry7" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer" unique_id=1588658501 instance=ExtResource("5_yy6eg")]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer10"]
-layout_mode = 2
-text = "Name"
-
-[node name="Label2" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer10"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "............................................."
-clip_text = true
-
-[node name="Label3" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer10"]
-layout_mode = 2
-text = "Score"
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer"]
+[node name="LeaderboardEntry8" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer" unique_id=894486176 instance=ExtResource("5_yy6eg")]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer2"]
-layout_mode = 2
-text = "Name"
-
-[node name="Label2" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer2"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "............................................."
-clip_text = true
-
-[node name="Label3" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer2"]
-layout_mode = 2
-text = "Score"
-
-[node name="HBoxContainer3" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer"]
+[node name="LeaderboardEntry9" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer" unique_id=622714146 instance=ExtResource("5_yy6eg")]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer3"]
-layout_mode = 2
-text = "Name"
-
-[node name="Label2" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer3"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "............................................."
-clip_text = true
-
-[node name="Label3" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer3"]
-layout_mode = 2
-text = "Score"
-
-[node name="HBoxContainer4" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer4"]
-layout_mode = 2
-text = "Name"
-
-[node name="Label2" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer4"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "............................................."
-clip_text = true
-
-[node name="Label3" type="Label" parent="Panel/MarginContainer/HBoxContainer/Leaderboard/Panel/MarginContainer/MarginContainer/EntryContainer/HBoxContainer4"]
-layout_mode = 2
-text = "Score"
-
-[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer" unique_id=367559571]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/MarginContainer" unique_id=2131548167]
 layout_mode = 2
 
-[node name="RestartButton" parent="Panel/MarginContainer/MarginContainer/HBoxContainer" instance=ExtResource("3_kvx7a")]
+[node name="RestartButton" parent="Panel/MarginContainer/MarginContainer/HBoxContainer" unique_id=1902413573 instance=ExtResource("3_kvx7a")]
 custom_minimum_size = Vector2(120, 25)
 layout_mode = 2
 text = "RESTART"
 
-[node name="NextButton" parent="Panel/MarginContainer/MarginContainer/HBoxContainer" instance=ExtResource("3_kvx7a")]
+[node name="NextButton" parent="Panel/MarginContainer/MarginContainer/HBoxContainer" unique_id=1878520972 instance=ExtResource("3_kvx7a")]
 custom_minimum_size = Vector2(120, 25)
 layout_mode = 2
 text = "NEXT"
 
-[node name="ExitButton" parent="Panel/MarginContainer/MarginContainer/HBoxContainer" instance=ExtResource("3_kvx7a")]
+[node name="ExitButton" parent="Panel/MarginContainer/MarginContainer/HBoxContainer" unique_id=113814324 instance=ExtResource("3_kvx7a")]
 custom_minimum_size = Vector2(120, 25)
 layout_mode = 2
 text = "EXIT"

@@ -21,6 +21,12 @@ func _on_quit_button_pressed() -> void:
 
 
 func _on_confirm_button_pressed() -> void:
+	var input_player_tag = tag_screen.player_tag
+	if not Utils.is_allowed_player_name(input_player_tag):
+		tag_screen.player_tag = ""
+		tag_screen.placeholder = "Only Letters Allowed"
+		return
+	
 	SaveManager.current_player_name = tag_screen.player_tag
 	SceneManger.go_to(level_select)
 

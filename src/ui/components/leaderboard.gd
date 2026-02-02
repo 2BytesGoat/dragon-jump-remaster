@@ -1,9 +1,11 @@
 extends MarginContainer
 
+const MAX_SUPPORTED_ENTRIES = 9
 @onready var leaderboard_entry_container = %EntryContainer
 @onready var leaderboard_placeholder_label = %LeaderboardPlaceholderLabel
 
 @onready var leaderboard_entry_scene = preload("res://src/ui/components/leaderboard_entry.tscn")
+@onready var leaderboard_others_scene = preload("res://src/ui/menus/others_label.tscn")
 
 
 func _ready() -> void:
@@ -26,13 +28,31 @@ func update_leaderboard(level_name: String):
 		leaderboard_entry_container.remove_child(child)
 		child.queue_free()
 	
-	for score_entry in results["scores"]["scores"]:
+	var maded_to_leaderboard = []
+	var player_name = SaveManager.get_player_name()
+	for entry_name in results["scores"]:
 		var entry_object = leaderboard_entry_scene.instantiate()
-		entry_object.player_name = score_entry["player_name"]
-		entry_object.player_score = Utils.format_time(score_entry["score"])
+		if entry_name == player_name:
+			entry_name = "> %s" % player_name
+		entry_object.player_name = entry_name
+		entry_object.player_score = Utils.format_time(results["scores"][player_name])
+		leaderboard_entry_container.add_child(entry_object)
+		maded_to_leaderboard.append(player_name)
+		if leaderboard_entry_container.get_child_count() >= MAX_SUPPORTED_ENTRIES:
+			break
+	
+	if player_name != Constants.DEFAULT_PLAYER_NAME and player_name not in maded_to_leaderboard:
+		while leaderboard_entry_container.get_child_count() > MAX_SUPPORTED_ENTRIES - 2:
+			var last_entry = leaderboard_entry_container.get_child(leaderboard_entry_container.get_child_count() - 1)
+			leaderboard_entry_container.remove_child(last_entry)
+			last_entry.queue_free()
+		
+		var others_label = leaderboard_others_scene.instantiate()
+		leaderboard_entry_container.add_child(others_label)
+		var entry_object = leaderboard_entry_scene.instantiate()
+		entry_object.player_name = player_name
+		entry_object.player_score = Utils.format_time(results["player_time"])
 		leaderboard_entry_container.add_child(entry_object)
 	
-	# TODO: interweave player between leaderboard entries
 	leaderboard_placeholder_label.visible = false
 	leaderboard_entry_container.visible = true
-	print("RESULT: ", results)

@@ -38,8 +38,17 @@ func instance_scene_on_main(scene, position, rotation=0.0, scale=Vector2.ONE):
 
 
 func format_time(time_sec: float) -> String:
-	var minutes = int(time_sec / 60)
-	var seconds = int(time_sec) % 60
-	var ms = int((time_sec - int(time_sec)) * 100)
+	var total_cs = int(time_sec * 100.0)
+	total_cs = min(total_cs, 99 * 60 * 100 + 59 * 100 + 99)
+
+	var minutes = total_cs / 6000
+	var seconds = (total_cs / 100) % 60
+	var ms = total_cs % 100
 
 	return "%02d:%02d.%02d" % [minutes, seconds, ms]
+
+
+func is_allowed_player_name(player_name: String) -> bool:
+	var regex := RegEx.new()
+	regex.compile("^[A-Za-z ]+$")
+	return regex.search(player_name) != null
