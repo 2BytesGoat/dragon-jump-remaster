@@ -29,6 +29,11 @@ func update_local_leaderboard(leaderboard_name: String):
 	
 	if player_best_time != INF:
 		var sw_result1 = await SilentWolf.Scores.get_score_position(player_best_time).sw_get_position_complete
+		if not sw_result1["success"]:
+			leaderboard_cache[leaderboard_name]["status"] = "failed"
+			SignalBus.leaderboard_scores_updated.emit(leaderboard_name)
+			return
+		
 		var player_best_time_position = sw_result1.position
 		leaderboard_cache[leaderboard_name]["player_time"] = player_best_time
 		leaderboard_cache[leaderboard_name]["player_position"] = player_best_time_position
