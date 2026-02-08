@@ -1,0 +1,49 @@
+name: Build and Publish to itch.io
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      GODOT_VERSION: 4.6.stable
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Download Godot
+        run: |
+          wget https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip
+          unzip Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip
+          mv Godot_v${GODOT_VERSION}-stable_linux.x86_64 godot
+          chmod +x godot
+
+      - name: Download export templates
+        run: |
+          wget https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_export_templates.tpz
+          mkdir -p ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+          unzip Godot_v${GODOT_VERSION}-stable_export_templates.tpz -d ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+
+      - name: Export game (Windows)
+        run: |
+          mkdir -p build/windows
+          ./godot --headless --export-release "Windows Desktop" build/windows/${{ secrets.EXPORT_NAME }}.exe
+
+      - name: Download butler
+        run: |
+          wget https://broth.itch.zone/butler/linux-amd64/LATEST/archive/default -O butler.zip
+          unzip butler.zip
+          chmod +x butler
+
+      - name: Push to itch.io
+        env:
+          BUTLER_API_KEY: ${{ secrets.ITCH_API_KEY }}
+        run: |
+          ./butler push build/windows \
+            ${{ secrets.ITCH_USER }}/${{ secrets.ITCH_GAME }}:windows
