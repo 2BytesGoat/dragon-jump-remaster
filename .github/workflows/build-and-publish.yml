@@ -28,31 +28,54 @@ jobs:
           const SILENT_WOLF_GAME_ID = "${{ secrets.SILENT_WOLF_GAME_ID }}"
           EOF
 
-      - name: Download Godot
+      - name: Download Godot Engine (Linux Headless)
         run: |
-          wget https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip
-          unzip Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip
-          mv Godot_v${GODOT_VERSION}-stable_linux.x86_64 godot
+          wget https://github.com/godotengine/godot/releases/download/${{ env.GODOT_VERSION }}-stable/Godot_v${{ env.GODOT_VERSION }}-stable_linux.x86_64.zip
+          unzip Godot_v${{ env.GODOT_VERSION }}-stable_linux.x86_64.zip
+          mv Godot_v${{ env.GODOT_VERSION }}-stable_linux.x86_64 godot
           chmod +x godot
 
-      - name: Download export templates
+      - name: Install Official Export Templates (For Web)
         run: |
-          wget https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_export_templates.tpz
+          wget https://github.com/godotengine/godot/releases/download/${{ env.GODOT_VERSION }}-stable/Godot_v${{ env.GODOT_VERSION }}-stable_export_templates.tpz
+          mkdir -p ~/.local/share/godot/export_templates/${{ env.GODOT_VERSION }}.stable
+          unzip Godot_v${{ env.GODOT_VERSION }}-stable_export_templates.tpz
+          mv templates/* ~/.local/share/godot/export_templates/${{ env.GODOT_VERSION }}.stable
+          rm Godot_v${{ env.GODOT_VERSION }}-stable_export_templates.tpz
 
-          mkdir -p ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+      - name: Inject Custom Windows Templates
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download custom-templates -p "windows.zip"
 
-          unzip Godot_v${GODOT_VERSION}-stable_export_templates.tpz
-          mv templates/* ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+          # Godot ONLY reads templates from this exact path
+          TEMPLATE_DIR="$HOME/.local/share/godot/export_templates/${{ env.GODOT_VERSION }}.stable"
+          mkdir -p "$TEMPLATE_DIR"
+
+          unzip -o windows.zip -d /tmp/windows_templates
+
+          mv /tmp/windows_templates/godot.windows.template_release.x86_64.exe \
+            "$TEMPLATE_DIR/windows_release_x86_64.exe"
+
+          cp "$TEMPLATE_DIR/windows_release_x86_64.exe" \
+            "$TEMPLATE_DIR/windows_debug_x86_64.exe"
+
+          # Cleanup
+          rm -rf /tmp/windows_templates windows.zip
 
       - name: Export game (Web)
         run: |
           mkdir -p build/web
-          ./godot --headless --export-release "Web" build/web/index.html --encryption-key ${{ secrets.GODOT_PCK_ENCRYPTION_KEY }}
+          ./godot --headless --path . --export-release "Web" build/web/index.html
 
       - name: Export game (Windows)
+        env:
+          GODOT_SCRIPT_ENCRYPTION_KEY: ${{ secrets.GODOT_PCK_ENCRYPTION_KEY }}
         run: |
           mkdir -p build/windows
-          ./godot --headless --export-release "Windows Desktop" build/windows/${{ secrets.EXPORT_NAME }}.exe --encryption-key ${{ secrets.GODOT_PCK_ENCRYPTION_KEY }}
+          # Godot will now use the custom templates we injected into the global folder
+          ./godot --headless --path . --export-release "Windows Desktop" build/windows/${{ secrets.EXPORT_NAME }}.exe
 
       - name: Download butler
         run: |
@@ -62,14 +85,12 @@ jobs:
 
       - name: Push Web to itch.io
         env:
-          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY  }}
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
         run: |
-          ./butler push build/web \
-            $ITCH_USER/$ITCH_GAME:web
+          ./butler push build/web $ITCH_USER/$ITCH_GAME:web
 
       - name: Push Windows to itch.io
         env:
-          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY  }}
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
         run: |
-          ./butler push build/windows \
-            $ITCH_USER/$ITCH_GAME:windows
+          ./butler push build/windows $ITCH_USER/$ITCH_GAME:windows
