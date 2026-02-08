@@ -32,7 +32,7 @@ func _ready() -> void:
 		var button: Button = level_button_scene.instantiate()
 		button.name = level_name
 		level_button_container.add_child(button)
-		button.disabled = not SaveManager.has_level_data(level_name)
+		button.set_button_disabled(not SaveManager.has_level_data(level_name))
 		button.button_label = "%03d - %s" % [i, Constants.LEVELS[level_name]["name"]]
 		button.pressed.connect(_on_level_button_clicked.bind(level_name))
 		

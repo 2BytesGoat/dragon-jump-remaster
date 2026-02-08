@@ -54,7 +54,7 @@ func get_player_name() -> String:
 
 
 func get_level_data(level_name: String) -> LevelData:
-	return current_data.levels[level_name]
+	return current_data.levels.get(level_name)
 
 
 func has_level_data(level_name: String) -> bool:

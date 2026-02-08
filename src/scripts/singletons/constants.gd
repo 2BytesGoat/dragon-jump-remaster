@@ -2,6 +2,12 @@ extends Node
 
 var DEFAULT_PLAYER_NAME = "UNK"
 
+var MEDAL_COLORS = [
+	Color(0.804, 0.502, 0.196, 1.0),
+	Color(0.753, 0.753, 0.753, 1.0),
+	Color(0.996, 0.843, 0.0, 1.0)
+]
+
 # TODO: make these into resources
 var POWERUPS = {
 	"DoubleJump": {
