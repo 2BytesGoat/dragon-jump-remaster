@@ -73,7 +73,7 @@ func _on_level_button_clicked(level_name: String) -> void:
 func _on_start_button_pressed() -> void:
 	if not selected_level_name:
 		return
-	var speed_modifier = speed_slider.value + 0.5
+	var speed_modifier = speed_slider.value
 	
 	SceneManger.go_to(single_player_scene.resource_path, {"level_name": selected_level_name, "speed_modifier": speed_modifier})
 
