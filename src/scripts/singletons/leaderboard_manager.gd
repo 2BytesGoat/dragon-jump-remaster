@@ -5,8 +5,8 @@ var leaderboard_cache = {}
 
 
 func _ready() -> void:
-	#for level_name in Constants.LEVELS:
-		#SilentWolf.Scores.wipe_leaderboard(level_name)
+	for level_name in Constants.LEVELS:
+		SilentWolf.Scores.wipe_leaderboard(level_name)
 	
 	SignalBus.new_leaderboard_submission.connect(_on_new_leaderboard_submission)
 

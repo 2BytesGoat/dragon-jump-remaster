@@ -18,3 +18,6 @@ func _on_button_label_changed(new_label: String) -> void:
 	
 	medal_icon.visible = level_data.attempts != 0
 	medal_icon.modulate = Constants.MEDAL_COLORS[level_data.progress_milestone]
+
+func _on_pressed() -> void:
+	grab_focus()

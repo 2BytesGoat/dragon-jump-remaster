@@ -206,6 +206,7 @@ layout_mode = 2
 text = "RESTART"
 
 [node name="NextButton" parent="Panel/MarginContainer/MarginContainer/HBoxContainer" unique_id=1878520972 instance=ExtResource("3_kvx7a")]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(120, 25)
 layout_mode = 2
 text = "NEXT"

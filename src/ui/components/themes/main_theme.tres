@@ -21,7 +21,7 @@ texture_margin_top = 8.0
 texture_margin_right = 8.0
 texture_margin_bottom = 8.0
 expand_margin_bottom = 2.0
-modulate_color = Color(0, 1, 0, 0.1)
+modulate_color = Color(0.54102784, 0.92168134, 0.35253903, 0.4)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gu6du"]
 texture = ExtResource("2_mqe7l")
@@ -30,7 +30,7 @@ texture_margin_top = 8.0
 texture_margin_right = 8.0
 texture_margin_bottom = 8.0
 expand_margin_bottom = 2.0
-modulate_color = Color(0.3882353, 0.67058825, 0.24705882, 1)
+modulate_color = Color(0.4366977, 0.7489992, 0.28133705, 1)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_nmpq4"]
 texture = ExtResource("2_mqe7l")

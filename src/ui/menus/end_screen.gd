@@ -7,6 +7,11 @@ extends MarginContainer
 @onready var preogress_bar = %LevelProgressBar
 @onready var progress_medal = %LevelProgressMedalLabel
 @onready var leaderboard = %Leaderboard
+@onready var next_button = %NextButton
+
+
+func _ready() -> void:
+	next_button._on_mouse_entered()
 
 
 func update_stats(stats: Dictionary) -> void:
