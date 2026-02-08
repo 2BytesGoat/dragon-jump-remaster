@@ -11,29 +11,48 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      GODOT_VERSION: 4.6.stable
+      GODOT_VERSION: 4.6
+      ITCH_USER: 2bytesgoat
+      ITCH_GAME: dragon-jump
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - name: Inject runtime secrets
+        run: |
+          cat > src/scripts/singletons/runtime_secrets.gd <<EOF
+          extends Node
+          const is_set = true
+          const SILENT_WOLF_API_KEY = "${{ secrets.SILENT_WOLF_API_KEY }}"
+          const SILENT_WOLF_GAME_ID = "${{ secrets.SILENT_WOLF_GAME_ID }}"
+          EOF
+
       - name: Download Godot
         run: |
-          wget https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip
+          wget https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip
           unzip Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip
           mv Godot_v${GODOT_VERSION}-stable_linux.x86_64 godot
           chmod +x godot
 
       - name: Download export templates
         run: |
-          wget https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_export_templates.tpz
-          mkdir -p ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
-          unzip Godot_v${GODOT_VERSION}-stable_export_templates.tpz -d ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+          wget https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_export_templates.tpz
 
-      - name: Export game (Windows)
+          mkdir -p ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+
+          unzip Godot_v${GODOT_VERSION}-stable_export_templates.tpz
+          mv templates/* ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+
+      - name: Export game (Web)
         run: |
-          mkdir -p build/windows
-          ./godot --headless --export-release "Windows Desktop" build/windows/${{ secrets.EXPORT_NAME }}.exe
+          mkdir -p build/web
+          ./godot --headless --export-release "Web" build/web/index.html --encryption-key ${{ secrets.GODOT_PCK_ENCRYPTION_KEY }}
+
+      # - name: Export game (Windows)
+      #   run: |
+      #     mkdir -p build/windows
+      #     ./godot --headless --export-release "Windows Desktop" build/windows/${{ secrets.EXPORT_NAME }}.exe
 
       - name: Download butler
         run: |
@@ -41,9 +60,9 @@ jobs:
           unzip butler.zip
           chmod +x butler
 
-      - name: Push to itch.io
+      - name: Push Web to itch.io
         env:
-          BUTLER_API_KEY: ${{ secrets.ITCH_API_KEY }}
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY  }}
         run: |
-          ./butler push build/windows \
-            ${{ secrets.ITCH_USER }}/${{ secrets.ITCH_GAME }}:windows
+          ./butler push build/web \
+            $ITCH_USER/$ITCH_GAME:web

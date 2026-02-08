@@ -22,5 +22,6 @@ func load_env(path: String):
 		if parts.size() == 2:
 			var key = parts[0].strip_edges()
 			var value = parts[1].strip_edges()
-			OS.set_environment(key, value)
+			if key in RuntimeSecrets:
+				RuntimeSecrets[key] = value
 	file.close()

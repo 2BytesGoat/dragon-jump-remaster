@@ -23,6 +23,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+RuntimeSecrets="*uid://di528qnk4e2rd"
 EnvironmentVariables="*res://src/scripts/singletons/environment_variables.gd"
 Utils="*res://src/scripts/singletons/utils.gd"
 Constants="*res://src/scripts/singletons/constants.gd"
