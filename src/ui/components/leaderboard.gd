@@ -3,6 +3,7 @@ extends MarginContainer
 const MAX_SUPPORTED_ENTRIES = 9
 @onready var leaderboard_entry_container = %EntryContainer
 @onready var leaderboard_placeholder_label = %LeaderboardPlaceholderLabel
+@onready var server_error_label = %ServerErrorLabel
 
 @onready var leaderboard_entry_scene = preload("res://src/ui/components/leaderboard_entry.tscn")
 @onready var leaderboard_others_scene = preload("res://src/ui/menus/others_label.tscn")
@@ -14,6 +15,7 @@ func _ready() -> void:
 
 func update_leaderboard(level_name: String):
 	leaderboard_entry_container.visible = false
+	server_error_label.visible = false
 	leaderboard_placeholder_label.visible = true
 	
 	var results = LeaderboardManager.get_local_leaderboard(level_name)
@@ -28,6 +30,11 @@ func update_leaderboard(level_name: String):
 		leaderboard_entry_container.remove_child(child)
 		child.queue_free()
 	
+	if results["status"] == "failed":
+		leaderboard_placeholder_label.visible = false
+		leaderboard_entry_container.visible = false
+		server_error_label.visible = true
+	
 	var maded_to_leaderboard = []
 	var player_name = SaveManager.get_player_name()
 	for entry_name in results["scores"]:
@@ -39,7 +46,7 @@ func update_leaderboard(level_name: String):
 		if leaderboard_entry_container.get_child_count() >= MAX_SUPPORTED_ENTRIES:
 			break
 	
-	var player_time = results["player_time"]
+	var player_time = results.get("player_time", INF)
 	if player_name != Constants.DEFAULT_PLAYER_NAME and player_time != INF and player_name not in maded_to_leaderboard:
 		while leaderboard_entry_container.get_child_count() > MAX_SUPPORTED_ENTRIES - 2:
 			var last_entry = leaderboard_entry_container.get_child(leaderboard_entry_container.get_child_count() - 1)

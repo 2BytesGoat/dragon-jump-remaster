@@ -22,15 +22,15 @@ var total_time: float = 0.0
 var delta_time: float = 0.0
 var update_interval: float = 0.2
 
-var level_name = ""
+var level_name = "1-14"
 var player_speed_modifier = 1.0
 var nb_players = 1   
 var player_nodes = []
 
 
 func _ready():
-	level_name = SceneManger.next_scene_data.get("level_name", "")
-	player_speed_modifier = SceneManger.next_scene_data.get("speed_modifier", "")
+	level_name = SceneManger.next_scene_data.get("level_name", level_name)
+	player_speed_modifier = SceneManger.next_scene_data.get("speed_modifier", player_speed_modifier)
 	
 	var level_code = Constants.LEVELS[level_name]["code"]
 	level.update_level(level_code)

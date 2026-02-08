@@ -27,6 +27,12 @@ layout_mode = 2
 text = "~ FETCHING LEADERBOARD ~"
 horizontal_alignment = 1
 
+[node name="ServerErrorLabel" type="Label" parent="Panel/MarginContainer" unique_id=355555386]
+unique_name_in_owner = true
+layout_mode = 2
+text = "~ UNABLE TO REACH SERVER ~"
+horizontal_alignment = 1
+
 [node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer" unique_id=385201935]
 layout_mode = 2
 theme_override_constants/margin_left = 10

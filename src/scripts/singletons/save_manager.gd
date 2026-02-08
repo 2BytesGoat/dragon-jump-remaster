@@ -54,7 +54,7 @@ func get_player_name() -> String:
 
 
 func get_level_data(level_name: String) -> LevelData:
-	return current_data.levels[level_name]
+	return current_data.levels.get(level_name)
 
 
 func has_level_data(level_name: String) -> bool:
@@ -80,7 +80,10 @@ func update_level_progress(level_name: String) -> void:
 
 
 func _on_new_run_attempt(level_name: String) -> void:
-	var level_data: LevelData = current_data.levels[level_name]
+	var level_data: LevelData = current_data.levels.get(level_name)
+	if not level_data:
+		unlock_level(level_name)
+		level_data = current_data.levels.get(level_name)
 	level_data.attempts += 1
 	save_to_disk()
 

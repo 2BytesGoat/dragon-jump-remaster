@@ -258,11 +258,11 @@ func _on_GetScorePosition_request_completed(result, response_code, headers, body
 	if status_check:
 		var json_body = JSON.parse_string(body.get_string_from_utf8())
 		var sw_result: Dictionary = SilentWolf.build_result(json_body)
-		if json_body.success:
+		if response_code == 200 and json_body.success:
 			SWLogger.info("SilentWolf get score position success: " + str(json_body.position))
 			sw_result["position"] =  int(json_body.position)
 		else:
-			SWLogger.error("SilentWolf get score position failure: " + str(json_body.error))
+			SWLogger.error("SilentWolf get score position failure: " + str(json_body["message"]))
 		sw_get_position_complete.emit(sw_result)
 
 

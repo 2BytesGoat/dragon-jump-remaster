@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://cw8cw6fpq5n63"]
+[gd_scene format=3 uid="uid://cw8cw6fpq5n63"]
 
 [ext_resource type="Script" uid="uid://c306bigp8honi" path="res://src/scenes/player/player.gd" id="1_uug8f"]
 [ext_resource type="Script" uid="uid://chhu1axyjbnac" path="res://src/scenes/player/observer.gd" id="2_4r4qr"]
@@ -18,6 +18,7 @@
 [ext_resource type="Script" uid="uid://cy8rgltfy0nub" path="res://src/scenes/player/states/double_jump_state.gd" id="10_62cf5"]
 [ext_resource type="Script" uid="uid://n0he4r7dkudr" path="res://src/scenes/player/states/dash_state.gd" id="12_3hyjg"]
 [ext_resource type="Script" uid="uid://bkoh6pdkvl2wc" path="res://src/scenes/player/states/swing_state.gd" id="13_824xm"]
+[ext_resource type="Script" uid="uid://dl2u2x131lawy" path="res://src/scenes/player/states/bounce_state.gd" id="18_oub3j"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_i6xdb"]
 particles_animation = true
@@ -468,28 +469,28 @@ _data = {
 &"Walled": SubResource("Animation_824xm")
 }
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D" unique_id=515833137]
 collision_layer = 2
 collision_mask = 33
 script = ExtResource("1_uug8f")
 
-[node name="Observer" type="Node" parent="."]
+[node name="Observer" type="Node" parent="." unique_id=768994441]
 script = ExtResource("2_4r4qr")
 
-[node name="Flippable" type="Node2D" parent="."]
+[node name="Flippable" type="Node2D" parent="." unique_id=376239235]
 texture_filter = 1
 
-[node name="Sprite" type="Sprite2D" parent="Flippable"]
+[node name="Sprite" type="Sprite2D" parent="Flippable" unique_id=1859604623]
 texture_filter = 1
 position = Vector2(1, -8)
 texture = ExtResource("3_4r4qr")
 offset = Vector2(-1, 0)
 hframes = 21
 
-[node name="HatContainer" type="Node2D" parent="Flippable"]
+[node name="HatContainer" type="Node2D" parent="Flippable" unique_id=2082777664]
 position = Vector2(-2, -11)
 
-[node name="AfterImage" type="CPUParticles2D" parent="Flippable"]
+[node name="AfterImage" type="CPUParticles2D" parent="Flippable" unique_id=1240639241]
 self_modulate = Color(1, 1, 1, 0.5)
 show_behind_parent = true
 material = SubResource("CanvasItemMaterial_i6xdb")
@@ -499,107 +500,111 @@ texture = ExtResource("3_tj7fb")
 lifetime = 0.15000000000000002
 gravity = Vector2(0, 0)
 
-[node name="GaplingHook" type="Node2D" parent="Flippable"]
+[node name="GaplingHook" type="Node2D" parent="Flippable" unique_id=566521433]
 show_behind_parent = true
 script = ExtResource("4_8vrmn")
 rest_length = 0.1
 stiffness = 40.0
 
-[node name="GrapplingPoints" type="Node2D" parent="Flippable/GaplingHook"]
+[node name="GrapplingPoints" type="Node2D" parent="Flippable/GaplingHook" unique_id=1245188450]
 
-[node name="RayCast2D" type="RayCast2D" parent="Flippable/GaplingHook/GrapplingPoints"]
+[node name="RayCast2D" type="RayCast2D" parent="Flippable/GaplingHook/GrapplingPoints" unique_id=1473833710]
 rotation = -2.268928
 target_position = Vector2(0, 150)
 collision_mask = 33
 
-[node name="GrappleIndicator" type="Sprite2D" parent="Flippable/GaplingHook"]
+[node name="GrappleIndicator" type="Sprite2D" parent="Flippable/GaplingHook" unique_id=1760370689]
 visible = false
 position = Vector2(68, -68)
 scale = Vector2(0.0546875, 0.0546875)
 texture = ExtResource("5_b7xrc")
 
-[node name="Line2D" type="Line2D" parent="Flippable/GaplingHook"]
+[node name="Line2D" type="Line2D" parent="Flippable/GaplingHook" unique_id=103796883]
 show_behind_parent = true
 points = PackedVector2Array(0, 0, 0, 0)
 width = 2.0
 
-[node name="PowerupSFX" type="AudioStreamPlayer" parent="."]
+[node name="PowerupSFX" type="AudioStreamPlayer" parent="." unique_id=1108406290]
 stream = ExtResource("6_xgv0w")
 volume_db = -25.0
 bus = &"SFX"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1173197085]
 position = Vector2(0, 0.5)
 shape = SubResource("RectangleShape2D_uug8f")
 
-[node name="InteractBox" type="Area2D" parent="."]
+[node name="InteractBox" type="Area2D" parent="." unique_id=703891723]
 collision_layer = 16
 collision_mask = 8
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractBox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractBox" unique_id=1504633298]
 visible = false
 position = Vector2(-0.5, 1)
 shape = SubResource("RectangleShape2D_6uujk")
 
-[node name="HurtBox" type="Area2D" parent="."]
+[node name="HurtBox" type="Area2D" parent="." unique_id=320738228]
 visible = false
 collision_layer = 2
 collision_mask = 4
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox" unique_id=2073333078]
 position = Vector2(-0.5, -0.5)
 shape = SubResource("RectangleShape2D_i6xdb")
 
-[node name="ControllerContainer" type="Node" parent="."]
+[node name="ControllerContainer" type="Node" parent="." unique_id=910661373]
 
-[node name="StateMachine" type="Node" parent="."]
+[node name="StateMachine" type="Node" parent="." unique_id=1905505156]
 script = ExtResource("3_7p4af")
 initial_state = NodePath("Idle")
 
-[node name="Idle" type="Node" parent="StateMachine"]
+[node name="Idle" type="Node" parent="StateMachine" unique_id=1703287815]
 script = ExtResource("4_3m013")
 
-[node name="Move" type="Node" parent="StateMachine"]
+[node name="Move" type="Node" parent="StateMachine" unique_id=1174257889]
 script = ExtResource("5_ii60e")
 
-[node name="Fall" type="Node" parent="StateMachine"]
+[node name="Fall" type="Node" parent="StateMachine" unique_id=378533986]
 script = ExtResource("6_8m0h4")
 
-[node name="Jump" type="Node" parent="StateMachine"]
+[node name="Jump" type="Node" parent="StateMachine" unique_id=1615644248]
 script = ExtResource("7_q88xr")
 
-[node name="Timer" type="Timer" parent="StateMachine/Jump"]
+[node name="Timer" type="Timer" parent="StateMachine/Jump" unique_id=1957238707]
 one_shot = true
 
-[node name="Walled" type="Node" parent="StateMachine"]
+[node name="Walled" type="Node" parent="StateMachine" unique_id=618057474]
 script = ExtResource("8_6uujk")
 wall_slide_curve = SubResource("Curve_4r4qr")
 
-[node name="DoubleJump" type="Node" parent="StateMachine"]
+[node name="DoubleJump" type="Node" parent="StateMachine" unique_id=113288851]
 script = ExtResource("10_62cf5")
 
-[node name="Timer" type="Timer" parent="StateMachine/DoubleJump"]
+[node name="Timer" type="Timer" parent="StateMachine/DoubleJump" unique_id=1662395314]
 one_shot = true
 
-[node name="Stomp" type="Node" parent="StateMachine"]
+[node name="Stomp" type="Node" parent="StateMachine" unique_id=1801570448]
 script = ExtResource("9_i6xdb")
 
-[node name="Dash" type="Node" parent="StateMachine"]
+[node name="Dash" type="Node" parent="StateMachine" unique_id=1482846064]
 script = ExtResource("12_3hyjg")
 
-[node name="Timer" type="Timer" parent="StateMachine/Dash"]
+[node name="Timer" type="Timer" parent="StateMachine/Dash" unique_id=1245084695]
 wait_time = 0.25
 one_shot = true
 
-[node name="Grapple" type="Node" parent="StateMachine"]
+[node name="Grapple" type="Node" parent="StateMachine" unique_id=915589517]
 script = ExtResource("13_824xm")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_i6xdb")
-}
+[node name="Bounce" type="Node" parent="StateMachine" unique_id=529725658]
+script = ExtResource("18_oub3j")
 
-[node name="StateLabel" type="Label" parent="."]
+[node name="Timer" type="Timer" parent="StateMachine/Bounce" unique_id=1805352055]
+one_shot = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1214060380]
+libraries/ = SubResource("AnimationLibrary_i6xdb")
+
+[node name="StateLabel" type="Label" parent="." unique_id=1345352259]
 visible = false
 anchors_preset = 7
 anchor_left = 0.5

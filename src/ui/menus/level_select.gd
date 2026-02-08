@@ -32,7 +32,7 @@ func _ready() -> void:
 		var button: Button = level_button_scene.instantiate()
 		button.name = level_name
 		level_button_container.add_child(button)
-		button.disabled = not SaveManager.has_level_data(level_name)
+		button.set_button_disabled(not SaveManager.has_level_data(level_name))
 		button.button_label = "%03d - %s" % [i, Constants.LEVELS[level_name]["name"]]
 		button.pressed.connect(_on_level_button_clicked.bind(level_name))
 		
@@ -73,7 +73,7 @@ func _on_level_button_clicked(level_name: String) -> void:
 func _on_start_button_pressed() -> void:
 	if not selected_level_name:
 		return
-	var speed_modifier = speed_slider.value + 0.5
+	var speed_modifier = speed_slider.value
 	
 	SceneManger.go_to(single_player_scene.resource_path, {"level_name": selected_level_name, "speed_modifier": speed_modifier})
 

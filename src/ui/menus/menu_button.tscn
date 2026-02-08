@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://bnxudkobrdgtb"]
+[gd_scene format=3 uid="uid://bnxudkobrdgtb"]
 
 [ext_resource type="Theme" uid="uid://se7xk3lcwng8" path="res://src/ui/components/themes/main_theme.tres" id="1_vpyhf"]
 [ext_resource type="Script" uid="uid://dee1am3oj4v0h" path="res://src/ui/menus/menu_button.gd" id="2_3838x"]
 
-[node name="MenuButton" type="Button"]
+[node name="MenuButton" type="Button" unique_id=2468351]
 custom_minimum_size = Vector2(48, 48)
 offset_right = 40.0
 offset_bottom = 40.0
