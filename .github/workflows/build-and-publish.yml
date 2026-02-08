@@ -49,10 +49,10 @@ jobs:
           mkdir -p build/web
           ./godot --headless --export-release "Web" build/web/index.html --encryption-key ${{ secrets.GODOT_PCK_ENCRYPTION_KEY }}
 
-      # - name: Export game (Windows)
-      #   run: |
-      #     mkdir -p build/windows
-      #     ./godot --headless --export-release "Windows Desktop" build/windows/${{ secrets.EXPORT_NAME }}.exe
+      - name: Export game (Windows)
+        run: |
+          mkdir -p build/windows
+          ./godot --headless --export-release "Windows Desktop" build/windows/${{ secrets.EXPORT_NAME }}.exe --encryption-key ${{ secrets.GODOT_PCK_ENCRYPTION_KEY }}
 
       - name: Download butler
         run: |
@@ -66,3 +66,10 @@ jobs:
         run: |
           ./butler push build/web \
             $ITCH_USER/$ITCH_GAME:web
+
+      - name: Push Windows to itch.io
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY  }}
+        run: |
+          ./butler push build/windows \
+            $ITCH_USER/$ITCH_GAME:windows
