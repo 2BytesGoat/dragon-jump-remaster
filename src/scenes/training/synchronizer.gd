@@ -209,7 +209,7 @@ func _set_agent_actions(actions, agents: Array):
 
 func _reset_agents(agents = agents_training):
 	for agent in agents:
-		agent.needs_reset = true
+		agent.reset()
 
 
 func _get_port():

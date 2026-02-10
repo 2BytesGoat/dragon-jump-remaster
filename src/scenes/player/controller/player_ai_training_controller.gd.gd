@@ -5,6 +5,7 @@ extends PlayerCharacterController
 
 var sensor: ISensor2D = null
 var is_done: bool = false
+var reward: float = 0.0
 
 
 func _ready() -> void:
@@ -13,8 +14,8 @@ func _ready() -> void:
 	add_to_group("AGENT")
 
 
-func set_action(new_action: bool) -> void:
-	jump_command.execute(player, JumpCommand.Params.new(new_action))
+func set_action(new_action: Dictionary) -> void:
+	jump_command.execute(player, JumpCommand.Params.new(new_action["jump"]))
 
 
 func reset() -> void:
@@ -29,7 +30,11 @@ func get_obs() -> Dictionary:
 
 func get_reward() -> float:
 	# This is how much the player earned for its past action
-	return 0.0
+	return reward
+
+
+func get_done() -> bool:
+	return is_done
 
 
 func get_info() -> Dictionary:
@@ -39,7 +44,9 @@ func get_info() -> Dictionary:
 
 func get_action_space() -> Dictionary:
 	# This is used by the system to know how it's going to control the player
-	return {"size": 1, "action_type": "discrete"}
+	return {
+		"jump": {"size": 1, "action_type": "discrete"}
+	}
 
 
 func get_obs_space() -> Dictionary:
@@ -48,3 +55,7 @@ func get_obs_space() -> Dictionary:
 	return {
 		"obs": {"size": [len(obs["obs"])], "space": "box"},
 	}
+
+
+func zero_reward() -> void:
+	reward = 0.0
