@@ -64,7 +64,6 @@ func _on_level_level_size_updated(level_size: Vector2i) -> void:
 
 func _on_level_level_size_updated_w_zoom(level_size: Vector2i) -> void:
 	var viewport_size = get_viewport().size
-	print(viewport_size)
 	
 	var scale_x = float(level_size.x) / (viewport_size.x * 0.85)
 	var scale_y = float(level_size.y) / (viewport_size.y * 0.85)

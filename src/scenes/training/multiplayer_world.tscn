@@ -24,7 +24,6 @@ visible = false
 [node name="Camera2D" parent="SubViewport" unique_id=1352300497 instance=ExtResource("2_yn8gx")]
 visible = false
 position = Vector2(104, 96)
-zoom = Vector2(0.75, 0.75)
 process_callback = 0
 limit_enabled = true
 position_smoothing_enabled = true

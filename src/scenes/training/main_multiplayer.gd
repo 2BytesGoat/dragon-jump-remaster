@@ -1,27 +1,36 @@
 extends Node
 
+@onready var multiplayer_world_scene = preload("res://src/scenes/training/multiplayer_world.tscn")
+@onready var ghost_scene = preload("res://src/scenes/player/ghost.tscn")
+
 # TODO: use a for loop to go through all levels
 @onready var worlds = $Worlds
+@onready var ghosts = $PlayerMirrors
 @onready var sync = $Synchronizer
 
+var nb_players = 100
 var level_name = "1-14"
 var main_world = null
-@onready var player_mapping = {
-	"Player0": $PlayerMirrors/Ghost,
-	"Player1": $PlayerMirrors/Ghost2,
-}
+var player_mapping = {}
 
 
 func _ready() -> void:
 	var level_code = Constants.LEVELS[level_name]["code"]
-	for i in range(worlds.get_child_count()):
-		var world: MultiplayerWorld = worlds.get_child(i)
+	for i in range(nb_players):
 		var player_name = "Player%s" % i
+		var world = multiplayer_world_scene.instantiate()
+		worlds.add_child(world)
 		world.set_params(level_code, player_name, Player.CONTROLLERS.TRAINING)
+		world.visible = false
+		
+		var ghost = ghost_scene.instantiate()
+		ghosts.add_child(ghost)
+		ghost.name = "Ghost%s" % i
+		player_mapping[player_name] = ghost
 	
 	main_world = worlds.get_child(0)
+	main_world.visible = true
 	main_world.set_camera_enabled(true)
-	main_world.track_node(player_mapping["Player0"])
 	
 	sync.initialize()
 	#SignalBus.player_started_run.connect(_on_player_started_run)
@@ -29,6 +38,8 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
+	return
+	
 	var player_node = null
 	var viewport = main_world.viewport
 	
