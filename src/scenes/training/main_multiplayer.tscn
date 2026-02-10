@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cuvodk1ehi12p" path="res://src/scenes/training/main_multiplayer.gd" id="1_phtji"]
 [ext_resource type="PackedScene" uid="uid://chl4uss37nadh" path="res://src/scenes/training/multiplayer_world.tscn" id="2_j4kom"]
+[ext_resource type="Script" uid="uid://cd46wkopjxif" path="res://src/scenes/training/synchronizer.gd" id="3_phtji"]
 
 [node name="MainMultiplayer" type="Node" unique_id=1674787169]
 script = ExtResource("1_phtji")
@@ -10,4 +11,8 @@ script = ExtResource("1_phtji")
 
 [node name="MultiplayerWorld" parent="Worlds" unique_id=1958918301 instance=ExtResource("2_j4kom")]
 
+[node name="MultiplayerWorld2" parent="Worlds" unique_id=1031647748 instance=ExtResource("2_j4kom")]
+visible = false
+
 [node name="Synchronizer" type="Node" parent="." unique_id=350876212]
+script = ExtResource("3_phtji")

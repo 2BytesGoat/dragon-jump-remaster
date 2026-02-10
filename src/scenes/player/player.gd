@@ -66,7 +66,7 @@ var wants_to_jump: bool = false
 var needs_to_release: bool = false
 var modifiers: Dictionary = {}
 var powerups: Array = []
-var starting_position: Vector2 = Vector2.ZERO
+var starting_position: Vector2 = Vector2.ZERO : set = _on_starting_position_changed
 var show_afterimage: bool = false : set = _on_show_after_image_changed
 var speed_modifier: float = 1.0 : set = _on_speed_modifier_changed
 
@@ -270,6 +270,11 @@ func _on_player_controller_changed(new_controller_type: CONTROLLERS) -> void:
 			set_controller(PlayerTwoController.new(self))
 		CONTROLLERS.TRAINING:
 			set_controller(PlayerAITrainingController.new(self))
+
+
+func _on_starting_position_changed(new_position: Vector2) -> void:
+	starting_position = new_position
+	global_position = starting_position
 
 
 func _on_hurt_box_body_entered(body: Node2D) -> void:

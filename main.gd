@@ -80,7 +80,7 @@ func initialize_players() -> void:
 	camera.player_node = player
 	
 	player.name = "Player1"
-	player.global_position = player_position
+	player.starting_position = player_position
 	player.speed_modifier = player_speed_modifier
 	player_container.add_child(player)
 	player_nodes.append(player)

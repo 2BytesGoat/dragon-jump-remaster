@@ -10,6 +10,7 @@ var is_done: bool = false
 func _ready() -> void:
 	sensor = raycast_sensor_scene.instantiate()
 	player.add_child(sensor)
+	add_to_group("AGENT")
 
 
 func set_action(new_action: bool) -> void:
@@ -39,3 +40,11 @@ func get_info() -> Dictionary:
 func get_action_space() -> Dictionary:
 	# This is used by the system to know how it's going to control the player
 	return {"size": 1, "action_type": "discrete"}
+
+
+func get_obs_space() -> Dictionary:
+	# may need overriding if the obs space is complex
+	var obs = get_obs()
+	return {
+		"obs": {"size": [len(obs["obs"])], "space": "box"},
+	}

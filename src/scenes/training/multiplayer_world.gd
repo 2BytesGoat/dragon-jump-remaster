@@ -8,6 +8,6 @@ extends SubViewportContainer
 
 func set_params(level_code: String, player_controller_type: Player.CONTROLLERS, enable_camera: bool = false) -> void:
 	level.update_level(level_code)
-	player.global_position = level.player_start_position
+	player.starting_position = level.player_start_position
 	player.controller_type = player_controller_type
-	camera.enabled = enable_camera
+	camera.visible = enable_camera
