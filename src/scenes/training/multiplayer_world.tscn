@@ -11,13 +11,17 @@ offset_bottom = 360.0
 script = ExtResource("1_yn8gx")
 
 [node name="SubViewport" type="SubViewport" parent="." unique_id=2136212787]
+transparent_bg = true
 handle_input_locally = false
 size = Vector2i(640, 360)
 render_target_update_mode = 4
 
 [node name="Level" parent="SubViewport" unique_id=962454612 groups=["Level"] instance=ExtResource("1_44gsu")]
 
-[node name="Camera2D" parent="SubViewport" unique_id=103036392 node_paths=PackedStringArray("player_node") instance=ExtResource("2_yn8gx")]
+[node name="Player" parent="SubViewport" unique_id=515833137 instance=ExtResource("3_o8n50")]
+visible = false
+
+[node name="Camera2D" parent="SubViewport" unique_id=1352300497 node_paths=PackedStringArray("player_node") instance=ExtResource("2_yn8gx")]
 visible = false
 position = Vector2(104, 96)
 process_callback = 0
@@ -25,10 +29,6 @@ limit_enabled = true
 position_smoothing_enabled = true
 drag_horizontal_enabled = true
 drag_vertical_enabled = true
-player_node = NodePath("../Player")
-
-[node name="Player" parent="SubViewport" unique_id=515833137 instance=ExtResource("3_o8n50")]
-
-[connection signal="level_size_updated" from="SubViewport/Level" to="SubViewport/Camera2D" method="_on_level_level_size_updated"]
+player_node = NodePath("")
 
 [editable path="SubViewport/Level"]

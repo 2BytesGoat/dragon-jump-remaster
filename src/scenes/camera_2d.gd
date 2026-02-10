@@ -1,6 +1,6 @@
 extends Camera2D
 
-@export var player_node: Player
+@export var player_node: Node2D
 @onready var noise = FastNoiseLite.new()
 @onready var rand = RandomNumberGenerator.new()
 

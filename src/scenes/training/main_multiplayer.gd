@@ -5,15 +5,38 @@ extends Node
 @onready var sync = $Synchronizer
 
 var level_name = "1-14"
+var main_world = null
+@onready var player_mapping = {
+	"Player0": $PlayerMirrors/Icon,
+	"Player1": $PlayerMirrors/Icon2,
+}
 
 
 func _ready() -> void:
 	var level_code = Constants.LEVELS[level_name]["code"]
 	for i in range(worlds.get_child_count()):
 		var world: MultiplayerWorld = worlds.get_child(i)
-		var enable_camera = i == 0
-		world.set_params(level_code, Player.CONTROLLERS.TRAINING, enable_camera)
+		var player_name = "Player%s" % i
+		world.set_params(level_code, player_name, Player.CONTROLLERS.TRAINING)
+	
+	main_world = worlds.get_child(0)
+	main_world.set_camera_enabled(true)
+	main_world.track_node(player_mapping["Player0"])
 	
 	sync.initialize()
 	#SignalBus.player_started_run.connect(_on_player_started_run)
 	#SignalBus.player_finished_run.connect(_on_player_finished_run)
+
+
+func _process(_delta: float) -> void:
+	var player_node = null
+	for agent_node in sync.agents_training:
+		player_node = agent_node.player
+		var sprite_node = player_mapping[player_node.name]
+		
+		var viewport = main_world.viewport
+		var canvas_transform = viewport.get_canvas_transform()
+		var screen_pos = canvas_transform * player_node.global_position
+		sprite_node.global_position = screen_pos
+		
+	main_world.track_node(player_node)
