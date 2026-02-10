@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://cuvodk1ehi12p" path="res://src/scenes/training/main_multiplayer.gd" id="1_phtji"]
 [ext_resource type="PackedScene" uid="uid://chl4uss37nadh" path="res://src/scenes/training/multiplayer_world.tscn" id="2_j4kom"]
+[ext_resource type="PackedScene" uid="uid://d3lm54whaodog" path="res://src/scenes/player/ghost.tscn" id="3_1hsvd"]
 [ext_resource type="Script" uid="uid://cd46wkopjxif" path="res://src/scenes/training/synchronizer.gd" id="3_phtji"]
-[ext_resource type="Texture2D" uid="uid://bcfjeeqq7rmrh" path="res://icon.svg" id="4_0geqr"]
 
 [node name="MainMultiplayer" type="Node" unique_id=1674787169]
 script = ExtResource("1_phtji")
@@ -17,14 +17,9 @@ visible = false
 
 [node name="PlayerMirrors" type="Node" parent="." unique_id=1834355539]
 
-[node name="Icon" type="Sprite2D" parent="PlayerMirrors" unique_id=1643515245]
-scale = Vector2(0.2, 0.2)
-texture = ExtResource("4_0geqr")
+[node name="Ghost" parent="PlayerMirrors" unique_id=475520150 instance=ExtResource("3_1hsvd")]
 
-[node name="Icon2" type="Sprite2D" parent="PlayerMirrors" unique_id=1275283265]
-position = Vector2(48.999996, 0)
-scale = Vector2(0.2, 0.2)
-texture = ExtResource("4_0geqr")
+[node name="Ghost2" parent="PlayerMirrors" unique_id=102521408 instance=ExtResource("3_1hsvd")]
 
 [node name="Synchronizer" type="Node" parent="." unique_id=350876212]
 script = ExtResource("3_phtji")

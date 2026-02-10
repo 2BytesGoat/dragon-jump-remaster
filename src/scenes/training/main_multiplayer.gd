@@ -7,8 +7,8 @@ extends Node
 var level_name = "1-14"
 var main_world = null
 @onready var player_mapping = {
-	"Player0": $PlayerMirrors/Icon,
-	"Player1": $PlayerMirrors/Icon2,
+	"Player0": $PlayerMirrors/Ghost,
+	"Player1": $PlayerMirrors/Ghost2,
 }
 
 
@@ -30,13 +30,15 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	var player_node = null
+	var viewport = main_world.viewport
+	
 	for agent_node in sync.agents_training:
 		player_node = agent_node.player
 		var sprite_node = player_mapping[player_node.name]
+		var info = agent_node.get_info()
 		
-		var viewport = main_world.viewport
 		var canvas_transform = viewport.get_canvas_transform()
-		var screen_pos = canvas_transform * player_node.global_position
-		sprite_node.global_position = screen_pos
+		var screen_pos = canvas_transform * info.get("global_position")
+		sprite_node.update(screen_pos, info.get("facing_direction"), info.get("state"))
 		
 	main_world.track_node(player_node)

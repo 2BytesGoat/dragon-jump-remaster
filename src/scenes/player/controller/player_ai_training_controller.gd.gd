@@ -39,7 +39,11 @@ func get_done() -> bool:
 
 func get_info() -> Dictionary:
 	# These are additional information that are mainly used for debug
-	return {}
+	return {
+		"global_position": player.global_position,
+		"facing_direction": player.facing_direction,
+		"state": player.state_machine.state.name
+	}
 
 
 func get_action_space() -> Dictionary:
