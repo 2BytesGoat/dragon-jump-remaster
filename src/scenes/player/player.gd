@@ -4,9 +4,10 @@ extends CharacterBody2D
 enum CONTROLLERS {
 	NONE,
 	PLAYER_ONE,
-	PLAYER_TWO
+	PLAYER_TWO,
+	TRAINING
 }
-@export var controller_type: CONTROLLERS = CONTROLLERS.NONE
+@export var controller_type: CONTROLLERS = CONTROLLERS.NONE : set = _on_player_controller_changed
 
 # movement properties
 @export var starting_facing_direction: int = Vector2i.RIGHT.x
@@ -72,11 +73,8 @@ var speed_modifier: float = 1.0 : set = _on_speed_modifier_changed
 
 func _ready() -> void:
 	starting_position = global_position
-	if controller_type == CONTROLLERS.PLAYER_ONE:
-		set_controller(PlayerOneController.new(self))
-	elif controller_type == CONTROLLERS.PLAYER_TWO:
-		set_controller(PlayerTwoController.new(self))
-	
+	_on_player_controller_changed(controller_type)
+	_on_speed_modifier_changed(speed_modifier)
 	reset()
 
 
@@ -95,6 +93,9 @@ func _physics_process(delta: float) -> void:
 
 
 func set_controller(controller: PlayerCharacterController) -> void:
+	if controller_container == null:
+		await ready
+	
 	for child in controller_container.get_children():
 		child.queue_free()
 	
@@ -254,6 +255,23 @@ func _apply_modifiers() -> void:
 		velocity *= modifier.get("velocity", 1.0) 
 
 
+func _on_show_after_image_changed(value: bool) -> void:
+	show_afterimage = value
+	afterimage.emitting = value
+	powerup_sfx.playing = value
+
+
+func _on_player_controller_changed(new_controller_type: CONTROLLERS) -> void:
+	controller_type = new_controller_type
+	match controller_type:
+		CONTROLLERS.PLAYER_ONE:
+			set_controller(PlayerOneController.new(self))
+		CONTROLLERS.PLAYER_TWO:
+			set_controller(PlayerTwoController.new(self))
+		CONTROLLERS.TRAINING:
+			set_controller(PlayerAITrainingController.new(self))
+
+
 func _on_hurt_box_body_entered(body: Node2D) -> void:
 	# This is for spikes
 	if body is TileMapLayer:
@@ -276,12 +294,6 @@ func _on_interact_box_area_entered(area: Area2D) -> void:
 func _on_interact_box_area_exited(area: Area2D) -> void:
 	if area.is_in_group("Slippery"):
 		remove_modifier("slippery")
-
-
-func _on_show_after_image_changed(value: bool) -> void:
-	show_afterimage = value
-	afterimage.emitting = value
-	powerup_sfx.playing = value
 
 
 func _on_interact_box_body_entered(body: Node2D) -> void:

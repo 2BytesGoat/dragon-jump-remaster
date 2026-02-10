@@ -27,8 +27,8 @@ var player_nodes = []
 
 
 func _ready():
-	level_name = SceneManger.next_scene_data.get("level_name", level_name)
-	player_speed_modifier = SceneManger.next_scene_data.get("speed_modifier", player_speed_modifier)
+	level_name = SceneManger.scene_data.get("level_name", level_name)
+	player_speed_modifier = SceneManger.scene_data.get("speed_modifier", player_speed_modifier)
 	
 	var level_code = Constants.LEVELS[level_name]["code"]
 	level.update_level(level_code)

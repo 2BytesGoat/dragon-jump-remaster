@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://chl4uss37nadh"]
+
+[ext_resource type="PackedScene" uid="uid://bvm718ddfisd7" path="res://src/scenes/level/level.tscn" id="1_44gsu"]
+[ext_resource type="Script" uid="uid://bpj76d70jgc4l" path="res://src/scenes/training/multiplayer_world.gd" id="1_yn8gx"]
+[ext_resource type="PackedScene" uid="uid://bje1it34lkko4" path="res://src/scenes/camera_2d.tscn" id="2_yn8gx"]
+[ext_resource type="PackedScene" uid="uid://cw8cw6fpq5n63" path="res://src/scenes/player/player.tscn" id="3_o8n50"]
+
+[node name="MultiplayerWorld" type="SubViewportContainer" unique_id=1958918301]
+offset_right = 640.0
+offset_bottom = 360.0
+script = ExtResource("1_yn8gx")
+
+[node name="SubViewport" type="SubViewport" parent="." unique_id=2136212787]
+handle_input_locally = false
+size = Vector2i(640, 360)
+render_target_update_mode = 4
+
+[node name="Level" parent="SubViewport" unique_id=962454612 groups=["Level"] instance=ExtResource("1_44gsu")]
+
+[node name="Camera2D" parent="SubViewport" unique_id=103036392 node_paths=PackedStringArray("player_node") instance=ExtResource("2_yn8gx")]
+position = Vector2(104, 96)
+process_callback = 0
+limit_enabled = true
+position_smoothing_enabled = true
+drag_horizontal_enabled = true
+drag_vertical_enabled = true
+player_node = NodePath("../Player")
+
+[node name="Player" parent="SubViewport" unique_id=515833137 instance=ExtResource("3_o8n50")]
+
+[connection signal="level_size_updated" from="SubViewport/Level" to="SubViewport/Camera2D" method="_on_level_level_size_updated"]
+
+[editable path="SubViewport/Level"]

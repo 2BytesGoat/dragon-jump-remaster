@@ -601,7 +601,6 @@ one_shot = true
 libraries/ = SubResource("AnimationLibrary_i6xdb")
 
 [node name="StateLabel" type="Label" parent="." unique_id=1345352259]
-visible = false
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0

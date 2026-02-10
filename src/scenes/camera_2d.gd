@@ -1,8 +1,8 @@
 extends Camera2D
 
+@export var player_node: Player
 @onready var noise = FastNoiseLite.new()
 @onready var rand = RandomNumberGenerator.new()
-@onready var player_node = null
 
 var noise_i: float = 0.0
 var noise_seed: float = 30.0
