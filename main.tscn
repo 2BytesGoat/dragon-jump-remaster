@@ -1,36 +1,24 @@
 [gd_scene format=3 uid="uid://b5etxdni2oe0j"]
 
-[ext_resource type="Script" uid="uid://3sasinrk8fc6" path="res://multiplayer_scene.gd" id="1_lquwl"]
+[ext_resource type="Script" uid="uid://3sasinrk8fc6" path="res://main.gd" id="1_efxa6"]
 [ext_resource type="PackedScene" uid="uid://bvm718ddfisd7" path="res://src/scenes/level/level.tscn" id="3_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://bje1it34lkko4" path="res://src/scenes/camera_2d.tscn" id="3_4c57u"]
 [ext_resource type="AudioStream" uid="uid://c1fov605bxdlk" path="res://assets/music/JDSherbert - Minigame Music Pack - Streetlights.ogg" id="3_7mycd"]
 [ext_resource type="Script" uid="uid://dvb3whtgxjn0m" path="res://src/scenes/powerups/card_container.gd" id="3_lquwl"]
 [ext_resource type="Texture2D" uid="uid://deok42gxy40yl" path="res://assets/sprites/world/backgrounds/back.png" id="4_efxa6"]
 [ext_resource type="Texture2D" uid="uid://dkavotkqcu7jx" path="res://assets/sprites/world/backgrounds/middle.png" id="5_dg77c"]
-[ext_resource type="Script" uid="uid://baoih2g6gs12p" path="res://src/ui/components/progress_bar.gd" id="6_5vw27"]
-[ext_resource type="Texture2D" uid="uid://baxhjmno0fwf4" path="res://assets/sprites/player/DragonSprites.png" id="6_272bh"]
 [ext_resource type="Script" uid="uid://e8fwy0piod4u" path="res://src/scenes/powerups/card_container_container.gd" id="6_dg77c"]
 [ext_resource type="PackedScene" uid="uid://cg5ctntixs1fk" path="res://src/ui/menus/pause_screen.tscn" id="6_ycdy4"]
-[ext_resource type="Texture2D" uid="uid://riso1kxfjte0" path="res://assets/sprites/world/tile-types.png" id="7_5vw27"]
 [ext_resource type="PackedScene" uid="uid://btnxex4dvvbmn" path="res://src/ui/menus/end_screen.tscn" id="12_ycdy4"]
 [ext_resource type="Theme" uid="uid://d1kdwbwfx60gf" path="res://src/ui/components/themes/level_select_theme.tres" id="13_w48qg"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_kek77"]
-atlas = ExtResource("7_5vw27")
-region = Rect2(64, 48, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_5vw27"]
-atlas = ExtResource("6_272bh")
-region = Rect2(4, 1, 16, 13)
-
-[node name="Main" type="Node" unique_id=632715217 node_paths=PackedStringArray("level", "player_container", "camera_p1", "card_container", "level_music", "progress_bar", "pause_screen", "end_screen", "time_label")]
-script = ExtResource("1_lquwl")
+[node name="Main" type="Node" unique_id=632715217 node_paths=PackedStringArray("level", "player_container", "camera", "card_container", "level_music", "pause_screen", "end_screen", "time_label")]
+script = ExtResource("1_efxa6")
 level = NodePath("SubViewportContainer/SubViewport/Level")
 player_container = NodePath("SubViewportContainer/SubViewport/Players")
-camera_p1 = NodePath("SubViewportContainer/SubViewport/Camera2D")
+camera = NodePath("SubViewportContainer/SubViewport/Camera2D")
 card_container = NodePath("CanvasLayer/CardContainerContainer")
 level_music = NodePath("AudioStreamPlayer")
-progress_bar = NodePath("CanvasLayer/ProgressBar")
 pause_screen = NodePath("CanvasLayer/PauseScreen")
 end_screen = NodePath("CanvasLayer/EndScreen")
 time_label = NodePath("CanvasLayer/TimeContainer/TimeLabel")
@@ -118,34 +106,6 @@ layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
 script = ExtResource("3_lquwl")
-
-[node name="ProgressBar" type="MarginContainer" parent="CanvasLayer" unique_id=1399193733]
-visible = false
-offset_right = 1152.0
-offset_bottom = 42.0
-theme_override_constants/margin_left = 100
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 100
-script = ExtResource("6_5vw27")
-
-[node name="Texture" type="Panel" parent="CanvasLayer/ProgressBar" unique_id=1802005608]
-visible = false
-custom_minimum_size = Vector2(10, 32)
-layout_mode = 2
-
-[node name="Crown" type="Sprite2D" parent="CanvasLayer/ProgressBar" unique_id=1692296867]
-visible = false
-position = Vector2(1051, 26)
-scale = Vector2(2, 2)
-texture = SubResource("AtlasTexture_kek77")
-
-[node name="IconContainer" type="Node" parent="CanvasLayer/ProgressBar" unique_id=705122386]
-
-[node name="Player1" type="Sprite2D" parent="CanvasLayer/ProgressBar/IconContainer" unique_id=238213529]
-visible = false
-position = Vector2(101, 26)
-scale = Vector2(2, 2)
-texture = SubResource("AtlasTexture_5vw27")
 
 [node name="PauseScreen" parent="CanvasLayer" unique_id=247255432 instance=ExtResource("6_ycdy4")]
 visible = false

@@ -1,0 +1,183 @@
+[gd_scene format=3 uid="uid://bvm718ddfisd7"]
+
+[ext_resource type="Script" uid="uid://oxbq6vk7mref" path="res://src/scenes/level/level.gd" id="1_sypop"]
+[ext_resource type="Texture2D" uid="uid://riso1kxfjte0" path="res://assets/sprites/world/tile-types.png" id="3_lxq08"]
+[ext_resource type="Texture2D" uid="uid://6rwx7rq1h31i" path="res://assets/sprites/world/rock-tiles-wang/tileset_rock-tiles-wang.png" id="3_n86tn"]
+[ext_resource type="Script" uid="uid://bqlmtoyls3un1" path="res://src/scenes/level/terrain_layer.gd" id="3_qnuiv"]
+[ext_resource type="Texture2D" uid="uid://b2u4lotmicdpc" path="res://assets/sprites/world/rock-tiles-wang/tileset_green-tiles-wang.png" id="4_56w06"]
+[ext_resource type="Texture2D" uid="uid://sg0wq6dg7a8n" path="res://assets/sprites/world/rock-tiles-wang/tilest-secret-rock-tiles-wang.png" id="5_n86tn"]
+[ext_resource type="Script" uid="uid://b6vvfthmemhgb" path="res://src/scenes/level/secrets_layer.gd" id="6_qnuiv"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_n86tn"]
+texture = ExtResource("3_lxq08")
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+2:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_n86tn"]
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_n86tn")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xqg4s"]
+texture = ExtResource("4_56w06")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+1:1/0/probability = 0.98
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+0:3/0 = 0
+0:3/0/probability = 0.01
+1:3/0 = 0
+1:3/0/probability = 0.01
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_exkae"]
+texture = ExtResource("3_n86tn")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+1:1/0/probability = 0.98
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+0:3/0 = 0
+0:3/0/probability = 0.01
+1:3/0 = 0
+1:3/0/probability = 0.01
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gbsjd"]
+texture = ExtResource("5_n86tn")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_exkae"]
+sources/0 = SubResource("TileSetAtlasSource_xqg4s")
+sources/1 = SubResource("TileSetAtlasSource_exkae")
+sources/2 = SubResource("TileSetAtlasSource_gbsjd")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6av30"]
+texture = ExtResource("3_lxq08")
+0:2/next_alternative_id = 4
+0:2/0 = 0
+0:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 4, 8, 4, 8, 8, -8, 8)
+0:2/1 = 1
+0:2/1/flip_h = true
+0:2/1/flip_v = true
+0:2/1/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, -4, -8, -4)
+0:2/2 = 2
+0:2/2/flip_h = true
+0:2/2/flip_v = true
+0:2/2/transpose = true
+0:2/2/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -4, -4, -4, -4, 8, -8, 8)
+0:2/3 = 3
+0:2/3/flip_v = true
+0:2/3/transpose = true
+0:2/3/physics_layer_0/polygon_0/points = PackedVector2Array(4, -4, 8, -4, 8, 8, 4, 8)
+1:2/next_alternative_id = 2
+1:2/0 = 0
+1:2/0/physics_layer_1/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:2/1 = 1
+1:2/1/modulate = Color(1, 1, 1, 0)
+1:2/1/physics_layer_1/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+
+[sub_resource type="TileSet" id="TileSet_j8j4h"]
+occlusion_layer_0/light_mask = 1
+physics_layer_0/collision_layer = 4
+physics_layer_0/collision_mask = 0
+physics_layer_1/collision_layer = 8
+physics_layer_1/collision_mask = 0
+sources/0 = SubResource("TileSetAtlasSource_6av30")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0fmww"]
+texture = ExtResource("3_lxq08")
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+3:4/0 = 0
+2:4/0 = 0
+1:4/0 = 0
+0:4/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_vbg06"]
+sources/0 = SubResource("TileSetAtlasSource_0fmww")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qnuiv"]
+texture = ExtResource("3_lxq08")
+0:1/next_alternative_id = 2
+0:1/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_0fmww"]
+sources/0 = SubResource("TileSetAtlasSource_qnuiv")
+
+[node name="Level" type="Node2D" unique_id=962454612]
+script = ExtResource("1_sypop")
+
+[node name="TerrainLayer" type="TileMapLayer" parent="." unique_id=899553349]
+texture_filter = 1
+tile_set = SubResource("TileSet_n86tn")
+script = ExtResource("3_qnuiv")
+
+[node name="VisualLayer" type="TileMapLayer" parent="TerrainLayer" unique_id=129901116]
+texture_filter = 1
+position = Vector2(-8, -8)
+tile_set = SubResource("TileSet_exkae")
+
+[node name="StaticLayer" type="TileMapLayer" parent="." unique_id=1462701517 groups=["StaticLayer"]]
+texture_filter = 1
+tile_set = SubResource("TileSet_j8j4h")
+
+[node name="ObjectsLayer" type="TileMapLayer" parent="." unique_id=1816366587]
+texture_filter = 1
+tile_set = SubResource("TileSet_vbg06")
+
+[node name="SecretsLayer" type="TileMapLayer" parent="." unique_id=651454299 node_paths=PackedStringArray("terrain_tilemap")]
+texture_filter = 1
+tile_set = SubResource("TileSet_0fmww")
+script = ExtResource("6_qnuiv")
+terrain_tilemap = NodePath("../TerrainLayer")
+
+[node name="VisualLayer" type="TileMapLayer" parent="SecretsLayer" unique_id=1911762671]
+texture_filter = 1
+position = Vector2(-8, -8)
+tile_set = SubResource("TileSet_exkae")
+y_sort_origin = 1

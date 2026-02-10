@@ -226,8 +226,7 @@ func _ready() -> void:
 		_init_hidden_areas()
 		current_level_code = get_level_code()
 		print(get_level_code())
-	
-	SignalBus.player_touched_crown.connect(_on_player_touched_crown)
+
 	is_initialized = true
 
 
@@ -500,8 +499,3 @@ func _add_to_populated_cells(cell_coords: Vector2i, symbol: String) -> void:
 	if not populated_cells.has(cell_coords):
 		populated_cells[cell_coords] = ""
 	populated_cells[cell_coords] += symbol
-
-
-func _on_player_touched_crown(_player: Player) -> void:
-	if first_time_touching_crown:
-		_update_race_finish_position(player_start_position)

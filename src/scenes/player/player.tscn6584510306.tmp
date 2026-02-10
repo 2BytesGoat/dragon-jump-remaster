@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cw8cw6fpq5n63"]
 
 [ext_resource type="Script" uid="uid://c306bigp8honi" path="res://src/scenes/player/player.gd" id="1_uug8f"]
+[ext_resource type="Script" uid="uid://chhu1axyjbnac" path="res://src/scenes/player/observer.gd" id="2_4r4qr"]
 [ext_resource type="Texture2D" uid="uid://cbu38jscfl0o" path="res://assets/sprites/player/player_v2.png" id="3_4r4qr"]
 [ext_resource type="Script" uid="uid://td15gffk6sym" path="res://src/scripts/components/states/state_machine.gd" id="3_7p4af"]
 [ext_resource type="Texture2D" uid="uid://dqb15x3l5qeot" path="res://assets/sprites/player/AfterImage.png" id="3_tj7fb"]
@@ -473,6 +474,9 @@ collision_layer = 2
 collision_mask = 33
 script = ExtResource("1_uug8f")
 
+[node name="Observer" type="Node" parent="." unique_id=768994441]
+script = ExtResource("2_4r4qr")
+
 [node name="Flippable" type="Node2D" parent="." unique_id=376239235]
 texture_filter = 1
 
@@ -621,6 +625,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("8_yu3wn")
 
+[connection signal="has_resetted" from="." to="Observer" method="_on_player_has_resetted"]
 [connection signal="should_release" from="Flippable/GaplingHook" to="StateMachine/Grapple" method="_on_gapling_hook_should_release"]
 [connection signal="area_entered" from="InteractBox" to="." method="_on_interact_box_area_entered"]
 [connection signal="area_entered" from="InteractBox" to="StateMachine/Stomp" method="_on_interact_box_area_entered"]

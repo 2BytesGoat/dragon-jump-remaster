@@ -14,9 +14,6 @@ func _ready() -> void:
 	var x_end = self.get_theme_constant("margin_right")
 	x_start = self.get_theme_constant("margin_left")
 	x_length = self.size.x - x_start - x_end
-	
-	SignalBus.player_touched_crown.connect(_on_player_touched_crown)
-	SignalBus.player_dropped_crown.connect(_on_player_dropped_crown)
 
 
 func update_player_progress(progress_data: Dictionary) -> void:

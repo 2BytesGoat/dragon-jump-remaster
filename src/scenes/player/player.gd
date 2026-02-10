@@ -42,7 +42,6 @@ var active_controller: PlayerCharacterController = null
 @onready var afterimage: CPUParticles2D = $Flippable/AfterImage
 @onready var grappling_hook: Node2D = $Flippable/GaplingHook
 @onready var hat_container: Node2D = $Flippable/HatContainer
-@onready var observer: Node = $Observer
 var has_crown: bool = false
 var last_floor_position: Vector2 = Vector2.ZERO
 var is_done: bool = false
@@ -78,7 +77,6 @@ func _ready() -> void:
 	elif controller_type == CONTROLLERS.PLAYER_TWO:
 		set_controller(PlayerTwoController.new(self))
 	
-	SignalBus.player_touched_crown.connect(_on_player_touched_crown)
 	reset()
 
 
@@ -114,14 +112,6 @@ func set_jump(input: bool) -> void:
 	else:
 		wants_to_jump = false
 		needs_to_release = false
-
-
-func get_info() -> Dictionary:
-	return {
-		"progress": observer.get_progress(),
-		"restarts": observer.reset_times,
-		"crowns_dropped": observer.crowns_dropped
-	}
 
 
 func reset() -> void:
@@ -196,14 +186,6 @@ func launch_grappling_hook() -> void:
 
 func release_grappling_hook() -> void:
 	grappling_hook.release()
-
-
-func pickup_crown(hat: Area2D) -> void:
-	has_crown = true
-	hat.pickup()
-	hat.reparent(hat_container)
-	hat.global_position = hat_container.global_position
-	SignalBus.player_touched_crown.emit(self)
 
 
 func drop_crown() -> void:
@@ -284,8 +266,6 @@ func _on_interact_box_area_entered(area: Area2D) -> void:
 	elif area.is_in_group("Slippery"):
 		# TODO: find a better way to do this
 		add_modifier("slippery", {"velocity": Vector2(1.07, 1)})
-	elif area.is_in_group("Crown") and not has_crown:
-		pickup_crown(area)
 	elif area.is_in_group("BouncePad"):
 		state_machine.transition_to("Bounce", {"push_direction": area.facing_direction})
 	elif area.is_in_group("Exit"):
@@ -308,7 +288,3 @@ func _on_interact_box_body_entered(body: Node2D) -> void:
 	if body.is_in_group("StaticLayer"):
 		starting_position = global_position
 		starting_facing_direction = facing_direction
-
-
-func _on_player_touched_crown(_player: Player) -> void:
-	acceleration = 1500
