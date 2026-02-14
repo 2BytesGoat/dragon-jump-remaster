@@ -7,6 +7,9 @@ enum CELL {TERRAIN, STATIC, OBJECT, SECRETS}
 const WALL_SYMBOL = "W"
 const SECRET_SYMBOL = "M"
 const EMPTY_SYMBOL = "E"
+const SPIKES_SYMBOL = "Y"
+const PLAYER_SYMBOL = "P"
+const EXIT_SYMBOL = "Q"
 const SEPARATOR_SYMBOL = "|"
 
 # TODO: make a datatype for these
@@ -33,7 +36,18 @@ var symbol_to_tile_info: Dictionary = {
 		"args": null,
 		"over_wall": false
 	},
-	"Y": {
+	PLAYER_SYMBOL: {
+		"name": "Player",
+		"type": CELL.OBJECT,
+		"source": 0,
+		"coords": Vector2i(5, 3),
+		"callable": null,
+		"debug_alt": null,
+		"scene": preload("res://src/scenes/player/player.tscn"),
+		"args": null,
+		"over_wall": false
+	},
+	SPIKES_SYMBOL: {
 		"name": "Spikes",
 		"type": CELL.STATIC,
 		"source": 0,
@@ -41,6 +55,17 @@ var symbol_to_tile_info: Dictionary = {
 		"callable": "_get_4sides_alt_tile",
 		"debug_alt": null,
 		"scene": null,
+		"args": null,
+		"over_wall": false
+	},
+	EXIT_SYMBOL: {
+		"name": "Exit",
+		"type": CELL.OBJECT,
+		"source": 0,
+		"coords": Vector2i(6, 3),
+		"callable": null,
+		"debug_alt": null,
+		"scene": preload("res://src/scenes/level/tiles/portal.tscn"),
 		"args": null,
 		"over_wall": false
 	},
@@ -143,28 +168,6 @@ var symbol_to_tile_info: Dictionary = {
 		"args": null,
 		"over_wall": false
 	},
-	"Q": {
-		"name": "Exit",
-		"type": CELL.OBJECT,
-		"source": 0,
-		"coords": Vector2i(6, 3),
-		"callable": null,
-		"debug_alt": null,
-		"scene": preload("res://src/scenes/level/tiles/portal.tscn"),
-		"args": null,
-		"over_wall": false
-	},
-	"P": {
-		"name": "Player",
-		"type": CELL.OBJECT,
-		"source": 0,
-		"coords": Vector2i(5, 3),
-		"callable": null,
-		"debug_alt": null,
-		"scene": preload("res://src/scenes/player/player.tscn"),
-		"args": null,
-		"over_wall": false
-	},
 	"M": {
 		"name": "Secret",
 		"type": CELL.SECRETS,
@@ -178,6 +181,7 @@ var symbol_to_tile_info: Dictionary = {
 	}
 }
 var tile_names := []
+var flow_field := []
 
 # These get populated at runtime
 var static_atlas_coords_to_symbol: Dictionary = {}
@@ -195,7 +199,7 @@ var player_start_position: Vector2 = Vector2.ZERO
 var populated_cells: Dictionary = {}
 
 # Progress
-var finish_global_position = Vector2.ZERO
+var exit_global_position = Vector2.ZERO
 var first_time_touching_crown = true
 
 # These are used to debug in editor
@@ -204,6 +208,8 @@ var terrain_layer_used_cells = [] # based on this we update the map using tool
 var emplased_time = 0
 var update_interval = 1
 var current_level_code = ""
+var level_width_cell = 0
+var level_height_cell = 0
 var level_size = Vector2.ZERO
 
 signal level_size_updated(level_size: Vector2i)
@@ -338,8 +344,8 @@ func set_level(level_code: String) -> void:
 	var y_offset = 0
 	var x_offset = 0
 	
-	var level_width = 0
-	var level_height = 0
+	level_width_cell = 0
+	level_height_cell = 0
 	
 	for symbol in level_code:
 		if _is_tilemap_symbol(symbol):
@@ -354,8 +360,8 @@ func set_level(level_code: String) -> void:
 			symbol_cnt = symbol_cnt * 10 + int(symbol)
 			should_flush = true
 		elif symbol == "|":
-			level_width = max(x_offset, level_width)
-			level_height += 1
+			level_width_cell = max(x_offset, level_width_cell)
+			level_height_cell += 1
 			_set_multiple_cells(current_symbols, symbol_cnt, Vector2i(x_offset, y_offset))
 			current_symbols = ""
 			symbol_cnt = 0
@@ -363,11 +369,33 @@ func set_level(level_code: String) -> void:
 			y_offset += 1
 	if symbol_cnt > 0:
 		_set_multiple_cells(current_symbols, symbol_cnt, Vector2i(x_offset, y_offset))
-		level_height += 1
+		level_height_cell += 1
 	
 	var cell_size = Vector2i(terrain_layer.rendering_quadrant_size, terrain_layer.rendering_quadrant_size)
-	level_size = Vector2i(level_width, level_height) * cell_size
+	level_size = Vector2i(level_width_cell, level_height_cell) * cell_size
 	level_size_updated.emit(level_size)
+
+
+func get_level_size_cell() -> Vector2i:
+	return Vector2i(level_width_cell, level_height_cell)
+
+
+func get_level_costs() -> Array:
+	var costs = []
+	for x in range(level_width_cell):
+		var row_costs = []
+		for y in range(level_height_cell):
+			var cell_type = get_cell_symbol(Vector2i(x, y))
+			var cell_cost = 1.0
+			if cell_type in [WALL_SYMBOL, SPIKES_SYMBOL]:
+				cell_cost = INF
+			row_costs.append(cell_cost)
+		costs.append(row_costs)
+	return costs
+
+
+func get_exit_cell_coords() -> Vector2i:
+	return terrain_layer.local_to_map(to_local(exit_global_position))
 
 
 func reset_objects() -> void:
@@ -402,6 +430,14 @@ func get_surrounding_cells(global_pos: Vector2, radius: int) -> Array:
 
 func get_tile_names() -> Array:
 	return tile_names
+
+
+func get_flowfield_value(object_global_position: Vector2) -> float:
+	if len(flow_field) == 0:
+		print("Undefined Flow Field: Returning default value 0")
+		return 0
+	var cell_coords = terrain_layer.local_to_map(to_local(object_global_position))
+	return flow_field[cell_coords.x][cell_coords.y]
 
 
 func _is_tilemap_symbol(symbol: String) -> bool:
@@ -467,16 +503,6 @@ func _update_static_alt_tiles() -> void:
 		_add_to_populated_cells(cell_coords, symbol)
 
 
-func _update_race_finish_position(new_position: Vector2 = Vector2.INF) -> void:
-	if new_position == Vector2.INF:
-		for object in objects_map.get("C", []):
-			finish_global_position = object.global_position
-			break
-	else:
-		finish_global_position = new_position
-	SignalBus.race_finish_position_updated.emit(finish_global_position)
-
-
 func _populate_objects() -> void:
 	for cell_coords in objects_layer.get_used_cells():
 		var symbol = _get_cell_atlas_symbol(cell_coords, CELL.OBJECT)
@@ -487,9 +513,12 @@ func _populate_objects() -> void:
 		_add_to_populated_cells(cell_coords, symbol)
 		objects_layer.erase_cell(cell_coords)
 		
-		if symbol == "P":
+		if symbol == PLAYER_SYMBOL:
 			player_start_position = object_position
 			continue
+		
+		if symbol == EXIT_SYMBOL:
+			exit_global_position = object_position
 		
 		var object = object_scene.instantiate()
 		

@@ -8,7 +8,7 @@ extends Node
 @onready var ghosts = $PlayerMirrors
 @onready var sync = $Synchronizer
 
-var DEFAULT_LEVEL_NAME = "1-1"
+var DEFAULT_LEVEL_NAME = "1-14"
 var DEFAULT_NB_AGENTS = 100
 
 var main_world = null
@@ -35,6 +35,10 @@ func _ready() -> void:
 	main_world = worlds.get_child(0)
 	main_world.visible = true
 	main_world.set_camera_enabled(true)
+	
+	var flow_field = main_world.compute_flow_field()
+	for world in worlds.get_children():
+		world.set_flow_field(flow_field)
 	
 	sync.initialize()
 	#SignalBus.player_started_run.connect(_on_player_started_run)

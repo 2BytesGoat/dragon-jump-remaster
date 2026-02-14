@@ -5,8 +5,12 @@ extends PlayerCharacterController
 
 var sensor: ISensor2D = null
 var is_done: bool = false
-var reward: float = 0.0
 var use_sensors: bool = false
+
+var prev_global_position: Vector2 = Vector2.INF
+var prev_value: float = INF
+var best_value_ever: float = INF
+var async_reward: float = 0.0
 
 
 func _ready() -> void:
@@ -16,6 +20,7 @@ func _ready() -> void:
 		player.add_child(sensor)
 		print("AI Controller: No level reference found. Defaulting to sensor data.")
 	
+	SignalBus.player_finished_run.connect(_on_player_finished_run)
 	add_to_group("AGENT")
 
 
@@ -35,7 +40,7 @@ func get_obs() -> Dictionary:
 		observations = sensor.get_observation()
 	else:
 		observations = player.level_reference.get_surrounding_cells(player.global_position, 3)
-		direction_to_end = player.global_position.direction_to(player.level_reference.finish_global_position)
+		direction_to_end = player.global_position.direction_to(player.level_reference.exit_global_position)
 	
 	var player_velocity_vector = player.velocity.normalized()
 	return {
@@ -50,7 +55,21 @@ func get_obs() -> Dictionary:
 
 
 func get_reward() -> float:
-	# This is how much the player earned for its past action
+	var curr_value = player.level_reference.get_flowfield_value(player.global_position)
+	# 1. Base Time Penalty (The "Drip")
+	var reward = -0.01 + async_reward
+	
+	# 2. Progress Reward
+	# If curr_value is smaller, the agent is CLOSER to the goal.
+	if curr_value < prev_value:
+		reward += 0.1 # Small "good job" for moving forward
+		
+	# 3. New Record Bonus (Prevents vibrating back and forth)
+	if curr_value < best_value_ever:
+		reward += 0.5 # Larger bonus for reaching a new all-time closeness
+		best_value_ever = curr_value
+		
+	prev_value = curr_value
 	return reward
 
 
@@ -86,4 +105,14 @@ func get_obs_space() -> Dictionary:
 
 
 func zero_reward() -> void:
-	reward = 0.0
+	async_reward = 0.0
+
+
+func set_done_false():
+	is_done = false
+
+
+func _on_player_finished_run(trigger_player: Player) -> void:
+	if trigger_player == player:
+		async_reward = 100
+		is_done = true
