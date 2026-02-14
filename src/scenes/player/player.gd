@@ -32,6 +32,7 @@ var fall_gravity: float
 # State
 @onready var state_machine: StateMachine = $StateMachine
 @onready var initial_state: State = $StateMachine/Idle
+@onready var jump_timer: Timer = $StateMachine/Jump/Timer
 
 # Controllers
 @onready var controller_container: Node = $ControllerContainer
@@ -69,6 +70,9 @@ var powerups: Array = []
 var starting_position: Vector2 = Vector2.ZERO : set = _on_starting_position_changed
 var show_afterimage: bool = false : set = _on_show_after_image_changed
 var speed_modifier: float = 1.0 : set = _on_speed_modifier_changed
+
+# Only used for the AI controller - find a better way in future
+var level_reference: Level
 
 
 func _ready() -> void:
@@ -199,6 +203,18 @@ func drop_crown() -> void:
 		child.drop()
 		has_crown = false
 		SignalBus.player_dropped_crown.emit(self)
+
+
+func percentage_towards_jump_peak() -> float:
+	return jump_timer.time_left / jump_time_to_peak
+
+
+func on_wall() -> bool:
+	return state_machine.state.name == "Walled"
+
+
+func on_floor() -> bool:
+	return state_machine.state.name in ["Idle", "Move"] 
 
 
 func _on_speed_modifier_changed(value) -> void:

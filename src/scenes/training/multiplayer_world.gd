@@ -11,6 +11,7 @@ func set_params(level_code: String, player_name: String, player_controller_type:
 	level.update_level(level_code)
 	player.starting_position = level.player_start_position
 	player.name = player_name
+	player.level_reference = level
 	player.controller_type = player_controller_type
 
 

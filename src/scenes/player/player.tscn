@@ -472,6 +472,8 @@ _data = {
 collision_layer = 2
 collision_mask = 33
 script = ExtResource("1_uug8f")
+controller_type = null
+starting_facing_direction = null
 
 [node name="Flippable" type="Node2D" parent="." unique_id=376239235]
 texture_filter = 1

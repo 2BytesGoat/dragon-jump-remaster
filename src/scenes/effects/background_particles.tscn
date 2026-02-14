@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://p3lou48biwtg"]
+[gd_scene format=3 uid="uid://p3lou48biwtg"]
 
 [sub_resource type="Gradient" id="Gradient_5k7ll"]
 offsets = PackedFloat32Array(0, 0.57223797, 1)
@@ -18,7 +18,7 @@ scale_over_velocity_max = 1.0
 color_initial_ramp = SubResource("GradientTexture1D_x8351")
 turbulence_enabled = true
 
-[node name="GPUParticles2D" type="GPUParticles2D"]
+[node name="GPUParticles2D" type="GPUParticles2D" unique_id=248882165]
 amount = 96
 lifetime = 9.0
 preprocess = 2.0

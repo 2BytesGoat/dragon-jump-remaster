@@ -1,4 +1,5 @@
 @tool
+class_name Level
 extends Node2D
 
 enum CELL {TERRAIN, STATIC, OBJECT, SECRETS}
@@ -10,7 +11,19 @@ const SEPARATOR_SYMBOL = "|"
 
 # TODO: make a datatype for these
 var symbol_to_tile_info: Dictionary = {
-	WALL_SYMBOL: { # wall
+	EMPTY_SYMBOL: {
+		"name": "Empty",
+		"type": CELL.TERRAIN,
+		"source": 0,
+		"coords": Vector2i(-1, -1),
+		"callable": null,
+		"debug_alt": null,
+		"scene": null,
+		"args": null,
+		"over_wall": false
+	},
+	WALL_SYMBOL: { 
+		"name": "Wall",
 		"type": CELL.TERRAIN,
 		"source": 0,
 		"coords": Vector2i(0, 0),
@@ -20,7 +33,8 @@ var symbol_to_tile_info: Dictionary = {
 		"args": null,
 		"over_wall": false
 	},
-	"Y": { # spikes
+	"Y": {
+		"name": "Spikes",
 		"type": CELL.STATIC,
 		"source": 0,
 		"coords": Vector2i(0, 2),
@@ -30,7 +44,8 @@ var symbol_to_tile_info: Dictionary = {
 		"args": null,
 		"over_wall": false
 	},
-	"R": { # reset blocks
+	"R": {
+		"name": "ResetBlock",
 		"type": CELL.STATIC,
 		"source": 0,
 		"coords": Vector2i(1, 2),
@@ -40,7 +55,8 @@ var symbol_to_tile_info: Dictionary = {
 		"args": null,
 		"over_wall": false
 	},
-	"B": { # bounce pad
+	"B": {
+		"name": "BouncePad",
 		"type": CELL.OBJECT,
 		"source": 0,
 		"coords": Vector2i(3, 3),
@@ -50,7 +66,8 @@ var symbol_to_tile_info: Dictionary = {
 		"args": null, # These sould get set in the callable
 		"over_wall": false
 	},
-	"I": { # ice
+	"I": {
+		"name": "Ice",
 		"type": CELL.OBJECT,
 		"source": 0,
 		"coords": Vector2i(1, 3),
@@ -60,7 +77,8 @@ var symbol_to_tile_info: Dictionary = {
 		"args": null,
 		"over_wall": true
 	},
-	"O": { # dissolve block
+	"O": {
+		"name": "DissolveBlock",
 		"type": CELL.OBJECT,
 		"source": 0,
 		"coords": Vector2i(2, 3),
@@ -70,7 +88,8 @@ var symbol_to_tile_info: Dictionary = {
 		"args": null,
 		"over_wall": false
 	},
-	"J": { # double jump
+	"J": {
+		"name": "DoubleJump",
 		"type": CELL.OBJECT,
 		"source": 0,
 		"coords": Vector2i(0, 4),
@@ -80,7 +99,8 @@ var symbol_to_tile_info: Dictionary = {
 		"args": ["DoubleJump"],
 		"over_wall": false
 	},
-	"S": { # stomp
+	"S": {
+		"name": "Stomp",
 		"type": CELL.OBJECT,
 		"source": 0,
 		"coords": Vector2i(1, 4),
@@ -90,7 +110,8 @@ var symbol_to_tile_info: Dictionary = {
 		"args": ["Stomp"],
 		"over_wall": false
 	},
-	"D": { # dash
+	"D": {
+		"name": "Dash",
 		"type": CELL.OBJECT,
 		"source": 0,
 		"coords": Vector2i(2, 4),
@@ -100,7 +121,8 @@ var symbol_to_tile_info: Dictionary = {
 		"args": ["Dash"],
 		"over_wall": false
 	},
-	"G": { # grapple
+	"G": {
+		"name": "Grapple",
 		"type": CELL.OBJECT,
 		"source": 0,
 		"coords": Vector2i(3, 4),
@@ -110,7 +132,8 @@ var symbol_to_tile_info: Dictionary = {
 		"args": ["Grapple"],
 		"over_wall": false
 	},
-	"C": { # corwn
+	"C": {
+		"name": "Crown",
 		"type": CELL.OBJECT,
 		"source": 0,
 		"coords": Vector2i(4, 3),
@@ -120,7 +143,8 @@ var symbol_to_tile_info: Dictionary = {
 		"args": null,
 		"over_wall": false
 	},
-	"Q": { # exit
+	"Q": {
+		"name": "Exit",
 		"type": CELL.OBJECT,
 		"source": 0,
 		"coords": Vector2i(6, 3),
@@ -130,7 +154,8 @@ var symbol_to_tile_info: Dictionary = {
 		"args": null,
 		"over_wall": false
 	},
-	"P": { # player
+	"P": {
+		"name": "Player",
 		"type": CELL.OBJECT,
 		"source": 0,
 		"coords": Vector2i(5, 3),
@@ -140,7 +165,8 @@ var symbol_to_tile_info: Dictionary = {
 		"args": null,
 		"over_wall": false
 	},
-	"M": { # secret area
+	"M": {
+		"name": "Secret",
 		"type": CELL.SECRETS,
 		"source": 0,
 		"coords": Vector2i(0, 1),
@@ -151,6 +177,7 @@ var symbol_to_tile_info: Dictionary = {
 		"over_wall": true
 	}
 }
+var tile_names := []
 
 # These get populated at runtime
 var static_atlas_coords_to_symbol: Dictionary = {}
@@ -202,6 +229,9 @@ func _process(delta: float) -> void:
 
 
 func _ready() -> void:
+	for info in symbol_to_tile_info.values():
+		tile_names.append(info["name"])
+	
 	clear_level()
 	#var old_code = "W42|W8E29W5|W3E37W2|W2E38W2|W1E25Y2E13W1|W1E25W2Y1E12W1|W1E25W2Y1E12W1|W1E25W2Y1E12W1|W1E15J1E4J1E4W2Y1E11B1W1|W1E30B2E8W1|W9E22W2E8W1|W9Y8E24W1|W17E6Y2E16W1|W17E5Y1W2Y1E11B1E1Y2W1|W7E15Y1W2Y1E10W6|W3E20Y2E11W6|W2E34W6|W1E35W6|W1E13J1E4B1E10B2E1Y3W6|W1E18W1E9W13|W1E18W1E9W13|W1E28W13|W1E23W18|W1E23W18|W1E2P1E8B1E11W18|W19Y5W18|W42"
 	#var level_code = old_code.replace("q", "E").replace("X", "Y").replace("/", "|").replace("V", "O").replace("D", "J")
@@ -225,7 +255,7 @@ func _ready() -> void:
 		_populate_objects()
 		_init_hidden_areas()
 		current_level_code = get_level_code()
-		print(get_level_code())
+		#print(get_level_code())
 
 	is_initialized = true
 
@@ -268,7 +298,7 @@ func get_level_code():
 	for y in range(level_size.y):
 		for x in range(level_size.x):
 			var cell_coords = Vector2i(x, y) + shift
-			var cell_symbol = populated_cells.get(cell_coords, EMPTY_SYMBOL)
+			var cell_symbol = get_cell_symbol(cell_coords)
 			
 			if cell_symbol != current_symbol:
 				if current_symbol_cnt > 0:
@@ -347,6 +377,33 @@ func reset_objects() -> void:
 				obj.call_deferred("reset")
 
 
+func get_cell_symbol(cell_coords: Vector2i) -> String:
+	return populated_cells.get(cell_coords, EMPTY_SYMBOL)
+
+
+func get_cell_symbol_index(cell_coords: Vector2i) -> int:
+	var cell_symbol = get_cell_symbol(cell_coords)
+	return symbol_to_tile_info.keys().find(cell_symbol)
+
+
+func get_surrounding_cells(global_pos: Vector2, radius: int) -> Array:
+	var center_tile = terrain_layer.local_to_map(to_local(global_pos))
+	var grid_data = []
+	
+	for y in range(-radius, radius + 1):
+		for x in range(-radius, radius + 1):
+			var coords = center_tile + Vector2i(x, y)
+			# Normalize cell_type: e.g., Empty = 0, Wall = 1, Spike = 2
+			var cell_type = get_cell_symbol_index(coords) 
+			grid_data.append(cell_type)
+	
+	return grid_data
+
+
+func get_tile_names() -> Array:
+	return tile_names
+
+
 func _is_tilemap_symbol(symbol: String) -> bool:
 	return symbol == EMPTY_SYMBOL or symbol in symbol_to_tile_info
 
@@ -401,7 +458,7 @@ func _init_terrain_layer() -> void:
 
 func _update_static_alt_tiles() -> void:
 	for cell_coords in static_layer.get_used_cells():
-		var symbol = _get_cell_symbol(cell_coords, CELL.STATIC)
+		var symbol = _get_cell_atlas_symbol(cell_coords, CELL.STATIC)
 		var alt_tile = _get_alt_tile_at_coords(cell_coords, symbol)
 		if alt_tile >= 0:
 			var tile_source = symbol_to_tile_info[symbol]["source"]
@@ -422,7 +479,7 @@ func _update_race_finish_position(new_position: Vector2 = Vector2.INF) -> void:
 
 func _populate_objects() -> void:
 	for cell_coords in objects_layer.get_used_cells():
-		var symbol = _get_cell_symbol(cell_coords, CELL.OBJECT)
+		var symbol = _get_cell_atlas_symbol(cell_coords, CELL.OBJECT)
 		var object_scene = symbol_to_tile_info[symbol]["scene"]
 		var object_arguments = symbol_to_tile_info[symbol]["args"]
 		
@@ -459,7 +516,7 @@ func _init_hidden_areas() -> void:
 	secrets_layer._init_secrets()
 
 
-func _get_cell_symbol(cell_coords: Vector2i, cell_type: CELL) -> String:
+func _get_cell_atlas_symbol(cell_coords: Vector2i, cell_type: CELL) -> String:
 	if cell_type == CELL.TERRAIN:
 		return WALL_SYMBOL
 	elif cell_type == CELL.STATIC:

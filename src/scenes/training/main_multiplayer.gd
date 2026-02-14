@@ -8,15 +8,19 @@ extends Node
 @onready var ghosts = $PlayerMirrors
 @onready var sync = $Synchronizer
 
-var nb_players = 100
-var level_name = "1-14"
+var DEFAULT_LEVEL_NAME = "1-1"
+var DEFAULT_NB_AGENTS = 100
+
 var main_world = null
 var player_mapping = {}
 
 
 func _ready() -> void:
+	var level_name = EnvironmentVariables.args.get("level", DEFAULT_LEVEL_NAME)
+	var nb_agents = EnvironmentVariables.args.get("nb_agents", DEFAULT_NB_AGENTS)
+	
 	var level_code = Constants.LEVELS[level_name]["code"]
-	for i in range(nb_players):
+	for i in range(nb_agents):
 		var player_name = "Player%s" % i
 		var world = multiplayer_world_scene.instantiate()
 		worlds.add_child(world)
@@ -38,8 +42,6 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	return
-	
 	var player_node = null
 	var viewport = main_world.viewport
 	
