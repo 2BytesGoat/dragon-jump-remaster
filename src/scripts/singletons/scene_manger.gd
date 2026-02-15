@@ -5,10 +5,9 @@ var scene_data = {}
 
 
 func _ready() -> void:
-	#var particles = particles_scene.instantiate()
-	#add_child(particles)
-	#particles.position.x += get_viewport().size.x / 4
-	pass
+	var particles = particles_scene.instantiate()
+	add_child(particles)
+	particles.position.x += get_viewport().size.x / 4
 
 
 func go_to(scene_path: String, data: Dictionary = {}):
