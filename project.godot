@@ -33,10 +33,6 @@ SaveManager="*res://src/scripts/singletons/save_manager.gd"
 SilentWolf="*res://addons/silent_wolf/SilentWolf.gd"
 LeaderboardManager="*res://src/scripts/singletons/leaderboard_manager.gd"
 
-[debug]
-
-settings/stdout/print_fps=true
-
 [display]
 
 window/size/viewport_width=640

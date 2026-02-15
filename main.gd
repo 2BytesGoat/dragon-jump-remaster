@@ -33,7 +33,6 @@ func _ready():
 	var level_code = Constants.LEVELS[level_name]["code"]
 	level.update_level(level_code)
 	initialize_players()
-	level._update_race_finish_position()
 	
 	SignalBus.player_started_run.connect(_on_player_started_run)
 	SignalBus.player_restarted_run.connect(_on_player_restarted_run)
@@ -48,7 +47,6 @@ func _ready():
 func update_level(level_code):
 	level.update_level(level_code)
 	update_players()
-	level._update_race_finish_position()
 
 
 func reset_ui():

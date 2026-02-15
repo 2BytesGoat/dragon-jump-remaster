@@ -6,9 +6,7 @@ extends MarginContainer
 
 
 func _ready() -> void:
-	#if "port" in EnvironmentVariables.args:
-	if true:
-		print(EnvironmentVariables.args)
+	if "port" in EnvironmentVariables.args:
 		SceneManger.go_to(main_multiplayer)
 	tag_screen.visible = false
 

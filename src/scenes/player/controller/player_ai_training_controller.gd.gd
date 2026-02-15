@@ -35,22 +35,39 @@ func reset() -> void:
 func get_obs() -> Dictionary:
 	# This is what the player unit observes in its current state
 	var observations := []
-	var direction_to_end := Vector2.ZERO
+	var state := []
+	var direction_to_end := [0, 0]
 	if use_sensors:
-		observations = sensor.get_observation()
+		state = sensor.get_observation()
 	else:
-		observations = player.level_reference.get_surrounding_cells(player.global_position, 3)
-		direction_to_end = player.global_position.direction_to(player.level_reference.exit_global_position)
+		state = player.level_reference.get_surrounding_cells(player.global_position, 3)
+		var direction_vector = player.global_position.direction_to(player.level_reference.exit_global_position)
+		direction_to_end = [direction_vector.x, direction_vector.y]
 	
 	var player_velocity_vector = player.velocity.normalized()
+	var velocity = [player_velocity_vector.x, player_velocity_vector.y]
+	var is_on_floor = player.on_floor()
+	var is_on_wall = player.on_wall()
+	var perc_to_peak = player.percentage_towards_jump_peak()
+	var has_powerup = int(player.has_powerups())
+	
+	observations.append_array(state)
+	observations.append_array(direction_to_end)
+	observations.append_array(velocity)
+	observations.append(is_on_floor)
+	observations.append(is_on_wall)
+	observations.append(perc_to_peak)
+	observations.append(has_powerup)
+	
 	return {
 		"obs": observations,
-		"end_direction": [direction_to_end.x, direction_to_end.y],
-		"velocity": [player_velocity_vector.x, player_velocity_vector.y],
-		"is_on_floor": player.on_floor(),
-		"is_on_wall": player.on_wall(),
-		"perc_to_peak": player.percentage_towards_jump_peak(),
-		"has_powerup": int(player.has_powerups())
+		"state": state,
+		"end_direction": direction_to_end,
+		"velocity": velocity,
+		"is_on_floor": is_on_floor,
+		"is_on_wall": is_on_wall,
+		"perc_to_peak": perc_to_peak,
+		"has_powerup": has_powerup
 	}
 
 

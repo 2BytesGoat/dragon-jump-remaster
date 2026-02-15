@@ -9,7 +9,7 @@ extends Node
 @onready var sync = $Synchronizer
 
 var DEFAULT_LEVEL_NAME = "1-14"
-var DEFAULT_NB_AGENTS = 100
+var DEFAULT_NB_AGENTS = 50
 
 var main_world = null
 var player_mapping = {}
