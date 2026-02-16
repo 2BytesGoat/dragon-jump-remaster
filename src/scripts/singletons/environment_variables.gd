@@ -1,11 +1,24 @@
 extends Node
 
 const env_file_path = "res://.env"
-
+var args = {}
 
 func _ready() -> void:
 	if FileAccess.file_exists(env_file_path):
 		load_env(env_file_path)
+	load_args()
+
+
+func load_args():
+	for argument in OS.get_cmdline_args():
+		print(argument)
+		if argument.find("=") > -1:
+			var key_value = argument.split("=")
+			args[key_value[0].lstrip("--")] = key_value[1]
+		else:
+			# Options without an argument will be present in the dictionary,
+			# with the value set to an empty string.
+			args[argument.lstrip("--")] = ""
 
 
 func load_env(path: String):

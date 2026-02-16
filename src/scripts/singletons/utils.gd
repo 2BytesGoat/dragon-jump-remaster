@@ -52,3 +52,47 @@ func is_allowed_player_name(player_name: String) -> bool:
 	var regex := RegEx.new()
 	regex.compile("^[A-Za-z ]+$")
 	return regex.search(player_name) != null
+
+
+func generate_dijkstra_map(grid_size: Vector2i, costs: Array, target: Vector2i) -> Array:
+	# Initialize distance map with infinity
+	var dist_map = []
+	for x in range(grid_size.x):
+		var column = []
+		column.resize(grid_size.y)
+		column.fill(INF)
+		dist_map.append(column)
+	
+	# The Frontier (Queue for BFS)
+	var queue = [target]
+	dist_map[target.x][target.y] = 0.0
+	
+	var neighbors = [
+		Vector2i(0, 1), Vector2i(0, -1), Vector2i(1, 0), Vector2i(-1, 0),
+		Vector2i(1, 1), Vector2i(1, -1), Vector2i(-1, 1), Vector2i(-1, -1)
+	]
+
+	while queue.size() > 0:
+		var current = queue.pop_front()
+		var current_dist = dist_map[current.x][current.y]
+		
+		for offset in neighbors:
+			var next = current + offset
+			
+			# Boundary and Wall check
+			if next.x < 0 or next.x >= grid_size.x or next.y < 0 or next.y >= grid_size.y:
+				continue
+				
+			var tile_cost = costs[next.x][next.y]
+			if tile_cost == INF: continue # It's a wall
+			
+			# Calculate new distance (Diagonal cost = 1.4, Cardinal = 1.0)
+			var move_cost = 1.414 if (offset.x != 0 and offset.y != 0) else 1.0
+			var new_dist = current_dist + (tile_cost * move_cost)
+			
+			# If we found a shorter path to this tile, update and add to queue
+			if new_dist < dist_map[next.x][next.y]:
+				dist_map[next.x][next.y] = new_dist
+				queue.push_back(next)
+				
+	return dist_map

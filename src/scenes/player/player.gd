@@ -4,9 +4,10 @@ extends CharacterBody2D
 enum CONTROLLERS {
 	NONE,
 	PLAYER_ONE,
-	PLAYER_TWO
+	PLAYER_TWO,
+	TRAINING
 }
-@export var controller_type: CONTROLLERS = CONTROLLERS.NONE
+@export var controller_type: CONTROLLERS = CONTROLLERS.NONE : set = _on_player_controller_changed
 
 # movement properties
 @export var starting_facing_direction: int = Vector2i.RIGHT.x
@@ -31,6 +32,7 @@ var fall_gravity: float
 # State
 @onready var state_machine: StateMachine = $StateMachine
 @onready var initial_state: State = $StateMachine/Idle
+@onready var jump_timer: Timer = $StateMachine/Jump/Timer
 
 # Controllers
 @onready var controller_container: Node = $ControllerContainer
@@ -42,7 +44,6 @@ var active_controller: PlayerCharacterController = null
 @onready var afterimage: CPUParticles2D = $Flippable/AfterImage
 @onready var grappling_hook: Node2D = $Flippable/GaplingHook
 @onready var hat_container: Node2D = $Flippable/HatContainer
-@onready var observer: Node = $Observer
 var has_crown: bool = false
 var last_floor_position: Vector2 = Vector2.ZERO
 var is_done: bool = false
@@ -66,19 +67,18 @@ var wants_to_jump: bool = false
 var needs_to_release: bool = false
 var modifiers: Dictionary = {}
 var powerups: Array = []
-var starting_position: Vector2 = Vector2.ZERO
+var starting_position: Vector2 = Vector2.ZERO : set = _on_starting_position_changed
 var show_afterimage: bool = false : set = _on_show_after_image_changed
 var speed_modifier: float = 1.0 : set = _on_speed_modifier_changed
+
+# Only used for the AI controller - find a better way in future
+var level_reference: Level
 
 
 func _ready() -> void:
 	starting_position = global_position
-	if controller_type == CONTROLLERS.PLAYER_ONE:
-		set_controller(PlayerOneController.new(self))
-	elif controller_type == CONTROLLERS.PLAYER_TWO:
-		set_controller(PlayerTwoController.new(self))
-	
-	SignalBus.player_touched_crown.connect(_on_player_touched_crown)
+	_on_player_controller_changed(controller_type)
+	_on_speed_modifier_changed(speed_modifier)
 	reset()
 
 
@@ -97,6 +97,9 @@ func _physics_process(delta: float) -> void:
 
 
 func set_controller(controller: PlayerCharacterController) -> void:
+	if controller_container == null:
+		await ready
+	
 	for child in controller_container.get_children():
 		child.queue_free()
 	
@@ -114,14 +117,6 @@ func set_jump(input: bool) -> void:
 	else:
 		wants_to_jump = false
 		needs_to_release = false
-
-
-func get_info() -> Dictionary:
-	return {
-		"progress": observer.get_progress(),
-		"restarts": observer.reset_times,
-		"crowns_dropped": observer.crowns_dropped
-	}
 
 
 func reset() -> void:
@@ -198,14 +193,6 @@ func release_grappling_hook() -> void:
 	grappling_hook.release()
 
 
-func pickup_crown(hat: Area2D) -> void:
-	has_crown = true
-	hat.pickup()
-	hat.reparent(hat_container)
-	hat.global_position = hat_container.global_position
-	SignalBus.player_touched_crown.emit(self)
-
-
 func drop_crown() -> void:
 	for child in hat_container.get_children():
 		if not child.is_in_group("Crown"):
@@ -216,6 +203,18 @@ func drop_crown() -> void:
 		child.drop()
 		has_crown = false
 		SignalBus.player_dropped_crown.emit(self)
+
+
+func percentage_towards_jump_peak() -> float:
+	return jump_timer.time_left / jump_time_to_peak
+
+
+func on_wall() -> bool:
+	return state_machine.state.name == "Walled"
+
+
+func on_floor() -> bool:
+	return state_machine.state.name in ["Idle", "Move"] 
 
 
 func _on_speed_modifier_changed(value) -> void:
@@ -272,6 +271,28 @@ func _apply_modifiers() -> void:
 		velocity *= modifier.get("velocity", 1.0) 
 
 
+func _on_show_after_image_changed(value: bool) -> void:
+	show_afterimage = value
+	afterimage.emitting = value
+	powerup_sfx.playing = value
+
+
+func _on_player_controller_changed(new_controller_type: CONTROLLERS) -> void:
+	controller_type = new_controller_type
+	match controller_type:
+		CONTROLLERS.PLAYER_ONE:
+			set_controller(PlayerOneController.new(self))
+		CONTROLLERS.PLAYER_TWO:
+			set_controller(PlayerTwoController.new(self))
+		CONTROLLERS.TRAINING:
+			set_controller(PlayerAITrainingController.new(self))
+
+
+func _on_starting_position_changed(new_position: Vector2) -> void:
+	starting_position = new_position
+	global_position = starting_position
+
+
 func _on_hurt_box_body_entered(body: Node2D) -> void:
 	# This is for spikes
 	if body is TileMapLayer:
@@ -284,8 +305,6 @@ func _on_interact_box_area_entered(area: Area2D) -> void:
 	elif area.is_in_group("Slippery"):
 		# TODO: find a better way to do this
 		add_modifier("slippery", {"velocity": Vector2(1.07, 1)})
-	elif area.is_in_group("Crown") and not has_crown:
-		pickup_crown(area)
 	elif area.is_in_group("BouncePad"):
 		state_machine.transition_to("Bounce", {"push_direction": area.facing_direction})
 	elif area.is_in_group("Exit"):
@@ -298,17 +317,7 @@ func _on_interact_box_area_exited(area: Area2D) -> void:
 		remove_modifier("slippery")
 
 
-func _on_show_after_image_changed(value: bool) -> void:
-	show_afterimage = value
-	afterimage.emitting = value
-	powerup_sfx.playing = value
-
-
 func _on_interact_box_body_entered(body: Node2D) -> void:
 	if body.is_in_group("StaticLayer"):
 		starting_position = global_position
 		starting_facing_direction = facing_direction
-
-
-func _on_player_touched_crown(_player: Player) -> void:
-	acceleration = 1500

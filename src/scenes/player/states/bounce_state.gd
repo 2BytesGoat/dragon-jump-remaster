@@ -14,7 +14,6 @@ func _ready() -> void:
 func enter(msg := {}) -> void:
 	was_on_wall = false
 	var push_direction: Vector2 = msg.get("push_direction", Vector2.ZERO)
-
 	# --- Horizontal push ---
 	if push_direction.x != 0:
 		owner.facing_direction = sign(push_direction.x)

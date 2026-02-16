@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://yr0x6omx38m7"]
+
+[ext_resource type="Script" uid="uid://cuvodk1ehi12p" path="res://src/scenes/training/main_multiplayer.gd" id="1_phtji"]
+[ext_resource type="Script" uid="uid://cd46wkopjxif" path="res://src/scenes/training/synchronizer.gd" id="3_phtji"]
+
+[node name="MainMultiplayer" type="Node" unique_id=1674787169]
+script = ExtResource("1_phtji")
+
+[node name="Worlds" type="Node" parent="." unique_id=319292674]
+
+[node name="PlayerMirrors" type="Node" parent="." unique_id=1834355539]
+
+[node name="Synchronizer" type="Node" parent="." unique_id=350876212]
+script = ExtResource("3_phtji")

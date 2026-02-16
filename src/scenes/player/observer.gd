@@ -5,12 +5,10 @@ var total_distance: float = 0.0
 var reverse_progress = true
 
 var reset_times: int = 0
-var crowns_dropped: int = 0
 
 
 func _ready() -> void:
-	SignalBus.player_dropped_crown.connect(_on_player_dropped_crown)
-	SignalBus.race_finish_position_updated.connect(_on_race_finish_position_updated)
+	pass
 
 
 func get_progress() -> float:
@@ -30,8 +28,3 @@ func _on_race_finish_position_updated(new_position: Vector2) -> void:
 
 func _on_player_has_resetted() -> void:
 	reset_times += 1
-
-
-func _on_player_dropped_crown(player: Player) -> void:
-	if player == self.owner:
-		crowns_dropped += 1

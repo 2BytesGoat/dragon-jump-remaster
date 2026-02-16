@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://cj3xqtfhfg5w6"]
+
+[ext_resource type="PackedScene" uid="uid://drvfihk5esgmv" path="res://addons/godot_rl_agents/sensors/sensors_2d/RaycastSensor2D.tscn" id="1_16l3e"]
+
+[node name="RaycastSensor" unique_id=1900124741 instance=ExtResource("1_16l3e")]
+rotation = 2.8274333
+collision_mask = 61
+collide_with_areas = true
+n_rays = 10.0

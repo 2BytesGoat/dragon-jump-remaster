@@ -1,7 +1,7 @@
 extends Node
 
 @onready var particles_scene = preload("res://src/scenes/effects/background_particles.tscn")
-var next_scene_data = {}
+var scene_data = {}
 
 
 func _ready() -> void:
@@ -11,5 +11,5 @@ func _ready() -> void:
 
 
 func go_to(scene_path: String, data: Dictionary = {}):
-	next_scene_data = data
+	scene_data = data
 	get_tree().change_scene_to_file(scene_path) 

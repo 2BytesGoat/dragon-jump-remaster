@@ -1,4 +1,5 @@
 @tool
+class_name Level
 extends Node2D
 
 enum CELL {TERRAIN, STATIC, OBJECT, SECRETS}
@@ -6,11 +7,26 @@ enum CELL {TERRAIN, STATIC, OBJECT, SECRETS}
 const WALL_SYMBOL = "W"
 const SECRET_SYMBOL = "M"
 const EMPTY_SYMBOL = "E"
+const SPIKES_SYMBOL = "Y"
+const PLAYER_SYMBOL = "P"
+const EXIT_SYMBOL = "Q"
 const SEPARATOR_SYMBOL = "|"
 
 # TODO: make a datatype for these
 var symbol_to_tile_info: Dictionary = {
-	WALL_SYMBOL: { # wall
+	EMPTY_SYMBOL: {
+		"name": "Empty",
+		"type": CELL.TERRAIN,
+		"source": 0,
+		"coords": Vector2i(-1, -1),
+		"callable": null,
+		"debug_alt": null,
+		"scene": null,
+		"args": null,
+		"over_wall": false
+	},
+	WALL_SYMBOL: { 
+		"name": "Wall",
 		"type": CELL.TERRAIN,
 		"source": 0,
 		"coords": Vector2i(0, 0),
@@ -20,117 +36,8 @@ var symbol_to_tile_info: Dictionary = {
 		"args": null,
 		"over_wall": false
 	},
-	"Y": { # spikes
-		"type": CELL.STATIC,
-		"source": 0,
-		"coords": Vector2i(0, 2),
-		"callable": "_get_4sides_alt_tile",
-		"debug_alt": null,
-		"scene": null,
-		"args": null,
-		"over_wall": false
-	},
-	"R": { # reset blocks
-		"type": CELL.STATIC,
-		"source": 0,
-		"coords": Vector2i(1, 2),
-		"callable": "_replace_with_alt_tile",
-		"debug_alt": null,
-		"scene": null,
-		"args": null,
-		"over_wall": false
-	},
-	"B": { # bounce pad
-		"type": CELL.OBJECT,
-		"source": 0,
-		"coords": Vector2i(3, 3),
-		"callable": "_get_4sides_alt_tile",
-		"debug_alt": null,
-		"scene": preload("res://src/scenes/level/tiles/bounce_pad.tscn"),
-		"args": null, # These sould get set in the callable
-		"over_wall": false
-	},
-	"I": { # ice
-		"type": CELL.OBJECT,
-		"source": 0,
-		"coords": Vector2i(1, 3),
-		"callable": null,
-		"debug_alt": null,
-		"scene": preload("res://src/scenes/level/tiles/slippery_floor.tscn"),
-		"args": null,
-		"over_wall": true
-	},
-	"O": { # dissolve block
-		"type": CELL.OBJECT,
-		"source": 0,
-		"coords": Vector2i(2, 3),
-		"callable": null,
-		"debug_alt": null,
-		"scene": preload("res://src/scenes/level/tiles/dissolve_block.tscn"),
-		"args": null,
-		"over_wall": false
-	},
-	"J": { # double jump
-		"type": CELL.OBJECT,
-		"source": 0,
-		"coords": Vector2i(0, 4),
-		"callable": null,
-		"debug_alt": null,
-		"scene": preload("res://src/scenes/powerups/powerup.tscn"),
-		"args": ["DoubleJump"],
-		"over_wall": false
-	},
-	"S": { # stomp
-		"type": CELL.OBJECT,
-		"source": 0,
-		"coords": Vector2i(1, 4),
-		"callable": null,
-		"debug_alt": null,
-		"scene": preload("res://src/scenes/powerups/powerup.tscn"),
-		"args": ["Stomp"],
-		"over_wall": false
-	},
-	"D": { # dash
-		"type": CELL.OBJECT,
-		"source": 0,
-		"coords": Vector2i(2, 4),
-		"callable": null,
-		"debug_alt": null,
-		"scene": preload("res://src/scenes/powerups/powerup.tscn"),
-		"args": ["Dash"],
-		"over_wall": false
-	},
-	"G": { # grapple
-		"type": CELL.OBJECT,
-		"source": 0,
-		"coords": Vector2i(3, 4),
-		"callable": null,
-		"debug_alt": null,
-		"scene": preload("res://src/scenes/powerups/powerup.tscn"),
-		"args": ["Grapple"],
-		"over_wall": false
-	},
-	"C": { # corwn
-		"type": CELL.OBJECT,
-		"source": 0,
-		"coords": Vector2i(4, 3),
-		"callable": null,
-		"debug_alt": null,
-		"scene": preload("res://src/scenes/level/tiles/crown.tscn"),
-		"args": null,
-		"over_wall": false
-	},
-	"Q": { # exit
-		"type": CELL.OBJECT,
-		"source": 0,
-		"coords": Vector2i(6, 3),
-		"callable": null,
-		"debug_alt": null,
-		"scene": preload("res://src/scenes/level/tiles/portal.tscn"),
-		"args": null,
-		"over_wall": false
-	},
-	"P": { # player
+	PLAYER_SYMBOL: {
+		"name": "Player",
 		"type": CELL.OBJECT,
 		"source": 0,
 		"coords": Vector2i(5, 3),
@@ -140,7 +47,129 @@ var symbol_to_tile_info: Dictionary = {
 		"args": null,
 		"over_wall": false
 	},
-	"M": { # secret area
+	SPIKES_SYMBOL: {
+		"name": "Spikes",
+		"type": CELL.STATIC,
+		"source": 0,
+		"coords": Vector2i(0, 2),
+		"callable": "_get_4sides_alt_tile",
+		"debug_alt": null,
+		"scene": null,
+		"args": null,
+		"over_wall": false
+	},
+	EXIT_SYMBOL: {
+		"name": "Exit",
+		"type": CELL.OBJECT,
+		"source": 0,
+		"coords": Vector2i(6, 3),
+		"callable": null,
+		"debug_alt": null,
+		"scene": preload("res://src/scenes/level/tiles/portal.tscn"),
+		"args": null,
+		"over_wall": false
+	},
+	"R": {
+		"name": "ResetBlock",
+		"type": CELL.STATIC,
+		"source": 0,
+		"coords": Vector2i(1, 2),
+		"callable": "_replace_with_alt_tile",
+		"debug_alt": null,
+		"scene": null,
+		"args": null,
+		"over_wall": false
+	},
+	"B": {
+		"name": "BouncePad",
+		"type": CELL.OBJECT,
+		"source": 0,
+		"coords": Vector2i(3, 3),
+		"callable": "_get_4sides_alt_tile",
+		"debug_alt": null,
+		"scene": preload("res://src/scenes/level/tiles/bounce_pad.tscn"),
+		"args": null, # These sould get set in the callable
+		"over_wall": false
+	},
+	"I": {
+		"name": "Ice",
+		"type": CELL.OBJECT,
+		"source": 0,
+		"coords": Vector2i(1, 3),
+		"callable": null,
+		"debug_alt": null,
+		"scene": preload("res://src/scenes/level/tiles/slippery_floor.tscn"),
+		"args": null,
+		"over_wall": true
+	},
+	"O": {
+		"name": "DissolveBlock",
+		"type": CELL.OBJECT,
+		"source": 0,
+		"coords": Vector2i(2, 3),
+		"callable": null,
+		"debug_alt": null,
+		"scene": preload("res://src/scenes/level/tiles/dissolve_block.tscn"),
+		"args": null,
+		"over_wall": false
+	},
+	"J": {
+		"name": "DoubleJump",
+		"type": CELL.OBJECT,
+		"source": 0,
+		"coords": Vector2i(0, 4),
+		"callable": null,
+		"debug_alt": null,
+		"scene": preload("res://src/scenes/powerups/powerup.tscn"),
+		"args": ["DoubleJump"],
+		"over_wall": false
+	},
+	"S": {
+		"name": "Stomp",
+		"type": CELL.OBJECT,
+		"source": 0,
+		"coords": Vector2i(1, 4),
+		"callable": null,
+		"debug_alt": null,
+		"scene": preload("res://src/scenes/powerups/powerup.tscn"),
+		"args": ["Stomp"],
+		"over_wall": false
+	},
+	"D": {
+		"name": "Dash",
+		"type": CELL.OBJECT,
+		"source": 0,
+		"coords": Vector2i(2, 4),
+		"callable": null,
+		"debug_alt": null,
+		"scene": preload("res://src/scenes/powerups/powerup.tscn"),
+		"args": ["Dash"],
+		"over_wall": false
+	},
+	"G": {
+		"name": "Grapple",
+		"type": CELL.OBJECT,
+		"source": 0,
+		"coords": Vector2i(3, 4),
+		"callable": null,
+		"debug_alt": null,
+		"scene": preload("res://src/scenes/powerups/powerup.tscn"),
+		"args": ["Grapple"],
+		"over_wall": false
+	},
+	"C": {
+		"name": "Crown",
+		"type": CELL.OBJECT,
+		"source": 0,
+		"coords": Vector2i(4, 3),
+		"callable": null,
+		"debug_alt": null,
+		"scene": preload("res://src/scenes/level/tiles/crown.tscn"),
+		"args": null,
+		"over_wall": false
+	},
+	"M": {
+		"name": "Secret",
 		"type": CELL.SECRETS,
 		"source": 0,
 		"coords": Vector2i(0, 1),
@@ -151,6 +180,8 @@ var symbol_to_tile_info: Dictionary = {
 		"over_wall": true
 	}
 }
+var tile_names := []
+var flow_field := []
 
 # These get populated at runtime
 var static_atlas_coords_to_symbol: Dictionary = {}
@@ -168,7 +199,7 @@ var player_start_position: Vector2 = Vector2.ZERO
 var populated_cells: Dictionary = {}
 
 # Progress
-var finish_global_position = Vector2.ZERO
+var exit_global_position = Vector2.ZERO
 var first_time_touching_crown = true
 
 # These are used to debug in editor
@@ -177,6 +208,8 @@ var terrain_layer_used_cells = [] # based on this we update the map using tool
 var emplased_time = 0
 var update_interval = 1
 var current_level_code = ""
+var level_width_cell = 0
+var level_height_cell = 0
 var level_size = Vector2.ZERO
 
 signal level_size_updated(level_size: Vector2i)
@@ -202,6 +235,9 @@ func _process(delta: float) -> void:
 
 
 func _ready() -> void:
+	for info in symbol_to_tile_info.values():
+		tile_names.append(info["name"])
+	
 	clear_level()
 	#var old_code = "W42|W8E29W5|W3E37W2|W2E38W2|W1E25Y2E13W1|W1E25W2Y1E12W1|W1E25W2Y1E12W1|W1E25W2Y1E12W1|W1E15J1E4J1E4W2Y1E11B1W1|W1E30B2E8W1|W9E22W2E8W1|W9Y8E24W1|W17E6Y2E16W1|W17E5Y1W2Y1E11B1E1Y2W1|W7E15Y1W2Y1E10W6|W3E20Y2E11W6|W2E34W6|W1E35W6|W1E13J1E4B1E10B2E1Y3W6|W1E18W1E9W13|W1E18W1E9W13|W1E28W13|W1E23W18|W1E23W18|W1E2P1E8B1E11W18|W19Y5W18|W42"
 	#var level_code = old_code.replace("q", "E").replace("X", "Y").replace("/", "|").replace("V", "O").replace("D", "J")
@@ -225,9 +261,8 @@ func _ready() -> void:
 		_populate_objects()
 		_init_hidden_areas()
 		current_level_code = get_level_code()
-		print(get_level_code())
-	
-	SignalBus.player_touched_crown.connect(_on_player_touched_crown)
+		#print(get_level_code())
+
 	is_initialized = true
 
 
@@ -269,7 +304,7 @@ func get_level_code():
 	for y in range(level_size.y):
 		for x in range(level_size.x):
 			var cell_coords = Vector2i(x, y) + shift
-			var cell_symbol = populated_cells.get(cell_coords, EMPTY_SYMBOL)
+			var cell_symbol = get_cell_symbol(cell_coords)
 			
 			if cell_symbol != current_symbol:
 				if current_symbol_cnt > 0:
@@ -309,8 +344,8 @@ func set_level(level_code: String) -> void:
 	var y_offset = 0
 	var x_offset = 0
 	
-	var level_width = 0
-	var level_height = 0
+	level_width_cell = 0
+	level_height_cell = 0
 	
 	for symbol in level_code:
 		if _is_tilemap_symbol(symbol):
@@ -325,8 +360,8 @@ func set_level(level_code: String) -> void:
 			symbol_cnt = symbol_cnt * 10 + int(symbol)
 			should_flush = true
 		elif symbol == "|":
-			level_width = max(x_offset, level_width)
-			level_height += 1
+			level_width_cell = max(x_offset, level_width_cell)
+			level_height_cell += 1
 			_set_multiple_cells(current_symbols, symbol_cnt, Vector2i(x_offset, y_offset))
 			current_symbols = ""
 			symbol_cnt = 0
@@ -334,11 +369,33 @@ func set_level(level_code: String) -> void:
 			y_offset += 1
 	if symbol_cnt > 0:
 		_set_multiple_cells(current_symbols, symbol_cnt, Vector2i(x_offset, y_offset))
-		level_height += 1
+		level_height_cell += 1
 	
 	var cell_size = Vector2i(terrain_layer.rendering_quadrant_size, terrain_layer.rendering_quadrant_size)
-	level_size = Vector2i(level_width, level_height) * cell_size
+	level_size = Vector2i(level_width_cell, level_height_cell) * cell_size
 	level_size_updated.emit(level_size)
+
+
+func get_level_size_cell() -> Vector2i:
+	return Vector2i(level_width_cell, level_height_cell)
+
+
+func get_level_costs() -> Array:
+	var costs = []
+	for x in range(level_width_cell):
+		var row_costs = []
+		for y in range(level_height_cell):
+			var cell_type = get_cell_symbol(Vector2i(x, y))
+			var cell_cost = 1.0
+			if cell_type in [WALL_SYMBOL, SPIKES_SYMBOL]:
+				cell_cost = INF
+			row_costs.append(cell_cost)
+		costs.append(row_costs)
+	return costs
+
+
+func get_exit_cell_coords() -> Vector2i:
+	return terrain_layer.local_to_map(to_local(exit_global_position))
 
 
 func reset_objects() -> void:
@@ -346,6 +403,41 @@ func reset_objects() -> void:
 		for obj in objects_map[obj_type]:
 			if obj.has_method("reset"):
 				obj.call_deferred("reset")
+
+
+func get_cell_symbol(cell_coords: Vector2i) -> String:
+	return populated_cells.get(cell_coords, EMPTY_SYMBOL)
+
+
+func get_cell_symbol_index(cell_coords: Vector2i) -> int:
+	var cell_symbol = get_cell_symbol(cell_coords)
+	return symbol_to_tile_info.keys().find(cell_symbol)
+
+
+func get_surrounding_cells(global_pos: Vector2, radius: int) -> Array:
+	var center_tile = terrain_layer.local_to_map(to_local(global_pos))
+	var grid_data = []
+	
+	for y in range(-radius, radius + 1):
+		for x in range(-radius, radius + 1):
+			var coords = center_tile + Vector2i(x, y)
+			# Normalize cell_type: e.g., Empty = 0, Wall = 1, Spike = 2
+			var cell_type = get_cell_symbol_index(coords) 
+			grid_data.append(cell_type)
+	
+	return grid_data
+
+
+func get_tile_names() -> Array:
+	return tile_names
+
+
+func get_flowfield_value(object_global_position: Vector2) -> float:
+	if len(flow_field) == 0:
+		print("Undefined Flow Field: Returning default value 0")
+		return 0
+	var cell_coords = terrain_layer.local_to_map(to_local(object_global_position))
+	return flow_field[cell_coords.x][cell_coords.y]
 
 
 func _is_tilemap_symbol(symbol: String) -> bool:
@@ -402,7 +494,7 @@ func _init_terrain_layer() -> void:
 
 func _update_static_alt_tiles() -> void:
 	for cell_coords in static_layer.get_used_cells():
-		var symbol = _get_cell_symbol(cell_coords, CELL.STATIC)
+		var symbol = _get_cell_atlas_symbol(cell_coords, CELL.STATIC)
 		var alt_tile = _get_alt_tile_at_coords(cell_coords, symbol)
 		if alt_tile >= 0:
 			var tile_source = symbol_to_tile_info[symbol]["source"]
@@ -411,19 +503,9 @@ func _update_static_alt_tiles() -> void:
 		_add_to_populated_cells(cell_coords, symbol)
 
 
-func _update_race_finish_position(new_position: Vector2 = Vector2.INF) -> void:
-	if new_position == Vector2.INF:
-		for object in objects_map.get("C", []):
-			finish_global_position = object.global_position
-			break
-	else:
-		finish_global_position = new_position
-	SignalBus.race_finish_position_updated.emit(finish_global_position)
-
-
 func _populate_objects() -> void:
 	for cell_coords in objects_layer.get_used_cells():
-		var symbol = _get_cell_symbol(cell_coords, CELL.OBJECT)
+		var symbol = _get_cell_atlas_symbol(cell_coords, CELL.OBJECT)
 		var object_scene = symbol_to_tile_info[symbol]["scene"]
 		var object_arguments = symbol_to_tile_info[symbol]["args"]
 		
@@ -431,9 +513,12 @@ func _populate_objects() -> void:
 		_add_to_populated_cells(cell_coords, symbol)
 		objects_layer.erase_cell(cell_coords)
 		
-		if symbol == "P":
+		if symbol == PLAYER_SYMBOL:
 			player_start_position = object_position
 			continue
+		
+		if symbol == EXIT_SYMBOL:
+			exit_global_position = object_position
 		
 		var object = object_scene.instantiate()
 		
@@ -460,7 +545,7 @@ func _init_hidden_areas() -> void:
 	secrets_layer._init_secrets()
 
 
-func _get_cell_symbol(cell_coords: Vector2i, cell_type: CELL) -> String:
+func _get_cell_atlas_symbol(cell_coords: Vector2i, cell_type: CELL) -> String:
 	if cell_type == CELL.TERRAIN:
 		return WALL_SYMBOL
 	elif cell_type == CELL.STATIC:
@@ -500,8 +585,3 @@ func _add_to_populated_cells(cell_coords: Vector2i, symbol: String) -> void:
 	if not populated_cells.has(cell_coords):
 		populated_cells[cell_coords] = ""
 	populated_cells[cell_coords] += symbol
-
-
-func _on_player_touched_crown(_player: Player) -> void:
-	if first_time_touching_crown:
-		_update_race_finish_position(player_start_position)
