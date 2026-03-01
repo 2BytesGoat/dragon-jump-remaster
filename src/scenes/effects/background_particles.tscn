@@ -11,7 +11,7 @@ gradient = SubResource("Gradient_5k7ll")
 particle_flag_disable_z = true
 emission_shape = 3
 emission_box_extents = Vector3(320, 1, 1)
-gravity = Vector3(0, 98, 0)
+gravity = Vector3(45, 64, 0)
 scale_min = 0.5
 scale_max = 2.0
 scale_over_velocity_max = 1.0
@@ -19,7 +19,8 @@ color_initial_ramp = SubResource("GradientTexture1D_x8351")
 turbulence_enabled = true
 
 [node name="GPUParticles2D" type="GPUParticles2D" unique_id=248882165]
-amount = 96
-lifetime = 9.0
+z_index = 1
+amount = 64
+lifetime = 16.0
 preprocess = 2.0
 process_material = SubResource("ParticleProcessMaterial_81j85")

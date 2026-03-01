@@ -1,7 +1,7 @@
 @tool
 extends TileMapLayer
 
-@onready var visual_layer: TileMapLayer = $VisualLayer
+@export var visual_layer: TileMapLayer
 
 const hidden_area_atlas_coors = Vector2i(2, 0)
 const autotileMap: Array = [

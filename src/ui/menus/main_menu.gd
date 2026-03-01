@@ -1,6 +1,6 @@
 extends MarginContainer
 
-@onready var tag_screen = $TagScreen
+@export var tag_screen: MarginContainer
 @onready var level_select = "src/ui/menus/level_select.tscn"
 @onready var main_multiplayer = "res://src/scenes/training/main_multiplayer.tscn"
 

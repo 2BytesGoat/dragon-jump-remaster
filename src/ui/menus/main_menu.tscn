@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://bnxudkobrdgtb" path="res://src/ui/menus/menu_button.tscn" id="2_xaiw4"]
 [ext_resource type="Texture2D" uid="uid://dolawuug5bvhc" path="res://assets/sprites/ui/silver_panel-export.png" id="3_vs67m"]
 [ext_resource type="Script" uid="uid://d1v42cg1p7imp" path="res://src/ui/menus/tag_screen.gd" id="6_y3puo"]
+[ext_resource type="Shader" uid="uid://b87hi538ipc5q" path="res://assets/shaders/screen_crt.gdshader" id="7_csvuu"]
+[ext_resource type="PackedScene" uid="uid://fcxn3r6i8mg5" path="res://src/ui/menus/crt_screen_effect.tscn" id="7_ltlti"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_jmap8"]
 texture = ExtResource("3_vs67m")
@@ -14,50 +16,69 @@ texture_margin_top = 16.0
 texture_margin_right = 16.0
 texture_margin_bottom = 16.0
 
-[node name="MainMenu" type="MarginContainer" unique_id=298348625]
+[sub_resource type="ViewportTexture" id="ViewportTexture_l3u6v"]
+viewport_path = NodePath("../SubViewportContainer/SubViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hcfgv"]
+resource_local_to_scene = true
+shader = ExtResource("7_csvuu")
+shader_parameter/tex = SubResource("ViewportTexture_l3u6v")
+shader_parameter/mask_type = 2
+shader_parameter/curve = 0.0400000019
+shader_parameter/sharpness = 0.6666667
+shader_parameter/color_offset = 0.0
+shader_parameter/mask_brightness = 1.0
+shader_parameter/scanline_brightness = 1.0
+shader_parameter/min_scanline_thickness = 0.5
+shader_parameter/aspect = 0.75
+shader_parameter/wobble_strength = 0.250000011875
+
+[node name="MainMenu" type="MarginContainer" unique_id=298348625 node_paths=PackedStringArray("tag_screen")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_xaiw4")
+tag_screen = NodePath("SubViewportContainer/SubViewport/TagScreen")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=2023776132]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=1628232823]
 layout_mode = 2
+size_flags_vertical = 4
 
-[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer" unique_id=630475977]
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=1731082921]
+handle_input_locally = false
+size = Vector2i(640, 360)
+render_target_update_mode = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer/SubViewport" unique_id=2023776132]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer/SubViewport/HBoxContainer" unique_id=635433113]
 layout_mode = 2
+size_flags_horizontal = 2
 theme_override_constants/margin_left = 32
-theme_override_constants/margin_top = 16
-
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer/MarginContainer2" unique_id=873343702]
-custom_minimum_size = Vector2(192, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
-texture = ExtResource("1_wuc7m")
-expand_mode = 5
-
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer" unique_id=635433113]
-layout_mode = 2
-size_flags_horizontal = 10
 theme_override_constants/margin_top = 55
-theme_override_constants/margin_right = 16
+theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 16
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer/MarginContainer" unique_id=217826035]
+[node name="VBoxContainer2" type="VBoxContainer" parent="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer" unique_id=217826035]
 custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
 theme_override_constants/separation = -16
 alignment = 1
 
-[node name="Panel" type="Panel" parent="HBoxContainer/MarginContainer/VBoxContainer2" unique_id=525283876]
+[node name="Panel" type="Panel" parent="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2" unique_id=525283876]
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxTexture_jmap8")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/MarginContainer/VBoxContainer2/Panel" unique_id=1293342526]
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel" unique_id=1293342526]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -68,14 +89,14 @@ size_flags_horizontal = 4
 size_flags_vertical = 3
 alignment = 1
 
-[node name="PlayButton" parent="HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer" unique_id=1896212048 instance=ExtResource("2_xaiw4")]
+[node name="PlayButton" parent="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer" unique_id=1896212048 instance=ExtResource("2_xaiw4")]
 custom_minimum_size = Vector2(176, 32)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 text = "PRACTICE"
 
-[node name="MultiplayerButton" parent="HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer" unique_id=2035410536 instance=ExtResource("2_xaiw4")]
+[node name="MultiplayerButton" parent="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer" unique_id=2035410536 instance=ExtResource("2_xaiw4")]
 custom_minimum_size = Vector2(176, 32)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -83,7 +104,7 @@ size_flags_vertical = 4
 disabled = true
 text = "MULTIPLAYER"
 
-[node name="MapEditorButton" parent="HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer" unique_id=2139600538 instance=ExtResource("2_xaiw4")]
+[node name="MapEditorButton" parent="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer" unique_id=2139600538 instance=ExtResource("2_xaiw4")]
 custom_minimum_size = Vector2(176, 32)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -91,7 +112,7 @@ size_flags_vertical = 4
 disabled = true
 text = "LEVEL EDITOR"
 
-[node name="SettingsButton" parent="HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer" unique_id=1399716814 instance=ExtResource("2_xaiw4")]
+[node name="SettingsButton" parent="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer" unique_id=1399716814 instance=ExtResource("2_xaiw4")]
 custom_minimum_size = Vector2(176, 32)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -99,7 +120,7 @@ size_flags_vertical = 4
 disabled = true
 text = "SETTINGS"
 
-[node name="CreditsButton" parent="HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer" unique_id=2125001671 instance=ExtResource("2_xaiw4")]
+[node name="CreditsButton" parent="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer" unique_id=2125001671 instance=ExtResource("2_xaiw4")]
 custom_minimum_size = Vector2(176, 32)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -107,13 +128,13 @@ size_flags_vertical = 4
 disabled = true
 text = "CREDITS"
 
-[node name="Panel2" type="Panel" parent="HBoxContainer/MarginContainer/VBoxContainer2" unique_id=1686692204]
+[node name="Panel2" type="Panel" parent="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2" unique_id=1686692204]
 custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
 size_flags_vertical = 6
 theme_override_styles/panel = SubResource("StyleBoxTexture_jmap8")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/MarginContainer/VBoxContainer2/Panel2" unique_id=414248634]
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel2" unique_id=414248634]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -130,27 +151,50 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 alignment = 1
 
-[node name="QuitButton" parent="HBoxContainer/MarginContainer/VBoxContainer2/Panel2/VBoxContainer" unique_id=606978826 instance=ExtResource("2_xaiw4")]
+[node name="QuitButton" parent="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel2/VBoxContainer" unique_id=606978826 instance=ExtResource("2_xaiw4")]
 custom_minimum_size = Vector2(176, 32)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 text = "QUIT"
 
-[node name="TagScreen" parent="." unique_id=1783688133 instance=ExtResource("2_jmap8")]
+[node name="MarginContainer2" type="MarginContainer" parent="SubViewportContainer/SubViewport/HBoxContainer" unique_id=630475977]
 layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 32
+
+[node name="TextureRect" type="TextureRect" parent="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer2" unique_id=873343702]
+custom_minimum_size = Vector2(192, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("1_wuc7m")
+expand_mode = 5
+
+[node name="TagScreen" parent="SubViewportContainer/SubViewport" unique_id=1783688133 instance=ExtResource("2_jmap8")]
+visible = false
+offset_left = -175.0
+offset_top = -100.0
+offset_right = 175.0
+offset_bottom = 100.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 script = ExtResource("6_y3puo")
 
-[node name="TagLineEdit" parent="TagScreen/Panel/MarginContainer/VBoxContainer" index="2"]
+[node name="TagLineEdit" parent="SubViewportContainer/SubViewport/TagScreen/Panel/MarginContainer/VBoxContainer" index="2"]
 placeholder_text = "UNK"
 
-[connection signal="pressed" from="HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
-[connection signal="pressed" from="HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer/MultiplayerButton" to="." method="_on_play_button_pressed"]
-[connection signal="pressed" from="HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer/MapEditorButton" to="." method="_on_play_button_pressed"]
-[connection signal="pressed" from="HBoxContainer/MarginContainer/VBoxContainer2/Panel2/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
-[connection signal="pressed" from="TagScreen/Panel/MarginContainer/VBoxContainer/HBoxContainer/ConfirmButton" to="." method="_on_confirm_button_pressed"]
-[connection signal="pressed" from="TagScreen/Panel/MarginContainer/VBoxContainer/HBoxContainer/SkipButton" to="." method="_on_skip_button_pressed"]
+[node name="CRTScreenEffect" parent="." unique_id=1412518820 instance=ExtResource("7_ltlti")]
+material = SubResource("ShaderMaterial_hcfgv")
+layout_mode = 2
 
-[editable path="TagScreen"]
+[connection signal="pressed" from="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer/MultiplayerButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer/MapEditorButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel2/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
+[connection signal="pressed" from="SubViewportContainer/SubViewport/TagScreen/Panel/MarginContainer/VBoxContainer/HBoxContainer/ConfirmButton" to="." method="_on_confirm_button_pressed"]
+[connection signal="pressed" from="SubViewportContainer/SubViewport/TagScreen/Panel/MarginContainer/VBoxContainer/HBoxContainer/SkipButton" to="." method="_on_skip_button_pressed"]
+
+[editable path="SubViewportContainer/SubViewport/TagScreen"]

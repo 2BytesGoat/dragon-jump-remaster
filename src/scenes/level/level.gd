@@ -187,12 +187,12 @@ var flow_field := []
 var static_atlas_coords_to_symbol: Dictionary = {}
 var object_atlas_coords_to_symbol: Dictionary = {}
 
-@onready var terrain_layer: TileMapLayer = $TerrainLayer
-@onready var static_layer : TileMapLayer = $StaticLayer
-@onready var objects_layer: TileMapLayer = $ObjectsLayer
-@onready var secrets_layer: TileMapLayer = $SecretsLayer
-@onready var terrain_visual_layer: TileMapLayer = $TerrainLayer/VisualLayer
-@onready var secrets_visual_layer: TileMapLayer = $SecretsLayer/VisualLayer
+@export var terrain_layer: TileMapLayer
+@export var static_layer : TileMapLayer
+@export var objects_layer: TileMapLayer
+@export var secrets_layer: TileMapLayer
+@export var terrain_visual_layer: TileMapLayer
+@export var secrets_visual_layer: TileMapLayer
 
 var objects_map: Dictionary = {}
 var player_start_position: Vector2 = Vector2.ZERO
@@ -249,7 +249,7 @@ func _ready() -> void:
 	#print(get_level_code())
 	
 	_init_atlas_symbol_mapping()
-	_init_terrain_layer()
+	#_init_terrain_layer()
 	
 	if not Engine.is_editor_hint():
 		#old_code = "W34E19|W5E13O1E4W3E5W3E19|W4E14O1E4W2E7W2E19|W2E16O1E4W2E8W1E19|W2E16O1E4W2E8W1E19|W2E16O1E4W2E8W1E19|W2E16O1E4W2E8W1E18W1|W2E16O1E14W1E19|W2E31W1E19|W2E49W1E1|E1W15Y5W6E6W1E19|E1W26E6W1E19|E1W2E8W3E4O1E14W1E19|W2E10W2E4O1E14W1E19|W1E11W2E4O1E14W1E19|W1E11W2E4O1E14W1E19|W1E17O1E14W1E19|W1E26W7E19|W1E1P1E5W1E18W7E19|W17Y3W14E19|E16W5E32"
@@ -494,7 +494,7 @@ func _init_terrain_layer() -> void:
 
 func _update_static_alt_tiles() -> void:
 	for cell_coords in static_layer.get_used_cells():
-		var symbol = _get_cell_atlas_symbol(cell_coords, CELL.STATIC)
+		var symbol = await _get_cell_atlas_symbol(cell_coords, CELL.STATIC)
 		var alt_tile = _get_alt_tile_at_coords(cell_coords, symbol)
 		if alt_tile >= 0:
 			var tile_source = symbol_to_tile_info[symbol]["source"]
@@ -505,7 +505,7 @@ func _update_static_alt_tiles() -> void:
 
 func _populate_objects() -> void:
 	for cell_coords in objects_layer.get_used_cells():
-		var symbol = _get_cell_atlas_symbol(cell_coords, CELL.OBJECT)
+		var symbol = await _get_cell_atlas_symbol(cell_coords, CELL.OBJECT)
 		var object_scene = symbol_to_tile_info[symbol]["scene"]
 		var object_arguments = symbol_to_tile_info[symbol]["args"]
 		
@@ -546,6 +546,9 @@ func _init_hidden_areas() -> void:
 
 
 func _get_cell_atlas_symbol(cell_coords: Vector2i, cell_type: CELL) -> String:
+	if not is_initialized:
+		await self.ready
+	
 	if cell_type == CELL.TERRAIN:
 		return WALL_SYMBOL
 	elif cell_type == CELL.STATIC:

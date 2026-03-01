@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bvm718ddfisd7"]
 
 [ext_resource type="Script" uid="uid://oxbq6vk7mref" path="res://src/scenes/level/level.gd" id="1_sypop"]
+[ext_resource type="Shader" uid="uid://d3mocqdgxguhv" path="res://assets/shaders/level_outline.gdshader" id="2_ijb5r"]
 [ext_resource type="Texture2D" uid="uid://riso1kxfjte0" path="res://assets/sprites/world/tile-types.png" id="3_lxq08"]
 [ext_resource type="Texture2D" uid="uid://6rwx7rq1h31i" path="res://assets/sprites/world/rock-tiles-wang/tileset_rock-tiles-wang.png" id="3_n86tn"]
 [ext_resource type="Script" uid="uid://bqlmtoyls3un1" path="res://src/scenes/level/terrain_layer.gd" id="3_qnuiv"]
@@ -19,6 +20,12 @@ texture = ExtResource("3_lxq08")
 [sub_resource type="TileSet" id="TileSet_n86tn"]
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_n86tn")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ijb5r"]
+shader = ExtResource("2_ijb5r")
+shader_parameter/tint_color = Color(0, 1, 0.13333344, 0.42745098)
+shader_parameter/brightness_multiplier = 1.0000000475
+shader_parameter/thickness = 2.000000095
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xqg4s"]
 texture = ExtResource("4_56w06")
@@ -149,15 +156,25 @@ texture = ExtResource("3_lxq08")
 [sub_resource type="TileSet" id="TileSet_0fmww"]
 sources/0 = SubResource("TileSetAtlasSource_qnuiv")
 
-[node name="Level" type="Node2D" unique_id=962454612]
+[node name="Level" type="Node2D" unique_id=962454612 node_paths=PackedStringArray("terrain_layer", "static_layer", "objects_layer", "secrets_layer", "terrain_visual_layer", "secrets_visual_layer")]
 script = ExtResource("1_sypop")
+terrain_layer = NodePath("TerrainLayer")
+static_layer = NodePath("StaticLayer")
+objects_layer = NodePath("ObjectsLayer")
+secrets_layer = NodePath("SecretsLayer")
+terrain_visual_layer = NodePath("TerrainLayer/CanvasGroup/VisualLayer")
+secrets_visual_layer = NodePath("SecretsLayer/VisualLayer")
 
-[node name="TerrainLayer" type="TileMapLayer" parent="." unique_id=899553349]
+[node name="TerrainLayer" type="TileMapLayer" parent="." unique_id=899553349 node_paths=PackedStringArray("visual_layer")]
 texture_filter = 1
 tile_set = SubResource("TileSet_n86tn")
 script = ExtResource("3_qnuiv")
+visual_layer = NodePath("CanvasGroup/VisualLayer")
 
-[node name="VisualLayer" type="TileMapLayer" parent="TerrainLayer" unique_id=129901116]
+[node name="CanvasGroup" type="CanvasGroup" parent="TerrainLayer" unique_id=610046657]
+material = SubResource("ShaderMaterial_ijb5r")
+
+[node name="VisualLayer" type="TileMapLayer" parent="TerrainLayer/CanvasGroup" unique_id=129901116]
 texture_filter = 1
 position = Vector2(-8, -8)
 tile_set = SubResource("TileSet_exkae")

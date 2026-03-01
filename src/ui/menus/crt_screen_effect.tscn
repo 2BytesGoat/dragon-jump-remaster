@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://fcxn3r6i8mg5"]
+
+[ext_resource type="Shader" uid="uid://b87hi538ipc5q" path="res://assets/shaders/screen_crt.gdshader" id="1_4b2wu"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_csvuu"]
+viewport_path = NodePath("SubViewportContainer/SubViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ltlti"]
+resource_local_to_scene = true
+shader = ExtResource("1_4b2wu")
+shader_parameter/tex = SubResource("ViewportTexture_csvuu")
+shader_parameter/mask_type = 2
+shader_parameter/curve = 0.0400000019
+shader_parameter/sharpness = 0.6666667
+shader_parameter/color_offset = 0.0
+shader_parameter/mask_brightness = 1.0
+shader_parameter/scanline_brightness = 1.0
+shader_parameter/min_scanline_thickness = 0.5
+shader_parameter/aspect = 0.75
+shader_parameter/wobble_strength = 0.250000011875
+
+[node name="CRTScreenEffect" type="ColorRect" unique_id=1412518820]
+material = SubResource("ShaderMaterial_ltlti")
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
