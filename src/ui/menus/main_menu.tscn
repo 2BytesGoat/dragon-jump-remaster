@@ -16,16 +16,16 @@ texture_margin_top = 16.0
 texture_margin_right = 16.0
 texture_margin_bottom = 16.0
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_l3u6v"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_ltlti"]
 viewport_path = NodePath("../SubViewportContainer/SubViewport")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_hcfgv"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l3u6v"]
 resource_local_to_scene = true
 shader = ExtResource("7_csvuu")
-shader_parameter/tex = SubResource("ViewportTexture_l3u6v")
+shader_parameter/tex = SubResource("ViewportTexture_ltlti")
 shader_parameter/mask_type = 2
 shader_parameter/curve = 0.0400000019
-shader_parameter/sharpness = 0.6666667
+shader_parameter/sharpness = 0.7550000121125
 shader_parameter/color_offset = 0.0
 shader_parameter/mask_brightness = 1.0
 shader_parameter/scanline_brightness = 1.0
@@ -187,7 +187,7 @@ script = ExtResource("6_y3puo")
 placeholder_text = "UNK"
 
 [node name="CRTScreenEffect" parent="." unique_id=1412518820 instance=ExtResource("7_ltlti")]
-material = SubResource("ShaderMaterial_hcfgv")
+material = SubResource("ShaderMaterial_l3u6v")
 layout_mode = 2
 
 [connection signal="pressed" from="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]

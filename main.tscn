@@ -15,13 +15,13 @@
 [sub_resource type="ViewportTexture" id="ViewportTexture_efxa6"]
 viewport_path = NodePath("../SubViewportContainer/SubViewport")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ycdy4"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dg77c"]
 resource_local_to_scene = true
 shader = ExtResource("11_dg77c")
 shader_parameter/tex = SubResource("ViewportTexture_efxa6")
 shader_parameter/mask_type = 2
 shader_parameter/curve = 0.0400000019
-shader_parameter/sharpness = 0.6666667
+shader_parameter/sharpness = 0.7550000121125
 shader_parameter/color_offset = 0.0
 shader_parameter/mask_brightness = 1.0
 shader_parameter/scanline_brightness = 1.0
@@ -53,10 +53,9 @@ render_target_update_mode = 4
 
 [node name="TerrainLayer" parent="SubViewportContainer/SubViewport/Level" index="0" unique_id=899553349]
 z_index = 1
-tile_map_data = PackedByteArray()
 
-[node name="VisualLayer" parent="SubViewportContainer/SubViewport/Level/TerrainLayer/CanvasGroup" parent_id_path=PackedInt32Array(1149041736, 610046657) index="0" unique_id=129901116]
-tile_map_data = PackedByteArray()
+[node name="LevelBackground" parent="SubViewportContainer/SubViewport/Level" index="4" unique_id=425700536]
+clip_children = 2
 
 [node name="Camera2D" parent="SubViewportContainer/SubViewport" unique_id=385435383 instance=ExtResource("3_4c57u")]
 position = Vector2(104, 96)
@@ -122,7 +121,7 @@ theme_override_font_sizes/font_size = 12
 text = "00:00.00"
 
 [node name="CRTScreenEffect" parent="." unique_id=1412518820 instance=ExtResource("9_efxa6")]
-material = SubResource("ShaderMaterial_ycdy4")
+material = SubResource("ShaderMaterial_dg77c")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

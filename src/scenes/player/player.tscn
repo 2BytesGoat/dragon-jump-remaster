@@ -479,7 +479,7 @@ starting_facing_direction = null
 texture_filter = 1
 
 [node name="Sprite" type="Sprite2D" parent="Flippable" unique_id=1859604623]
-self_modulate = Color(1.1638972, 1.1638972, 1.1638972, 1)
+self_modulate = Color(1.0789914, 1.0789914, 1.0789914, 1)
 texture_filter = 1
 position = Vector2(1, -8)
 texture = ExtResource("3_4r4qr")

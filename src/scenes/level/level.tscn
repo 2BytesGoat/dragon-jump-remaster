@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://b2u4lotmicdpc" path="res://assets/sprites/world/rock-tiles-wang/tileset_green-tiles-wang.png" id="4_56w06"]
 [ext_resource type="Texture2D" uid="uid://sg0wq6dg7a8n" path="res://assets/sprites/world/rock-tiles-wang/tilest-secret-rock-tiles-wang.png" id="5_n86tn"]
 [ext_resource type="Script" uid="uid://b6vvfthmemhgb" path="res://src/scenes/level/secrets_layer.gd" id="6_qnuiv"]
+[ext_resource type="Script" uid="uid://bu64t7tql4ych" path="res://src/scenes/level/level_background.gd" id="9_25vab"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_n86tn"]
 texture = ExtResource("3_lxq08")
@@ -156,6 +157,18 @@ texture = ExtResource("3_lxq08")
 [sub_resource type="TileSet" id="TileSet_0fmww"]
 sources/0 = SubResource("TileSetAtlasSource_qnuiv")
 
+[sub_resource type="Gradient" id="Gradient_n7bl3"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.8, 0.85531914)
+colors = PackedColorArray(0.03529412, 0.043137256, 0.08235294, 1, 0.078431375, 0.09411765, 0.18039216, 1, 0.29411766, 0.11372549, 0.32156864, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_dt0xs"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_4iyit"]
+noise = SubResource("FastNoiseLite_dt0xs")
+color_ramp = SubResource("Gradient_n7bl3")
+seamless = true
+
 [node name="Level" type="Node2D" unique_id=962454612 node_paths=PackedStringArray("terrain_layer", "static_layer", "objects_layer", "secrets_layer", "terrain_visual_layer", "secrets_visual_layer")]
 script = ExtResource("1_sypop")
 terrain_layer = NodePath("TerrainLayer")
@@ -198,3 +211,12 @@ texture_filter = 1
 position = Vector2(-8, -8)
 tile_set = SubResource("TileSet_exkae")
 y_sort_origin = 1
+
+[node name="LevelBackground" type="Polygon2D" parent="." unique_id=425700536]
+z_index = -1
+texture_repeat = 2
+texture = SubResource("NoiseTexture2D_4iyit")
+texture_scale = Vector2(0.7, 0.7)
+script = ExtResource("9_25vab")
+
+[connection signal="level_outline_updated" from="." to="LevelBackground" method="_on_level_level_outline_updated"]
