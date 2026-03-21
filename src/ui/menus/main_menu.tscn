@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://d1v42cg1p7imp" path="res://src/ui/menus/tag_screen.gd" id="6_y3puo"]
 [ext_resource type="Shader" uid="uid://b87hi538ipc5q" path="res://assets/shaders/screen_crt.gdshader" id="7_csvuu"]
 [ext_resource type="PackedScene" uid="uid://fcxn3r6i8mg5" path="res://src/ui/menus/crt_screen_effect.tscn" id="7_ltlti"]
+[ext_resource type="PackedScene" uid="uid://p3lou48biwtg" path="res://src/scenes/effects/background_particles.tscn" id="9_l3u6v"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_jmap8"]
 texture = ExtResource("3_vs67m")
@@ -16,18 +17,18 @@ texture_margin_top = 16.0
 texture_margin_right = 16.0
 texture_margin_bottom = 16.0
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_ltlti"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_l3u6v"]
 viewport_path = NodePath("../SubViewportContainer/SubViewport")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_l3u6v"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hcfgv"]
 resource_local_to_scene = true
 shader = ExtResource("7_csvuu")
-shader_parameter/tex = SubResource("ViewportTexture_ltlti")
+shader_parameter/tex = SubResource("ViewportTexture_l3u6v")
 shader_parameter/mask_type = 2
 shader_parameter/curve = 0.0400000019
 shader_parameter/sharpness = 0.7550000121125
 shader_parameter/color_offset = 0.0
-shader_parameter/mask_brightness = 1.0
+shader_parameter/mask_brightness = 0.750000035625
 shader_parameter/scanline_brightness = 1.0
 shader_parameter/min_scanline_thickness = 0.5
 shader_parameter/aspect = 0.75
@@ -43,6 +44,7 @@ script = ExtResource("1_xaiw4")
 tag_screen = NodePath("SubViewportContainer/SubViewport/TagScreen")
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=1628232823]
+texture_filter = 1
 layout_mode = 2
 size_flags_vertical = 4
 
@@ -50,6 +52,10 @@ size_flags_vertical = 4
 handle_input_locally = false
 size = Vector2i(640, 360)
 render_target_update_mode = 4
+
+[node name="GPUParticles2D" parent="SubViewportContainer/SubViewport" unique_id=248882165 instance=ExtResource("9_l3u6v")]
+z_index = 0
+position = Vector2(320, 0)
 
 [node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer/SubViewport" unique_id=2023776132]
 anchors_preset = 15
@@ -187,7 +193,8 @@ script = ExtResource("6_y3puo")
 placeholder_text = "UNK"
 
 [node name="CRTScreenEffect" parent="." unique_id=1412518820 instance=ExtResource("7_ltlti")]
-material = SubResource("ShaderMaterial_l3u6v")
+visible = false
+material = SubResource("ShaderMaterial_hcfgv")
 layout_mode = 2
 
 [connection signal="pressed" from="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]

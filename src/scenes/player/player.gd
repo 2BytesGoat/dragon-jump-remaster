@@ -73,6 +73,7 @@ var speed_modifier: float = 1.0 : set = _on_speed_modifier_changed
 
 # Only used for the AI controller - find a better way in future
 var level_reference: Level
+var last_agent_intput: bool = false
 
 
 func _ready() -> void:
@@ -108,6 +109,10 @@ func set_controller(controller: PlayerCharacterController) -> void:
 
 
 func set_jump(input: bool) -> void:
+	if input == last_agent_intput:
+		return
+	last_agent_intput = input
+	
 	if input:
 		if not started_walking:
 			started_walking = true
@@ -133,6 +138,7 @@ func reset() -> void:
 	needs_to_release = false
 	show_afterimage = false
 	modifiers = {}
+	last_agent_intput = false
 	
 	for i in range(len(powerups)):
 		consume_powerup()

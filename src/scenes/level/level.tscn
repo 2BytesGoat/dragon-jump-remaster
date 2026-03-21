@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://sg0wq6dg7a8n" path="res://assets/sprites/world/rock-tiles-wang/tilest-secret-rock-tiles-wang.png" id="5_n86tn"]
 [ext_resource type="Script" uid="uid://b6vvfthmemhgb" path="res://src/scenes/level/secrets_layer.gd" id="6_qnuiv"]
 [ext_resource type="Script" uid="uid://bu64t7tql4ych" path="res://src/scenes/level/level_background.gd" id="9_25vab"]
+[ext_resource type="Script" uid="uid://bas5rdqvcwnqw" path="res://src/scenes/level/level_wall_blend.gd" id="10_n7bl3"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_n86tn"]
 texture = ExtResource("3_lxq08")
@@ -159,15 +160,27 @@ sources/0 = SubResource("TileSetAtlasSource_qnuiv")
 
 [sub_resource type="Gradient" id="Gradient_n7bl3"]
 interpolation_mode = 1
-offsets = PackedFloat32Array(0, 0.8, 0.85531914)
+offsets = PackedFloat32Array(0, 0.81276596, 0.8468085)
 colors = PackedColorArray(0.03529412, 0.043137256, 0.08235294, 1, 0.078431375, 0.09411765, 0.18039216, 1, 0.29411766, 0.11372549, 0.32156864, 1)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_dt0xs"]
+noise_type = 4
+frequency = 0.0194
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_4iyit"]
 noise = SubResource("FastNoiseLite_dt0xs")
 color_ramp = SubResource("Gradient_n7bl3")
 seamless = true
+
+[sub_resource type="Gradient" id="Gradient_dt0xs"]
+offsets = PackedFloat32Array(0.7319149)
+colors = PackedColorArray(0.03529412, 0.043137256, 0.08235294, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_4iyit"]
+gradient = SubResource("Gradient_dt0xs")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 1)
 
 [node name="Level" type="Node2D" unique_id=962454612 node_paths=PackedStringArray("terrain_layer", "static_layer", "objects_layer", "secrets_layer", "terrain_visual_layer", "secrets_visual_layer")]
 script = ExtResource("1_sypop")
@@ -219,4 +232,11 @@ texture = SubResource("NoiseTexture2D_4iyit")
 texture_scale = Vector2(0.7, 0.7)
 script = ExtResource("9_25vab")
 
+[node name="LevelWallBlend" type="Polygon2D" parent="." unique_id=1539271689]
+z_index = 1
+texture_repeat = 2
+texture = SubResource("GradientTexture2D_4iyit")
+script = ExtResource("10_n7bl3")
+
 [connection signal="level_outline_updated" from="." to="LevelBackground" method="_on_level_level_outline_updated"]
+[connection signal="level_outline_updated" from="." to="LevelWallBlend" method="_on_level_level_outline_updated"]

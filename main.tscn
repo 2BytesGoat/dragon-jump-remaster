@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b5etxdni2oe0j"]
 
 [ext_resource type="Script" uid="uid://3sasinrk8fc6" path="res://main.gd" id="1_efxa6"]
+[ext_resource type="PackedScene" uid="uid://p3lou48biwtg" path="res://src/scenes/effects/background_particles.tscn" id="2_dg77c"]
 [ext_resource type="PackedScene" uid="uid://bvm718ddfisd7" path="res://src/scenes/level/level.tscn" id="3_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://bje1it34lkko4" path="res://src/scenes/camera_2d.tscn" id="3_4c57u"]
 [ext_resource type="AudioStream" uid="uid://c1fov605bxdlk" path="res://assets/music/JDSherbert - Minigame Music Pack - Streetlights.ogg" id="3_7mycd"]
@@ -12,18 +13,18 @@
 [ext_resource type="PackedScene" uid="uid://btnxex4dvvbmn" path="res://src/ui/menus/end_screen.tscn" id="12_ycdy4"]
 [ext_resource type="Theme" uid="uid://d1kdwbwfx60gf" path="res://src/ui/components/themes/level_select_theme.tres" id="13_w48qg"]
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_efxa6"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_dg77c"]
 viewport_path = NodePath("../SubViewportContainer/SubViewport")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_dg77c"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ycdy4"]
 resource_local_to_scene = true
 shader = ExtResource("11_dg77c")
-shader_parameter/tex = SubResource("ViewportTexture_efxa6")
+shader_parameter/tex = SubResource("ViewportTexture_dg77c")
 shader_parameter/mask_type = 2
 shader_parameter/curve = 0.0400000019
 shader_parameter/sharpness = 0.7550000121125
 shader_parameter/color_offset = 0.0
-shader_parameter/mask_brightness = 1.0
+shader_parameter/mask_brightness = 0.750000035625
 shader_parameter/scanline_brightness = 1.0
 shader_parameter/min_scanline_thickness = 0.5
 shader_parameter/aspect = 0.75
@@ -41,6 +42,7 @@ end_screen = NodePath("SubViewportContainer/SubViewport/CanvasLayer/EndScreen")
 time_label = NodePath("SubViewportContainer/SubViewport/CanvasLayer/TimeContainer/TimeLabel")
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=858590886]
+texture_filter = 1
 offset_right = 640.0
 offset_bottom = 360.0
 
@@ -49,6 +51,8 @@ handle_input_locally = false
 size = Vector2i(640, 360)
 render_target_update_mode = 4
 
+[node name="GPUParticles2D" parent="SubViewportContainer/SubViewport" unique_id=248882165 instance=ExtResource("2_dg77c")]
+
 [node name="Level" parent="SubViewportContainer/SubViewport" unique_id=1149041736 groups=["Level"] instance=ExtResource("3_1bvp3")]
 
 [node name="TerrainLayer" parent="SubViewportContainer/SubViewport/Level" index="0" unique_id=899553349]
@@ -56,6 +60,7 @@ z_index = 1
 
 [node name="LevelBackground" parent="SubViewportContainer/SubViewport/Level" index="4" unique_id=425700536]
 clip_children = 2
+texture_filter = 1
 
 [node name="Camera2D" parent="SubViewportContainer/SubViewport" unique_id=385435383 instance=ExtResource("3_4c57u")]
 position = Vector2(104, 96)
@@ -121,7 +126,8 @@ theme_override_font_sizes/font_size = 12
 text = "00:00.00"
 
 [node name="CRTScreenEffect" parent="." unique_id=1412518820 instance=ExtResource("9_efxa6")]
-material = SubResource("ShaderMaterial_dg77c")
+visible = false
+material = SubResource("ShaderMaterial_ycdy4")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -135,6 +141,7 @@ autoplay = true
 bus = &"Music"
 parameters/looping = true
 
+[connection signal="level_size_updated" from="SubViewportContainer/SubViewport/Level" to="SubViewportContainer/SubViewport/GPUParticles2D" method="_on_level_level_size_updated"]
 [connection signal="level_size_updated" from="SubViewportContainer/SubViewport/Level" to="SubViewportContainer/SubViewport/Camera2D" method="_on_level_level_size_updated"]
 [connection signal="pressed" from="SubViewportContainer/SubViewport/CanvasLayer/PauseScreen/Panel/VBoxContainer/ResumeButton" to="." method="_on_resume_button_pressed"]
 [connection signal="pressed" from="SubViewportContainer/SubViewport/CanvasLayer/PauseScreen/Panel/VBoxContainer/RestartButton" to="." method="_on_pause_screen_restart_button_pressed"]
