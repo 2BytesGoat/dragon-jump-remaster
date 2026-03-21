@@ -212,9 +212,11 @@ var level_width_cell = 0
 var level_height_cell = 0
 var level_size = Vector2.ZERO
 
-# Need these for the background
+# Need these for the background (used during set_level parsing)
 var left_wall_pos = Vector2.INF
 var right_wall_pos = Vector2.INF
+var left_wall_cell = Vector2i(-1, -1)  # cell coords for outline
+var right_wall_cell = Vector2i(-1, -1)
 
 signal level_size_updated(level_size: Vector2i)
 signal level_outline_updated(level_outline: Array)
@@ -349,8 +351,8 @@ func set_level(level_code: String) -> void:
 	var y_offset = 0
 	var x_offset = 0
 	
-	var left_bg_pos = []
-	var right_bg_pos = []
+	var left_wall_cells: Array[Vector2i] = []  # (x, y) per row for leftmost wall
+	var right_wall_cells: Array[Vector2i] = []  # (x, y) per row for rightmost wall
 	
 	level_width_cell = 0
 	level_height_cell = 0
@@ -377,28 +379,47 @@ func set_level(level_code: String) -> void:
 			y_offset += 1
 			
 			if left_wall_pos != Vector2.INF and right_wall_pos != Vector2.INF:
-				left_bg_pos.append(left_wall_pos)
-				right_bg_pos.append(right_wall_pos)
+				left_wall_cells.append(left_wall_cell)
+				right_wall_cells.append(right_wall_cell)
 				left_wall_pos = Vector2.INF
 				right_wall_pos = Vector2.INF
+				left_wall_cell = Vector2i(-1, -1)
+				right_wall_cell = Vector2i(-1, -1)
 			
 	if symbol_cnt > 0:
 		_set_multiple_cells(current_symbols, symbol_cnt, Vector2i(x_offset, y_offset))
 		level_height_cell += 1
 	
 	if left_wall_pos != Vector2.INF and right_wall_pos != Vector2.INF:
-		left_bg_pos.append(left_wall_pos)
-		right_bg_pos.append(right_wall_pos)
+		left_wall_cells.append(left_wall_cell)
+		right_wall_cells.append(right_wall_cell)
 		left_wall_pos = Vector2.INF
 		right_wall_pos = Vector2.INF
 	
-	right_bg_pos.reverse()
-	left_bg_pos.append_array(right_bg_pos)
-	level_outline_updated.emit(left_bg_pos)
+	var outline := _compute_outline_from_wall_cells(left_wall_cells, right_wall_cells)
+	level_outline_updated.emit(outline)
 	
 	var cell_size = Vector2i(terrain_layer.rendering_quadrant_size, terrain_layer.rendering_quadrant_size)
 	level_size = Vector2i(level_width_cell, level_height_cell) * cell_size
 	level_size_updated.emit(level_size)
+
+
+func _compute_outline_from_wall_cells(left_cells: Array[Vector2i], right_cells: Array[Vector2i]) -> Array:
+	if left_cells.is_empty() or right_cells.is_empty():
+		return []
+	
+	var left_bg_pos: Array[Vector2] = []
+	var right_bg_pos: Array[Vector2] = []
+	
+	for i in range(left_cells.size()):
+		var left_local := terrain_layer.map_to_local(left_cells[i])
+		var right_local := terrain_layer.map_to_local(right_cells[i])
+		left_bg_pos.append(terrain_layer.to_global(left_local))
+		right_bg_pos.append(terrain_layer.to_global(right_local))
+	
+	right_bg_pos.reverse()
+	left_bg_pos.append_array(right_bg_pos)
+	return left_bg_pos
 
 
 func get_level_size_cell() -> Vector2i:
@@ -495,7 +516,9 @@ func _set_multiple_cells(cell_symbols: String, cell_cnt: int, offset_coords: Vec
 			if symbol == WALL_SYMBOL:
 				if left_wall_pos == Vector2.INF:
 					left_wall_pos = terrain_layer.to_global(terrain_layer.map_to_local(cell_coords))
+					left_wall_cell = cell_coords
 				right_wall_pos = terrain_layer.to_global(terrain_layer.map_to_local(cell_coords))
+				right_wall_cell = cell_coords
 
 
 func _init_atlas_symbol_mapping() -> void:
