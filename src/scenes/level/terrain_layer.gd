@@ -4,6 +4,7 @@ extends TileMapLayer
 @export var visual_layer: TileMapLayer
 
 const hidden_area_atlas_coors = Vector2i(2, 0)
+const RECT_FILL_TILE := Vector2i(1, 1)  # From autotileMap[15] - used to fill gaps for rectangle shape
 const autotileMap: Array = [
 	[Vector2i(0, 0)], 
 	[Vector2i(0, 2)], 
@@ -46,13 +47,33 @@ func clear_visual_tiles() -> void:
 	visual_layer.clear()
 
 
+func get_visual_outline() -> Array:
+	## Returns the 4 corners of the terrain rectangle as global positions (CCW: top-left, top-right, bottom-right, bottom-left).
+	## Assumes visual layer is a solid rectangle (after fill_visual_rectangle).
+	if not visual_layer:
+		return []
+	var rect := get_used_rect()
+	if rect.has_area() == false:
+		return []
+	var min_x := rect.position.x
+	var min_y := rect.position.y
+	var max_x := rect.position.x + rect.size.x
+	var max_y := rect.position.y + rect.size.y
+	var corners: Array[Vector2] = []
+	corners.append(visual_layer.to_global(visual_layer.map_to_local(Vector2(min_x, min_y))))
+	corners.append(visual_layer.to_global(visual_layer.map_to_local(Vector2(max_x, min_y))))
+	corners.append(visual_layer.to_global(visual_layer.map_to_local(Vector2(max_x, max_y))))
+	corners.append(visual_layer.to_global(visual_layer.map_to_local(Vector2(min_x, max_y))))
+	return corners
+
+
 func get_visual_cell_atlas_coords(cell_coords: Vector2i) -> Vector2i:
 	return visual_layer.get_cell_atlas_coords(cell_coords)
 
 
 func set_tile_hidden_area(cell_coords: Vector2i) -> void:
 	self.set_cell(cell_coords, 0, hidden_area_atlas_coors)
-	self.update_visual_tiles(cell_coords)
+	update_visual_tiles(cell_coords)
 
 
 func _get_neighbour_count(cell_coords: Vector2i, tilemap_layer: TileMapLayer, as_binary: bool = false) -> int:

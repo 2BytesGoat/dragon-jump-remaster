@@ -16,11 +16,8 @@ func _on_level_level_outline_updated(level_outline: Array) -> void:
 	for p in level_outline:
 		raw.append(to_local(Vector2(p)))
 
-	var count := raw.size()
-
-	# Expand outward: inner at boundary, outer beyond (negate: normals point inward for CCW)
-	var inner := _expand_ring(raw, -tile_size * 0.15)  # Just outside the boundary
-	var outer := _expand_ring(raw, -tile_size * WALL_THICKNESS_MULTIPLIER)  # Further out for border thickness
+	var inner = _expand_ring(raw, -tile_size * 0.4)
+	var outer = _expand_ring(raw, tile_size * WALL_THICKNESS_MULTIPLIER)
 
 	var donut: PackedVector2Array = PackedVector2Array()
 	for p in outer:
@@ -28,28 +25,21 @@ func _on_level_level_outline_updated(level_outline: Array) -> void:
 	
 	donut.append(outer[0])
 	donut.append(inner[0])
-
-	for i in range(count - 1, -1, -1):
-		donut.append(inner[i])
-
+	
+	inner.reverse()
+	for p in inner:
+		donut.append(p)
+	
 	polygon = donut
 
 
 func _expand_ring(points: Array[Vector2], distance: float) -> Array[Vector2]:
-	var result: Array[Vector2] = []
-	var n := points.size()
-	for i in n:
-		var prev := points[(i - 1 + n) % n]
-		var curr := points[i]
-		var next := points[(i + 1) % n]
-		var edge_a := (curr - prev).normalized()
-		var edge_b := (next - curr).normalized()
-		var normal_a := Vector2(edge_a.y, -edge_a.x)
-		var normal_b := Vector2(edge_b.y, -edge_b.x)
-		var miter := (normal_a + normal_b).normalized()
-		var raw_length = distance / max(miter.dot(normal_a), 0.1)
-		var miter_length = clamp(raw_length, min(distance, distance * 4.0), max(distance, distance * 4.0))
-		result.append(curr + miter * miter_length)
+	var result: Array[Vector2] = [
+		points[0] + Vector2(-distance, -distance),
+		points[1] + Vector2(+distance, -distance),
+		points[2] + Vector2(+distance, +distance),
+		points[3] + Vector2(-distance, +distance),
+	]
 	return result
 
 
