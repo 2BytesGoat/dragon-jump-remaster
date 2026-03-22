@@ -110,8 +110,8 @@ jobs:
           name: build
           path: build/
 
-  publish:
-    name: Publish
+  publish-itch:
+    name: Publish to itch.io
     needs: build
     runs-on: ubuntu-latest
 
@@ -122,6 +122,12 @@ jobs:
           name: build
           path: build/
 
+      - name: Restore itch upload cache
+        uses: actions/cache/restore@v4
+        with:
+          path: .cache/itch
+          key: itch-hashes-v1
+
       - name: Push to itch.io
         env:
           BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
@@ -130,12 +136,65 @@ jobs:
           unzip -q butler.zip
           chmod +x butler
 
-          ./butler push build/web ${{ env.ITCH_USER }}/${{ env.ITCH_GAME }}:web
-          ./butler push build/windows ${{ env.ITCH_USER }}/${{ env.ITCH_GAME }}:windows
-          ./butler push build/linux ${{ env.ITCH_USER }}/${{ env.ITCH_GAME }}:linux
+          hash_dir() { find "$1" -type f -exec sha256sum {} \; | sort | sha256sum | cut -d' ' -f1; }
+          web_hash=$(hash_dir build/web)
+          win_hash=$(hash_dir build/windows)
+          linux_hash=$(hash_dir build/linux)
+
+          push_channel() {
+            local channel=$1
+            local dir=$2
+            local curr_hash=$3
+            local prev_hash=$4
+            if [[ "$curr_hash" == "$prev_hash" ]]; then
+              echo "Skipping $channel (content unchanged)"
+              return 0
+            fi
+            for i in 1 2 3 4 5; do
+              if ./butler push "$dir" ${{ env.ITCH_USER }}/${{ env.ITCH_GAME }}:$channel; then
+                return 0
+              fi
+              if [[ $i -lt 5 ]]; then
+                echo "itch.io may still be processing previous build, retrying in 30s..."
+                sleep 30
+              fi
+            done
+            return 1
+          }
+
+          prev_web="" prev_win="" prev_linux=""
+          [[ -f .cache/itch/hashes.txt ]] && . .cache/itch/hashes.txt
+
+          push_channel web build/web "$web_hash" "$prev_web" || exit 1
+          push_channel windows build/windows "$win_hash" "$prev_win" || exit 1
+          push_channel linux build/linux "$linux_hash" "$prev_linux" || exit 1
+
+          mkdir -p .cache/itch
+          echo "prev_web=$web_hash" > .cache/itch/hashes.txt
+          echo "prev_win=$win_hash" >> .cache/itch/hashes.txt
+          echo "prev_linux=$linux_hash" >> .cache/itch/hashes.txt
+
+      - name: Save itch upload cache
+        if: success()
+        uses: actions/cache/save@v4
+        with:
+          path: .cache/itch
+          key: itch-hashes-v1
+
+  publish-steam:
+    name: Publish to Steam
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event.inputs.publish_steam != 'false'
+
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: build/
 
       - name: Push to Steam
-        if: github.event_name == 'push' || github.event.inputs.publish_steam != 'false'
         uses: game-ci/steam-deploy@v3
         with:
           username: ${{ secrets.STEAM_USERNAME }}
