@@ -73,6 +73,7 @@ var speed_modifier: float = 1.0 : set = _on_speed_modifier_changed
 
 # Only used for the AI controller - find a better way in future
 var level_reference: Level
+var last_agent_intput: bool = false
 
 
 func _ready() -> void:
@@ -108,6 +109,10 @@ func set_controller(controller: PlayerCharacterController) -> void:
 
 
 func set_jump(input: bool) -> void:
+	if input == last_agent_intput:
+		return
+	last_agent_intput = input
+	
 	if input:
 		if not started_walking:
 			started_walking = true
@@ -133,6 +138,7 @@ func reset() -> void:
 	needs_to_release = false
 	show_afterimage = false
 	modifiers = {}
+	last_agent_intput = false
 	
 	for i in range(len(powerups)):
 		consume_powerup()
@@ -166,11 +172,11 @@ func set_speedup_progress(progress: float) -> void:
 
 
 func pick_powerup(area: Area2D) -> void:
-	var interacted_areas = powerups.map(func(x): return x[0])
-	if area.name in interacted_areas:
+	if area.name in powerups:
 		return
-	var powerup_type = area.get_powerup()
-	powerups.append([area.name, powerup_type])
+	area.pickup()
+	powerups.append(area)
+	var powerup_type = area.type
 	picked_powerup.emit(powerup_type, len(powerups) - 1)
 
 
@@ -180,9 +186,10 @@ func has_powerups() -> bool:
 
 func consume_powerup() -> String:
 	# TODO: find a better way to do this
-	var powerup_name = powerups.pop_back()[1]
+	var powerup = powerups.pop_back()
+	powerup.consume()
 	used_powerup.emit(len(powerups))
-	return powerup_name
+	return powerup.type
 
 
 func launch_grappling_hook() -> void:

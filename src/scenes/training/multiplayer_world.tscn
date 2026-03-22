@@ -13,10 +13,16 @@ script = ExtResource("1_yn8gx")
 [node name="SubViewport" type="SubViewport" parent="." unique_id=2136212787]
 transparent_bg = true
 handle_input_locally = false
-size = Vector2i(640, 480)
+size = Vector2i(640, 360)
 render_target_update_mode = 4
 
 [node name="Level" parent="SubViewport" unique_id=962454612 groups=["Level"] instance=ExtResource("1_44gsu")]
+
+[node name="TerrainLayer" parent="SubViewport/Level" index="0" unique_id=899553349]
+tile_map_data = PackedByteArray()
+
+[node name="VisualLayer" parent="SubViewport/Level/TerrainLayer/CanvasGroup" parent_id_path=PackedInt32Array(962454612, 610046657) index="0" unique_id=129901116]
+tile_map_data = PackedByteArray()
 
 [node name="Player" parent="SubViewport" unique_id=515833137 instance=ExtResource("3_o8n50")]
 visible = false

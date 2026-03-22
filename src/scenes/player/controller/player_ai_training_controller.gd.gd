@@ -29,6 +29,8 @@ func set_action(new_action: Dictionary) -> void:
 
 
 func reset() -> void:
+	is_done = false
+	player.is_done = false
 	reset_command.execute(player)
 
 

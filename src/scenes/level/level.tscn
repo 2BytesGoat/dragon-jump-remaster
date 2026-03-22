@@ -1,12 +1,15 @@
 [gd_scene format=3 uid="uid://bvm718ddfisd7"]
 
 [ext_resource type="Script" uid="uid://oxbq6vk7mref" path="res://src/scenes/level/level.gd" id="1_sypop"]
+[ext_resource type="Shader" uid="uid://d3mocqdgxguhv" path="res://assets/shaders/level_outline.gdshader" id="2_ijb5r"]
 [ext_resource type="Texture2D" uid="uid://riso1kxfjte0" path="res://assets/sprites/world/tile-types.png" id="3_lxq08"]
 [ext_resource type="Texture2D" uid="uid://6rwx7rq1h31i" path="res://assets/sprites/world/rock-tiles-wang/tileset_rock-tiles-wang.png" id="3_n86tn"]
 [ext_resource type="Script" uid="uid://bqlmtoyls3un1" path="res://src/scenes/level/terrain_layer.gd" id="3_qnuiv"]
 [ext_resource type="Texture2D" uid="uid://b2u4lotmicdpc" path="res://assets/sprites/world/rock-tiles-wang/tileset_green-tiles-wang.png" id="4_56w06"]
 [ext_resource type="Texture2D" uid="uid://sg0wq6dg7a8n" path="res://assets/sprites/world/rock-tiles-wang/tilest-secret-rock-tiles-wang.png" id="5_n86tn"]
 [ext_resource type="Script" uid="uid://b6vvfthmemhgb" path="res://src/scenes/level/secrets_layer.gd" id="6_qnuiv"]
+[ext_resource type="Script" uid="uid://bu64t7tql4ych" path="res://src/scenes/level/level_background.gd" id="9_25vab"]
+[ext_resource type="Script" uid="uid://bas5rdqvcwnqw" path="res://src/scenes/level/level_wall_blend.gd" id="10_n7bl3"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_n86tn"]
 texture = ExtResource("3_lxq08")
@@ -19,6 +22,12 @@ texture = ExtResource("3_lxq08")
 [sub_resource type="TileSet" id="TileSet_n86tn"]
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_n86tn")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ijb5r"]
+shader = ExtResource("2_ijb5r")
+shader_parameter/tint_color = Color(0, 1, 0.13333344, 0.42745098)
+shader_parameter/brightness_multiplier = 1.0000000475
+shader_parameter/thickness = 2.000000095
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xqg4s"]
 texture = ExtResource("4_56w06")
@@ -149,15 +158,49 @@ texture = ExtResource("3_lxq08")
 [sub_resource type="TileSet" id="TileSet_0fmww"]
 sources/0 = SubResource("TileSetAtlasSource_qnuiv")
 
-[node name="Level" type="Node2D" unique_id=962454612]
-script = ExtResource("1_sypop")
+[sub_resource type="Gradient" id="Gradient_n7bl3"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.78723407, 0.82978725)
+colors = PackedColorArray(0.03529412, 0.043137256, 0.08235294, 1, 0.064500004, 0.077325016, 0.15, 1, 0.18266669, 0.07000001, 0.2, 1)
 
-[node name="TerrainLayer" type="TileMapLayer" parent="." unique_id=899553349]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_dt0xs"]
+noise_type = 4
+frequency = 0.0338
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_4iyit"]
+noise = SubResource("FastNoiseLite_dt0xs")
+color_ramp = SubResource("Gradient_n7bl3")
+seamless = true
+
+[sub_resource type="Gradient" id="Gradient_dt0xs"]
+offsets = PackedFloat32Array(1)
+colors = PackedColorArray(0.03529412, 0.043137256, 0.08235294, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_4iyit"]
+gradient = SubResource("Gradient_dt0xs")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 1)
+
+[node name="Level" type="Node2D" unique_id=962454612 node_paths=PackedStringArray("terrain_layer", "static_layer", "objects_layer", "secrets_layer", "terrain_visual_layer", "secrets_visual_layer")]
+script = ExtResource("1_sypop")
+terrain_layer = NodePath("TerrainLayer")
+static_layer = NodePath("StaticLayer")
+objects_layer = NodePath("ObjectsLayer")
+secrets_layer = NodePath("SecretsLayer")
+terrain_visual_layer = NodePath("TerrainLayer/CanvasGroup/VisualLayer")
+secrets_visual_layer = NodePath("SecretsLayer/VisualLayer")
+
+[node name="TerrainLayer" type="TileMapLayer" parent="." unique_id=899553349 node_paths=PackedStringArray("visual_layer")]
 texture_filter = 1
 tile_set = SubResource("TileSet_n86tn")
 script = ExtResource("3_qnuiv")
+visual_layer = NodePath("CanvasGroup/VisualLayer")
 
-[node name="VisualLayer" type="TileMapLayer" parent="TerrainLayer" unique_id=129901116]
+[node name="CanvasGroup" type="CanvasGroup" parent="TerrainLayer" unique_id=610046657]
+material = SubResource("ShaderMaterial_ijb5r")
+
+[node name="VisualLayer" type="TileMapLayer" parent="TerrainLayer/CanvasGroup" unique_id=129901116]
 texture_filter = 1
 position = Vector2(-8, -8)
 tile_set = SubResource("TileSet_exkae")
@@ -181,3 +224,20 @@ texture_filter = 1
 position = Vector2(-8, -8)
 tile_set = SubResource("TileSet_exkae")
 y_sort_origin = 1
+
+[node name="LevelBackground" type="Polygon2D" parent="." unique_id=425700536]
+z_index = -1
+texture_filter = 1
+texture_repeat = 2
+texture = SubResource("NoiseTexture2D_4iyit")
+script = ExtResource("9_25vab")
+
+[node name="LevelWallBlend" type="Polygon2D" parent="." unique_id=1539271689]
+visible = false
+z_index = 1
+texture_repeat = 2
+texture = SubResource("GradientTexture2D_4iyit")
+script = ExtResource("10_n7bl3")
+
+[connection signal="level_outline_updated" from="." to="LevelBackground" method="_on_level_level_outline_updated"]
+[connection signal="level_outline_updated" from="." to="LevelWallBlend" method="_on_level_level_outline_updated"]
