@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://p3lou48biwtg"]
 
+[ext_resource type="Script" path="res://src/scenes/effects/background_particles.gd" id="1_particles"]
+
 [sub_resource type="Gradient" id="Gradient_5k7ll"]
 offsets = PackedFloat32Array(0, 0.57223797, 1)
 colors = PackedColorArray(1, 1, 1, 0, 0.24705882, 0.29803923, 0.6, 1, 0.4745098, 0.18039216, 0.52156866, 1)
@@ -19,6 +21,7 @@ color_initial_ramp = SubResource("GradientTexture1D_x8351")
 turbulence_enabled = true
 
 [node name="GPUParticles2D" type="GPUParticles2D" unique_id=248882165]
+script = ExtResource("1_particles")
 z_index = 1
 amount = 64
 lifetime = 16.0
