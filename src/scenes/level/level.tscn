@@ -160,12 +160,12 @@ sources/0 = SubResource("TileSetAtlasSource_qnuiv")
 
 [sub_resource type="Gradient" id="Gradient_n7bl3"]
 interpolation_mode = 1
-offsets = PackedFloat32Array(0, 0.81276596, 0.8468085)
-colors = PackedColorArray(0.03529412, 0.043137256, 0.08235294, 1, 0.078431375, 0.09411765, 0.18039216, 1, 0.29411766, 0.11372549, 0.32156864, 1)
+offsets = PackedFloat32Array(0, 0.78723407, 0.82978725)
+colors = PackedColorArray(0.03529412, 0.043137256, 0.08235294, 1, 0.064500004, 0.077325016, 0.15, 1, 0.18266669, 0.07000001, 0.2, 1)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_dt0xs"]
 noise_type = 4
-frequency = 0.0194
+frequency = 0.0338
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_4iyit"]
 noise = SubResource("FastNoiseLite_dt0xs")
@@ -227,9 +227,9 @@ y_sort_origin = 1
 
 [node name="LevelBackground" type="Polygon2D" parent="." unique_id=425700536]
 z_index = -1
+texture_filter = 1
 texture_repeat = 2
 texture = SubResource("NoiseTexture2D_4iyit")
-texture_scale = Vector2(0.7, 0.7)
 script = ExtResource("9_25vab")
 
 [node name="LevelWallBlend" type="Polygon2D" parent="." unique_id=1539271689]
