@@ -39,12 +39,36 @@ Add these in **Settings → Secrets and variables → Actions**:
 
 1. Install [steamcmd](https://partner.steamgames.com/doc/sdk/uploading#1) locally
 2. Run `steamcmd +login <build_account> +quit` and complete MFA
-3. Encode the config:
-   - **Linux/macOS**: `cat ~/.steam/steam/config/config.vdf | base64 -w0`
-   - **Windows**: `certutil -encode -f "C:\Program Files (x86)\Steam\config\config.vdf" tmp.b64`
-4. Put the base64 string into the `STEAM_CONFIG_VDF` secret
+3. Locate `config.vdf` – typically:
+   - **steamcmd**: in the folder where you ran it → `config/config.vdf`
+   - **Steam client**: `~/.steam/steam/config/config.vdf` (Linux) or `C:\Program Files (x86)\Steam\config\config.vdf` (Windows)
+4. Encode to a **single-line** base64 string (no line breaks):
+
+   **Linux (GNU base64):**
+   ```bash
+   base64 -w0 config/config.vdf
+   ```
+
+   **macOS (no -w0):**
+   ```bash
+   base64 -i config/config.vdf | tr -d '\n'
+   ```
+
+   **Windows (PowerShell):** certutil adds PEM headers – strip them first:
+   ```powershell
+   certutil -encode config.vdf tmp.b64
+   # Open tmp.b64, remove first and last line (-----BEGIN/END CERTIFICATE-----),
+   # join remaining lines into one, then paste into the secret
+   ```
+
+5. Paste the raw base64 string into the `STEAM_CONFIG_VDF` secret. Ensure:
+   - No leading/trailing spaces or newlines
+   - No line breaks inside the value
+   - Entire output is a single alphanumeric string (plus `+`, `/`, `=`)
 
 If Steam asks for MFA again later, regenerate this secret.
+
+**Troubleshooting `base64: invalid input`:** The secret contains invalid base64. Re-encode with the commands above, copy the whole output in one go, and paste into GitHub without adding or removing characters.
 
 ### Depot setup
 
