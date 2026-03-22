@@ -172,11 +172,11 @@ func set_speedup_progress(progress: float) -> void:
 
 
 func pick_powerup(area: Area2D) -> void:
-	var interacted_areas = powerups.map(func(x): return x[0])
-	if area.name in interacted_areas:
+	if area.name in powerups:
 		return
-	var powerup_type = area.get_powerup()
-	powerups.append([area.name, powerup_type])
+	area.pickup()
+	powerups.append(area)
+	var powerup_type = area.type
 	picked_powerup.emit(powerup_type, len(powerups) - 1)
 
 
@@ -186,9 +186,10 @@ func has_powerups() -> bool:
 
 func consume_powerup() -> String:
 	# TODO: find a better way to do this
-	var powerup_name = powerups.pop_back()[1]
+	var powerup = powerups.pop_back()
+	powerup.consume()
 	used_powerup.emit(len(powerups))
-	return powerup_name
+	return powerup.type
 
 
 func launch_grappling_hook() -> void:

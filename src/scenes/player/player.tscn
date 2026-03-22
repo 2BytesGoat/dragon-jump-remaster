@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://dqb15x3l5qeot" path="res://assets/sprites/player/AfterImage.png" id="3_tj7fb"]
 [ext_resource type="Script" uid="uid://dx2ry6r7fymd8" path="res://src/scenes/player/states/idle_state.gd" id="4_3m013"]
 [ext_resource type="Script" uid="uid://c7tiqqjpghksw" path="res://src/scenes/player/gapling_hook.gd" id="4_8vrmn"]
-[ext_resource type="Texture2D" uid="uid://bcfjeeqq7rmrh" path="res://icon.svg" id="5_b7xrc"]
+[ext_resource type="Texture2D" path="res://icon.svg" id="5_b7xrc"]
 [ext_resource type="Script" uid="uid://smgwcfp3t3mr" path="res://src/scenes/player/states/move_state.gd" id="5_ii60e"]
 [ext_resource type="Script" uid="uid://dcy2d5ldqq0er" path="res://src/scenes/player/states/fall_state.gd" id="6_8m0h4"]
 [ext_resource type="AudioStream" uid="uid://35l4xnse0nlc" path="res://assets/sfx/SoundBonus.wav" id="6_xgv0w"]
