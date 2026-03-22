@@ -21,8 +21,8 @@ resource_local_to_scene = true
 shader = ExtResource("11_dg77c")
 shader_parameter/tex = SubResource("ViewportTexture_dg77c")
 shader_parameter/mask_type = 2
-shader_parameter/curve = 0.0400000019
-shader_parameter/sharpness = 0.7550000121125
+shader_parameter/curve = 0.01200000057
+shader_parameter/sharpness = 0.80000001425
 shader_parameter/color_offset = 0.0
 shader_parameter/mask_brightness = 0.750000035625
 shader_parameter/scanline_brightness = 1.0
@@ -52,6 +52,7 @@ size = Vector2i(640, 360)
 render_target_update_mode = 4
 
 [node name="GPUParticles2D" parent="SubViewportContainer/SubViewport" unique_id=248882165 instance=ExtResource("2_dg77c")]
+amount = 32
 
 [node name="Level" parent="SubViewportContainer/SubViewport" unique_id=1149041736 groups=["Level"] instance=ExtResource("3_1bvp3")]
 
