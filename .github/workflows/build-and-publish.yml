@@ -1,23 +1,43 @@
-name: Build and Publish to itch.io
+name: Build and Publish
 
 on:
   push:
     tags:
       - "v*"
   workflow_dispatch:
+    inputs:
+      publish_steam:
+        description: "Publish to Steam"
+        required: false
+        default: true
+        type: boolean
+
+env:
+  GODOT_VERSION: 4.6
+  ITCH_USER: 2bytesgoat
+  ITCH_GAME: dragon-jump
 
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
-
-    env:
-      GODOT_VERSION: 4.6
-      ITCH_USER: 2bytesgoat
-      ITCH_GAME: dragon-jump
+    outputs:
+      tag: ${{ steps.meta.outputs.tag }}
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get tag for build description
+        id: meta
+        run: |
+          if [ "${{ github.ref_type }}" = "tag" ]; then
+            echo "tag=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          else
+            echo "tag=dev-$(date +%Y%m%d-%H%M)" >> $GITHUB_OUTPUT
+          fi
 
       - name: Inject runtime secrets
         run: |
@@ -30,16 +50,16 @@ jobs:
 
       - name: Download Godot Engine (Linux Headless)
         run: |
-          wget https://github.com/godotengine/godot/releases/download/${{ env.GODOT_VERSION }}-stable/Godot_v${{ env.GODOT_VERSION }}-stable_linux.x86_64.zip
-          unzip Godot_v${{ env.GODOT_VERSION }}-stable_linux.x86_64.zip
+          wget -q https://github.com/godotengine/godot/releases/download/${{ env.GODOT_VERSION }}-stable/Godot_v${{ env.GODOT_VERSION }}-stable_linux.x86_64.zip
+          unzip -q Godot_v${{ env.GODOT_VERSION }}-stable_linux.x86_64.zip
           mv Godot_v${{ env.GODOT_VERSION }}-stable_linux.x86_64 godot
           chmod +x godot
 
       - name: Install Official Export Templates (For Web)
         run: |
-          wget https://github.com/godotengine/godot/releases/download/${{ env.GODOT_VERSION }}-stable/Godot_v${{ env.GODOT_VERSION }}-stable_export_templates.tpz
+          wget -q https://github.com/godotengine/godot/releases/download/${{ env.GODOT_VERSION }}-stable/Godot_v${{ env.GODOT_VERSION }}-stable_export_templates.tpz
           mkdir -p ~/.local/share/godot/export_templates/${{ env.GODOT_VERSION }}.stable
-          unzip Godot_v${{ env.GODOT_VERSION }}-stable_export_templates.tpz
+          unzip -q Godot_v${{ env.GODOT_VERSION }}-stable_export_templates.tpz
           mv templates/* ~/.local/share/godot/export_templates/${{ env.GODOT_VERSION }}.stable
           rm Godot_v${{ env.GODOT_VERSION }}-stable_export_templates.tpz
 
@@ -49,11 +69,10 @@ jobs:
         run: |
           gh release download custom-templates -p "windows.zip"
 
-          # Godot ONLY reads templates from this exact path
           TEMPLATE_DIR="$HOME/.local/share/godot/export_templates/${{ env.GODOT_VERSION }}.stable"
           mkdir -p "$TEMPLATE_DIR"
 
-          unzip -o windows.zip -d /tmp/windows_templates
+          unzip -o -q windows.zip -d /tmp/windows_templates
 
           mv /tmp/windows_templates/godot.windows.template_release.x86_64.exe \
             "$TEMPLATE_DIR/windows_release_x86_64.exe"
@@ -61,7 +80,6 @@ jobs:
           cp "$TEMPLATE_DIR/windows_release_x86_64.exe" \
             "$TEMPLATE_DIR/windows_debug_x86_64.exe"
 
-          # Cleanup
           rm -rf /tmp/windows_templates windows.zip
 
       - name: Export game (Web)
@@ -74,23 +92,58 @@ jobs:
           GODOT_SCRIPT_ENCRYPTION_KEY: ${{ secrets.GODOT_PCK_ENCRYPTION_KEY }}
         run: |
           mkdir -p build/windows
-          # Godot will now use the custom templates we injected into the global folder
           ./godot --headless --path . --export-release "Windows Desktop" build/windows/${{ secrets.EXPORT_NAME }}.exe
 
-      - name: Download butler
+      - name: Export game (Linux)
         run: |
-          wget https://broth.itch.zone/butler/linux-amd64/LATEST/archive/default -O butler.zip
-          unzip butler.zip
+          mkdir -p build/linux
+          ./godot --headless --path . --export-release "Linux Desktop" build/linux/${{ secrets.EXPORT_NAME }}.x86_64
+
+      - name: Create MacOS depot placeholder
+        run: |
+          mkdir -p build/macos
+          echo "MacOS build is no longer supported." > build/macos/macos_not_supported.txt
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: build/
+
+  publish:
+    name: Publish
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: build/
+
+      - name: Push to itch.io
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+        run: |
+          wget -q https://broth.itch.zone/butler/linux-amd64/LATEST/archive/default -O butler.zip
+          unzip -q butler.zip
           chmod +x butler
 
-      - name: Push Web to itch.io
-        env:
-          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
-        run: |
-          ./butler push build/web $ITCH_USER/$ITCH_GAME:web
+          ./butler push build/web ${{ env.ITCH_USER }}/${{ env.ITCH_GAME }}:web
+          ./butler push build/windows ${{ env.ITCH_USER }}/${{ env.ITCH_GAME }}:windows
+          ./butler push build/linux ${{ env.ITCH_USER }}/${{ env.ITCH_GAME }}:linux
 
-      - name: Push Windows to itch.io
-        env:
-          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
-        run: |
-          ./butler push build/windows $ITCH_USER/$ITCH_GAME:windows
+      - name: Push to Steam
+        if: github.event_name == 'push' || github.event.inputs.publish_steam != 'false'
+        uses: game-ci/steam-deploy@v3
+        with:
+          username: ${{ secrets.STEAM_USERNAME }}
+          configVdf: ${{ secrets.STEAM_CONFIG_VDF }}
+          appId: ${{ secrets.STEAM_APP_ID }}
+          buildDescription: ${{ needs.build.outputs.tag }}
+          rootPath: build
+          depot1Path: windows   # STEAM_APP_ID + 1
+          depot2Path: macos     # STEAM_APP_ID + 2 (placeholder, no longer supported)
+          depot3Path: linux     # STEAM_APP_ID + 3
+          releaseBranch: prerelease
