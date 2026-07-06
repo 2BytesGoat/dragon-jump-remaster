@@ -1,7 +1,9 @@
 [gd_scene format=3 uid="uid://yr0x6omx38m7"]
 
 [ext_resource type="Script" uid="uid://cuvodk1ehi12p" path="res://src/scenes/training/main_multiplayer.gd" id="1_phtji"]
+[ext_resource type="PackedScene" uid="uid://tlcqsbymcr7g" path="res://src/ui/components/time_container.tscn" id="3_1hsvd"]
 [ext_resource type="Script" uid="uid://cd46wkopjxif" path="res://src/scenes/training/synchronizer.gd" id="3_phtji"]
+[ext_resource type="Script" uid="uid://pw0kir7kafsw" path="res://src/ui/components/multi_time_container.gd" id="4_1hsvd"]
 
 [node name="MainMultiplayer" type="Node" unique_id=1674787169]
 script = ExtResource("1_phtji")
@@ -12,3 +14,7 @@ script = ExtResource("1_phtji")
 
 [node name="Synchronizer" type="Node" parent="." unique_id=350876212]
 script = ExtResource("3_phtji")
+
+[node name="TimeContainer" parent="." unique_id=872347357 instance=ExtResource("3_1hsvd")]
+unique_name_in_owner = true
+script = ExtResource("4_1hsvd")
