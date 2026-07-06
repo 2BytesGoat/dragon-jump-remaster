@@ -8,18 +8,19 @@
 [ext_resource type="Script" uid="uid://dvb3whtgxjn0m" path="res://src/scenes/powerups/card_container.gd" id="3_lquwl"]
 [ext_resource type="Script" uid="uid://e8fwy0piod4u" path="res://src/scenes/powerups/card_container_container.gd" id="6_dg77c"]
 [ext_resource type="PackedScene" uid="uid://cg5ctntixs1fk" path="res://src/ui/menus/pause_screen.tscn" id="6_ycdy4"]
+[ext_resource type="PackedScene" uid="uid://tlcqsbymcr7g" path="res://src/ui/components/time_container.tscn" id="9_dg77c"]
 [ext_resource type="PackedScene" uid="uid://fcxn3r6i8mg5" path="res://src/ui/menus/crt_screen_effect.tscn" id="9_efxa6"]
+[ext_resource type="Script" uid="uid://u12281ncqv4x" path="res://src/ui/components/single_time_container.gd" id="10_ycdy4"]
 [ext_resource type="Shader" uid="uid://b87hi538ipc5q" path="res://assets/shaders/screen_crt.gdshader" id="11_dg77c"]
 [ext_resource type="PackedScene" uid="uid://btnxex4dvvbmn" path="res://src/ui/menus/end_screen.tscn" id="12_ycdy4"]
-[ext_resource type="Theme" uid="uid://d1kdwbwfx60gf" path="res://src/ui/components/themes/level_select_theme.tres" id="13_w48qg"]
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_dg77c"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_w48qg"]
 viewport_path = NodePath("../SubViewportContainer/SubViewport")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ycdy4"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vivmo"]
 resource_local_to_scene = true
 shader = ExtResource("11_dg77c")
-shader_parameter/tex = SubResource("ViewportTexture_dg77c")
+shader_parameter/tex = SubResource("ViewportTexture_w48qg")
 shader_parameter/mask_type = 2
 shader_parameter/curve = 0.01200000057
 shader_parameter/sharpness = 0.80000001425
@@ -30,7 +31,7 @@ shader_parameter/min_scanline_thickness = 0.5
 shader_parameter/aspect = 0.75
 shader_parameter/wobble_strength = 0.250000011875
 
-[node name="Main" type="Node" unique_id=632715217 node_paths=PackedStringArray("level", "player_container", "camera", "card_container", "level_music", "pause_screen", "end_screen", "time_label")]
+[node name="Main" type="Node" unique_id=632715217 node_paths=PackedStringArray("level", "player_container", "camera", "card_container", "level_music", "pause_screen", "end_screen", "time_container")]
 script = ExtResource("1_efxa6")
 level = NodePath("SubViewportContainer/SubViewport/Level")
 player_container = NodePath("SubViewportContainer/SubViewport/Players")
@@ -39,7 +40,7 @@ card_container = NodePath("SubViewportContainer/SubViewport/CanvasLayer/CardCont
 level_music = NodePath("AudioStreamPlayer")
 pause_screen = NodePath("SubViewportContainer/SubViewport/CanvasLayer/PauseScreen")
 end_screen = NodePath("SubViewportContainer/SubViewport/CanvasLayer/EndScreen")
-time_label = NodePath("SubViewportContainer/SubViewport/CanvasLayer/TimeContainer/TimeLabel")
+time_container = NodePath("SubViewportContainer/SubViewport/CanvasLayer/TimeContainer")
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=858590886]
 texture_filter = 1
@@ -113,26 +114,13 @@ offset_bottom = 105.0
 [node name="EndScreen" parent="SubViewportContainer/SubViewport/CanvasLayer" unique_id=127491131 instance=ExtResource("12_ycdy4")]
 visible = false
 
-[node name="TimeContainer" type="MarginContainer" parent="SubViewportContainer/SubViewport/CanvasLayer" unique_id=1415512404]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -48.0
-offset_right = 48.0
-offset_bottom = 40.0
-grow_horizontal = 2
-size_flags_horizontal = 4
-theme = ExtResource("13_w48qg")
-
-[node name="TimeLabel" type="Label" parent="SubViewportContainer/SubViewport/CanvasLayer/TimeContainer" unique_id=645836330]
+[node name="TimeContainer" parent="SubViewportContainer/SubViewport/CanvasLayer" unique_id=872347357 instance=ExtResource("9_dg77c")]
 unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "00:00.00"
+script = ExtResource("10_ycdy4")
 
 [node name="CRTScreenEffect" parent="." unique_id=1412518820 instance=ExtResource("9_efxa6")]
 visible = false
-material = SubResource("ShaderMaterial_ycdy4")
+material = SubResource("ShaderMaterial_vivmo")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -146,6 +134,7 @@ autoplay = true
 bus = &"Music"
 parameters/looping = true
 
+[connection signal="game_paused" from="." to="SubViewportContainer/SubViewport/CanvasLayer/TimeContainer" method="_on_main_game_paused"]
 [connection signal="level_size_updated" from="SubViewportContainer/SubViewport/Level" to="SubViewportContainer/SubViewport/GPUParticles2D" method="_on_level_level_size_updated"]
 [connection signal="level_size_updated" from="SubViewportContainer/SubViewport/Level" to="SubViewportContainer/SubViewport/Camera2D" method="_on_level_level_size_updated"]
 [connection signal="pressed" from="SubViewportContainer/SubViewport/CanvasLayer/PauseScreen/Panel/VBoxContainer/ResumeButton" to="." method="_on_resume_button_pressed"]
