@@ -1,7 +1,11 @@
 ---
 title: Dragon Jump Remaster Architecture Documentation
 tags: [godot, game-engine, architecture, system-design]
-related: [[main_system/main_system.md]], [[player_system/player_system.md]], [[level_system/level_system.md]], [[save_system/save_system.md]]
+related:
+  - "[[main_system]]"
+  - "[[player_system]]"
+  - "[[level_system]]"
+  - "[[save_system]]"
 search_terms: [modular-architecture, symbol-based-levels, scene-organization, signal-communication, decoupled-systems]
 ---
 

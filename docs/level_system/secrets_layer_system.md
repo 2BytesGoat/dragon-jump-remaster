@@ -1,3 +1,12 @@
+---
+title: Secrets Layer System Documentation
+tags: [godot, game-engine, level-system, secret-management, hidden-areas]
+related:
+  - "[[level_system]]"
+  - "[[main_system]]"
+search_terms: [secret-areas, hidden-tiles, flood-fill-algorithm, collision-detection, visual-hiding, secret-discovery]
+---
+
 # Secrets Layer System Documentation
 
 This document outlines the architecture and functionality of the Secrets Layer system in the Dragon Jump Remaster project.

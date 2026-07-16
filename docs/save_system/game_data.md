@@ -1,71 +1,93 @@
 ---
 title: GameData Resource Documentation
-tags: [godot, game-engine, data-resource, player-progress, level-data]
-related: [[save_system/save_system.md]], [[level_system/level_system.md]], [[player_system/player_system.md]]
-search_terms: [game-data-resource, player-save, level-progress, data-structure, serialization, deserialization]
+tags: [godot, game-engine, data-resource, player-progress, level-data, save-system]
+related:
+  - "[[save_system/save_system.md]]"
+  - "[[level_system/level_system.md]]"
+  - "[[player_system/player_system.md]]"
+search_terms: [game-data-resource, player-save, level-progress, data-structure, serialization, deserialization, save-manager, resource-system, game-state]
 ---
 
-# GameData Resource
+# GameData Resource Documentation
 
 ## Overview
+- High-level description of the system's purpose: The `GameData` resource in Dragon Jump Remaster represents the top-level data structure for storing player progress and game state. It serves as the primary container for all player-related information including player name and level progress data. This resource is serialized to disk using Godot's resource system to persist game progress between sessions.
+- Role within the overall architecture: This resource acts as the main container for player game state, enabling persistent storage of player progress across game sessions.
+- Key search terms and concepts for RAG retrieval: game-data-resource, player-save, level-progress, data-structure, serialization, deserialization, save-manager, resource-system, game-state
+- System relationships and dependencies: Related to save system (data persistence), level system (level tracking), player system (player identification)
 
-The `GameData` resource in Dragon Jump Remaster represents the top-level data structure for storing player progress and game state. It serves as the primary container for all player-related information including player name and level progress data. This resource is serialized to disk using Godot's resource system to persist game progress between sessions.
+## Script Components (`*.gd`)
+### `game_data.gd`
+- Key properties and their purposes:
+  - `player_name`: String - Name of the player associated with this save data
+  - `levels`: Dictionary - Dictionary mapping level names to LevelData objects containing specific level progress information
+- Main methods and their functionality:
+  - None (this is a resource, not a script node)
+- Signals and connections:
+  - None (this is a resource, not a script node)
+- Integration points with other systems:
+  - Used by SaveManager singleton for serialization/deserialization of player progress
+  - Connects to level system for per-level progress tracking through the levels dictionary
+  - Integrates with player system for player identification via player_name field
+- RAG metadata: performance considerations, optimization hints
+  - Performance considerations include efficient data structure usage and minimal memory overhead
+  - Optimization hints involve using appropriate dictionary structures for level access
 
-## Script Components (`game_data.gd`)
-
-### Key Properties
-
-| Property | Type | Purpose |
-|----------|------|---------|
-| `player_name` | String | Name of the player associated with this save data |
-| `levels` | Dictionary | Dictionary mapping level names to LevelData objects containing specific level progress information |
-
-### Main Functionality
-
-The GameData resource is designed as a container for player game state and does not contain any methods or logic. It serves purely as a data structure that holds the following information:
-- Player identification through `player_name` field
-- Per-level progress tracking in the `levels` dictionary, where each key is a level name (e.g., "1-1", "1-2") and each value is a LevelData resource object
+## Scene Components (`*.tscn`)
+### `game_data.tscn`
+- Scene hierarchy and organization:
+  - This is a resource file, not a scene
+- Key connections between elements:
+  - None (this is a resource, not a scene)
+- Visual layout considerations:
+  - No visual elements required for this system
+- RAG metadata: visual design patterns, UI flow
+  - Not applicable for resource files
 
 ## System Integration
-
-The GameData resource integrates with the SaveManager singleton through the following mechanisms:
-1. **Data Persistence**: Used by SaveManager to serialize/deserialize player progress to/from disk
-2. **Level Progress Tracking**: The `levels` dictionary provides access to individual level data for progress tracking and updates
-3. **Player Identification**: The `player_name` field enables multi-player support by associating save data with specific players
+- How the system interacts with other components: The GameData resource integrates with the SaveManager singleton and connects to level and player systems for data persistence and tracking.
+- Signal-based communication patterns: Uses signals from SaveManager for save/load events
+- Data flow and control flow:
+  1. SaveManager initializes new GameData instances
+  2. Player progress updates GameData levels dictionary
+  3. SaveManager serializes GameData to disk
+  4. SaveManager deserializes GameData from disk
+- Cross-system relationships for RAG linking: Related to save system (data persistence), level system (level tracking), player system (player identification)
 
 ## Design Patterns
+- Architecture patterns used:
+  - Resource pattern for data persistence
+  - Dictionary pattern for scalable level organization
+  - Data container pattern for structured information storage
+- Code organization principles:
+  - Separation of concerns between data structure and behavior
+  - Modular design for reusable game state management
+- Reusability considerations:
+  - Can be reused across different save/load operations
+  - Supports multiple player profiles through player_name field
+- Pattern-specific RAG tags and categorization:
+  - resource-pattern
+  - dictionary-pattern
+  - data-container-pattern
+  - save-system
 
-### Resource-based Data Structure
-Uses Godot's built-in Resource system as the foundation for data persistence, enabling automatic serialization and deserialization of game state.
+## Implementation Details
+- Key code examples:
+  - `var game_data = GameData.new()` - Creating new game data instance
+  - `game_data.player_name = "Player1"` - Setting player name
+  - `ResourceSaver.save(game_data, "user://save_game.tres")` - Saving game data to disk
+  - `var loaded_data = ResourceLoader.load("user://save_game.tres")` - Loading game data from disk
+- Important algorithms or logic:
+  - Data serialization for save/load operations
+  - Dictionary-based level access for efficient progress tracking
+  - Player identification and profile management
+- Performance considerations:
+  - Efficient data structure usage to minimize memory overhead
+  - Fast dictionary lookups for level progress access
+  - Proper resource handling to avoid memory leaks
 
-### Dictionary-based Organization
-Organizes level data using a dictionary structure where keys are level identifiers (strings) and values are LevelData resources, allowing flexible and scalable level progression tracking.
+## See Also
+- [[save_system/save_system.md]]
+- [[level_system/level_system.md]]
+- [[player_system/player_system.md]]
 
-## Data Flow
-
-1. **Initialization**: SaveManager creates new GameData instances with default player name and empty levels dictionary
-2. **Progress Tracking**: As players complete levels, SaveManager updates the corresponding LevelData objects within the `levels` dictionary
-3. **Persistence**: When saving, SaveManager serializes the entire GameData resource to disk using Godot's ResourceSaver
-4. **Loading**: When loading, SaveManager deserializes the GameData resource from disk using Godot's ResourceLoader
-
-## File Structure
-
-### Location
-GameData resources are stored in `src/scripts/resources/game_data.gd` and are used by the SaveManager singleton.
-
-### Usage in Save System
-The GameData resource is the primary data structure used throughout the save system:
-- Created when a new player save is initialized
-- Updated as players complete levels
-- Serialized to disk using `ResourceSaver.save()` method
-- Deserialized from disk using `ResourceLoader.load()` method
-
-## Relationship with LevelData
-
-GameData works in conjunction with LevelData resources through the `levels` dictionary. Each entry in this dictionary corresponds to a LevelData resource that contains specific information about an individual level's progress, including:
-- Attempts count
-- Best completion time
-- Progress milestone reached
-- Overall progress percentage
-
-This design allows for efficient storage and retrieval of player progress across all levels while maintaining clear separation between top-level player data and individual level data.

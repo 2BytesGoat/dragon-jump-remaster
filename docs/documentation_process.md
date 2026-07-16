@@ -134,7 +134,7 @@ Each documentation file should include a metadata header at the top:
 ---
 title: [System Name] Documentation
 tags: [tag1, tag2, tag3]
-related: [[file_name.md]]
+related: [[file_name]]
 search_terms: [term1, term2, term3]
 ---
 ```
@@ -144,7 +144,10 @@ search_terms: [term1, term2, term3]
 ---
 title: Main System Documentation
 tags: [godot, game-engine, architecture, main-system]
-related: [[player_system/player_system.md]], [[level_system/level_system.md]], [[save_system/save_system.md]]
+related:
+  - "[[player_system]]"
+  - "[[level_system]]"
+  - "[[save_system]]"
 search_terms: [main loop, game flow, level loading, player management, signal communication]
 ---
 ```
@@ -180,7 +183,7 @@ Here is a complete template that should be followed for all documentation files:
 ---
 title: [System Name] Documentation
 tags: [tag1, tag2, tag3]
-related: [[file_name.md]]
+related: [[file_name]]
 search_terms: [term1, term2, term3]
 ---
 

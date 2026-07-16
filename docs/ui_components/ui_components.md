@@ -1,7 +1,10 @@
 ---
 title: UI Components Documentation
 tags: [godot, game-engine, ui, user-interface, components]
-related: [[player_system/player_system.md]], [[leaderboard_system/leaderboard_system.md]], [[save_system/save_system.md]]
+related:
+  - "[[player_system]]"
+  - "[[leaderboard_system]]"
+  - "[[save_system]]"
 search_terms: [ui-components, menu-system, player-ui, leaderboard-ui, progress-bar, time-display, game-menus]
 ---
 

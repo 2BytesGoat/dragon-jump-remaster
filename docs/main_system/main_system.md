@@ -1,7 +1,10 @@
 ---
 title: Main System Documentation
 tags: [godot, game-engine, main-system, game-loop, level-management]
-related: [[player_system/player_system.md]], [[level_system/level_system.md]], [[save_system/save_system.md]]
+related:
+  - "[[player_system]]"
+  - "[[level_system]]"
+  - "[[save_system]]"
 search_terms: [main-loop, game-flow, level-loading, player-management, signal-communication, ui-handling]
 ---
 

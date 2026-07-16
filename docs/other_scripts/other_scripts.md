@@ -1,7 +1,9 @@
 ---
 title: Other Scripts Documentation
 tags: [godot, game-engine, utilities, constants, environment, scene-manager, utils]
-related: [[main_system/main_system.md]], [[save_system/save_system.md]]
+related:
+  - "[[main_system]]"
+  - "[[save_system]]"
 search_terms: [constants, environment-variables, scene-manager, utility-functions, command-line-args, player-name-validation, time-formatting]
 ---
 

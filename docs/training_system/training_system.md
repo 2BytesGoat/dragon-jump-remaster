@@ -1,8 +1,10 @@
 ---
 title: Training System Documentation
-tags: [godot, game-engine, rl, reinforcement-learning, training]
-related: [[rl_integration_system/rl_integration_system.md]], [[player_system/player_system.md]]
-search_terms: [training-system, rl-training, ai-training, multiplayer-training, agent-management, environment-communication, physics-simulation]
+tags: [godot, game-engine, rl, reinforcement-learning, training, system-integration]
+related:
+  - "[[rl_integration_system/rl_integration_system.md]]"
+  - "[[player_system/player_system.md]]"
+search_terms: [training-system, rl-training, ai-training, multiplayer-training, agent-management, environment-communication, physics-simulation, agent-communication, reinforcement-learning-environment]
 ---
 
 # Training System Documentation
@@ -30,6 +32,8 @@ System relationships and dependencies: This system integrates with RL Integratio
 - **Main methods**:
   - `_ready()`: Initializes training worlds and agents based on command line arguments
   - `_process(_delta: float)`: Updates agent positions and tracking in real-time
+- **Signals and connections**:
+  - No direct signals defined in this script, but connects to sync node for communication
 - **Integration points with other systems**:
   - Uses EnvironmentVariables for command-line arguments
   - Connects to Constants for level definitions
@@ -60,6 +64,10 @@ System relationships and dependencies: This system integrates with RL Integratio
   - `handle_message()`: Processes messages from the Python server
   - `_get_obs_from_agents()`, `_get_reward_from_agents()`, `_get_info_from_agents()`, `_get_done_from_agents()`: Helper methods for data extraction
   - `_set_agent_actions()`, `_reset_agents()`: Helper methods for agent control
+- **Signals and connections**:
+  - Connects to agent nodes via groups for communication
+  - Communicates with Python server through TCP connection
+  - Uses signals from Sync node for coordination
 - **Integration points with other systems**:
   - Connects to RL Integration System for communication
   - Uses Godot's physics engine for simulation
@@ -91,7 +99,14 @@ System relationships and dependencies: This system integrates with RL Integratio
 ## System Integration
 - How the system interacts with other components: Training system connects to RL Integration System for communication, player system for agent behavior, and main system for game flow control
 - Signal-based communication patterns: Uses signals from agents and Sync node for coordination
-- Data flow and control flow: Command-line arguments → Agent initialization → Environment setup → Communication with Python server → Agent actions → Observation feedback
+- Data flow and control flow:
+  1. Command-line arguments are parsed by EnvironmentVariables
+  2. MainMultiplayer initializes training worlds and agents based on arguments
+  3. Synchronizer connects to Python RL server via TCP
+  4. Agent nodes send observations to Python server
+  5. Python server sends actions back to Godot
+  6. Actions are applied to agent nodes in the game world
+  7. Loop continues for training iterations
 - Cross-system relationships for RAG linking: Related to RL Integration System (communication), player system (agent behavior), main system (game flow)
 
 ## Design Patterns
@@ -111,7 +126,12 @@ System relationships and dependencies: This system integrates with RL Integratio
   - Physics step repetition for training efficiency
   - Agent action setting and observation sending
 - Performance considerations: Efficient agent instantiation, proper network communication, appropriate physics step repetition
+- Optimization hints:
+  - Use preloaded scenes to reduce instantiation time
+  - Configure appropriate action repeat values for training efficiency
+  - Implement proper message handling to avoid network bottlenecks
 
 ## See Also
 - [[rl_integration_system/rl_integration_system.md]]
 - [[player_system/player_system.md]]
+- [[main_system/main_system.md]]

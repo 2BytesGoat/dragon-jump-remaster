@@ -1,7 +1,10 @@
 ---
 title: Save System Documentation
 tags: [godot, game-engine, save-system, data-persistence, player-progress]
-related: [[main_system/main_system.md]], [[player_system/player_system.md]], [[level_system/level_system.md]]
+related:
+  - "[[main_system]]"
+  - "[[player_system]]"
+  - "[[level_system]]"
 search_terms: [data-persistence, player-save, level-unlock, progress-tracking, game-state, resource-saving]
 ---
 

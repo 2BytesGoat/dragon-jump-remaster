@@ -2,6 +2,9 @@
 
 This document tracks all .gd and .tscn files in the repository, organized by component type.
 
+> [!NOTE]
+> Documentation structures may evolve over time to better align with the guidelines outlined in `docs/documentation_process.md`. All documentation should be cross-referenced against the current process document for the most up-to-date requirements.
+
 ## Main System Files
 
 - [x] main.gd - (Added documentation to /docs/main_system/main_system.md)

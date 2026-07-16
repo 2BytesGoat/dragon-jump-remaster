@@ -1,7 +1,10 @@
 ---
 title: Leaderboard System Documentation
 tags: [godot, game-engine, ui, networking, leaderboard]
-related: [[save_system/save_system.md]], [[player_system/player_system.md]], [[ui_components/ui_components.md]]
+related:
+  - "[[save_system]]"
+  - "[[player_system]]"
+  - "[[ui_components]]"
 search_terms: [leaderboard, scores, multiplayer, silentwolf, online-leaderboards, time-submission, player-rankings]
 ---
 

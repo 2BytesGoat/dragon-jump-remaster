@@ -1,3 +1,12 @@
+---
+title: Level Wall Blend System Documentation
+tags: [godot, game-engine, level-system, visual-effects, wall-blend]
+related:
+  - "[[level_system]]"
+  - "[[main_system]]"
+search_terms: [wall-blend, level-boundary, polygon-shape, visual-separation, boundary-effect]
+---
+
 # Level Wall Blend System Documentation
 
 This document outlines the architecture and functionality of the Level Wall Blend system in the Dragon Jump Remaster project.

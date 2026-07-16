@@ -1,7 +1,10 @@
 ---
 title: Level System Documentation
 tags: [godot, game-engine, level-system, tilemap, symbol-based-levels]
-related: [[main_system/main_system.md]], [[player_system/player_system.md]], [[save_system/save_system.md]]
+related:
+  - "[[main_system]]"
+  - "[[player_system]]"
+  - "[[save_system]]"
 search_terms: [level-generation, tilemap-system, symbol-based-levels, terrain-rendering, object-placement, pathfinding]
 ---
 

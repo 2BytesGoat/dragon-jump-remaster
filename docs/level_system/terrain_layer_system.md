@@ -1,3 +1,12 @@
+---
+title: Terrain Layer System Documentation
+tags: [godot, game-engine, level-system, tilemap, terrain-rendering]
+related:
+  - "[[level_system]]"
+  - "[[main_system]]"
+search_terms: [terrain-layer, tilemap-system, autotile-generation, hidden-areas, boundary-calculation]
+---
+
 # Terrain Layer System Documentation
 
 This document outlines the architecture and functionality of the Terrain Layer system in the Dragon Jump Remaster project.

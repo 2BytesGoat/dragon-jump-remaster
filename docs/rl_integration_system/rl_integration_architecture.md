@@ -1,160 +1,111 @@
 ---
-title: System Architecture Documentation
-author: Cline
-status: Draft
+title: RL Integration System Documentation
+tags: [godot, game-engine, rl-integration, reinforcement-learning, ai, architecture, tcp-communication]
+related:
+  - "[[training_system/training_system.md]]"
+  - "[[player_system/player_system.md]]"
+  - "[[signal_bus/signal_bus.md]]"
+  - "[[main_system/main_system.md]]"
+search_terms: [rl-integration, reinforcement-learning, python-server, tcp-socket, agent-control, training-mode, inference-mode, human-mode, onnx-model, architecture, communication-pattern]
 ---
 
-# System Architecture Documentation
+# RL Integration System Documentation
 
 ## Overview
-This document details the architecture of `dragon-jump-remaster`, focusing on component relationships, communication protocols, and implementation specifics. The system combines game mechanics with reinforcement learning integration.
+- High-level description of the system's purpose: The RL Integration System enables integration between the Godot game engine and Python-based reinforcement learning environments through TCP socket communication.
+- Role within the overall architecture: This system acts as a bridge between the Godot game engine and external Python RL servers, supporting training, inference, and human control modes.
+- Key search terms and concepts for RAG retrieval: rl-integration, reinforcement-learning, python-server, tcp-socket, agent-control, training-mode, inference-mode, human-mode, onnx-model, architecture, communication-pattern
+- System relationships and dependencies: Related to training system (agent management), player system (agent control), signal bus (event communication), main system (game loop)
 
----
 
-## Core Components
+## Script Components (`*.gd`)
+### `sync.gd` (in addons/godot_rl_agents/)
+- Key properties and their purposes:
+  - `control_mode`: Enum controlling the mode of operation (HUMAN, TRAINING, ONNX_INFERENCE)
+  - `socket_port`: TCP port for communication with Python server (default: 11008)
+  - `agent_group_name`: Name of the group containing agent nodes
+  - `onnx_model_path`: Path to ONNX model file for inference mode
+- Main methods and their functionality:
+  - `_ready()`: Initializes socket connection and sets up control mode
+  - `_process(delta)`: Handles periodic updates and communication with Python server
+  - `connect_to_server()`: Establishes TCP connection to Python RL server
+  - `send_observation(observation)`: Sends observation data to Python server
+  - `receive_action()`: Receives action data from Python server
+  - `set_control_mode(mode)`: Switches between HUMAN, TRAINING, and ONNX_INFERENCE modes
+- Signals and connections:
+  - Connects to Python RL server via TCP socket
+  - Listens for actions from Python server in TRAINING mode
+  - Emits signals for agent state changes
+- Integration points with other systems:
+  - Connects to player system for agent control
+  - Integrates with level system for environment state
+  - Uses signal bus for event communication
+- RAG metadata: performance considerations, optimization hints
+  - Performance considerations include efficient socket communication and minimal processing overhead
+  - Optimization hints involve using asynchronous socket operations and batching data transfers
 
-### 1. RL Integration System (`addons/godot_rl_agents`)
-**Location**: `addons/godot_rl_agents/sync.gd`  
-**Communication Protocol**: TCP socket (port `11008`) with Python server
 
-#### Key Workflow
-```mermaid
-graph LR
-  A[Godot Engine] -->|TCP| B[Python RL Server]
-  B -->|env_info| A
-  B -->|reset| A
-  B -->|step| A
-  A -->|obs/reward| B
-```
+## Scene Components (`*.tscn`)
+### `sync.tscn` (in addons/godot_rl_agents/)
+- Scene hierarchy and organization:
+  - Node that contains the sync.gd script for RL integration functionality
+- Key connections between elements:
+  - Connects to player nodes via agent group
+  - Communicates with Python server through TCP socket
+- Visual layout considerations:
+  - Minimal visual representation as this is primarily a logic component
+- RAG metadata: visual design patterns, UI flow
+  - No visual elements required for this system
 
-#### Control Modes
-| Mode | Purpose | Configuration |
-|------|---------|---------------|
-| `HUMAN` | Manual control | `control_mode = ControlModes.HUMAN` |
-| `TRAINING` | Connect to Python RL environment | `control_mode = ControlModes.TRAINING` |
-| `ONNX_INFERENCE` | Load pre-trained `.onnx` models | `control_mode = ControlModes.ONNX_INFERENCE` |
 
-#### Critical Implementation Notes
-- Agents grouped via `get_tree().get_nodes_in_group("AGENT")`
-- Supports multi-agent RL with policy names
-- Uses `ONNXModel` for inference (`.onnx` file loading)
-- Requires Python server running with `gdrl` command
+## System Integration
+- How the system interacts with other components: The RL Integration System communicates with the Python RL server via TCP socket and interfaces with player agents to control their behavior based on training or inference data.
+- Signal-based communication patterns: Uses signals for agent state changes, environment updates, and control mode transitions.
+- Data flow and control flow:
+  1. Game initializes RL integration system
+  2. System connects to Python server via TCP socket
+  3. Environment information sent to Python server
+  4. Actions received from Python server
+  5. Player agents controlled based on received actions
+- Cross-system relationships for RAG linking: Related to training system (agent management), player system (agent control), signal bus (event communication), main system (game loop)
 
----
 
-### 2. Player System
-**Location**: `src/scenes/level/level.gd` (primary implementation)  
-**Key Features**:
-- Character movement physics
-- Collision detection with platforms
-- State management (jumping, falling, idle)
-- Input handling (keyboard/gamepad)
+## Design Patterns
+- Architecture patterns used:
+  - Communication pattern for TCP socket handling
+  - State pattern for different control modes (HUMAN, TRAINING, ONNX_INFERENCE)
+  - Observer pattern for event handling and notifications
+- Code organization principles:
+  - Separation of concerns between communication logic and game state management
+  - Modular design supporting multiple control modes
+- Reusability considerations:
+  - Can be reused with different Python RL servers
+  - Supports multi-agent scenarios through group-based agent management
+- Pattern-specific RAG tags and categorization:
+  - communication-pattern
+  - state-pattern
+  - observer-pattern
+  - rl-integration-system
 
-#### Implementation Details
-- **Input Handling**: Directly implemented in `level.gd` through `Player` node (see `player.tscn`)
-- **Player State**: Stored in `player_start_position` variable
-- **State Persistence**: Player position is saved via level code serialization
 
----
+## Implementation Details
+- Key code examples:
+  - `get_tree().get_nodes_in_group("AGENT")` - Agent grouping for multi-agent scenarios
+  - `create_tween()` - Animation creation for smooth transitions in UI elements
+  - `connect("connected", self, "_on_connected")` - Signal connection for socket events
+- Important algorithms or logic:
+  - TCP socket communication protocol implementation
+  - Control mode switching logic
+  - Agent state management and synchronization
+- Performance considerations:
+  - Efficient socket communication to minimize latency
+  - Asynchronous processing to avoid blocking the main game loop
+  - Minimal data transfer between Godot and Python environments
 
-### 3. Map System (Level System)
-**Location**: `src/scenes/level/level.gd` (level management)  
-**Key Features**:
-- Tile-based level rendering
-- Dynamic object spawning
-- Boundary detection
-- Level progression logic
 
-#### Implementation Details
-- **Level Data Format**: Custom symbol-based format (W=wall, E=empty, P=player, etc.)
-- **Serialization**: Implemented via `get_level_code()` and `set_level()`
-- **Storage**: Levels defined as string codes (e.g., `W42|W8E29W5|...`)
-- **Level Data Structure**: Encoded in `level.gd` using symbol-to-tile mapping
+## See Also
+- [[training_system/training_system.md]]
+- [[player_system/player_system.md]]
+- [[signal_bus/signal_bus.md]]
+- [[main_system/main_system.md]]
 
----
-
-### 4. Save System
-**Location**: *Implementation missing* (expected: `src/scripts/save_manager.gd`)  
-**Current Status**: Not implemented (file doesn't exist)
-
-#### Implementation Findings
-> **What data is persisted?**  
-> Level layout (via `get_level_code()`) and player position (`player_start_position`)  
-> *Evidence*: Level code serialization in `get_level_code()` and `player_start_position` variable
-
-> **Versioning mechanism?**  
-> Not implemented - level code format appears stable with no version markers  
-> *Evidence*: Level code format consistent throughout `level.gd` codebase
-
----
-
-### 5. Leaderboard System
-**Location**: `src/scripts/leaderboard_manager.gd` (singleton)  
-**Current Status**: Singleton exists but integration details unclear
-
-#### Implementation Findings
-> **Event integration?**  
-> `player_finished_run` events likely used (referenced in component relationships)  
-> *Evidence*: `level.gd` contains `player_finished_run` signal in component relationships
-
-> **Storage mechanism?**  
-> Local storage only (no cloud services mentioned in code)  
-> *Evidence*: No external API calls or cloud references in codebase
-
----
-
-## Singleton Management
-
-| Singleton | Location | Purpose | Status | Implementation Status |
-|-----------|----------|---------|--------|------------------------|
-| `SaveManager` | `src/scripts/save_manager.gd` | Game state persistence | Implementation missing | Not found in codebase |
-| `LeaderboardManager` | `src/scripts/leaderboard_manager.gd` | High score management | Integration unclear | Singleton exists but no usage |
-| `SignalBus` | `src/scripts/signal_bus.gd` | Central event dispatcher | Needs verification | Not referenced in `level.gd` |
-
----
-
-## Component Relationships
-
-```mermaid
-graph TD
-  LevelSystem -->|Tile data| MapSystem
-  LevelSystem -->|Player control| PlayerSystem
-  PlayerSystem -->|State changes| SignalBus
-  SignalBus -->|player_finished_run| LeaderboardManager
-  SignalBus -->|new_run_attempt| SaveManager
-  RLIntegration -->|TCP| PythonServer
-  PythonServer -->|env_info| RLIntegration
-  RLIntegration -->|Actions| PlayerSystem
-```
-
----
-
-## Critical Questions Answered
-
-1. **Python Server Startup Command**  
-   `gdrl` (external command to start Python server)
-
-2. **Network Requirements**  
-   Port `11008` TCP connection required; no firewall specifics in code
-
-3. **Save Data Structure**  
-   - Level layout: Symbol-based string code (W=wall, E=empty, P=player)
-   - Player position: Stored in `player_start_position` variable
-   - *No versioning mechanism implemented*
-
-4. **Leaderboard Storage**  
-   Local storage only (no cloud services referenced)
-
-5. **Input Handling Architecture**  
-   Directly handled in `level.gd` through `Player` node (see `player.tscn`)
-
-6. **Level Data Format**  
-   Custom symbol-based encoding (e.g., `W42|W8E29W5|...`)
-
----
-
-## Next Steps
-1. Implement `SaveManager` singleton to handle level and player state persistence
-2. Verify `SignalBus` usage with `player_finished_run` events
-3. Document level code format for save/load operations
-4. Add cloud storage options to `LeaderboardManager` if required

@@ -1,3 +1,12 @@
+---
+title: Level Background System Documentation
+tags: [godot, game-engine, level-system, background-rendering, visual-effects]
+related:
+  - "[[main_system]]"
+  - "[[level_system]]"
+  - "[[save_system]]"
+search_terms: [level-background, polygon-rendering, particle-effects, visual-enhancement, boundary-representation]
+---
 # Level Background System Documentation
 
 This document outlines the architecture and functionality of the Level Background system in the Dragon Jump Remaster project.
