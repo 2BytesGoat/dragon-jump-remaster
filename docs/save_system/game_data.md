@@ -1,5 +1,8 @@
 ---
 title: GameData Resource Documentation
+tags: [godot, game-engine, data-resource, player-progress, level-data]
+related: [[save_system/save_system.md]], [[level_system/level_system.md]], [[player_system/player_system.md]]
+search_terms: [game-data-resource, player-save, level-progress, data-structure, serialization, deserialization]
 ---
 
 # GameData Resource

@@ -1,3 +1,10 @@
+---
+title: Main System Documentation
+tags: [godot, game-engine, main-system, game-loop, level-management]
+related: [[player_system/player_system.md]], [[level_system/level_system.md]], [[save_system/save_system.md]]
+search_terms: [main-loop, game-flow, level-loading, player-management, signal-communication, ui-handling]
+---
+
 # Main System Documentation
 
 This document describes the core game system that orchestrates the overall gameplay flow in Dragon Jump Remaster.

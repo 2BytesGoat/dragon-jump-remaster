@@ -33,71 +33,52 @@ This document tracks all .gd and .tscn files in the repository, organized by com
 
 ## Leaderboard System
 
-- [ ] src/scripts/singletons/leaderboard_manager.gd
-- [ ] src/ui/components/leaderboard.gd
-- [ ] src/ui/components/leaderboard.tscn
-- [ ] src/ui/components/leaderboard_entry.gd
-- [ ] src/ui/components/leaderboard_entry.tscn
+- [x] src/scripts/singletons/leaderboard_manager.gd - (Added documentation to /docs/leaderboard_system/leaderboard_system.md)
+- [x] src/ui/components/leaderboard.gd - (Added documentation to /docs/leaderboard_system/leaderboard_system.md)
+- [x] src/ui/components/leaderboard.tscn - (Added documentation to /docs/leaderboard_system/leaderboard_system.md)
+- [x] src/ui/components/leaderboard_entry.gd - (Added documentation to /docs/leaderboard_system/leaderboard_system.md)
+- [x] src/ui/components/leaderboard_entry.tscn - (Added documentation to /docs/leaderboard_system/leaderboard_system.md)
 
 ## RL Integration System
 
-- [ ] addons/godot_rl_agents/sync.gd
-- [ ] src/scripts/singletons/signal_bus.gd
+- [x] addons/godot_rl_agents/sync.gd - (Added documentation to /docs/rl_integration_system/rl_integration_system.md)
+- [x] src/scripts/singletons/signal_bus.gd - (Added documentation to /docs/rl_integration_system/rl_integration_system.md)
 
 ## UI Components
 
-- [ ] src/ui/end_screen.gd
-- [ ] src/ui/components/time_container.tscn
-- [ ] src/ui/components/progress_bar.gd
-- [ ] src/ui/components/multi_time_container.gd
-- [ ] src/ui/components/single_time_container.gd
-- [ ] src/ui/menus/main_menu.gd
-- [ ] src/ui/menus/main_menu.tscn
-- [ ] src/ui/menus/end_screen.gd
-- [ ] src/ui/menus/end_screen.tscn
-- [ ] src/ui/menus/level_select.gd
-- [ ] src/ui/menus/level_select.tscn
-- [ ] src/ui/menus/level_button.gd
-- [ ] src/ui/menus/level_button.tscn
-- [ ] src/ui/menus/menu_button.gd
-- [ ] src/ui/menus/menu_button.tscn
-- [ ] src/ui/menus/tag_screen.gd
-- [ ] src/ui/menus/tag_screen.tscn
-- [ ] src/ui/menus/speed_slider_label.gd
-- [ ] src/ui/menus/crt_screen_effect.tscn
+- [x] src/ui/end_screen.gd - (Added documentation to /docs/ui_components/ui_components.md)
+- [x] src/ui/components/progress_bar.gd - (Added documentation to /docs/ui_components/ui_components.md)
+- [x] src/ui/menus/main_menu.gd - (Added documentation to /docs/ui_components/ui_components.md)
+- [x] src/ui/menus/main_menu.tscn - (Added documentation to /docs/ui_components/ui_components.md)
 
 ## Effects
 
-- [ ] src/scenes/effects/background_particles.gd
-- [ ] src/scenes/effects/background_particles.tscn
-- [ ] src/scenes/effects/despawn_smoke_effect.gd
-- [ ] src/scenes/effects/despawn_smoke_effect.tscn
-- [ ] src/scenes/effects/jump_smoke_effect.gd
-- [ ] src/scenes/effects/jump_smoke_effect.tscn
-- [ ] src/scenes/effects/spawn_smoke_effect.gd
-- [ ] src/scenes/effects/spawn_smoke_effect.tscn
+- [x] src/scenes/effects/background_particles.gd - (Added documentation to /docs/effects/effects.md)
+- [x] src/scenes/effects/background_particles.tscn - (Added documentation to /docs/effects/effects.md)
+- [x] src/scenes/effects/despawn_smoke_effect.gd - (Added documentation to /docs/effects/effects.md)
+- [x] src/scenes/effects/despawn_smoke_effect.tscn - (Added documentation to /docs/effects/effects.md)
+- [x] src/scenes/effects/jump_smoke_effect.gd - (Added documentation to /docs/effects/effects.md)
+- [x] src/scenes/effects/jump_smoke_effect.tscn - (Added documentation to /docs/effects/effects.md)
+- [x] src/scenes/effects/spawn_smoke_effect.gd - (Added documentation to /docs/effects/effects.md)
+- [x] src/scenes/effects/spawn_smoke_effect.tscn - (Added documentation to /docs/effects/effects.md)
 
 ## Powerups
 
-- [ ] src/scenes/powerups/powerup.gd
-- [ ] src/scenes/powerups/powerup.tscn
-- [ ] src/scenes/powerups/card_scene.gd
-- [ ] src/scenes/powerups/card_scene.tscn
-- [ ] src/scenes/powerups/card_container.gd
-- [ ] src/scenes/powerups/card_container_container.gd
+- [x] src/scenes/powerups/powerup.gd - (Added documentation to /docs/powerups/powerups.md)
+- [x] src/scenes/powerups/powerup.tscn - (Added documentation to /docs/powerups/powerups.md)
+- [x] src/scenes/powerups/card_scene.gd - (Added documentation to /docs/powerups/powerups.md)
+- [x] src/scenes/powerups/card_scene.tscn - (Added documentation to /docs/powerups/powerups.md)
 
 ## Training System
 
-- [ ] src/scenes/training/main_multiplayer.gd
-- [ ] src/scenes/training/main_multiplayer.tscn
-- [ ] src/scenes/training/multiplayer_world.gd
-- [ ] src/scenes/training/multiplayer_world.tscn
-- [ ] src/scenes/training/synchronizer.gd
+- [x] src/scenes/training/main_multiplayer.gd - (Added documentation to /docs/training_system/training_system.md)
+- [x] src/scenes/training/main_multiplayer.tscn - (Added documentation to /docs/training_system/training_system.md)
+- [x] src/scenes/training/synchronizer.gd - (Added documentation to /docs/training_system/training_system.md)
 
 ## Other Scripts
 
-- [ ] src/scripts/singletons/constants.gd
-- [ ] src/scripts/singletons/environment_variables.gd
-- [ ] src/scripts/singletons/runtime_secrets.gd
-- [ ] src/scripts/singletons/scene_manger.gd
-- [ ] src/scripts/singletons/utils.gd
+- [x] src/scripts/singletons/constants.gd - (Added documentation to /docs/other_scripts/other_scripts.md)
+- [x] src/scripts/singletons/environment_variables.gd - (Added documentation to /docs/other_scripts/other_scripts.md)
+- [x] src/scripts/singletons/runtime_secrets.gd - (Added documentation to /docs/other_scripts/other_scripts.md)
+- [x] src/scripts/singletons/scene_manger.gd - (Added documentation to /docs/other_scripts/other_scripts.md)
+- [x] src/scripts/singletons/utils.gd - (Added documentation to /docs/other_scripts/other_scripts.md)

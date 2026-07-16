@@ -1,3 +1,10 @@
+---
+title: Player System Documentation
+tags: [godot, game-engine, player-system, character-controller, state-machine]
+related: [[main_system/main_system.md]], [[level_system/level_system.md]], [[save_system/save_system.md]]
+search_terms: [player-character, character-controller, state-machine, physics-movement, power-ups, grappling-hook]
+---
+
 # Player System Documentation
 
 This document outlines the architecture and functionality of the Player system in the Dragon Jump Remaster project.

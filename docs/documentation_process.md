@@ -139,6 +139,16 @@ search_terms: [term1, term2, term3]
 ---
 ```
 
+**Example of a complete metadata header:**
+```markdown
+---
+title: Main System Documentation
+tags: [godot, game-engine, architecture, main-system]
+related: [[player_system/player_system.md]], [[level_system/level_system.md]], [[save_system/save_system.md]]
+search_terms: [main loop, game flow, level loading, player management, signal communication]
+---
+```
+
 ### Searchability Enhancements
 - Include **search_terms** in metadata for better RAG retrieval
 - Use **related** links to create a web of interconnected knowledge
@@ -162,3 +172,57 @@ search_terms: [term1, term2, term3]
 - Use consistent naming conventions across all documentation files
 - Include system relationships in each document's overview
 - Add cross-references to related components
+
+### Complete Documentation Template
+Here is a complete template that should be followed for all documentation files:
+
+```markdown
+---
+title: [System Name] Documentation
+tags: [tag1, tag2, tag3]
+related: [[file_name.md]]
+search_terms: [term1, term2, term3]
+---
+
+# [System Name] Documentation
+
+## Overview
+- High-level description of the system's purpose
+- Role within the overall architecture
+- Key search terms and concepts for RAG retrieval
+- System relationships and dependencies
+
+## Script Components (`*.gd`)
+- Key properties and their purposes  
+- Main methods and their functionality  
+- Signals and connections
+- Integration points with other systems
+- RAG metadata: performance considerations, optimization hints
+
+## Scene Components (`*.tscn`)
+- Scene hierarchy and organization
+- Key connections between elements
+- Visual layout considerations
+- RAG metadata: visual design patterns, UI flow
+
+## System Integration
+- How the system interacts with other components
+- Signal-based communication patterns
+- Data flow and control flow
+- Cross-system relationships for RAG linking
+
+## Design Patterns
+- Architecture patterns used
+- Code organization principles
+- Reusability considerations
+- Pattern-specific RAG tags and categorization
+
+## Implementation Details
+- Key code examples
+- Important algorithms or logic
+- Performance considerations
+
+## See Also
+- [[related_system_1.md]]
+- [[related_system_2.md]]
+```

@@ -1,3 +1,10 @@
+---
+title: Level System Documentation
+tags: [godot, game-engine, level-system, tilemap, symbol-based-levels]
+related: [[main_system/main_system.md]], [[player_system/player_system.md]], [[save_system/save_system.md]]
+search_terms: [level-generation, tilemap-system, symbol-based-levels, terrain-rendering, object-placement, pathfinding]
+---
+
 # Level System Documentation
 
 This document outlines the architecture and functionality of the Level system in the Dragon Jump Remaster project.
