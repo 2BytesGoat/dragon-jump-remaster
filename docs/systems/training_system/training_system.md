@@ -38,7 +38,7 @@ System relationships and dependencies: This system integrates with RL Integratio
   - Uses EnvironmentVariables for command-line arguments
   - Connects to Constants for level definitions
   - Integrates with RL Integration System through Sync node
-  - Uses SceneManger for scene navigation
+  - Uses `SceneManager` for scene navigation (currently named `SceneManger` in code; rename pending)
   - Connects to player system for agent behavior
 - **RAG metadata**: Performance considerations include efficient agent instantiation and real-time position updates, optimization hints involve using preloaded scenes and deferred calls
 

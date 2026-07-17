@@ -85,7 +85,7 @@ The Player scene is organized as follows:
    - **Sprite** (Sprite2D) - Visual representation of player
    - **HatContainer** (Node2D) - Container for accessories like crowns
    - **AfterImage** (CPUParticles2D) - Visual effect for movement trails
-   - **GaplingHook** (Node2D) - Grappling hook system
+   - **GrapplingHook** (Node2D) - Grappling hook system (currently named `GaplingHook` in code; rename pending)
      - **GrapplingPoints** (Node2D) - Points for grappling hook
      - **RayCast2D** - Raycast for detecting hook targets
      - **GrappleIndicator** (Sprite2D) - Visual indicator for hook
@@ -103,7 +103,7 @@ The Player scene is organized as follows:
 
 | Connection | Source | Target | Purpose |
 |------------|--------|--------|---------|
-| `should_release` | GaplingHook | Grapple State | Handles grappling hook release |
+| `should_release` | GrapplingHook | Grapple State | Handles grappling hook release |
 | `area_entered` | InteractBox | Player | Detects power-up and interaction areas |
 | `area_exited` | InteractBox | Player | Handles exit from interaction areas |
 | `body_entered` | InteractBox | Player | Handles collision with interactive objects |
@@ -116,7 +116,7 @@ The player scene uses a layered approach:
 - **Sprite** - Main visual representation with frame animation
 - **HatContainer** - For accessories like crowns that can be added/removed
 - **AfterImage** - Particle effect for movement trails when enabled
-- **GaplingHook** - Interactive grappling hook system with raycast detection
+- **GrapplingHook** - Interactive grappling hook system with raycast detection (currently named `GaplingHook` in code; rename pending)
 - **StateLabel** - Debug overlay showing current player state
 
 ## System Integration

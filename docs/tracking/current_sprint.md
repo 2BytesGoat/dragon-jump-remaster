@@ -12,7 +12,9 @@ search_terms: [sprint, current-sprint, tasks, focus, now]
 
 ## Sprint goal
 
-ML workshop competition: add level `1-17`, record distinct tiles touched by the player, and check for breaking bugs. Ends **July 25, 2026**.
+ML workshop competition: add level `1-17`, record distinct tiles touched by the player, fix critical bugs, and verify no regressions. Ends **July 25, 2026**.
+
+This is Phase 1 of the updated release plan: hackathon prep and quick bugfixes.
 
 ## Active sprint
 
@@ -22,10 +24,12 @@ See `[[tracking/sprints/sprint_2026_07_25]]` for the full sprint plan and defini
 
 - [ ] Add level `1-17` to `Constants.LEVELS`.
 - [ ] Implement distinct-tiles-touched tracking.
+- [ ] Fix critical bugs flagged in `[[tracking/backlog]]#phase-1--hackathon-prep-and-quick-bugfixes`.
 - [ ] Verify no breaking bugs in main paths.
 - [ ] Test existing levels `1-1` through `1-16` for regressions.
 
 ## Where to find related planning
 
 - Full backlog and phases: `[[tracking/backlog]]`
+- Release plan: `[[direction/release_plan]]`
 - Previous sprint (docs restructure): `[[tracking/decisions]]` and `[[00_index]]`

@@ -1,5 +1,5 @@
 ---
-title: CampaingLevelData Resource Documentation
+title: CampaignLevelData Resource Documentation
 tags: [godot, game-engine, resource, campaign, level-data]
 related:
   - "[[save_system/save_system.md]]"
@@ -8,16 +8,16 @@ related:
 search_terms: [campaign-level-data, level-resource, game-progression, level-tracking, save-system, level-code, completion-times]
 ---
 
-# CampaingLevelData Resource Documentation
+# CampaignLevelData Resource Documentation
 
 ## Overview
-- High-level description of the system's purpose: The CampaingLevelData resource is used to store information about levels within a campaign. It contains the essential properties needed to represent and track individual levels in the game's progression system.
+- High-level description of the system's purpose: The CampaignLevelData resource is used to store information about levels within a campaign. It contains the essential properties needed to represent and track individual levels in the game's progression system.
 - Role within the overall architecture: This resource serves as a data container for campaign level information, supporting save/load functionality and progress tracking.
 - Key search terms and concepts for RAG retrieval: campaign-level-data, level-resource, game-progression, level-tracking, save-system, level-code, completion-times
 - System relationships and dependencies: Related to save system (data persistence), level system (level generation), player system (progression tracking)
 
 ## Script Components (`*.gd`)
-### `campaing_level_data.gd`
+### `campaign_level_data.gd`
 - Key properties and their purposes:
   - `name`: String - Human-readable name of the level
   - `code`: String - Symbol-based level code used for level generation  
@@ -35,7 +35,7 @@ search_terms: [campaign-level-data, level-resource, game-progression, level-trac
   - Optimization hints involve using appropriate data structures for time arrays
 
 ## Scene Components (`*.tscn`)
-### `campaing_level_data.tscn`
+### `campaign_level_data.tscn`
 - Scene hierarchy and organization:
   - This is a resource file, not a scene
 - Key connections between elements:
@@ -46,7 +46,7 @@ search_terms: [campaign-level-data, level-resource, game-progression, level-trac
   - Not applicable for resource files
 
 ## System Integration
-- How the system interacts with other components: The CampaingLevelData resource integrates with the save system for persistence, level system for code interpretation, and player system for progress tracking.
+- How the system interacts with other components: The CampaignLevelData resource integrates with the save system for persistence, level system for code interpretation, and player system for progress tracking.
 - Signal-based communication patterns: Uses signals from save manager for data loading/saving events
 - Data flow and control flow:
   1. Game initializes campaign level data
@@ -72,7 +72,7 @@ search_terms: [campaign-level-data, level-resource, game-progression, level-trac
 
 ## Implementation Details
 - Key code examples:
-  - `var level_data = CampaingLevelData.new()` - Creating new level data instance
+  - `var level_data = CampaignLevelData.new()` - Creating new level data instance
   - `level_data.name = "Level 1"` - Setting level name property
   - `level_data.times.append(time)` - Adding completion time to array
 - Important algorithms or logic:

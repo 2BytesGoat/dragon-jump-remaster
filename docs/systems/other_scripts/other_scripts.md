@@ -49,7 +49,7 @@ System relationships and dependencies: This system integrates with main system f
   - Connects to scene manager for navigation parameters
 - **RAG metadata**: Performance considerations include efficient parsing, optimization hints involve caching parsed values
 
-### `scene_manger.gd`
+### `scene_manager.gd`
 - **Purpose**: Manages scene transitions and navigation within the game
 - **Key properties**:
   - `scene_data`: Dictionary storing data to pass between scenes
@@ -60,6 +60,7 @@ System relationships and dependencies: This system integrates with main system f
   - Integrates with UI components for navigation
   - Used by player system for level transitions
 - **RAG metadata**: Performance considerations include efficient scene loading, optimization hints involve preloading scenes
+- **Known issue**: The file and autoload are currently named `scene_manger.gd` / `SceneManger`. Rename pending (see [[tracking/backlog]]#phase-2--harden-the-foundation).
 
 ### `utils.gd`
 - **Purpose**: Collection of utility functions used throughout the game for various operations

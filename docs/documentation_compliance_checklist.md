@@ -1,6 +1,16 @@
+---
+title: Documentation Compliance Checklist
+tags: [godot, game-engine, documentation, checklist, compliance, rag]
+related:
+  - "[[documentation_process]]"
+  - "[[documentation_tracking]]"
+  - "[[00_index]]"
+search_terms: [compliance, checklist, documentation-quality, review, standards]
+---
+
 # Documentation Compliance Checklist
 
-This checklist ensures all documentation files in the Dragon Jump Remaster project meet the standards outlined in the documentation_process.md guidelines.
+This checklist ensures all documentation files in the Dragon Jump Remaster project meet the standards outlined in the [[documentation_process]] guidelines.
 
 ## Metadata Header Requirements
 - [ ] Title properly set (e.g., "System Name Documentation")

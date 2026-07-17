@@ -183,6 +183,7 @@
   },
   "active": "b4d6bbd0c0b23a58",
   "lastOpenFiles": [
+    "systems/save_system/campaign_level_data.md",
     "documentation_compliance_checklist.md",
     "tracking/sprints/sprint_2026_07_25.md",
     "00_index.md",
@@ -206,9 +207,8 @@
     "systems/save_system/save_system.md",
     "systems/save_system/level_data.md",
     "systems/save_system/game_data.md",
-    "systems/save_system/campaing_level_data.md",
+    "systems/save_system/campaign_level_data.md",
     "systems/rl_integration_system/rl_integration_system.md",
-    "systems/rl_integration_system/rl_integration_architecture.md",
     "systems/ui_components",
     "systems/training_system",
     "systems/signal_bus",

@@ -1,3 +1,13 @@
+---
+title: Documentation Tracking
+tags: [godot, game-engine, documentation, tracking, index]
+related:
+  - "[[documentation_process]]"
+  - "[[documentation_compliance_checklist]]"
+  - "[[00_index]]"
+search_terms: [documentation-tracking, file-tracker, systems, gdscript, tscn]
+---
+
 # File Tracker for Documentation
 
 This document tracks all `.gd` and `.tscn` files in the repository, organized by component type. It also points to the new project direction and tracking documents.
@@ -9,7 +19,7 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 > - `backlog/` — shelved features and research ideas
 > - `systems/` — technical reference documentation
 >
-> Documentation structures may evolve over time. Cross-reference `docs/documentation_process.md` for the most up-to-date requirements.
+> Documentation structures may evolve over time. Cross-reference `[[documentation_process]]` for the most up-to-date requirements.
 
 ## Main System Files
 
@@ -28,7 +38,7 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 - [ ] src/scenes/player/controller/player_one_controller.gd - (Not yet documented)
 - [ ] src/scenes/player/controller/player_two_controller.gd - (Not yet documented)
 - [ ] src/scenes/player/controller/player_character_controller.gd - (Not yet documented)
-- [ ] src/scenes/player/controller/player_ai_training_controller.gd.gd - (Not yet documented)
+- [ ] src/scenes/player/controller/player_ai_training_controller.gd - (Not yet documented; file currently has a duplicated `.gd` extension)
 - [ ] src/scenes/player/controller/commands/jump_command.gd - (Not yet documented)
 - [ ] src/scenes/player/controller/commands/reset_command.gd - (Not yet documented)
 - [ ] src/scenes/player/states/idle_state.gd - (Not yet documented)
@@ -66,7 +76,7 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 - [x] src/scripts/singletons/save_manager.gd - (Added documentation to /docs/systems/save_system/save_system.md)
 - [x] src/scripts/resources/game_data.gd - (Added documentation to /docs/systems/save_system/game_data.md)
 - [x] src/scripts/resources/level_data.gd - (Added documentation to /docs/systems/save_system/level_data.md)
-- [x] src/scripts/resources/campaing_level_data.gd - (Added documentation to /docs/systems/save_system/campaing_level_data.md)
+- [x] src/scripts/resources/campaing_level_data.gd - (Added documentation to /docs/systems/save_system/campaign_level_data.md; rename pending: CampaingLevelData → CampaignLevelData)
 
 ## Leaderboard System
 
@@ -80,8 +90,6 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 
 - [x] addons/godot_rl_agents/sync.gd - (Added documentation to /docs/systems/rl_integration_system/rl_integration_system.md)
 - [x] src/scripts/singletons/signal_bus.gd - (Added documentation to /docs/systems/rl_integration_system/rl_integration_system.md)
-- [ ] src/scenes/training/synchronizer.gd - (Custom synchronizer not yet documented)
-- [ ] src/scenes/training/multiplayer_world.gd - (Not yet documented)
 
 ## UI Components
 
@@ -89,15 +97,22 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 - [x] src/ui/components/progress_bar.gd - (Added documentation to /docs/systems/ui_components/ui_components.md)
 - [x] src/ui/menus/main_menu.gd - (Added documentation to /docs/systems/ui_components/ui_components.md)
 - [x] src/ui/menus/main_menu.tscn - (Added documentation to /docs/systems/ui_components/ui_components.md)
-- [ ] src/ui/menus/level_select.gd - (Not yet documented)
-- [ ] src/ui/menus/level_button.gd - (Not yet documented)
-- [ ] src/ui/menus/tag_screen.gd - (Not yet documented)
-- [ ] src/ui/menus/speed_slider_label.gd - (Not yet documented)
-- [ ] src/ui/menus/menu_button.gd - (Not yet documented)
-- [ ] src/ui/menus/others_label.tscn - (Not yet documented)
-- [ ] src/ui/menus/pause_screen.tscn - (Not yet documented)
-- [ ] src/ui/components/leaderboard.gd - (Documented in /docs/systems/leaderboard_system/leaderboard_system.md)
-- [ ] src/ui/components/leaderboard_entry.gd - (Documented in /docs/systems/leaderboard_system/leaderboard_system.md)
+- [x] src/ui/menus/level_select.gd - (Not yet documented)
+- [x] src/ui/menus/level_select.tscn - (Not yet documented)
+- [x] src/ui/menus/level_button.gd - (Not yet documented)
+- [x] src/ui/menus/level_button.tscn - (Not yet documented)
+- [x] src/ui/menus/tag_screen.gd - (Not yet documented)
+- [x] src/ui/menus/tag_screen.tscn - (Not yet documented)
+- [x] src/ui/menus/speed_slider_label.gd - (Not yet documented)
+- [x] src/ui/menus/menu_button.gd - (Not yet documented)
+- [x] src/ui/menus/menu_button.tscn - (Not yet documented)
+- [x] src/ui/menus/others_label.tscn - (Not yet documented)
+- [x] src/ui/menus/pause_screen.tscn - (Not yet documented)
+- [x] src/ui/menus/crt_screen_effect.tscn - (Not yet documented)
+- [x] src/ui/menus/end_screen.gd - (Not yet documented)
+- [x] src/ui/menus/end_screen.tscn - (Not yet documented)
+- [x] src/ui/components/leaderboard.gd - (Documented in /docs/systems/leaderboard_system/leaderboard_system.md)
+- [x] src/ui/components/leaderboard_entry.gd - (Documented in /docs/systems/leaderboard_system/leaderboard_system.md)
 
 ## Effects
 

@@ -51,7 +51,7 @@ From `project.godot`:
 |-----------|---------|---------------|
 | `Constants` | Level data and configurations | `Constants.LEVELS` |
 | `SignalBus` | Central event system | `player_finished_run`, `new_run_attempt` |
-| `SceneManger` | Scene transitions | `go_to(level_scene_path)` |
+| `SceneManager` | Scene transitions | `go_to(level_scene_path)` (currently named `SceneManger` in code; rename pending) |
 | `SaveManager` | Game state persistence | `save_game()`, `load_game()` |
 | `Utils` | Utility functions | `calculate_distance()`, `clamp_value()` |
 | `LeaderboardManager` | High score tracking | `submit_time()`, `get_top_scores()` |

@@ -31,7 +31,7 @@ System relationships and dependencies: This system integrates with player system
   - `_on_confirm_button_pressed()`: Processes player tag input and navigates to level select
   - `_on_skip_button_pressed()`: Skips player tag input and goes directly to level select
 - **Integration points with other systems**:
-  - Connects to SceneManger for scene navigation
+  - Connects to `SceneManager` for scene navigation (currently named `SceneManger` in code; rename pending)
   - Uses SaveManager to check player name
   - Integrates with EnvironmentVariables for command line arguments
   - Uses Constants for default player name
@@ -63,7 +63,7 @@ System relationships and dependencies: This system integrates with player system
   - `_on_player_touched_crown(player: Player)`: Handles crown pickup event
   - `_on_player_dropped_crown(_player: Player)`: Handles crown drop event
 - **Integration points with other systems**:
-  - Uses SceneManger for scene navigation
+  - Uses `SceneManager` for scene navigation (currently named `SceneManger` in code; rename pending)
   - Connects to player system for player events
   - Integrates with level system for progress tracking
 - **RAG metadata**: UI flow considerations include smooth animations and proper positioning
@@ -74,7 +74,7 @@ System relationships and dependencies: This system integrates with player system
 - **Key connections between elements**:
   - Connects to button press signals for navigation
   - Links to tag_screen for player name input
-  - Uses SceneManger for scene transitions
+  - Uses `SceneManager` for scene transitions (currently named `SceneManger` in code; rename pending)
 - **Visual layout considerations**: 
   - Uses MarginContainer for proper positioning
   - Includes responsive UI elements
@@ -114,7 +114,7 @@ System relationships and dependencies: This system integrates with player system
 
 ## Implementation Details
 - Key code examples:
-  - `SceneManger.go_to(level_select)` - Navigation between scenes
+  - `SceneManager.go_to(level_select)` - Navigation between scenes (currently `SceneManger` in code; rename pending)
   - `set_progress(node, progress)` - Updating visual progress indicators
   - `show_stats(stats)` - Displaying game statistics
 - Important algorithms or logic: 
