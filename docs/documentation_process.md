@@ -51,6 +51,7 @@ Each system documentation should include:
 - Document both public and internal functionality
 - Reference related systems and components
 - **Use backlinks similar to Obsidian (e.g., [[file_name.md]])**
+- **Do not wrap Obsidian backlinks in backticks** — `` `[[file_name.md]]` `` breaks rendering/parsing in this vault. Use plain `[[file_name.md]]` instead.
 - **Add links between original scripts and documentation files for quick navigation**
 - **Include metadata headers for RAG indexing**
 - **Add search tags and cross-references for better retrieval**

@@ -18,6 +18,7 @@ These features are intentionally **not part of V1.0**. They are kept visible so 
   - Target: 25+ total levels.
   - Current gap: levels specifically designed for Dash, Stomp, and Grapple powerups.
   - Depends on: clean level tooling and a solid level design workflow.
+  - **Strongest post-ship signal from playtesting:** this was the most common player request.
 
 - **Secret areas**
   - Hidden routes and collectibles similar to *Neon White*.
@@ -42,6 +43,14 @@ These features are intentionally **not part of V1.0**. They are kept visible so 
   - QR code pointing to the Steam full release so arcade players can buy it.
   - This is the post-ship arcade build identity.
 
+- **Phone-as-controller local multiplayer (Jackbox-style)**
+  - The host game runs a local web server / LAN session.
+  - Players join with a phone browser and use touch as a one-button controller.
+  - Spectators can watch on the main screen without buying the game.
+  - Useful for parties, exhibitions, and viral local sessions.
+  - Big architecture change: network discovery, web input client, spectator UI, latency handling.
+  - Only viable after Steam ships and the core loop is locked.
+
 ## Shelved indefinitely unless explicitly revived
 
 - **Co-op / bot race:** Race against a friend or a recorded bot ghost.
@@ -53,4 +62,4 @@ These features are intentionally **not part of V1.0**. They are kept visible so 
 
 ## When to revive
 
-Only after V1.0 is shipped and the author has learned from player feedback. The decision to revive any of these must be explicit and written in `[[tracking/decisions]]`.
+Only after V1.0 is shipped and the author has learned from player feedback. The decision to revive any of these must be explicit and written in [[tracking/decisions]].

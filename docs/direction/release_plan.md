@@ -16,7 +16,7 @@ search_terms: [release-plan, v1.0, scope, milestones, steam, arcade, ship]
 
 > **Fix what blocks now, harden the foundation, ship the arcade build, then prepare Steam. Big ideas come only after the core game is stable and released.**
 
-The goal is not to build the perfect game in one release. The goal is to ship a small, coherent game that can support the ideas in `[[backlog/shelved_features]]` without collapsing under unused systems.
+The goal is not to build the perfect game in one release. The goal is to ship a small, coherent game that can support the ideas in [[backlog/shelved_features]] without collapsing under unused systems.
 
 ## Phases
 
@@ -26,7 +26,7 @@ The goal is not to build the perfect game in one release. The goal is to ship a 
 | Phase 2 | Harden the foundation | Clean up unused systems, fix typos, move constants, document fragile code. |
 | Phase 3 | Verify all 17 levels and ship arcade | Arcade build is already done; playtest all levels and ship the arcade binary ASAP. |
 | Phase 4 | Steam release prep | Finalize Steam build, store page, deadline, and AI training mode delivery. |
-| Phase 5 | Post-Steam features | Only after real player feedback; see `[[backlog/shelved_features]]` and `[[backlog/research_ideas]]`. |
+| Phase 5 | Post-Steam features | Only after real player feedback; see [[backlog/shelved_features]] and [[backlog/research_ideas]]. |
 
 ## Phase 1 — Hackathon prep and quick bugfixes
 
@@ -37,7 +37,7 @@ The immediate target is the ML workshop final competition on **July 25, 2026**.
 - Fix critical typos and guards (`SIVLER`, `unlock_next_level` off-by-one, etc.).
 - Verify no breaking bugs in the main paths and no regressions in levels `1-1` through `1-16`.
 
-Full sprint plan: `[[tracking/sprints/sprint_2026_07_25]]`.
+Full sprint plan: [[tracking/sprints/sprint_2026_07_25]].
 
 ## Phase 2 — Harden the foundation
 
@@ -48,7 +48,7 @@ Before shipping anything publicly, make the codebase robust:
 - Move magic numbers into `Constants`.
 - Document fragile code (custom synchronizer, `multiplayer_world.gd`).
 
-See `[[tracking/backlog]]#phase-2--harden-the-foundation`.
+See [[tracking/backlog]]#phase-2--harden-the-foundation.
 
 ## Phase 3 — Verify all 17 levels and ship arcade
 
@@ -60,31 +60,31 @@ The arcade build is already functional. The goal here is to verify it and ship f
 - Produce and checksum the arcade build artifacts.
 - Update the README to describe the arcade build accurately.
 
-See `[[tracking/backlog]]#phase-3--verify-all-17-levels-and-ship-arcade`.
+See [[tracking/backlog]]#phase-3--verify-all-17-levels-and-ship-arcade.
 
 ## Phase 4 — Steam release prep
 
 Once the arcade build is shipped, the next milestone is the Steam/itch.io release (~$5):
 
-- Decide exact V1.0 release deadline and write it in `[[tracking/decisions]]`.
+- Decide exact V1.0 release deadline and write it in [[tracking/decisions]].
 - Decide how the AI training mode is delivered (hidden menu vs separate build/launch flag).
 - Complete Steam build checklist: store page, builds, playtest branch, leaderboards.
 - Update README for the Steam scope.
 
-See `[[tracking/backlog]]#phase-4--steam-release-prep`.
+See [[tracking/backlog]]#phase-4--steam-release-prep.
 
 ## Phase 5 — Post-Steam (only after real player feedback)
 
 Potential directions, in no particular order:
 
 - Secret areas, ghost race, map editor + QR sharing, more campaign levels, procedural/weekly levels, Steam Workshop.
-- Research directions from `[[backlog/research_ideas]]` (RL improvements, competition metrics, player-facing AI tools).
+- Research directions from [[backlog/research_ideas]] (RL improvements, competition metrics, player-facing AI tools).
 
 Nothing here is committed until Steam ships and player feedback exists.
 
 ## Open decisions
 
-All decisions must be recorded in `[[tracking/decisions]]` once made:
+All decisions must be recorded in [[tracking/decisions]] once made:
 
 - [ ] Exact Steam release deadline for V1.0.
 - [ ] AI training mode delivery: hidden menu, separate build, or launch flag.
@@ -92,4 +92,4 @@ All decisions must be recorded in `[[tracking/decisions]]` once made:
 
 ## External deadlines
 
-- **ML workshop final competition: July 25, 2026.** Details and sprint plan: `[[tracking/sprints/sprint_2026_07_25]]`.
+- **ML workshop final competition: July 25, 2026.** Details and sprint plan: [[tracking/sprints/sprint_2026_07_25]].
