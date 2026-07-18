@@ -8,7 +8,7 @@ extends Node
 @onready var ghosts = $PlayerMirrors
 @onready var sync = $Synchronizer
 
-var DEFAULT_LEVEL_NAME = "1-1"
+var DEFAULT_LEVEL_NAME = "1-10"
 var DEFAULT_NB_AGENTS = 100
 
 var main_world = null

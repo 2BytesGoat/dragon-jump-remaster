@@ -27,6 +27,8 @@ func _process(delta: float) -> void:
 func reset() -> void:
 	total_time = 0.0
 	delta_time = 0.0
+	race_started = false
+	race_paused = false
 	time_label.text = "00:00.00"
 
 
