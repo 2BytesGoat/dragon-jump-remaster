@@ -1,0 +1,224 @@
+{
+  "main": {
+    "id": "d8b6336c44c71f00",
+    "type": "split",
+    "children": [
+      {
+        "id": "fa6ba1b59cb9c5e9",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "b4d6bbd0c0b23a58",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "tracking/sprints/sprint_2026_07_25.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "sprint_2026_07_25"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "3bf328c10c77dcc8",
+    "type": "split",
+    "children": [
+      {
+        "id": "e82ffc7d96892b22",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "5209951ea41d1187",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "51c45d3398903ced",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "fccc62925d12bf83",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "c1571415589be3a2",
+    "type": "split",
+    "children": [
+      {
+        "id": "6b014a30f7f79158",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "98fb8b4f06fb6bd2",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "01f15e1843c35df9",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "e1ed4007577e647d",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "7ca0bcdbbe9826f3",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "722485cdb3a3afba",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Untitled.canvas",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of Untitled"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "b4d6bbd0c0b23a58",
+  "lastOpenFiles": [
+    "documentation_tracking.md",
+    "documentation_process.md",
+    "documentation_compliance_checklist.md",
+    "00_index.md",
+    "systems/save_system/campaign_level_data.md",
+    "tracking/sprints/sprint_2026_07_25.md",
+    "backlog/research_ideas.md",
+    "backlog/shelved_features.md",
+    "tracking/backlog.md",
+    "tracking/current_sprint.md",
+    "tracking/decisions.md",
+    "direction/ai_training_mode.md",
+    "direction/release_plan.md",
+    "direction/progression_and_meta.md",
+    "direction/core_loop.md",
+    "direction/vision_and_goals.md",
+    "direction/product_identity.md",
+    "systems/main_system/main_system.md",
+    "systems/leaderboard_system/leaderboard_system.md",
+    "systems/other_scripts/other_scripts.md",
+    "systems/ui_components/ui_components.md",
+    "systems/training_system/training_system.md",
+    "systems/signal_bus/signal_bus.md",
+    "systems/save_system/save_system.md",
+    "systems/save_system/level_data.md",
+    "systems/save_system/game_data.md",
+    "systems/ui_components",
+    "systems/training_system",
+    "systems/signal_bus",
+    "systems/save_system",
+    "systems/rl_integration_system",
+    "systems/powerups",
+    "systems/player_system",
+    "systems/other_scripts",
+    "systems/main_system",
+    "systems/level_system",
+    "Untitled.canvas"
+  ]
+}
