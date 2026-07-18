@@ -18,14 +18,14 @@ This backlog is ordered by priority. The rule is: **fix what's blocking now, har
 
 | # | Task | Source | Priority |
 |---|------|--------|----------|
-| 1 | Add level `1-17` for ML workshop | `Constants.LEVELS`, hidden from regular level-select, loadable by name for AI training | High |
-| 2 | Add distinct-tiles-touched tracking | RL competition metric; see [[tracking/sprints/sprint_2026_07_25]] | High |
-| 3 | Fix `MEDAL_NAMES` typo: `SIVLER` → `SILVER` | `src/scripts/singletons/constants.gd` | High |
-| 4 | Fix `unlock_next_level` off-by-one guard in `SaveManager` | `src/scripts/singletons/save_manager.gd` | High |
-| 5 | Verify end screen stats are correct | `main.gd` hardcodes restarts/crowns; confirm acceptable | Medium |
-| 6 | Verify main menu navigation works | Path already uses `res://`; test in build | Medium |
-| 7 | Check for breaking bugs in main paths | menu → level → finish → retry → next level | High |
-| 8 | Regression-test existing levels `1-1` through `1-16` | No crash / soft-lock / medal breakage | High |
+| 1 | [x] Add level `1-17` for ML workshop | `Constants.LEVELS`, hidden from regular level-select, loadable by name for AI training | High |
+| 2 | [x] Add distinct-tiles-touched tracking | RL competition metric; see [[tracking/sprints/sprint_2026_07_25]] | High |
+| 3 | [x] Fix `MEDAL_NAMES` typo: `SIVLER` → `SILVER` | `src/scripts/singletons/constants.gd` | High |
+| 4 | [x] Fix `unlock_next_level` off-by-one guard in `SaveManager` | `src/scripts/singletons/save_manager.gd` | High |
+| 5 | [x] Verify end screen stats are correct | `main.gd` hardcodes restarts/crowns; confirm acceptable | Medium |
+| 6 | [x] Verify main menu navigation works | Path already uses `res://`; test in build | Medium |
+| 7 | [ ] Check for breaking bugs in main paths | menu → level → finish → retry → next level | High |
+| 8 | [ ] Regression-test existing levels `1-1` through `1-16` | No crash / soft-lock / medal breakage | High |
 
 ## Phase 2 — Harden the foundation (after hackathon, before shipping)
 

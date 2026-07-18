@@ -20,7 +20,7 @@ var total_time: float = 0.0
 var delta_time: float = 0.0
 var update_interval: float = 0.2
 
-var level_name = "1-10"
+var level_name = "1-17"
 var player_speed_modifier = 1.0 
 var player_nodes = []
 

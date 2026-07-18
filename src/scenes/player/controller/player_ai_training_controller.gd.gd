@@ -12,6 +12,9 @@ var prev_value: float = INF
 var best_value_ever: float = INF
 var async_reward: float = 0.0
 
+# ML workshop metric: number of unique grid cells the player has touched this run
+var distinct_cells_touched: Dictionary = {}
+
 
 func _ready() -> void:
 	if not player.level_reference:
@@ -26,11 +29,13 @@ func _ready() -> void:
 
 func set_action(new_action: Dictionary) -> void:
 	jump_command.execute(player, JumpCommand.Params.new(new_action["jump"]))
+	_track_distinct_cell()
 
 
 func reset() -> void:
 	is_done = false
 	player.is_done = false
+	distinct_cells_touched = {}
 	reset_command.execute(player)
 
 
@@ -101,7 +106,8 @@ func get_info() -> Dictionary:
 	var info = {
 		"global_position": player.global_position,
 		"facing_direction": player.facing_direction,
-		"state": player.state_machine.state.name
+		"state": player.state_machine.state.name,
+		"distinct_cells_touched": distinct_cells_touched.size()
 	}
 	if not use_sensors:
 		info["tile_names"] = player.level_reference.get_tile_names()
@@ -125,6 +131,15 @@ func get_obs_space() -> Dictionary:
 
 func zero_reward() -> void:
 	async_reward = 0.0
+
+
+func _track_distinct_cell() -> void:
+	if not player.level_reference:
+		return
+	
+	var terrain_layer = player.level_reference.terrain_layer
+	var cell_coords = terrain_layer.local_to_map(terrain_layer.to_local(player.global_position))
+	distinct_cells_touched[cell_coords] = true
 
 
 func set_done_false():

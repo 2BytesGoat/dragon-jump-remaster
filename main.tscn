@@ -14,13 +14,13 @@
 [ext_resource type="Shader" uid="uid://b87hi538ipc5q" path="res://assets/shaders/screen_crt.gdshader" id="11_dg77c"]
 [ext_resource type="PackedScene" uid="uid://btnxex4dvvbmn" path="res://src/ui/menus/end_screen.tscn" id="12_ycdy4"]
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_w48qg"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_ycdy4"]
 viewport_path = NodePath("../SubViewportContainer/SubViewport")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_vivmo"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w48qg"]
 resource_local_to_scene = true
 shader = ExtResource("11_dg77c")
-shader_parameter/tex = SubResource("ViewportTexture_w48qg")
+shader_parameter/tex = SubResource("ViewportTexture_ycdy4")
 shader_parameter/mask_type = 2
 shader_parameter/curve = 0.01200000057
 shader_parameter/sharpness = 0.80000001425
@@ -120,7 +120,7 @@ script = ExtResource("10_ycdy4")
 
 [node name="CRTScreenEffect" parent="." unique_id=1412518820 instance=ExtResource("9_efxa6")]
 visible = false
-material = SubResource("ShaderMaterial_vivmo")
+material = SubResource("ShaderMaterial_w48qg")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

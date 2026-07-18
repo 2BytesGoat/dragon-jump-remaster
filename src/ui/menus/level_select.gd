@@ -27,19 +27,25 @@ func _ready() -> void:
 		level_button_container.remove_child(child)
 		child.queue_free()
 	
+	var display_index = 0
 	for i in len(Constants.LEVELS):
 		var level_name = Constants.LEVELS.keys()[i]
+		var level_data = Constants.LEVELS[level_name]
+		if level_data.get("hidden", false):
+			continue
+		
 		var button: Button = level_button_scene.instantiate()
 		button.name = level_name
 		level_button_container.add_child(button)
 		button.set_button_disabled(not SaveManager.has_level_data(level_name))
-		button.button_label = "%03d - %s" % [i, Constants.LEVELS[level_name]["name"]]
+		button.button_label = "%03d - %s" % [display_index, level_data["name"]]
 		button.pressed.connect(_on_level_button_clicked.bind(level_name))
 		
 		if cnt == 0:
 			_on_level_button_clicked(level_name)
 			button.grab_focus()
 		cnt += 1
+		display_index += 1
 	
 	_on_map_info_button_pressed()
 
