@@ -111,8 +111,8 @@ func _on_player_finished_run(_player: Player) -> void:
 	var stats = {
 		"level_name": level_name,
 		"time": total_time,
-		#"restarts": info["restarts"],
-		#"crowns_dropped": info["crowns_dropped"]
+		"restarts": 1,
+		"crowns_dropped": 0
 	}
 	end_screen.update_stats(stats)
 	
