@@ -19,11 +19,11 @@ func unlock_level(level_name: String):
 
 func unlock_next_level(level_name: String):
 	var all_level_names = Constants.LEVELS.keys()
-	var next_level_index = all_level_names.find(level_name) + 1
-	if next_level_index != -1 and next_level_index >= len(all_level_names):
+	var current_level_index = all_level_names.find(level_name)
+	if current_level_index == -1 or current_level_index + 1 >= len(all_level_names):
 		return
 	
-	var new_level_name = all_level_names[next_level_index]
+	var new_level_name = all_level_names[current_level_index + 1]
 	unlock_level(new_level_name)
 
 
