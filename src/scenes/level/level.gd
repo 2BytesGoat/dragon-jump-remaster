@@ -239,32 +239,19 @@ func _ready() -> void:
 	for info in symbol_to_tile_info.values():
 		tile_names.append(info["name"])
 	
-	clear_level()
-	#var old_code = "W42|W8E29W5|W3E37W2|W2E38W2|W1E25Y2E13W1|W1E25W2Y1E12W1|W1E25W2Y1E12W1|W1E25W2Y1E12W1|W1E15J1E4J1E4W2Y1E11B1W1|W1E30B2E8W1|W9E22W2E8W1|W9Y8E24W1|W17E6Y2E16W1|W17E5Y1W2Y1E11B1E1Y2W1|W7E15Y1W2Y1E10W6|W3E20Y2E11W6|W2E34W6|W1E35W6|W1E13J1E4B1E10B2E1Y3W6|W1E18W1E9W13|W1E18W1E9W13|W1E28W13|W1E23W18|W1E23W18|W1E2P1E8B1E11W18|W19Y5W18|W42"
-	#var level_code = old_code.replace("q", "E").replace("X", "Y").replace("/", "|").replace("V", "O").replace("D", "J")
-	#set_level(level_code)
-	#_init_terrain_layer()
-	#_populate_objects()
-	#_init_hidden_areas()
-	#_update_static_alt_tiles()
-	#print(get_level_code())
-	
 	_init_atlas_symbol_mapping()
-	#_init_terrain_layer()
 	
 	if not Engine.is_editor_hint():
-		#old_code = "W34E19|W5E13O1E4W3E5W3E19|W4E14O1E4W2E7W2E19|W2E16O1E4W2E8W1E19|W2E16O1E4W2E8W1E19|W2E16O1E4W2E8W1E19|W2E16O1E4W2E8W1E18W1|W2E16O1E14W1E19|W2E31W1E19|W2E49W1E1|E1W15Y5W6E6W1E19|E1W26E6W1E19|E1W2E8W3E4O1E14W1E19|W2E10W2E4O1E14W1E19|W1E11W2E4O1E14W1E19|W1E11W2E4O1E14W1E19|W1E17O1E14W1E19|W1E26W7E19|W1E1P1E5W1E18W7E19|W17Y3W14E19|E16W5E32"
-		#level_code = old_code.replace("q", "E").replace("X", "Y").replace("/", "|").replace("V", "O")
-		#clear_level()
-		#set_level(level_code)
-		_init_terrain_layer()
-		_update_static_alt_tiles()
-		_populate_objects()
-		_init_hidden_areas()
-		current_level_code = get_level_code()
-		#print(get_level_code())
-
+		clear_level()
+	
 	is_initialized = true
+	
+	_init_terrain_layer()
+	_update_static_alt_tiles()
+	_populate_objects()
+	_init_hidden_areas()
+	print(get_level_code())
+	
 
 
 func update_level(level_code: String) -> void:
