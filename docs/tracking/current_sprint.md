@@ -22,11 +22,15 @@ See [[tracking/sprints/sprint_2026_07_25]] for the full sprint plan and definiti
 
 ## Status
 
-- [ ] Add level `1-17` to `Constants.LEVELS`, hidden from the regular level-select menu but loadable by name for AI training.
-- [ ] Implement distinct-tiles-touched tracking.
-- [ ] Fix critical bugs flagged in [[tracking/backlog]]#phase-1--hackathon-prep-and-quick-bugfixes.
-- [ ] Verify no breaking bugs in main paths.
-- [ ] Test existing levels `1-1` through `1-16` for regressions.
+- [x] Add level `1-17` to `Constants.LEVELS`, hidden from the regular level-select menu but loadable by name for AI training. *(layout being reimplemented)*
+- [x] Implement distinct-tiles-touched tracking.
+- [x] Fix critical bugs flagged in [[tracking/backlog]]#phase-1--hackathon-prep-and-quick-bugfixes.
+  - [x] `MEDAL_NAMES` typo: `SIVLER` → `SILVER`
+  - [x] `unlock_next_level` off-by-one guard in `SaveManager`
+  - [x] `started_walking` reset bug in `Player.reset()`
+  - [x] TimeContainer timer keeps running after player reset
+- [x] Verify no breaking bugs in main paths.
+- [x] Test existing levels `1-1` through `1-16` for regressions.
 
 ## Where to find related planning
 

@@ -133,7 +133,8 @@ func reset() -> void:
 	Utils.instance_scene_on_main(despawn_smoke, self.global_position)
 	current_friction = default_friction 
 	facing_direction = starting_facing_direction
-	started_walking = false
+	if controller_type != CONTROLLERS.TRAINING:
+		started_walking = false
 	wants_to_jump = false
 	needs_to_release = false
 	show_afterimage = false

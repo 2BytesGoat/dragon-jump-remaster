@@ -8,8 +8,8 @@ extends Node
 @onready var ghosts = $PlayerMirrors
 @onready var sync = $Synchronizer
 
-var DEFAULT_LEVEL_NAME = "1-14"
-var DEFAULT_NB_AGENTS = 1
+var DEFAULT_LEVEL_NAME = "1-10"
+var DEFAULT_NB_AGENTS = 100
 
 var main_world = null
 var player_mapping = {}
@@ -41,8 +41,6 @@ func _ready() -> void:
 		world.set_flow_field(flow_field)
 	
 	sync.initialize()
-	#SignalBus.player_started_run.connect(_on_player_started_run)
-	#SignalBus.player_finished_run.connect(_on_player_finished_run)
 
 
 func _process(_delta: float) -> void:
