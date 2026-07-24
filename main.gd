@@ -54,6 +54,8 @@ func reset_ui():
 
 
 func _input(event: InputEvent) -> void:
+	if not is_inside_tree() or is_queued_for_deletion():
+		return
 	if not race_finished and event.is_action_pressed("ui_cancel"):
 		set_game_paused(not pause_screen.visible)
 

@@ -11,4 +11,4 @@ func _on_level_level_size_updated(level_size: Vector2i) -> void:
 	var new_zoom = 1.0 / new_scale
 	zoom = Vector2(new_zoom, new_zoom)
 	
-	self.global_position = level_size / 2 - viewport_size / 2 + Vector2i(8, 0)
+	self.global_position = level_size / 2.0 - viewport_size / 2.0 + Vector2(8, 0)

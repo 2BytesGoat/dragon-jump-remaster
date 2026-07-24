@@ -8,7 +8,7 @@ const EMPTY_SYMBOL = "E"
 const SEPARATOR_SYMBOL = "|"
 
 
-static func parse(level_code: String) -> Array[Dictionary]:
+static func parse(level_code: String) -> Dictionary:
 	var instructions: Array[Dictionary] = []
 	var symbol_cnt = 0
 	var current_symbols = ""
@@ -58,7 +58,11 @@ static func parse(level_code: String) -> Array[Dictionary]:
 		level_width_cell = max(level_width_cell, x_offset + symbol_cnt)
 		level_height_cell += 1
 	
-	return instructions
+	return {
+		"instructions": instructions,
+		"level_width_cell": level_width_cell,
+		"level_height_cell": level_height_cell
+	}
 
 
 static func _is_tilemap_symbol(symbol: String) -> bool:

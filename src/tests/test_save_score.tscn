@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://amvquyk6q03dq"]
+[gd_scene format=3 uid="uid://mvquyk6q03dq"]
 
 [ext_resource type="Script" path="res://src/tests/test_save_score.gd" id="1_amvqu"]
 

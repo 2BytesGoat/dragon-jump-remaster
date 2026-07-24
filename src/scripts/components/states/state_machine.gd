@@ -24,14 +24,20 @@ func _ready() -> void:
 
 # The state machine subscribes to node callbacks and delegates them to the state objects.
 func _unhandled_input(event: InputEvent) -> void:
+	if not is_inside_tree() or is_queued_for_deletion() or not state:
+		return
 	state.handle_input(event)
 
 
 func _process(delta: float) -> void:
+	if not is_inside_tree() or is_queued_for_deletion() or not state:
+		return
 	state.update(delta)
 
 
 func _physics_process(delta: float) -> void:
+	if not is_inside_tree() or is_queued_for_deletion() or not state:
+		return
 	state.physics_update(delta)
 
 

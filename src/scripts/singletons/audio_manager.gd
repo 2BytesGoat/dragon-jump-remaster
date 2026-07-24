@@ -13,7 +13,7 @@ func _ready() -> void:
 	_music_player.bus = &"Music"
 
 
-func play_music(stream: AudioStream, crossfade: float = 0.0) -> void:
+func play_music(stream: AudioStream, _crossfade: float = 0.0) -> void:
 	if _music_player.playing and _music_player.stream == stream:
 		return
 	

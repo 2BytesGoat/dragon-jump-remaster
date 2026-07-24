@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://yyefkumj11u2n"]
+[gd_scene format=3 uid="uid://brw61i31ntmi2"]
 
 [ext_resource type="Script" path="res://src/tests/test_boot.gd" id="1_yyefk"]
 

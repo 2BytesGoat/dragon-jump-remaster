@@ -321,14 +321,13 @@ func clear_level() -> void:
 
 
 func set_level(level_code: String) -> void:
-	level_width_cell = 0
-	level_height_cell = 0
-	
-	var instructions = LevelCodeParser.parse(level_code)
+	var parsed_level = LevelCodeParser.parse(level_code)
+	var instructions = parsed_level["instructions"]
 	for instruction in instructions:
 		_set_multiple_cells(instruction["symbols"], instruction["count"], instruction["offset"])
-		level_width_cell = max(level_width_cell, instruction["offset"].x + instruction["count"])
-		level_height_cell = max(level_height_cell, instruction["offset"].y + 1)
+	
+	level_width_cell = parsed_level["level_width_cell"]
+	level_height_cell = parsed_level["level_height_cell"]
 	
 	_fill_rectangle_with_walls(level_width_cell, level_height_cell)
 	

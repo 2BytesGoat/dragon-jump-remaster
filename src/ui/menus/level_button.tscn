@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bt4mplp74an6d" path="res://src/ui/menus/level_button.gd" id="1_h6yvo"]
 [ext_resource type="Theme" uid="uid://d1kdwbwfx60gf" path="res://src/ui/components/themes/level_select_theme.tres" id="1_u0wb1"]
-[ext_resource type="Texture2D" uid="uid://bcfjeeqq7rmrh" path="res://icon.svg" id="2_dq4x0"]
+[ext_resource type="Texture2D" uid="uid://cwkemtynu1s2u" path="res://icon.png" id="2_dq4x0"]
 [ext_resource type="Texture2D" uid="uid://i3pclkax207x" path="res://assets/sprites/ui/medals.png" id="4_n1323"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7bwvc"]
