@@ -36,12 +36,12 @@ Phase 1 execution plan. Each task is small enough to hand to a freelancer or to 
 
 ## Phase 1.4 — Move Data into Resources
 
-- [ ] Create `res://resources/physics_params.tres`
-- [ ] Create `res://resources/level_data/` folder and one `.tres` per V1.0 level
-- [ ] Create `res://resources/powerup_palette.tres`
-- [ ] Create `res://resources/medal_config.tres`
-- [ ] Create `res://resources/audio_bus_config.tres`
-- [ ] Refactor `level.gd` to load `LevelData` instead of parsing inline symbol strings
+- [x] Create `res://resources/physics_params.tres`
+- [x] Create `res://resources/level_data/` folder and one `.tres` per V1.0 level
+- [x] Create `res://resources/powerup_palette.tres`
+- [x] Create `res://resources/medal_config.tres`
+- [x] Create `res://resources/audio_bus_config.tres`
+- [x] Refactor `level.gd` to load `LevelData` instead of parsing inline symbol strings
 
 ## Phase 1.5 — Add Smoke Tests
 

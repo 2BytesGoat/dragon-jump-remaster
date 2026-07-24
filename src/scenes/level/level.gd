@@ -194,6 +194,7 @@ var exit_global_position = Vector2.ZERO
 var is_initialized = false
 var terrain_layer_used_cells = [] # based on this we update the map using tool
 var current_level_code = ""
+var current_level_data: CampaignLevelData = null
 var level_width_cell = 0
 var level_height_cell = 0
 var level_size = Vector2.ZERO
@@ -235,6 +236,17 @@ func _ready() -> void:
 	_init_hidden_areas()
 	print(get_level_code())
 	
+
+
+func load_level(level_data: CampaignLevelData) -> void:
+	if level_data == null:
+		push_error("Level.load_level called with null CampaignLevelData")
+		return
+	if current_level_data == level_data:
+		return
+	
+	current_level_data = level_data
+	update_level(level_data.code)
 
 
 func update_level(level_code: String) -> void:
@@ -305,6 +317,7 @@ func clear_level() -> void:
 		child.queue_free()
 	
 	objects_map = {}
+	current_level_data = null
 
 
 func set_level(level_code: String) -> void:

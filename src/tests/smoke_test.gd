@@ -43,7 +43,7 @@ func _check_level_load() -> void:
 	var level_data := CampaignLevelLibrary.get_level("1-1")
 	var level: Level = _level_scene.instantiate()
 	add_child(level)
-	level.update_level(level_data.code)
+	level.load_level(level_data)
 	assert(level.get_level_size_cell().x > 0, "Level width must be positive")
 	assert(level.player_start_position != Vector2.ZERO, "Player start must be set")
 	level.queue_free()

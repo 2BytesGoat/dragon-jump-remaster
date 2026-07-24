@@ -55,12 +55,12 @@ func _ready() -> void:
 
 func _on_level_button_hovered(level_name: String) -> void:
 	var campaign_level := CampaignLevelLibrary.get_level(level_name)
-	level_node.update_level(campaign_level.code)
+	level_node.load_level(campaign_level)
 
 
 func _on_level_button_clicked(level_name: String) -> void:
 	var campaign_level := CampaignLevelLibrary.get_level(level_name)
-	level_node.update_level(campaign_level.code)
+	level_node.load_level(campaign_level)
 	selected_level_name = level_name
 	
 	var level_data: LevelData = SaveManager.get_level_data(level_name)

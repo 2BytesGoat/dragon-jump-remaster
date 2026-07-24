@@ -32,7 +32,7 @@ func _ready():
 	player_speed_modifier = GameSession.speed_modifier if GameSession.speed_modifier != 1.0 else player_speed_modifier
 	
 	var level_data := CampaignLevelLibrary.get_level(level_name)
-	level.update_level(level_data.code)
+	level.load_level(level_data)
 	initialize_players()
 	
 	pause_screen.visible = false
@@ -41,8 +41,8 @@ func _ready():
 	SignalBus.new_run_attempt.emit(level_name)
 
 
-func update_level(level_code):
-	level.update_level(level_code)
+func update_level(level_data: CampaignLevelData):
+	level.load_level(level_data)
 	update_players()
 
 
@@ -151,5 +151,5 @@ func _on_next_button_pressed() -> void:
 		return
 	
 	var level_data := CampaignLevelLibrary.get_level(level_name)
-	update_level(level_data.code)
+	update_level(level_data)
 	reset_ui()
