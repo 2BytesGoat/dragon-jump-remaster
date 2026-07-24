@@ -1,55 +1,31 @@
----
-title: AI Training Mode
-tags: [godot, game-engine, gdd, ai, rl, training, godot-rl-agents, hidden-feature]
-related:
-  - "[[direction/product_identity]]"
-  - "[[direction/release_plan]]"
-  - "[[systems/rl_integration_system/rl_integration_system]]"
-  - "[[systems/training_system/training_system]]"
-search_terms: [ai-training, reinforcement-learning, godot-rl-agents, synchronizer, hidden-mode]
----
+# AI Training Mode — Dragon Jump Remaster
 
-# AI Training Mode
+**Status:** Hidden tinkerer feature. **Not** part of the player-facing V1.0 release.
 
-## Positioning
+## Purpose
 
-The AI training mode is a **hidden/tinkerer feature**, not the main product. It is most valuable for:
+A hidden mode that lets technically curious players (and the developer) train reinforcement-learning agents on Dragon Jump levels. It is a long-term value-add, not the main product.
 
-- Steam players who want to experiment with reinforcement learning.
-- ML workshops where participants train agents to speedrun levels.
+## Visibility Rules
 
-## How it works
+- Not shown in any menu.
+- Not mentioned in marketing, store pages, trailers, or press materials.
+- Accessible only through an undocumented input sequence or a launch flag.
 
-The project integrates `godot-rl-agents` and exposes the game as a Gym-like environment:
+## Technical Isolation
 
-- Observations come from the player state and level context.
-- Actions are sent from a Python training process over TCP.
-- A custom synchronizer (`src/scenes/training/synchronizer.gd`) pauses the engine between steps.
+- AI controller lives in `src/scenes/player/controller/` alongside the human controller.
+- All telemetry, snapshots, and save data flow through `SaveManager` only.
+- No AI logic runs in the main menu or arcade loop unless explicitly activated.
+- No network calls, no external services, no cloud uploads.
 
-See `[[systems/rl_integration_system/rl_integration_system]]` and `[[systems/training_system/training_system]]` for technical details.
+## Data Collection
 
-## Launch options
+- Local only.
+- Per-run metrics: time, deaths, powerups used, finish flag.
+- Stored in user save directory, not sent anywhere.
 
-Open decision: how is the mode exposed?
+## Future Decisions
 
-| Option | Pros | Cons |
-|--------|------|------|
-| Hidden menu in the same build | Easy to discover for tinkerers | Risk of casual players breaking their save or getting confused |
-| Separate launch flag / build | Clean separation | Requires maintaining another export target |
-| Arcade build excludes it | Smaller arcade footprint | Less value for arcade-community AI workshops |
-
-## Current competition needs
-
-See `[[tracking/sprints/sprint_2026_07_25]]` for the current sprint plan.
-
-## Future direction
-
-- Keep the AI controller working for the current player character.
-- Consider a cleaner observation interface so the AI does not need to reach into internal player state.
-- Document the Python/Godot training pipeline more thoroughly after V1.0.
-
-## Known limitations
-
-- `PlayerAITrainingController` is tightly coupled to `player.level_reference`, `player.state_machine`, and `player.global_position`.
-- `main_multiplayer.gd` has a hardcoded default level (`1-14`) and a TODO to loop through all levels.
-- The custom synchronizer (`src/scenes/training/synchronizer.gd`) is not yet documented in the technical system docs.
+- Whether to expose a hidden "watch AI" screen after V1.0.
+- Whether to publish a separate educational repo with stripped-down systems.

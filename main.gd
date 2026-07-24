@@ -28,8 +28,8 @@ signal game_paused(is_paused: bool)
 
 
 func _ready():
-	level_name = SceneManger.scene_data.get("level_name", level_name)
-	player_speed_modifier = SceneManger.scene_data.get("speed_modifier", player_speed_modifier)
+	level_name = SceneManager.scene_data.get("level_name", level_name)
+	player_speed_modifier = SceneManager.scene_data.get("speed_modifier", player_speed_modifier)
 	
 	var level_code = Constants.LEVELS[level_name]["code"]
 	level.update_level(level_code)
@@ -142,7 +142,7 @@ func _on_end_screen_restart_button_pressed() -> void:
 
 
 func _on_exit_button_pressed() -> void:
-	SceneManger.go_to(level_scene_path)
+	SceneManager.go_to(level_scene_path)
 
 
 func _on_next_button_pressed() -> void:

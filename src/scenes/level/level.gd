@@ -200,7 +200,6 @@ var populated_cells: Dictionary = {}
 
 # Progress
 var exit_global_position = Vector2.ZERO
-var first_time_touching_crown = true
 
 # These are used to debug in editor
 var is_initialized = false

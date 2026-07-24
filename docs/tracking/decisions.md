@@ -1,20 +1,11 @@
----
-title: Decision Log
-tags: [godot, game-engine, project-management, decision-log]
-related:
-  - "[[direction/product_identity]]"
-  - "[[direction/release_plan]]"
-  - "[[tracking/current_sprint]]"
-search_terms: [decisions, decision-log, scope, identity, agreed-upon]
----
-
-# Decision Log
+# Decision Log — Dragon Jump Remaster
 
 This document captures high-level decisions as the project evolves.
 
-## 2026-07-17
+---
 
-- **Created this decision log** to capture the current state and prevent findings from being lost.
+## 2026-07-17 — Product identity and early scope
+
 - **Refined product identity** to:
 
   > Dragon Jump Remaster is an arcade-style single-button speedrun platformer. The Steam version adds a hidden AI training mode for players who want to tinker with reinforcement learning.
@@ -25,7 +16,7 @@ This document captures high-level decisions as the project evolves.
 
 - **Identified the upcoming ML workshop competition** as the immediate external deadline. Sprint plan: [[tracking/sprints/sprint_2026_07_25]].
 
-  > **Status update:** The `1-17` level and distinct-tiles-touched tracking are **not yet implemented** in code, despite an earlier note claiming they were added. They remain the top priority for the current sprint.
+- **Status update:** The `1-17` level and distinct-tiles-touched tracking are **not yet implemented** in code, despite an earlier note claiming they were added. They remain the top priority for the current sprint.
 
 - **Recorded playtesting feedback:**
   - Most common request: **more levels**. This becomes the strongest signal for the first post-ship feature.
@@ -41,12 +32,46 @@ This document captures high-level decisions as the project evolves.
 
 - **Decided source/IP strategy:** the main Dragon Jump repo will be made private before commercial release to protect the full game, levels, and assets. After release, the author may publish a separate educational repo with core architecture and systems (no assets, no levels, no branding) under a permissive license, similar to the Aseprite model. The commercial value is the official build, updates, leaderboards, and community — not code secrecy. Technical or legal protection alone cannot stop a determined bad actor; the defense is being the trusted official version.
 
-## Open decisions
+---
 
-- Should the RL training mode remain a first-class feature or become a separate build target?
-- Should the crown/progress bar/tag-mode code be removed, hidden, or fully implemented?
-- What is the target platform and release channel (itch.io, Steam, internal research demo)?
-- Is the AI training mode a hidden menu, a separate launch flag, or excluded from the arcade build?
-- What is the exact release deadline for V1.0?
-- What is the desired level count for a first public build?
-- When exactly should the repo transition from public to private relative to the arcade/Steam builds?
+## 2026-07-24 — V1.0 Scope Lock and Foundation Approvals
+
+**Approved by:** solo developer  
+**Context:** Foundation cleanup and release planning.
+
+### Decisions
+
+| # | Topic | Decision | Rationale |
+|---|---|---|---|
+| 1 | Multiplayer | **Removed for V1.0.** All multiplayer files deleted. | Outside single-player arcade scope; adds coupling and network risk. |
+| 2 | Crown / tile-tag mode | **Removed for V1.0.** | Half-implemented; confuses scope. |
+| 3 | Progress-bar mode | **Removed for V1.0.** | Can be rebuilt cleanly from a solid base if needed later. |
+| 4 | AI training mode | **Kept hidden.** Accessible only via secret input/launch flag. | Value-add for tinkerers; never marketed. |
+| 5 | Symbol-based level editor | **Kept.** | Core content pipeline. |
+| 6 | Autoloads | **Five allowed:** `SaveManager`, `SceneManager`, `AudioManager`, `Settings`, `GameSession`. | Avoid fragile global state. |
+| 7 | Release order | **Free arcade build first, then paid Steam/itch.io.** | Validate loop and build wishlists before charging. |
+| 8 | V1.0 content | 10–20 handcrafted levels, local high score, endless/survival mode. | Small, shippable, learnable. |
+| 9 | Price | **$4.99 USD** with 10–20% launch-week discount. | Matches small-arcade market. |
+| 10 | Involvement model | Developer decides/reviews; AI executes code changes; developer tests builds. | Fits solo dev with limited bandwidth. |
+
+### Renames
+
+| Old | New | Status |
+|---|---|---|
+| `SceneManger` / `scene_manger.gd` | `SceneManager` / `scene_manager.gd` | Done |
+| `emplased_time` | `elapsed_time` | Done (then removed as dead) |
+
+### Removed files
+
+- `src/scenes/training/main_multiplayer.gd`
+- `src/scenes/training/main_multiplayer.tscn`
+- `src/scenes/training/multiplayer_world.gd`
+- `src/scenes/training/multiplayer_world.tscn`
+- `main_multiplayer` button from `main_menu.tscn`
+
+### Open questions
+
+- Exact Godot 4.x patch version to pin.
+- Launch discount percentage (10% vs 20%).
+- Web demo timing (before or alongside desktop demo).
+- Gamepad support for V1.0 or post-launch.

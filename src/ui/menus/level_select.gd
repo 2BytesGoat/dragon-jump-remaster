@@ -81,11 +81,11 @@ func _on_start_button_pressed() -> void:
 		return
 	var speed_modifier = 0.75 + speed_slider.value * 0.25
 	
-	SceneManger.go_to(single_player_scene.resource_path, {"level_name": selected_level_name, "speed_modifier": speed_modifier})
+	SceneManager.go_to(single_player_scene.resource_path, {"level_name": selected_level_name, "speed_modifier": speed_modifier})
 
 
 func _on_back_button_pressed() -> void:
-	SceneManger.go_to(main_menu_scene.resource_path)
+	SceneManager.go_to(main_menu_scene.resource_path)
 
 
 func _on_leaderboard_button_pressed() -> void:

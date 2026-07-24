@@ -2,12 +2,9 @@ extends MarginContainer
 
 @export var tag_screen: MarginContainer
 @onready var level_select = "res://src/ui/menus/level_select.tscn"
-@onready var main_multiplayer = "res://src/scenes/training/main_multiplayer.tscn"
 
 
 func _ready() -> void:
-	if "port" in EnvironmentVariables.args:
-		SceneManger.go_to(main_multiplayer)
 	tag_screen.visible = false
 
 
@@ -15,7 +12,7 @@ func _on_play_button_pressed() -> void:
 	if SaveManager.get_player_name() == Constants.DEFAULT_PLAYER_NAME:
 		tag_screen.visible = true
 	else:
-		SceneManger.go_to(level_select)
+		SceneManager.go_to(level_select)
 
 
 func _on_quit_button_pressed() -> void:
@@ -30,8 +27,8 @@ func _on_confirm_button_pressed() -> void:
 		return
 	
 	SaveManager.current_player_name = tag_screen.player_tag
-	SceneManger.go_to(level_select)
+	SceneManager.go_to(level_select)
 
 
 func _on_skip_button_pressed() -> void:
-	SceneManger.go_to(level_select)
+	SceneManager.go_to(level_select)
