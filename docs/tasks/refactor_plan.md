@@ -45,10 +45,10 @@ Phase 1 execution plan. Each task is small enough to hand to a freelancer or to 
 
 ## Phase 1.5 — Add Smoke Tests
 
-- [ ] Create `tests/test_boot.gd`: game boots to main menu
-- [ ] Create `tests/test_level_load.gd`: each V1.0 level loads from symbol code
-- [ ] Create `tests/test_save_score.gd`: finish a run, save score, reload it
-- [ ] Wire tests to a CI script or a run-one-test-scene so they can be run headlessly
+- [x] Create `src/tests/test_boot.gd` + `.tscn`: game boots to main menu
+- [x] Create `src/tests/test_level_load.gd` + `.tscn`: each V1.0 level loads from symbol code
+- [x] Create `src/tests/test_save_score.gd` + `.tscn`: finish a run, save score, reload it
+- [x] Wire tests to `src/tests/test_runner.tscn` and `run_tests.sh` / `run_tests.bat` for headless runs
 
 ## Phase 1.6 — Documentation Sync
 

@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://psu9926h4wm62"]
+
+[ext_resource type="Script" path="res://src/tests/test_level_load.gd" id="1_psu99"]
+
+[node name="TestLevelLoad" type="Node"]
+script = ExtResource("1_psu99")
