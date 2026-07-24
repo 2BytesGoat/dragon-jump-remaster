@@ -48,11 +48,18 @@ This document captures high-level decisions as the project evolves.
 | 3 | Progress-bar mode | **Removed for V1.0.** | Can be rebuilt cleanly from a solid base if needed later. |
 | 4 | AI training mode | **Kept hidden.** Accessible only via secret input/launch flag. | Value-add for tinkerers; never marketed. |
 | 5 | Symbol-based level editor | **Kept.** | Core content pipeline. |
-| 6 | Autoloads | **Five allowed:** `SaveManager`, `SceneManager`, `AudioManager`, `Settings`, `GameSession`. | Avoid fragile global state. |
+| 6 | Autoloads | **Five approved:** `SaveManager`, `SceneLoader`, `AudioManager`, `Settings`, `GameSession`. `Constants` and `SignalBus` remain as documented transitional helper autoloads for V1.0 hardening; `Utils` is now a static `class_name` helper and is no longer an autoload. | Avoid fragile global state while preserving existing signal bus and const utilities. |
 | 7 | Release order | **Free arcade build first, then paid Steam/itch.io.** | Validate loop and build wishlists before charging. |
 | 8 | V1.0 content | 10–20 handcrafted levels, local high score, endless/survival mode. | Small, shippable, learnable. |
 | 9 | Price | **$4.99 USD** with 10–20% launch-week discount. | Matches small-arcade market. |
 | 10 | Involvement model | Developer decides/reviews; AI executes code changes; developer tests builds. | Fits solo dev with limited bandwidth. |
+
+### Shader compiler warning (2026-07-24)
+
+- **Symptom:** Headless smoke test logged `ERROR: Condition "!actions.custom_samplers.has(function->arguments[j].tex_builtin)" is true. Continuing.`
+- **Cause:** `assets/shaders/powerup.gdshader` passed the built-in `TEXTURE` sampler into a custom `tex(sampler2D, vec2)` helper. Godot 4.x flags this pattern internally.
+- **Fix:** Inlined the UV-bounds guard with a preprocessor macro (`SAFE_TEXTURE`) so `TEXTURE` is sampled directly inside `fragment()`, not passed through a function.
+- **Status:** Resolved; smoke test now passes without shader warnings.
 
 ### Renames
 
@@ -68,6 +75,11 @@ This document captures high-level decisions as the project evolves.
 - `src/scenes/training/multiplayer_world.gd`
 - `src/scenes/training/multiplayer_world.tscn`
 - `main_multiplayer` button from `main_menu.tscn`
+
+### 2026-07-24 — Deferred systems
+
+- **LeaderboardManager + SilentWolf:** Deferred to post-launch. The UI leaderboard component now shows "Leaderboard disabled in V1.0." Online scores will be re-enabled once backend integration is solid.
+- **RuntimeSecrets / EnvironmentVariables:** Removed from autoloads. Environment parsing is now local to the hidden AI training scene; SilentWolf secrets are no longer needed while online leaderboards are deferred.
 
 ### Open questions
 

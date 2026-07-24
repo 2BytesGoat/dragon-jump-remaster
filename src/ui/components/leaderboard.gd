@@ -10,55 +10,19 @@ const MAX_SUPPORTED_ENTRIES = 9
 
 
 func _ready() -> void:
-	SignalBus.leaderboard_scores_updated.connect(update_leaderboard)
+	_show_placeholder("Leaderboard disabled in V1.0.")
 
 
-func update_leaderboard(level_name: String):
+func update_leaderboard(_level_name: String):
+	_show_placeholder("Leaderboard disabled in V1.0.")
+
+
+func _show_placeholder(text: String) -> void:
+	leaderboard_placeholder_label.text = text
 	leaderboard_entry_container.visible = false
 	server_error_label.visible = false
 	leaderboard_placeholder_label.visible = true
-	
-	var results = LeaderboardManager.get_local_leaderboard(level_name)
-	if not results:
-		LeaderboardManager.update_local_leaderboard(level_name)
-		return
-	
-	if results.get("status") == "updating":
-		return
-	
-	for child in leaderboard_entry_container.get_children():
-		leaderboard_entry_container.remove_child(child)
-		child.queue_free()
-	
-	if results["status"] == "failed":
-		leaderboard_placeholder_label.visible = false
-		leaderboard_entry_container.visible = false
-		server_error_label.visible = true
-	
-	var maded_to_leaderboard = []
-	var player_name = SaveManager.get_player_name()
-	for entry_name in results["scores"]:
-		var entry_object = leaderboard_entry_scene.instantiate()
-		entry_object.player_name = entry_name if entry_name != player_name else "> %s" % player_name
-		entry_object.player_score = Utils.format_time(results["scores"][entry_name])
-		leaderboard_entry_container.add_child(entry_object)
-		maded_to_leaderboard.append(entry_name)
-		if leaderboard_entry_container.get_child_count() >= MAX_SUPPORTED_ENTRIES:
-			break
-	
-	var player_time = results.get("player_time", INF)
-	if player_name != Constants.DEFAULT_PLAYER_NAME and player_time != INF and player_name not in maded_to_leaderboard:
-		while leaderboard_entry_container.get_child_count() > MAX_SUPPORTED_ENTRIES - 2:
-			var last_entry = leaderboard_entry_container.get_child(leaderboard_entry_container.get_child_count() - 1)
-			leaderboard_entry_container.remove_child(last_entry)
-			last_entry.queue_free()
-		
-		var others_label = leaderboard_others_scene.instantiate()
-		leaderboard_entry_container.add_child(others_label)
-		var entry_object = leaderboard_entry_scene.instantiate()
-		entry_object.player_name = player_name
-		entry_object.player_score = Utils.format_time(results["player_time"])
-		leaderboard_entry_container.add_child(entry_object)
-	
-	leaderboard_placeholder_label.visible = false
-	leaderboard_entry_container.visible = true
+
+
+func _render_results(_results: Dictionary) -> void:
+	pass

@@ -18,13 +18,10 @@ func unlock_level(level_name: String):
 
 
 func unlock_next_level(level_name: String):
-	var all_level_names = Constants.LEVELS.keys()
-	var current_level_index = all_level_names.find(level_name)
-	if current_level_index == -1 or current_level_index + 1 >= len(all_level_names):
+	var next_level_name := CampaignLevelLibrary.get_next_level(level_name)
+	if next_level_name == "":
 		return
-	
-	var new_level_name = all_level_names[current_level_index + 1]
-	unlock_level(new_level_name)
+	unlock_level(next_level_name)
 
 
 func save_to_disk():
@@ -43,8 +40,9 @@ func load_game():
 func create_new_save():
 	current_data = GameData.new()
 	current_data.player_name = current_player_name
-	# Unlock the very first level defined in your Constants
-	var first_level = Constants.LEVELS.keys()[0]
+	# Unlock the very first campaign level
+	var level_ids := CampaignLevelLibrary.get_all_level_ids()
+	var first_level: String = level_ids[0]
 	unlock_level(first_level)
 	save_to_disk()
 
@@ -66,7 +64,10 @@ func update_level_progress(level_name: String) -> void:
 	if not level_data or level_data.best_time <= 0:
 		return
 
-	var milestones = Constants.LEVELS[level_name]["times"]
+	var campaign_level := CampaignLevelLibrary.get_level(level_name)
+	if campaign_level == null:
+		return
+	var milestones := campaign_level.times
 	var total_milestones = milestones.size()
 
 	for i in range(total_milestones):
@@ -95,8 +96,6 @@ func _on_new_time_submission(level_name: String, time: float) -> void:
 		update_level_progress(level_name)
 		unlock_next_level(level_name)
 		save_to_disk()
-		
-		SignalBus.new_leaderboard_submission.emit(current_data.player_name, level_name, time)
 
 func _on_player_name_changed(value) -> void:
 	current_player_name = value

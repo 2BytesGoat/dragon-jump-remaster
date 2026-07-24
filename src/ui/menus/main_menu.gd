@@ -12,7 +12,7 @@ func _on_play_button_pressed() -> void:
 	if SaveManager.get_player_name() == Constants.DEFAULT_PLAYER_NAME:
 		tag_screen.visible = true
 	else:
-		SceneManager.go_to(level_select)
+		SceneLoader.go_to(level_select)
 
 
 func _on_quit_button_pressed() -> void:
@@ -27,8 +27,8 @@ func _on_confirm_button_pressed() -> void:
 		return
 	
 	SaveManager.current_player_name = tag_screen.player_tag
-	SceneManager.go_to(level_select)
+	SceneLoader.go_to(level_select)
 
 
 func _on_skip_button_pressed() -> void:
-	SceneManager.go_to(level_select)
+	SceneLoader.go_to(level_select)

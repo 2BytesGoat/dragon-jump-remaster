@@ -20,5 +20,5 @@ func exit() -> void:
 	owner.release_grappling_hook()
 
 
-func _on_gapling_hook_should_release() -> void:
+func _on_grappling_hook_should_release() -> void:
 	state_machine.transition_to("Fall")

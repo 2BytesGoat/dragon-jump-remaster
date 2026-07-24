@@ -19,6 +19,8 @@ extends MarginContainer
 
 var selected_level_name = ""
 
+@onready var _medal_config: MedalConfig = Constants.MEDAL_CONFIG
+
 
 func _ready() -> void:
 	var cnt = 0
@@ -28,17 +30,18 @@ func _ready() -> void:
 		child.queue_free()
 	
 	var display_index = 0
-	for i in len(Constants.LEVELS):
-		var level_name = Constants.LEVELS.keys()[i]
-		var level_data = Constants.LEVELS[level_name]
-		if level_data.get("hidden", false):
+	var level_ids := CampaignLevelLibrary.get_all_level_ids()
+	for i in len(level_ids):
+		var level_name = level_ids[i]
+		var level_data := CampaignLevelLibrary.get_level(level_name)
+		if level_data.hidden:
 			continue
 		
 		var button: Button = level_button_scene.instantiate()
 		button.name = level_name
 		level_button_container.add_child(button)
 		button.set_button_disabled(not SaveManager.has_level_data(level_name))
-		button.button_label = "%03d - %s" % [display_index, level_data["name"]]
+		button.button_label = "%03d - %s" % [display_index, level_data.display_name]
 		button.pressed.connect(_on_level_button_clicked.bind(level_name))
 		
 		if cnt == 0:
@@ -51,13 +54,13 @@ func _ready() -> void:
 
 
 func _on_level_button_hovered(level_name: String) -> void:
-	var level_code = Constants.LEVELS[level_name]["code"]
-	level_node.update_level(level_code)
+	var campaign_level := CampaignLevelLibrary.get_level(level_name)
+	level_node.update_level(campaign_level.code)
 
 
 func _on_level_button_clicked(level_name: String) -> void:
-	var level_code = Constants.LEVELS[level_name]["code"]
-	level_node.update_level(level_code)
+	var campaign_level := CampaignLevelLibrary.get_level(level_name)
+	level_node.update_level(campaign_level.code)
 	selected_level_name = level_name
 	
 	var level_data: LevelData = SaveManager.get_level_data(level_name)
@@ -67,10 +70,10 @@ func _on_level_button_clicked(level_name: String) -> void:
 	level_attempts_label.text = str(level_data.attempts)
 	
 	level_progress_bar.value = level_data.progress_percentage
-	level_progress_medal.text = Constants.MEDAL_NAMES[level_data.progress_milestone]
+	level_progress_medal.text = _medal_config.medal_names[level_data.progress_milestone]
 	
-	var i = Constants.LEVELS.keys().find(level_name)
-	selected_level_label.text = "%03d - %s" % [i, Constants.LEVELS[level_name]["name"]]
+	var i = CampaignLevelLibrary.get_all_level_ids().find(level_name)
+	selected_level_label.text = "%03d - %s" % [i, campaign_level.display_name]
 	
 	if leaderboard_container.visible:
 		_on_map_info_button_pressed()
@@ -81,11 +84,12 @@ func _on_start_button_pressed() -> void:
 		return
 	var speed_modifier = 0.75 + speed_slider.value * 0.25
 	
-	SceneManager.go_to(single_player_scene.resource_path, {"level_name": selected_level_name, "speed_modifier": speed_modifier})
+	GameSession.start_run(selected_level_name, speed_modifier)
+	SceneLoader.go_to(single_player_scene.resource_path)
 
 
 func _on_back_button_pressed() -> void:
-	SceneManager.go_to(main_menu_scene.resource_path)
+	SceneLoader.go_to(main_menu_scene.resource_path)
 
 
 func _on_leaderboard_button_pressed() -> void:

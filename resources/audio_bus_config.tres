@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="AudioBusConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/scripts/resources/audio_bus_config.gd" id="1_g6h7i"]
+
+[resource]
+script = ExtResource("1_g6h7i")
+master_volume = 1.0
+music_volume = 1.0
+sfx_volume = 1.0

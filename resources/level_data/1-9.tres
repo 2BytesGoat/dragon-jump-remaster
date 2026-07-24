@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="CampaignLevelData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/scripts/resources/campaign_level_data.gd" id="1_1_9"]
+
+[resource]
+script = ExtResource("1_1_9")
+level_id = "1-9"
+display_name = "CHAIN_JUMPS"
+code = "W40|W13E16W11|W12E18W10|W3E34W3|W2E36W2|W2E37W1|W1E38W1|W1E38W1|W1E38W1|W1E38W1|W1E38W1|W1E38W1|W1E14J1E5J1E5J1E11W1|W1E2P1E6W1E25Q1E2W1|W11E19W10|E8W3E19W4E6|E8W3E20W3E6|E8W2E22W2E6|E8W1Y24W1E6|E8W26E6"
+times = Array[float]([7.199999999999999, 4.752, 3.456])
+hidden = false

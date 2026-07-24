@@ -9,11 +9,13 @@ var race_started := false
 
 
 func _ready() -> void:
-	SignalBus.player_started_run.connect(_on_player_started_run)
-	SignalBus.player_restarted_run.connect(_on_player_restarted_run)
-	SignalBus.player_finished_run.connect(_on_player_finished_run)
-	
 	reset()
+
+
+func track_player(player: Player) -> void:
+	player.run_started.connect(_on_player_run_started)
+	player.run_restarted.connect(_on_player_run_restarted)
+	player.run_finished.connect(_on_player_run_finished)
 
 
 func _process(delta: float) -> void:
@@ -32,16 +34,16 @@ func reset() -> void:
 	time_label.text = "00:00.00"
 
 
-func _on_player_started_run(_player: Player):
+func _on_player_run_started(_player: Player):
 	race_started = true
 	race_paused = false
 
 
-func _on_player_restarted_run(_player: Player):
+func _on_player_run_restarted(_player: Player):
 	reset()
 
 
-func _on_player_finished_run(_player: Player) -> void:
+func _on_player_run_finished(_player: Player) -> void:
 	race_started = false
 	race_paused = true
 

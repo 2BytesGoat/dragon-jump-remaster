@@ -17,7 +17,7 @@ func _ready() -> void:
 
 func init(args: Array) -> void:
 	type = args[0]
-	color = Constants.POWERUPS[type]["color"]
+	color = Constants.POWERUP_PALETTE.get_color(type)
 
 
 func pickup() -> void:

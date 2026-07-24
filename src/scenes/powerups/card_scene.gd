@@ -4,6 +4,7 @@ extends Control
 @onready var container: MarginContainer = $MarginContainer
 @onready var texture: TextureRect = $MarginContainer/TextureRect
 @onready var label: Label = $MarginContainer/TextureRect/Label
+@onready var _palette: PowerupPalette = Constants.POWERUP_PALETTE
 
 var is_splitscreen: bool = false
 var powerup_type: String = ""
@@ -28,7 +29,7 @@ func draw(type: String, exists: bool = false) -> void:
 	powerup_type = type
 	
 	label.text = type
-	texture.self_modulate = Constants.POWERUPS[type]["color"]
+	texture.self_modulate = _palette.get_color(type)
 	
 	if not exists:
 		play_draw_new_animation()

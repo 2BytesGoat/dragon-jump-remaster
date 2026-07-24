@@ -13,7 +13,7 @@ const EXIT_SYMBOL = "Q"
 const SEPARATOR_SYMBOL = "|"
 
 # TODO: make a datatype for these
-var symbol_to_tile_info: Dictionary = {
+const SYMBOL_TO_TILE_INFO: Dictionary = {
 	EMPTY_SYMBOL: {
 		"name": "Empty",
 		"type": CELL.TERRAIN,
@@ -157,17 +157,6 @@ var symbol_to_tile_info: Dictionary = {
 		"args": ["Grapple"],
 		"over_wall": false
 	},
-	"C": {
-		"name": "Crown",
-		"type": CELL.OBJECT,
-		"source": 0,
-		"coords": Vector2i(4, 3),
-		"callable": null,
-		"debug_alt": null,
-		"scene": preload("res://src/scenes/level/tiles/crown.tscn"),
-		"args": null,
-		"over_wall": false
-	},
 	"M": {
 		"name": "Secret",
 		"type": CELL.SECRETS,
@@ -204,8 +193,6 @@ var exit_global_position = Vector2.ZERO
 # These are used to debug in editor
 var is_initialized = false
 var terrain_layer_used_cells = [] # based on this we update the map using tool
-var emplased_time = 0
-var update_interval = 1
 var current_level_code = ""
 var level_width_cell = 0
 var level_height_cell = 0
@@ -224,18 +211,15 @@ func _exit_tree() -> void:
 	set_process(false)
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if not Engine.is_editor_hint() and is_initialized:
 		return
 	
-	emplased_time += delta
-	if emplased_time >= update_interval:
-		_init_terrain_layer()
-		emplased_time = 0
+	_init_terrain_layer()
 
 
 func _ready() -> void:
-	for info in symbol_to_tile_info.values():
+	for info in SYMBOL_TO_TILE_INFO.values():
 		tile_names.append(info["name"])
 	
 	_init_atlas_symbol_mapping()
@@ -324,41 +308,14 @@ func clear_level() -> void:
 
 
 func set_level(level_code: String) -> void:
-	var symbol_cnt = 0
-	var current_symbols = ""
-	var should_flush = false
-	
-	var y_offset = 0
-	var x_offset = 0
-	
 	level_width_cell = 0
 	level_height_cell = 0
 	
-	for symbol in level_code:
-		if _is_tilemap_symbol(symbol):
-			if symbol_cnt > 0 and should_flush:
-				_set_multiple_cells(current_symbols, symbol_cnt, Vector2i(x_offset, y_offset))
-				current_symbols = ""
-				x_offset += symbol_cnt
-				symbol_cnt = 0
-				should_flush = false
-			current_symbols += symbol
-		elif symbol.is_valid_int():
-			symbol_cnt = symbol_cnt * 10 + int(symbol)
-			should_flush = true
-		elif symbol == "|":
-			level_width_cell = max(level_width_cell, x_offset + symbol_cnt)
-			level_height_cell += 1
-			_set_multiple_cells(current_symbols, symbol_cnt, Vector2i(x_offset, y_offset))
-			current_symbols = ""
-			symbol_cnt = 0
-			x_offset = 0
-			y_offset += 1
-			
-	if symbol_cnt > 0:
-		_set_multiple_cells(current_symbols, symbol_cnt, Vector2i(x_offset, y_offset))
-		level_width_cell = max(level_width_cell, x_offset + symbol_cnt)
-		level_height_cell += 1
+	var instructions = LevelCodeParser.parse(level_code)
+	for instruction in instructions:
+		_set_multiple_cells(instruction["symbols"], instruction["count"], instruction["offset"])
+		level_width_cell = max(level_width_cell, instruction["offset"].x + instruction["count"])
+		level_height_cell = max(level_height_cell, instruction["offset"].y + 1)
 	
 	_fill_rectangle_with_walls(level_width_cell, level_height_cell)
 	
@@ -402,7 +359,7 @@ func get_cell_symbol(cell_coords: Vector2i) -> String:
 
 func get_cell_symbol_index(cell_coords: Vector2i) -> int:
 	var cell_symbol = get_cell_symbol(cell_coords)
-	return symbol_to_tile_info.keys().find(cell_symbol)
+	return SYMBOL_TO_TILE_INFO.keys().find(cell_symbol)
 
 
 func get_surrounding_cells(global_pos: Vector2, radius: int) -> Array:
@@ -432,11 +389,11 @@ func get_flowfield_value(object_global_position: Vector2) -> float:
 
 
 func _is_tilemap_symbol(symbol: String) -> bool:
-	return symbol == EMPTY_SYMBOL or symbol in symbol_to_tile_info
+	return symbol == EMPTY_SYMBOL or symbol in SYMBOL_TO_TILE_INFO
 
 
 func _fill_rectangle_with_walls(width: int, height: int) -> void:
-	var wall_info = symbol_to_tile_info[WALL_SYMBOL]
+	var wall_info = SYMBOL_TO_TILE_INFO[WALL_SYMBOL]
 	for y in range(height):
 		for x in range(width):
 			var cell_coords = Vector2i(x, y)
@@ -457,8 +414,8 @@ func _set_multiple_cells(cell_symbols: String, cell_cnt: int, offset_coords: Vec
 		return
 	
 	for symbol in cell_symbols:
-		var wall_info = symbol_to_tile_info[WALL_SYMBOL]
-		var cell_type_info = symbol_to_tile_info[symbol]
+		var wall_info = SYMBOL_TO_TILE_INFO[WALL_SYMBOL]
+		var cell_type_info = SYMBOL_TO_TILE_INFO[symbol]
 		var cell_layer = terrain_layer
 		match cell_type_info["type"]:
 			CELL.TERRAIN:
@@ -478,9 +435,9 @@ func _set_multiple_cells(cell_symbols: String, cell_cnt: int, offset_coords: Vec
 
 
 func _init_atlas_symbol_mapping() -> void:
-	for symbol in symbol_to_tile_info:
-		var atlas_coords = str(symbol_to_tile_info[symbol]["coords"])
-		var cell_type = symbol_to_tile_info[symbol]["type"]
+	for symbol in SYMBOL_TO_TILE_INFO:
+		var atlas_coords = str(SYMBOL_TO_TILE_INFO[symbol]["coords"])
+		var cell_type = SYMBOL_TO_TILE_INFO[symbol]["type"]
 		if cell_type == CELL.STATIC:
 			static_atlas_coords_to_symbol[atlas_coords] = symbol
 		elif cell_type == CELL.OBJECT:
@@ -507,8 +464,8 @@ func _update_static_alt_tiles() -> void:
 		var symbol = await _get_cell_atlas_symbol(cell_coords, CELL.STATIC)
 		var alt_tile = _get_alt_tile_at_coords(cell_coords, symbol)
 		if alt_tile >= 0:
-			var tile_source = symbol_to_tile_info[symbol]["source"]
-			var tile_coords = symbol_to_tile_info[symbol]["coords"]
+			var tile_source = SYMBOL_TO_TILE_INFO[symbol]["source"]
+			var tile_coords = SYMBOL_TO_TILE_INFO[symbol]["coords"]
 			static_layer.set_cell(cell_coords, tile_source, tile_coords, alt_tile)
 		_add_to_populated_cells(cell_coords, symbol)
 
@@ -516,8 +473,8 @@ func _update_static_alt_tiles() -> void:
 func _populate_objects() -> void:
 	for cell_coords in objects_layer.get_used_cells():
 		var symbol = await _get_cell_atlas_symbol(cell_coords, CELL.OBJECT)
-		var object_scene = symbol_to_tile_info[symbol]["scene"]
-		var object_arguments = symbol_to_tile_info[symbol]["args"]
+		var object_scene = SYMBOL_TO_TILE_INFO[symbol]["scene"]
+		var object_arguments = SYMBOL_TO_TILE_INFO[symbol]["args"]
 		
 		var object_position = objects_layer.to_global(objects_layer.map_to_local(cell_coords))
 		_add_to_populated_cells(cell_coords, symbol)
@@ -587,7 +544,7 @@ func _get_alt_tile(cell: Vector2i, directions: Array[Vector2i]) -> int:
 
 
 func _get_alt_tile_at_coords(cell: Vector2i, symbol: String):
-	var alt_tile_callable = symbol_to_tile_info[symbol]["callable"]
+	var alt_tile_callable = SYMBOL_TO_TILE_INFO[symbol]["callable"]
 	if alt_tile_callable:
 		var callable = Callable(self, alt_tile_callable)
 		return callable.call(cell)

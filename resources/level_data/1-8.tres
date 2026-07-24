@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="CampaignLevelData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/scripts/resources/campaign_level_data.gd" id="1_1_8"]
+
+[resource]
+script = ExtResource("1_1_8")
+level_id = "1-8"
+display_name = "DOUBLE_JUMP"
+code = "W25E10|W3E20W2E10|W2E22W1E10|W1E23W1E10|W1E23W1E10|W1E20Q1E2W1E10|W1E13W11E10|W1E15W19|W1E31W3|W8Y1E24W2|W8Y1E5J1E19W1|W8Y1E25W1|E2W6Y1E25W1|E2W3E15W7E7W1|E2W1E17W7E7W1|E2W1E31W1|E2W1E31W1|E2W1E11J1E19W1|E2W1E31W1|E2W1E16W16|E2W1E16W1E15|E2W1E5P1E10W1E15|E2W18E15|E2W18E15"
+times = Array[float]([10.975, 7.243499999999999, 5.268])
+hidden = false

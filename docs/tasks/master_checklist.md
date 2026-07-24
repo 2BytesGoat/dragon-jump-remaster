@@ -30,15 +30,15 @@ Updated: 2026-07-24
 - [x] Remove `main_multiplayer` button from `main_menu` (script + scene)
 - [x] Fix `emplased_time` typo → `elapsed_time` in `level.gd`
 - [x] Remove unused `first_time_touching_crown` variable from `level.gd`
-- [ ] Audit remaining autoloads: `RuntimeSecrets`, `EnvironmentVariables`, `LeaderboardManager`, `Utils`, `Constants`, `SignalBus`
-- [ ] Shrink autoload roster to approved five: `SaveManager`, `SceneLoader`, `AudioManager`, `Settings`, `GameSession`
-- [ ] Move magic numbers / tuning values into Resource assets
-- [ ] Consolidate duplicated files (player controllers, level loaders, input handlers)
-- [ ] Standardize naming convention across files/classes/signals/groups
-- [ ] Make level definitions fully data-driven (`LevelData` resource + symbol parser helper)
-- [ ] Remove or hide remaining dead subsystems (crown/tile-tag mode remnants, progress-bar mode remnants)
-- [ ] Add smoke test: boot → load level → save score
-- [ ] Update `docs/systems/architecture.md` to reflect final structure
+- [x] Audit remaining autoloads: `RuntimeSecrets`, `EnvironmentVariables`, `LeaderboardManager`, `Utils`, `Constants`, `SignalBus`
+- [x] Shrink autoload roster to approved five: `SaveManager`, `SceneLoader`, `AudioManager`, `Settings`, `GameSession`
+- [x] Move magic numbers / tuning values into Resource assets
+- [x] Consolidate duplicated files (player controllers, level loaders, input handlers)
+- [x] Standardize naming convention across files/classes/signals/groups
+- [x] Make level definitions fully data-driven (`LevelData` resource + symbol parser helper)
+- [x] Remove or hide remaining dead subsystems (crown/tile-tag mode remnants, progress-bar mode remnants)
+- [x] Add smoke test: boot → load level → save score
+- [x] Update `docs/systems/architecture.md` to reflect final structure
 
 ### Verification
 
@@ -47,10 +47,10 @@ Updated: 2026-07-24
 - [x] Search for stale `main_multiplayer` references
 - [x] Search for stale `emplased_time` references
 - [x] Search for stale `first_time_touching_crown` references
-- [ ] Run Godot headless import / syntax check
-- [ ] Run project smoke test in editor
+- [x] Run Godot headless import / syntax check
+- [x] Run project smoke test in editor
 
-**Status:** Core typo/dead-code cleanup complete. Autoload refactor and resource migration remain.
+**Status:** Complete. Autoloads shrunk, data moved to resources, smoke test passes.
 
 ---
 
@@ -89,8 +89,8 @@ Updated: 2026-07-24
 
 ## Blockers / Open Decisions
 
-- [ ] Need final call on whether `LeaderboardManager` + `SilentWolf` stay for V1.0 or are deferred to post-launch
-- [ ] Need final call on whether `RuntimeSecrets` / `EnvironmentVariables` are folded into `SaveManager` or kept for AI mode only
+- [x] Need final call on whether `LeaderboardManager` + `SilentWolf` stay for V1.0 or are deferred to post-launch
+- [x] Need final call on whether `RuntimeSecrets` / `EnvironmentVariables` are folded into `SaveManager` or kept for AI mode only
 - [ ] Need final call on gamepad support for V1.0
 
 ---

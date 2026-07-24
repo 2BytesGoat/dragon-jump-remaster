@@ -28,15 +28,12 @@ signal game_paused(is_paused: bool)
 
 
 func _ready():
-	level_name = SceneManager.scene_data.get("level_name", level_name)
-	player_speed_modifier = SceneManager.scene_data.get("speed_modifier", player_speed_modifier)
+	level_name = GameSession.level_name if GameSession.level_name else level_name
+	player_speed_modifier = GameSession.speed_modifier if GameSession.speed_modifier != 1.0 else player_speed_modifier
 	
-	var level_code = Constants.LEVELS[level_name]["code"]
-	level.update_level(level_code)
+	var level_data := CampaignLevelLibrary.get_level(level_name)
+	level.update_level(level_data.code)
 	initialize_players()
-	
-	SignalBus.player_restarted_run.connect(_on_player_restarted_run)
-	SignalBus.player_finished_run.connect(_on_player_finished_run)
 	
 	pause_screen.visible = false
 	end_screen.visible = false
@@ -74,6 +71,9 @@ func initialize_players() -> void:
 	player_nodes.append(player)
 	
 	player.has_resetted.connect(level.reset_objects)
+	player.run_restarted.connect(_on_player_restarted_run)
+	player.run_finished.connect(_on_player_finished_run)
+	time_container.track_player(player)
 	
 	card_container.map_player_signals(player_nodes)
 
@@ -142,14 +142,14 @@ func _on_end_screen_restart_button_pressed() -> void:
 
 
 func _on_exit_button_pressed() -> void:
-	SceneManager.go_to(level_scene_path)
+	SceneLoader.go_to(level_scene_path)
 
 
 func _on_next_button_pressed() -> void:
-	level_name = Constants.get_next_level(level_name)
+	level_name = CampaignLevelLibrary.get_next_level(level_name)
 	if not level_name:
 		return
 	
-	var level_code = Constants.LEVELS[level_name]["code"]
-	update_level(level_code)
+	var level_data := CampaignLevelLibrary.get_level(level_name)
+	update_level(level_data.code)
 	reset_ui()

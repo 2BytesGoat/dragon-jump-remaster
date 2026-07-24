@@ -1,7 +1,10 @@
-extends Node
+class_name Utils
+extends RefCounted
+
+## Static utility helpers. No longer an autoload; call directly via Utils.method().
 
 
-func get_weighted_array_item(array: Array, weights=[]) -> Vector2i:
+static func get_weighted_array_item(array: Array, weights=[]) -> Vector2i:
 	if array.is_empty():
 		return Vector2i(-1, -1)
 
@@ -22,8 +25,11 @@ func get_weighted_array_item(array: Array, weights=[]) -> Vector2i:
 	return array[0]
 
 
-func instance_scene_on_main(scene, position, rotation=0.0, scale=Vector2.ONE):
-	var level_scenes = get_tree().get_nodes_in_group("Level")
+static func instance_scene_on_main(scene, position, rotation=0.0, scale=Vector2.ONE) -> Node:
+	var tree := Engine.get_main_loop()
+	if not tree is SceneTree:
+		return null
+	var level_scenes: Array = tree.get_nodes_in_group("Level")
 	if level_scenes.size() == 0:
 		print("can't instance scene, level scene missing")
 		return
@@ -37,7 +43,7 @@ func instance_scene_on_main(scene, position, rotation=0.0, scale=Vector2.ONE):
 	return instance
 
 
-func format_time(time_sec: float) -> String:
+static func format_time(time_sec: float) -> String:
 	var total_cs = int(time_sec * 100.0)
 	total_cs = min(total_cs, 99 * 60 * 100 + 59 * 100 + 99)
 
@@ -48,13 +54,13 @@ func format_time(time_sec: float) -> String:
 	return "%02d:%02d.%02d" % [minutes, seconds, ms]
 
 
-func is_allowed_player_name(player_name: String) -> bool:
+static func is_allowed_player_name(player_name: String) -> bool:
 	var regex := RegEx.new()
 	regex.compile("^[A-Za-z ]+$")
 	return regex.search(player_name) != null
 
 
-func generate_dijkstra_map(grid_size: Vector2i, costs: Array, target: Vector2i) -> Array:
+static func generate_dijkstra_map(grid_size: Vector2i, costs: Array, target: Vector2i) -> Array:
 	# Initialize distance map with infinity
 	var dist_map = []
 	for x in range(grid_size.x):

@@ -4,25 +4,26 @@ extends CharacterBody2D
 enum CONTROLLERS {
 	NONE,
 	PLAYER_ONE,
-	PLAYER_TWO,
 	TRAINING
 }
 @export var controller_type: CONTROLLERS = CONTROLLERS.NONE : set = _on_player_controller_changed
 
 # movement properties
 @export var starting_facing_direction: int = Vector2i.RIGHT.x
-var default_max_speed: float = 220.0
-var default_acceleration: float = 250.0
-var default_friction: float = 100.0     # Default friction when on normal surfaces
-var max_speed: float = 220.0
-var acceleration: float = 250.0
+@export var physics_params: PhysicsParams = Constants.PHYSICS_PARAMS
+
+var default_max_speed: float
+var default_acceleration: float
+var default_friction: float     # Default friction when on normal surfaces
+var max_speed: float
+var acceleration: float
 
 # jump properties
-var jump_height: float = 72.0                     # Height in pixels
-var default_jump_time_to_peak: float = 0.37       # Time in seconds to reach peak
-var default_jump_time_to_descent: float = 0.23    # Time in seconds to descent
-var jump_time_to_peak: float = 0.37
-var jump_time_to_descent: float = 0.23
+var jump_height: float                     # Height in pixels
+var default_jump_time_to_peak: float       # Time in seconds to reach peak
+var default_jump_time_to_descent: float    # Time in seconds to descent
+var jump_time_to_peak: float
+var jump_time_to_descent: float
 
 # Physics properties
 var jump_velocity: float
@@ -42,7 +43,7 @@ var active_controller: PlayerCharacterController = null
 @onready var flippable_container: Node2D = $Flippable
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var afterimage: CPUParticles2D = $Flippable/AfterImage
-@onready var grappling_hook: Node2D = $Flippable/GaplingHook
+@onready var grappling_hook: Node2D = $Flippable/GrapplingHook
 @onready var hat_container: Node2D = $Flippable/HatContainer
 var has_crown: bool = false
 var last_floor_position: Vector2 = Vector2.ZERO
@@ -52,6 +53,10 @@ var is_done: bool = false
 signal picked_powerup(powerup_name: String, id: int)
 signal used_powerup(id: int)
 signal has_resetted
+signal run_started(player: Player)
+signal run_restarted(player: Player)
+signal run_finished(player: Player)
+signal dropped_crown(player: Player)
 
 # Effects
 @onready var spawn_smoke = preload("res://src/scenes/effects/spawn_smoke_effect.tscn")
@@ -73,14 +78,28 @@ var speed_modifier: float = 1.0 : set = _on_speed_modifier_changed
 
 # Only used for the AI controller - find a better way in future
 var level_reference: Level
-var last_agent_intput: bool = false
+var last_agent_input: bool = false
 
 
 func _ready() -> void:
+	_apply_physics_params()
 	starting_position = global_position
 	_on_player_controller_changed(controller_type)
 	_on_speed_modifier_changed(speed_modifier)
 	reset()
+
+
+func _apply_physics_params() -> void:
+	if physics_params == null:
+		physics_params = Constants.PHYSICS_PARAMS
+	default_max_speed = physics_params.max_speed
+	default_acceleration = physics_params.acceleration
+	default_friction = physics_params.friction
+	jump_height = physics_params.jump_height
+	default_jump_time_to_peak = physics_params.jump_time_to_peak
+	default_jump_time_to_descent = physics_params.jump_time_to_descent
+	max_speed = default_max_speed
+	acceleration = default_acceleration
 
 
 func _physics_process(delta: float) -> void:
@@ -109,14 +128,14 @@ func set_controller(controller: PlayerCharacterController) -> void:
 
 
 func set_jump(input: bool) -> void:
-	if input == last_agent_intput:
+	if input == last_agent_input:
 		return
-	last_agent_intput = input
+	last_agent_input = input
 	
 	if input:
 		if not started_walking:
 			started_walking = true
-			SignalBus.player_started_run.emit(self)
+			run_started.emit(self)
 			return
 		wants_to_jump = true
 	else:
@@ -129,7 +148,7 @@ func reset() -> void:
 		return
 	
 	drop_crown()
-	SignalBus.player_restarted_run.emit(self)
+	run_restarted.emit(self)
 	Utils.instance_scene_on_main(despawn_smoke, self.global_position)
 	current_friction = default_friction 
 	facing_direction = starting_facing_direction
@@ -139,7 +158,7 @@ func reset() -> void:
 	needs_to_release = false
 	show_afterimage = false
 	modifiers = {}
-	last_agent_intput = false
+	last_agent_input = false
 	
 	for i in range(len(powerups)):
 		consume_powerup()
@@ -210,7 +229,7 @@ func drop_crown() -> void:
 		child.global_position = last_floor_position
 		child.drop()
 		has_crown = false
-		SignalBus.player_dropped_crown.emit(self)
+		dropped_crown.emit(self)
 
 
 func percentage_towards_jump_peak() -> float:
@@ -290,8 +309,6 @@ func _on_player_controller_changed(new_controller_type: CONTROLLERS) -> void:
 	match controller_type:
 		CONTROLLERS.PLAYER_ONE:
 			set_controller(PlayerOneController.new(self))
-		CONTROLLERS.PLAYER_TWO:
-			set_controller(PlayerTwoController.new(self))
 		CONTROLLERS.TRAINING:
 			set_controller(PlayerAITrainingController.new(self))
 
@@ -317,7 +334,7 @@ func _on_interact_box_area_entered(area: Area2D) -> void:
 		state_machine.transition_to("Bounce", {"push_direction": area.facing_direction})
 	elif area.is_in_group("Exit"):
 		is_done = true
-		SignalBus.player_finished_run.emit(self)
+		run_finished.emit(self)
 
 
 func _on_interact_box_area_exited(area: Area2D) -> void:

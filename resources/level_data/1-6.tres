@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="CampaignLevelData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/scripts/resources/campaign_level_data.gd" id="1_1_6"]
+
+[resource]
+script = ExtResource("1_1_6")
+level_id = "1-6"
+display_name = "DISSOLVE"
+code = "E10W23E6|E10W2E20W1E6|E10W2E20W1E6|E10W2E20W1E6|E10W2E20W1E6|E10W2E20W1E6|E10W2E20W1E6|E10W2E20W1E6|E10W2E5W3E12W1E6|E10W1O1E5W3E12W1E6|E10W1O1E5W3E6O6W7|E10W1O1E5W3E18W1|W11O1E5W3E18W1|W11O1E5O1W2E18W1|W2E7W3E5O1E18Q1E1W1|W2E8W2E5O1E12W9|W1E16O1E13W8|W1E16O1W7E13W1|W1E16W7E14W1|W1E16W2E19W1|W1E2P1E6W9E19W1|W19Y19W1|E18W21"
+times = Array[float]([9.65, 6.369, 4.632])
+hidden = false

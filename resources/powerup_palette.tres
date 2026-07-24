@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="PowerupPalette" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/scripts/resources/powerup_palette.gd" id="1_d4e5f"]
+
+[resource]
+script = ExtResource("1_d4e5f")
+colors = {
+"DoubleJump": Color(0.729, 0.212, 0.333, 1),
+"Stomp": Color(0.475, 0.839, 0.247, 1),
+"Dash": Color(0.204, 0.329, 0.529, 1),
+"Grapple": Color(0.176, 0.839, 0.988, 1)
+}

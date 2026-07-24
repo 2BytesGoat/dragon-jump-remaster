@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="CampaignLevelData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/scripts/resources/campaign_level_data.gd" id="1_1_5"]
+
+[resource]
+script = ExtResource("1_1_5")
+level_id = "1-5"
+display_name = "BUNNY_HOP"
+code = "E16W15|E16W2E11W2|E16W2E12W1|E16W2E12W1|E16W2E12W1|W18E12W1|W5E9W4E5Y2E3Q1E1W1|W4E11W3E4W9|W2E14W2E4W1E6W2|W1E29W1|W1E29W1|W1E15W2E12W1|W1E15W7E7W1|W1E29W1|W1E29W1|W1E2P1E7W1E18W1|W15Y7W9|E14W9E8"
+times = Array[float]([7.574999999999999, 4.999499999999999, 3.6359999999999997])
+hidden = false

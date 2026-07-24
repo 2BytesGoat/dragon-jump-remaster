@@ -6,33 +6,33 @@ Phase 1 execution plan. Each task is small enough to hand to a freelancer or to 
 
 ## Phase 1.1 — Delete Dead Systems
 
-- [ ] Delete `src/scenes/training/main_multiplayer.gd` and `.tscn` ✅ Done
-- [ ] Delete `src/scenes/training/multiplayer_world.gd` and `.tscn` ✅ Done
-- [ ] Remove `MULTIPLAYER_LEVELS` from `Constants.gd` ✅ Done
-- [ ] Remove `main_multiplayer` button from `main_menu.tscn` and `main_menu.gd` ✅ Done
-- [ ] Remove crown/tile-tag dead code from `level.gd` ✅ Done (`first_time_touching_crown` removed)
-- [ ] Remove `emplased_time` / `elapsed_time` dead variable from `level.gd` ✅ Done
-- [ ] Audit `src/scenes/training/` for any remaining multiplayer or AI crossover files
-- [ ] Audit `src/scenes/ui/` for placeholder/dead screens and remove or flag them
+- [x] Delete `src/scenes/training/main_multiplayer.gd` and `.tscn`
+- [x] Delete `src/scenes/training/multiplayer_world.gd` and `.tscn`
+- [x] Remove `MULTIPLAYER_LEVELS` from `Constants.gd`
+- [x] Remove `main_multiplayer` button from `main_menu.tscn` and `main_menu.gd`
+- [x] Remove crown/tile-tag dead code from `level.gd`
+- [x] Remove `emplased_time` / `elapsed_time` dead variable from `level.gd`
+- [x] Audit `src/scenes/training/` for any remaining multiplayer or AI crossover files
+- [x] Audit `src/scenes/ui/` for placeholder/dead screens and remove or flag them
 
 ## Phase 1.2 — Fix Naming Debt
 
-- [ ] Rename `SceneManger` → `SceneManager` across code and scenes ✅ Done
-- [ ] Rename `GaplingHook` → `GrapplingHook`
-- [ ] Rename `preogress_bar` (if it exists) → `progress_bar`
-- [ ] Rename `CampaingLevelData` (if it exists) → `CampaignLevelData`
-- [ ] Rename `last_agent_intput` (if it exists) → `last_agent_input`
-- [ ] Standardize file/class naming: PascalCase files and classes, snake_case signals/variables
+- [x] Rename `SceneManger` → `SceneManager` across code and scenes
+- [x] Rename `GaplingHook` → `GrapplingHook`
+- [x] Rename `preogress_bar` (if it exists) → `progress_bar`
+- [x] Rename `CampaingLevelData` (if it exists) → `CampaignLevelData`
+- [x] Rename `last_agent_intput` (if it exists) → `last_agent_input`
+- [x] Standardize file/class naming: PascalCase files and classes, snake_case signals/variables
 
 ## Phase 1.3 — Shrink Autoloads
 
-- [ ] Convert `Utils` autoload to `class_name Utils` with static helpers
-- [ ] Convert `SignalBus` autoload: keep only cross-scene signals; replace local ones
-- [ ] Move `Constants` level lists into `LevelData` Resource files
-- [ ] Move physics tuning from `Constants`/`level.gd` into `PhysicsParams` Resource
-- [ ] Move powerup/medal colors from `Constants` into `PowerupPalette`/`MedalConfig` Resources
-- [ ] Fold `RuntimeSecrets` and `EnvironmentVariables` into `Settings` or remove if unused
-- [ ] Decide fate of `LeaderboardManager` and `SilentWolf` addon (local-only vs remove)
+- [x] Convert `Utils` autoload to `class_name Utils` with static helpers
+- [x] Convert `SignalBus` autoload: keep only cross-scene signals; replace local ones
+- [x] Move `Constants` level lists into `LevelData` Resource files
+- [x] Move physics tuning from `Constants`/`level.gd` into `PhysicsParams` Resource
+- [x] Move powerup/medal colors from `Constants` into `PowerupPalette`/`MedalConfig` Resources
+- [x] Fold `RuntimeSecrets` and `EnvironmentVariables` into `Settings` or remove if unused
+- [x] Decide fate of `LeaderboardManager` and `SilentWolf` addon (local-only vs remove)
 
 ## Phase 1.4 — Move Data into Resources
 
