@@ -64,20 +64,20 @@ Post-audit execution plan. Each task is scoped to a single focused session and c
 
 ## Phase 2.4 — Harden Audio, UI & First-Time Experience
 
-- [ ] Validate bus names in `AudioManager.set_bus_volume` and warn on missing buses
+- [x] Validate bus names in `AudioManager.set_bus_volume` and warn on missing buses
   - File: `src/scripts/singletons/audio_manager.gd`
-- [ ] Debounce settings save so sliders do not write disk every frame
+- [x] Debounce settings save so sliders do not write disk every frame
   - File: `src/scripts/singletons/settings.gd`
-- [ ] Remove accidental `next_button._on_mouse_entered()` call in `end_screen.gd`
+- [x] Remove accidental `next_button._on_mouse_entered()` call in `end_screen.gd`
   - File: `src/ui/menus/end_screen.gd`
-  - Replace with `next_button.grab_focus()` if controller focus is needed
-- [ ] Add gamepad bindings for `ui_accept` and `ui_cancel` in `project.godot`
+  - Replaced with `next_button.grab_focus()`
+- [x] Add gamepad bindings for `ui_accept` and `ui_cancel` in `project.godot`
   - File: `project.godot`
-- [ ] Ensure every menu calls `grab_focus()` on the primary button for controller navigation
-  - Files: `src/ui/menus/main_menu.gd`, `src/ui/menus/level_select.gd`, `src/ui/menus/end_screen.gd`, `src/ui/menus/pause_screen.tscn`
-- [ ] Add a loading/transition overlay to `SceneLoader`
+- [x] Ensure every menu calls `grab_focus()` on the primary button for controller navigation
+  - Files: `src/ui/menus/main_menu.gd`, `src/ui/menus/level_select.gd`, `src/ui/menus/end_screen.gd`, `src/ui/menus/pause_screen.tscn` + new `pause_screen.gd`
+- [x] Add a loading/transition overlay to `SceneLoader`
   - File: `src/scripts/singletons/scene_loader.gd`
-  - Handle `change_scene_to_file` errors and fade in/out
+  - Added `ColorRect` fade overlay and `change_scene_to_file` error handling
 
 ---
 

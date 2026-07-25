@@ -12,6 +12,7 @@ extends MarginContainer
 @onready var level_info_container = %LevelInfoContainer
 @onready var leaderboard_container = %LeaderboardContainer
 @onready var leaderboard = %Leaderboard
+@onready var start_button: Button = $SubViewportContainer/SubViewport/VBoxContainer/MarginContainer/MarginContainer/VBoxContainer/StartButton
 
 @onready var level_button_scene = preload("res://src/ui/menus/level_button.tscn")
 @export var single_player_scene: PackedScene
@@ -77,6 +78,8 @@ func _on_level_button_clicked(level_name: String) -> void:
 	
 	if leaderboard_container.visible:
 		_on_map_info_button_pressed()
+	
+	start_button.grab_focus()
 
 
 func _on_start_button_pressed() -> void:

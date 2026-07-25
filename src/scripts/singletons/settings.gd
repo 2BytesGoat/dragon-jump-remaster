@@ -6,17 +6,26 @@ extends Node
 
 const SETTINGS_PATH := "user://settings.res"
 const SETTINGS_VERSION := 1
+const SAVE_DEBOUNCE_SECONDS := 0.3
 
 var _settings_data: SettingsData
+var _save_timer: Timer
+var _pending_save := false
+
+
+func _ready() -> void:
+	_save_timer = Timer.new()
+	_save_timer.one_shot = true
+	_save_timer.wait_time = SAVE_DEBOUNCE_SECONDS
+	_save_timer.timeout.connect(_flush_pending_save)
+	add_child(_save_timer)
+	load_settings()
+
 
 var master_volume: float = 1.0 : set = set_master_volume
 var music_volume: float = 1.0 : set = set_music_volume
 var sfx_volume: float = 1.0 : set = set_sfx_volume
 var fullscreen: bool = false : set = set_fullscreen
-
-
-func _ready() -> void:
-	load_settings()
 
 
 func load_settings() -> void:
@@ -40,8 +49,26 @@ func load_settings() -> void:
 
 func save_settings() -> void:
 	_sync_to_data()
-	_save_settings_to_disk()
+	_schedule_save()
 	_apply_settings()
+
+
+func _schedule_save() -> void:
+	if _settings_data == null:
+		return
+	_pending_save = true
+	if _save_timer == null:
+		_save_settings_to_disk()
+		return
+	if not _save_timer.is_stopped():
+		_save_timer.stop()
+	_save_timer.start()
+
+
+func _flush_pending_save() -> void:
+	if _pending_save:
+		_save_settings_to_disk()
+		_pending_save = false
 
 
 func _save_settings_to_disk() -> void:

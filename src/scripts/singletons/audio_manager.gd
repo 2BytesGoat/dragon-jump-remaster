@@ -26,5 +26,16 @@ func stop_music() -> void:
 
 
 func set_bus_volume(bus_name: String, linear_volume: float) -> void:
+	var bus_index := AudioServer.get_bus_index(bus_name)
+	if bus_index < 0:
+		push_warning("AudioManager: bus '%s' does not exist. Valid buses: %s" % [bus_name, _get_bus_names()])
+		return
 	var db = linear_to_db(clamp(linear_volume, 0.0, 1.0))
-	AudioServer.set_bus_volume_db(AudioServer.get_bus_index(bus_name), db)
+	AudioServer.set_bus_volume_db(bus_index, db)
+
+
+func _get_bus_names() -> PackedStringArray:
+	var result: PackedStringArray = []
+	for i in AudioServer.bus_count:
+		result.append(AudioServer.get_bus_name(i))
+	return result

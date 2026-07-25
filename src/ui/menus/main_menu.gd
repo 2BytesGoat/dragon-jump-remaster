@@ -2,10 +2,13 @@ extends MarginContainer
 
 @export var tag_screen: MarginContainer
 @onready var level_select = "res://src/ui/menus/level_select.tscn"
+@onready var play_button: Button = $SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer/PlayButton
 
 
 func _ready() -> void:
 	tag_screen.visible = false
+	if play_button != null:
+		play_button.grab_focus()
 
 
 func _on_play_button_pressed() -> void:
