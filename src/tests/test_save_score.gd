@@ -9,10 +9,12 @@ const TEST_LEVEL_ID := "1-1"
 const TEST_TIME := 5.0
 
 var _original_player_name: String = ""
+var _original_settings_data: SettingsData = null
 
 
 func run() -> bool:
 	_original_player_name = SaveManager.current_player_name
+	_original_settings_data = Settings._settings_data
 
 	# Switch to an isolated test profile.
 	SaveManager.current_player_name = TEST_PLAYER_NAME
@@ -55,6 +57,7 @@ func run() -> bool:
 	# Clean up the temporary save file and restore the original profile.
 	_remove_test_save()
 	_restore_player_name()
+	_restore_settings()
 	return true
 
 
@@ -67,9 +70,14 @@ func _restore_player_name() -> void:
 
 
 func _remove_test_save() -> void:
-	var save_path := "user://%s_savegame.tres" % TEST_PLAYER_NAME
-	if ResourceLoader.exists(save_path):
+	var save_path := "user://%s_savegame.bin" % TEST_PLAYER_NAME
+	if FileAccess.file_exists(save_path):
 		DirAccess.remove_absolute(save_path)
+
+
+func _restore_settings() -> void:
+	Settings._settings_data = _original_settings_data
+	Settings._sync_from_data()
 
 
 func _ready() -> void:
