@@ -52,11 +52,11 @@ Phase 1 execution plan. Each task is small enough to hand to a freelancer or to 
 
 ## Phase 1.6 — Documentation Sync
 
-- [ ] Update `docs/systems/architecture.md` with final autoload roster ✅ Done
-- [ ] Update `docs/direction/release_plan.md` with locked V1.0 scope ✅ Done
-- [ ] Update `docs/tracking/decisions.md` ✅ Done
-- [ ] Create `docs/direction/ai_training_mode.md`
-- [ ] Update `docs/backlog/shelved_features.md` to reflect what was removed vs deferred
+- [x] Update `docs/systems/architecture.md` with final autoload roster ✅ Done
+- [x] Update `docs/direction/release_plan.md` with locked V1.0 scope ✅ Done
+- [x] Update `docs/tracking/decisions.md` ✅ Done
+- [x] Create `docs/direction/ai_training_mode.md`
+- [x] Update `docs/backlog/shelved_features.md` to reflect what was removed vs deferred
 
 ## Phase 1.7 — Performance & Architecture Audit
 
