@@ -23,21 +23,22 @@ Post-audit execution plan. Each task is scoped to a single focused session and c
 
 ## Phase 2.2 — Stabilize Player Physics & State Machine
 
-- [ ] Refactor `Player._physics_process` so velocity integration happens exactly once per frame
+- [x] Refactor `Player._physics_process` so velocity integration happens exactly once per frame
   - File: `src/scenes/player/player.gd`
-  - States compute target velocity; `Player` applies gravity/horizontal accel and calls `move_and_slide()` once
-  - Remove the global `velocity.x = move_toward(...)` and `velocity.y += gravity` from running before state logic
-- [ ] Fix state name mismatch: rename `Grapple` node to `Swing` (or rename class to `Grapple`)
-  - File: `src/scenes/player/player.tscn` and `src/scenes/player/states/swing_state.gd`
-  - Update all `transition_to("Grapple")` / `transition_to("Swing")` calls
-- [ ] Replace state-name-based `on_floor()` with `CharacterBody2D.is_on_floor()`
+  - `StateMachine.manual_physics_process` is enabled; `Player` calls `state_machine.step_physics(delta)` before applying gravity/horizontal accel and calling `move_and_slide()` once
+  - Removed the global velocity integration from running before state logic
+- [x] Fix state name mismatch: rename `Swing` class to `Grapple` to match the `Grapple` state node
+  - File: `src/scenes/player/player.tscn` and `src/scenes/player/states/grapple_state.gd` (renamed from `swing_state.gd`)
+  - Powerup type string "Grapple" already routes to the matching node name
+- [x] Replace state-name-based `on_floor()` with `CharacterBody2D.is_on_floor()`
   - File: `src/scenes/player/player.gd`
-  - Let states decide ground behavior, not string comparison
-- [ ] Extract bounce/dash multipliers from magic numbers into `PhysicsParams`
+  - `on_floor()` now returns `is_on_floor()`; `on_wall()` returns `is_on_wall()`
+- [x] Extract bounce/dash multipliers from magic numbers into `PhysicsParams`
   - File: `src/scenes/player/states/bounce_state.gd`, `src/scenes/player/states/dash_state.gd`
-  - Add exported fields to `src/scripts/resources/physics_params.gd`
-- [ ] Add deterministic movement replay test for at least one level
-  - File: `src/tests/` — record fixed inputs and assert final position/time
+  - Added exported fields to `src/scripts/resources/physics_params.gd` and values to `resources/physics_params.tres`
+- [x] Add deterministic movement replay test for at least one level
+  - File: `src/tests/test_replay.gd` / `src/tests/test_replay.tscn` — replays fixed jump inputs on level 1-1 and asserts final position/time
+  - Registered in `src/tests/test_runner.gd`
 
 ---
 

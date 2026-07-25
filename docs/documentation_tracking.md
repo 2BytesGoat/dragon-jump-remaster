@@ -50,7 +50,7 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 - [ ] src/scenes/player/states/dash_state.gd - (Not yet documented)
 - [ ] src/scenes/player/states/stomp_state.gd - (Not yet documented)
 - [ ] src/scenes/player/states/bounce_state.gd - (Not yet documented)
-- [ ] src/scenes/player/states/swing_state.gd - (Not yet documented)
+- [ ] src/scenes/player/states/grapple_state.gd - (Not yet documented)
 - [ ] src/scenes/player/sensors/raycast_sensor.tscn - (Not yet documented)
 
 ## Level Component

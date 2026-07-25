@@ -1,4 +1,4 @@
-class_name Swing
+class_name Grapple
 extends State
 
 

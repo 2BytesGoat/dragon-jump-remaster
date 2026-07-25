@@ -16,6 +16,11 @@ var initialized = false
 # Cached state nodes by name to avoid repeated get_node() lookups on transition.
 var _state_cache: Dictionary = {}
 
+# When true, the owning node is responsible for calling physics_update() manually.
+# This prevents the state machine from running its own _physics_process callback
+# and allows the owner to integrate velocity exactly once per frame.
+@export var manual_physics_process: bool = false
+
 
 func _ready() -> void:
 	# The state machine assigns itself to the State objects' state_machine property.
@@ -42,6 +47,15 @@ func _process(delta: float) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if manual_physics_process or not is_inside_tree() or is_queued_for_deletion() or not state:
+		return
+	state.physics_update(delta)
+
+
+# Public entry point for owners that drive the state machine manually.
+# Calls the active state's physics_update without running the internal
+# _physics_process callback again.
+func step_physics(delta: float) -> void:
 	if not is_inside_tree() or is_queued_for_deletion() or not state:
 		return
 	state.physics_update(delta)

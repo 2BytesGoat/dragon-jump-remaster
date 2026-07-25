@@ -35,6 +35,11 @@ var fall_gravity: float
 @onready var initial_state: State = $StateMachine/Idle
 @onready var jump_timer: Timer = $StateMachine/Jump/Timer
 
+# When true, the state controls horizontal velocity directly and the global
+# move_toward acceleration is skipped for this frame. States that apply an
+# immediate horizontal impulse (bounce, dash) set this during enter/exit.
+var velocity_x_locked: bool = false
+
 # Controllers
 @onready var controller_container: Node = $ControllerContainer
 var active_controller: PlayerCharacterController = null
@@ -106,7 +111,14 @@ func _physics_process(delta: float) -> void:
 	if not started_walking or is_done or is_paused:
 		return
 	
-	velocity.x = move_toward(velocity.x, max_speed * facing_direction, acceleration * delta)
+	# Let the current state compute target velocity / apply impulses first.
+	state_machine.step_physics(delta)
+	
+	# Apply horizontal acceleration unless the active state has taken over.
+	if not velocity_x_locked:
+		velocity.x = move_toward(velocity.x, max_speed * facing_direction, acceleration * delta)
+	
+	# Integrate gravity exactly once per frame.
 	velocity.y += _get_actual_gravity() * delta
 	
 	_apply_modifiers()
@@ -237,11 +249,19 @@ func percentage_towards_jump_peak() -> float:
 
 
 func on_wall() -> bool:
-	return state_machine.state.name == "Walled"
+	return is_on_wall()
 
 
 func on_floor() -> bool:
-	return state_machine.state.name in ["Idle", "Move"] 
+	return is_on_floor()
+
+
+func lock_velocity_x() -> void:
+	velocity_x_locked = true
+
+
+func unlock_velocity_x() -> void:
+	velocity_x_locked = false
 
 
 func _on_speed_modifier_changed(value) -> void:

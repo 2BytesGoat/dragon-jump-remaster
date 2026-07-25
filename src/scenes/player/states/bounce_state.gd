@@ -13,19 +13,21 @@ func _ready() -> void:
 
 func enter(msg := {}) -> void:
 	was_on_wall = false
+	var params = owner.physics_params
 	var push_direction: Vector2 = msg.get("push_direction", Vector2.ZERO)
+	owner.lock_velocity_x()
 	# --- Horizontal push ---
 	if push_direction.x != 0:
 		owner.facing_direction = sign(push_direction.x)
-		owner.velocity.x = owner.max_speed * push_direction.x * 2
+		owner.velocity.x = owner.max_speed * push_direction.x * params.bounce_horizontal_multiplier
 
 	# --- Vertical push (ONLY if requested) ---
 	if push_direction.y < 0:
 		# Upward push (jump)
-		owner.velocity.y = owner.jump_velocity * abs(push_direction.y) * 1.2
+		owner.velocity.y = owner.jump_velocity * abs(push_direction.y) * params.bounce_upward_multiplier
 	elif push_direction.y > 0:
 		# Downward push (slam / knockdown)
-		owner.velocity.y = owner.jump_velocity * -push_direction.y * 0.5
+		owner.velocity.y = owner.jump_velocity * -push_direction.y * params.bounce_downward_multiplier
 
 	timer.start(owner.jump_time_to_peak)
 	owner.play_animation("Move")
@@ -44,6 +46,7 @@ func physics_update(_delta: float) -> void:
 
 
 func exit() -> void:
+	owner.unlock_velocity_x()
 	was_on_wall = false
 	timer.stop()
 	owner.remove_modifier("spiderman")
