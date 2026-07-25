@@ -31,7 +31,7 @@ func update_visual_tiles(cell_coords: Vector2i) -> void:
 	var directions = [Vector2i(0, 0), Vector2i(0, 1), Vector2i(1, 0), Vector2i(1, 1)]
 	for direction in directions:
 		var visual_cell_coords = cell_coords + direction
-		var neighbour_count = _get_neighbour_count(visual_cell_coords, self, true)
+		var neighbour_count = _get_neighbour_count(visual_cell_coords, self, true, source_id)
 		if neighbour_count == 0:
 			continue
 		
@@ -76,14 +76,17 @@ func set_tile_hidden_area(cell_coords: Vector2i) -> void:
 	update_visual_tiles(cell_coords)
 
 
-func _get_neighbour_count(cell_coords: Vector2i, tilemap_layer: TileMapLayer, as_binary: bool = false) -> int:
-	# TODO: add same type check
+func _get_neighbour_count(cell_coords: Vector2i, tilemap_layer: TileMapLayer, as_binary: bool = false, source_id: int = -1) -> int:
 	var neighbours = []
 	var directions = [Vector2i(0, 0), Vector2i(0, 1), Vector2i(1, 0), Vector2i(1, 1)]
 	for i in range(len(directions)):
 		var direction = directions[i]
-		var neighbour = tilemap_layer.get_cell_tile_data(cell_coords + direction - Vector2i(1, 1))
-		neighbours.insert(0, neighbour != null)
+		var neighbour_coords = cell_coords + direction - Vector2i(1, 1)
+		var neighbour = tilemap_layer.get_cell_tile_data(neighbour_coords)
+		var matches_source: bool = true
+		if source_id >= 0:
+			matches_source = tilemap_layer.get_cell_source_id(neighbour_coords) == source_id
+		neighbours.insert(0, neighbour != null and matches_source)
 	
 	var neighbour_count = 0
 	for i in range(len(neighbours)):

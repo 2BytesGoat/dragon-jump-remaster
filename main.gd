@@ -83,7 +83,8 @@ func initialize_players() -> void:
 
 func update_players():
 	var player_position = level.player_start_position
-	for player: Player in player_container.get_children():
+	var current_players := player_container.get_children()
+	for player: Player in current_players:
 		player.starting_position = player_position
 		player.speed_modifier = player_speed_modifier
 		player.is_done = false
@@ -133,10 +134,10 @@ func _on_resume_button_pressed() -> void:
 
 
 func _on_pause_screen_restart_button_pressed() -> void:
+	reset_ui()
 	for player: Player in player_container.get_children():
 		player.is_done = false
 		player.reset()
-	#reset_ui() # TODO: check if we still need this
 
 
 func _on_end_screen_restart_button_pressed() -> void:

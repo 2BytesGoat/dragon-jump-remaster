@@ -101,14 +101,14 @@ Post-audit execution plan. Each task is scoped to a single focused session and c
 
 ## Phase 2.6 — Performance & Architecture Polish
 
-- [ ] Audit `SubViewport` usage in `main.tscn` for unnecessary redraws
+- [x] Audit `SubViewport` usage in `main.tscn` for unnecessary redraws
   - File: `main.tscn`
-  - Use `UPDATE_WHEN_VISIBLE` and smallest needed size
-- [ ] Cache `get_children()` calls in `main.gd` `initialize_players`/`update_players` where safe
+  - Set `render_target_update_mode = 1` (`UPDATE_WHEN_VISIBLE`); size already matches container
+- [x] Cache `get_children()` calls in `main.gd` `initialize_players`/`update_players` where safe
   - File: `main.gd`
-- [ ] Ensure `TileMap.clear()` is called before every level rebuild and bounds are tight
+- [x] Ensure `TileMap.clear()` is called before every level rebuild and bounds are tight
   - File: `src/scenes/level/level.gd`
-- [ ] Remove or resolve all TODO/FIXME comments found in audit
+- [x] Remove or resolve all TODO/FIXME comments found in audit
   - Files: `main.gd`, `src/scenes/player/player.gd`, `src/scenes/level/level.gd`, `src/scenes/level/terrain_layer.gd`, `src/scenes/training/synchronizer.gd`, `src/scenes/player/states/move_state.gd`
-- [ ] Run full test suite and fix any regressions
+- [x] Run full test suite and fix any regressions
   - Files: `run_tests.sh`, `run_tests.bat`, `src/tests/test_runner.tscn`
