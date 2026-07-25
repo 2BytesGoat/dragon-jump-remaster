@@ -127,6 +127,7 @@ func load_game():
 	if loaded_data is GameData:
 		current_data = loaded_data as GameData
 		current_data.migrate()
+		current_data.refresh_periodic_counters()
 		# Re-save after migration so the on-disk format is current.
 		save_to_disk()
 	else:
@@ -139,6 +140,7 @@ func create_new_save():
 	current_data = GameData.new()
 	current_data.player_name = current_player_name
 	current_data.migrate()
+	current_data.refresh_periodic_counters()
 	# Unlock the very first campaign level
 	var level_ids := CampaignLevelLibrary.get_all_level_ids()
 	if level_ids.is_empty():
@@ -151,6 +153,30 @@ func create_new_save():
 
 func get_player_name() -> String:
 	return current_data.player_name
+
+
+func get_total_attempts() -> int:
+	return current_data.total_attempts
+
+
+func get_total_time_played() -> float:
+	return current_data.total_time_played_seconds
+
+
+func get_daily_attempts() -> int:
+	return current_data.daily_attempts
+
+
+func get_daily_time_played() -> float:
+	return current_data.daily_time_played_seconds
+
+
+func get_weekly_attempts() -> int:
+	return current_data.weekly_attempts
+
+
+func get_weekly_time_played() -> float:
+	return current_data.weekly_time_played_seconds
 
 
 func get_level_data(level_name: String) -> LevelData:
@@ -180,6 +206,27 @@ func update_level_progress(level_name: String) -> void:
 		else:
 			level_data.progress_percentage = clamp(time_to_beat / level_data.best_time, 0.0, 1.0)
 			break
+	
+	_try_unlock_cosmetic_for_milestone(level_data.progress_milestone)
+
+
+func unlock_cosmetic(cosmetic_id: String) -> void:
+	if cosmetic_id == "" or cosmetic_id in current_data.unlocked_cosmetics:
+		return
+	current_data.unlocked_cosmetics.append(cosmetic_id)
+
+
+func has_cosmetic(cosmetic_id: String) -> bool:
+	return cosmetic_id in current_data.unlocked_cosmetics
+
+
+func get_unlocked_cosmetics() -> Array[String]:
+	return current_data.unlocked_cosmetics.duplicate()
+
+
+func _try_unlock_cosmetic_for_milestone(milestone: int) -> void:
+	var cosmetic_id := Constants.MEDAL_CONFIG.get_cosmetic_for_milestone(milestone)
+	unlock_cosmetic(cosmetic_id)
 
 
 func _on_new_run_attempt(level_name: String) -> void:
@@ -188,6 +235,10 @@ func _on_new_run_attempt(level_name: String) -> void:
 		unlock_level(level_name)
 		level_data = current_data.levels.get(level_name)
 	level_data.attempts += 1
+	current_data.total_attempts += 1
+	current_data.daily_attempts += 1
+	current_data.weekly_attempts += 1
+	current_data.refresh_periodic_counters()
 	save_to_disk()
 
 
@@ -200,7 +251,11 @@ func _on_new_time_submission(level_name: String, time: float) -> void:
 		current_data.levels[level_name].best_time = time
 		update_level_progress(level_name)
 		unlock_next_level(level_name)
-		save_to_disk()
+	current_data.total_time_played_seconds += time
+	current_data.daily_time_played_seconds += time
+	current_data.weekly_time_played_seconds += time
+	current_data.refresh_periodic_counters()
+	save_to_disk()
 
 
 func _on_player_name_changed(value) -> void:

@@ -221,6 +221,7 @@ func consume_powerup() -> String:
 	var powerup = powerups.pop_back()
 	powerup.consume()
 	used_powerup.emit(len(powerups))
+	TelemetrySystem.powerup_used(powerup.type)
 	return powerup.type
 
 
@@ -341,6 +342,7 @@ func _on_starting_position_changed(new_position: Vector2) -> void:
 func _on_hurt_box_body_entered(body: Node2D) -> void:
 	# This is for spikes
 	if body is TileMapLayer:
+		TelemetrySystem.death("hazard", level_reference.level_name if level_reference != null else "")
 		reset()
 
 

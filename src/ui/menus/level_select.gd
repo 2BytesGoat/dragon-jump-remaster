@@ -24,6 +24,7 @@ var selected_level_name = ""
 
 
 func _ready() -> void:
+	TelemetrySystem.menu_opened("level_select")
 	var cnt = 0
 	
 	for child in level_button_container.get_children():

@@ -60,6 +60,15 @@ static func format_time(time_sec: float) -> String:
 	return "%02d:%02d.%02d" % [minutes, seconds, ms]
 
 
+static func format_duration(time_sec: float) -> String:
+	## Formats a possibly large duration as HH:MM:SS.
+	var total_seconds := int(time_sec)
+	var hours := total_seconds / 3600
+	var minutes := (total_seconds / 60) % 60
+	var seconds := total_seconds % 60
+	return "%02d:%02d:%02d" % [hours, minutes, seconds]
+
+
 static func is_allowed_player_name(player_name: String) -> bool:
 	var regex := RegEx.new()
 	regex.compile("^[A-Za-z ]+$")

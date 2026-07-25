@@ -83,17 +83,17 @@ Post-audit execution plan. Each task is scoped to a single focused session and c
 
 ## Phase 2.5 — Add Retention & Monetization Hooks
 
-- [ ] Add lightweight analytics abstraction layer
+- [x] Add lightweight analytics abstraction layer
   - File: `src/scripts/singletons/telemetry_system.gd` (new)
   - Events: `level_started`, `level_finished`, `run_restarted`, `powerup_used`, `death` (with reason), `menu_opened`
   - Start with local debug logger; later swap to SilentWolf/GameAnalytics backend
-- [ ] Add daily/weekly attempt and time-played counters to `GameData`
+- [x] Add daily/weekly attempt and time-played counters to `GameData`
   - File: `src/scripts/resources/game_data.gd` and `src/scripts/singletons/save_manager.gd`
-- [ ] Add a stats screen accessible from main menu
-  - File: `src/ui/menus/` (new scene)
-- [ ] Add cosmetic unlock abstraction (hats/skins) tied to medal milestones
-  - Files: `src/scripts/resources/medal_config.gd`, `src/ui/menus/level_select.gd`
-- [ ] Add an optional IAP/ad layer behind a feature flag
+- [x] Add a stats screen accessible from main menu
+  - File: `src/ui/menus/stats_screen.gd` / `src/ui/menus/stats_screen.tscn` (new scene)
+- [x] Add cosmetic unlock abstraction (hats/skins) tied to medal milestones
+  - Files: `src/scripts/resources/medal_config.gd`, `src/scripts/singletons/save_manager.gd`
+- [x] Add an optional IAP/ad layer behind a feature flag
   - File: `src/scripts/singletons/monetization_system.gd` (new)
   - Keep it no-op until store integration is ready
 

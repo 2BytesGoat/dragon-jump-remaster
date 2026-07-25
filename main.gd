@@ -39,6 +39,7 @@ func _ready():
 	end_screen.visible = false
 	
 	SignalBus.new_run_attempt.emit(level_name)
+	TelemetrySystem.level_started(level_name)
 
 
 func update_level(level_data: CampaignLevelData):
@@ -105,10 +106,12 @@ func set_game_paused(value: bool) -> void:
 func _on_player_restarted_run(_player: Player):
 	reset_ui()
 	SignalBus.new_run_attempt.emit(level_name)
+	TelemetrySystem.run_restarted(level_name)
 
 
 func _on_player_finished_run(_player: Player) -> void:
 	SignalBus.new_time_submission.emit(level_name, total_time)
+	TelemetrySystem.level_finished(level_name, total_time)
 	
 	var stats = {
 		"level_name": level_name,
@@ -144,6 +147,7 @@ func _on_end_screen_restart_button_pressed() -> void:
 
 
 func _on_exit_button_pressed() -> void:
+	TelemetrySystem.menu_opened("level_select")
 	SceneLoader.go_to(level_scene_path)
 
 
