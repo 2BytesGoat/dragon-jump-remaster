@@ -12,6 +12,7 @@ call :run_scene "src/tests/test_runner.tscn"
 call :run_scene "src/tests/test_boot.tscn"
 call :run_scene "src/tests/test_level_load.tscn"
 call :run_scene "src/tests/test_save_score.tscn"
+call :run_scene "src/tests/test_save_security.tscn"
 call :run_scene "src/tests/test_frame_time.tscn"
 call :run_scene "src/tests/smoke_test.tscn"
 

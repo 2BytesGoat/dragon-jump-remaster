@@ -15,7 +15,7 @@
 [ext_resource type="Script" uid="uid://boph7py3wtet5" path="res://src/scenes/player/states/stomp_state.gd" id="9_i6xdb"]
 [ext_resource type="Script" uid="uid://cy8rgltfy0nub" path="res://src/scenes/player/states/double_jump_state.gd" id="10_62cf5"]
 [ext_resource type="Script" uid="uid://n0he4r7dkudr" path="res://src/scenes/player/states/dash_state.gd" id="12_3hyjg"]
-[ext_resource type="Script" uid="uid://bkoh6pdkvl2wc" path="res://src/scenes/player/states/swing_state.gd" id="13_824xm"]
+[ext_resource type="Script" uid="uid://bkoh6pdkvl2wc" path="res://src/scenes/player/states/grapple_state.gd" id="13_824xm"]
 [ext_resource type="Script" uid="uid://dl2u2x131lawy" path="res://src/scenes/player/states/bounce_state.gd" id="18_oub3j"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_i6xdb"]
@@ -552,6 +552,7 @@ shape = SubResource("RectangleShape2D_i6xdb")
 [node name="StateMachine" type="Node" parent="." unique_id=1905505156]
 script = ExtResource("3_7p4af")
 initial_state = NodePath("Idle")
+manual_physics_process = true
 
 [node name="Idle" type="Node" parent="StateMachine" unique_id=1703287815]
 script = ExtResource("4_3m013")

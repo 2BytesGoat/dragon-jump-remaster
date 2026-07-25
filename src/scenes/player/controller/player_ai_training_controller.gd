@@ -7,10 +7,12 @@ var sensor: ISensor2D = null
 var is_done: bool = false
 var use_sensors: bool = false
 
-var prev_global_position: Vector2 = Vector2.INF
 var prev_value: float = INF
 var best_value_ever: float = INF
 var async_reward: float = 0.0
+
+# Used to distinguish a synchronizer reset from a death-induced reset.
+var _ignore_next_reset_signal: bool = false
 
 # ML workshop metric: number of unique grid cells the player has touched this run
 var distinct_cells_touched: Dictionary = {}
@@ -24,6 +26,7 @@ func _ready() -> void:
 		print("AI Controller: No level reference found. Defaulting to sensor data.")
 	
 	player.run_finished.connect(_on_player_run_finished)
+	player.has_resetted.connect(_on_player_reset)
 	add_to_group("AGENT")
 
 
@@ -36,6 +39,10 @@ func reset() -> void:
 	is_done = false
 	player.is_done = false
 	distinct_cells_touched = {}
+	prev_value = INF
+	best_value_ever = INF
+	async_reward = 0.0
+	_ignore_next_reset_signal = true
 	reset_command.execute(player)
 
 
@@ -43,13 +50,17 @@ func get_obs() -> Dictionary:
 	# This is what the player unit observes in its current state
 	var observations := []
 	var state := []
-	var direction_to_end := [0, 0]
+	var direction_to_end := [0.0, 0.0]
+	var distance_to_end: float = 0.0
 	if use_sensors:
 		state = sensor.get_observation()
 	else:
 		state = player.level_reference.get_surrounding_cells(player.global_position, 3)
 		var direction_vector = player.global_position.direction_to(player.level_reference.exit_global_position)
 		direction_to_end = [direction_vector.x, direction_vector.y]
+		var flow_value = player.level_reference.get_flowfield_value(player.global_position)
+		# Normalize roughly by a typical maximum level diagonal.
+		distance_to_end = clamp(flow_value / 200.0, 0.0, 1.0) if flow_value != INF else 1.0
 	
 	var player_velocity_vector = player.velocity.normalized()
 	var velocity = [player_velocity_vector.x, player_velocity_vector.y]
@@ -60,6 +71,7 @@ func get_obs() -> Dictionary:
 	
 	observations.append_array(state)
 	observations.append_array(direction_to_end)
+	observations.append(distance_to_end)
 	observations.append_array(velocity)
 	observations.append(is_on_floor)
 	observations.append(is_on_wall)
@@ -70,6 +82,7 @@ func get_obs() -> Dictionary:
 		"obs": observations,
 		"state": state,
 		"end_direction": direction_to_end,
+		"distance_to_end": distance_to_end,
 		"velocity": velocity,
 		"is_on_floor": is_on_floor,
 		"is_on_wall": is_on_wall,
@@ -79,20 +92,25 @@ func get_obs() -> Dictionary:
 
 
 func get_reward() -> float:
-	var curr_value = player.level_reference.get_flowfield_value(player.global_position)
-	# 1. Base Time Penalty (The "Drip")
-	var reward = -0.01 + async_reward
+	var reward := -0.01 + async_reward
+	var curr_value: float = player.level_reference.get_flowfield_value(player.global_position)
 	
-	# 2. Progress Reward
-	# If curr_value is smaller, the agent is CLOSER to the goal.
-	if curr_value < prev_value:
-		reward += 0.1 # Small "good job" for moving forward
-		
-	# 3. New Record Bonus (Prevents vibrating back and forth)
+	# 1. Penalize leaving the level bounds or unreachable areas.
+	if curr_value == INF:
+		reward -= 1.0
+		prev_value = INF
+		return reward
+	
+	# 2. Progress reward: scaled by how many cells closer to the exit the agent got.
+	if prev_value == INF or curr_value < prev_value:
+		var improvement := prev_value - curr_value if prev_value != INF else 0.0
+		reward += 0.1 * clamp(improvement, 0.0, 10.0)
+	
+	# 3. New-record bonus for reaching a new all-time minimum distance.
 	if curr_value < best_value_ever:
-		reward += 0.5 # Larger bonus for reaching a new all-time closeness
+		reward += 0.5
 		best_value_ever = curr_value
-		
+	
 	prev_value = curr_value
 	return reward
 
@@ -148,5 +166,16 @@ func set_done_false():
 
 func _on_player_run_finished(trigger_player: Player) -> void:
 	if trigger_player == player:
-		async_reward = 100
+		async_reward = 100.0
 		is_done = true
+
+
+func _on_player_reset() -> void:
+	# A synchronizer reset emits this signal deliberately; ignore that one.
+	if _ignore_next_reset_signal:
+		_ignore_next_reset_signal = false
+		return
+	
+	# Otherwise the player was reset by a hazard (spikes, etc.).
+	async_reward = -50.0
+	is_done = true

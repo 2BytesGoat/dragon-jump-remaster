@@ -2,37 +2,95 @@ extends Node
 
 ## Settings
 ## Global user preferences: volume, fullscreen, input remap.
-## Persisted through SaveManager.
+## Persisted independently from progress data via SettingsData.
 
-var master_volume: float = 1.0
-var music_volume: float = 1.0
-var sfx_volume: float = 1.0
-var fullscreen: bool = false
+const SETTINGS_PATH := "user://settings.res"
+const SETTINGS_VERSION := 1
+const SAVE_DEBOUNCE_SECONDS := 0.3
+
+var _settings_data: SettingsData
+var _save_timer: Timer
+var _pending_save := false
 
 
 func _ready() -> void:
+	_save_timer = Timer.new()
+	_save_timer.one_shot = true
+	_save_timer.wait_time = SAVE_DEBOUNCE_SECONDS
+	_save_timer.timeout.connect(_flush_pending_save)
+	add_child(_save_timer)
 	load_settings()
 
 
+var master_volume: float = 1.0 : set = set_master_volume
+var music_volume: float = 1.0 : set = set_music_volume
+var sfx_volume: float = 1.0 : set = set_sfx_volume
+var fullscreen: bool = false : set = set_fullscreen
+
+
 func load_settings() -> void:
-	var data = SaveManager.current_data.settings if SaveManager.current_data else {}
-	master_volume = data.get("master_volume", 1.0)
-	music_volume = data.get("music_volume", 1.0)
-	sfx_volume = data.get("sfx_volume", 1.0)
-	fullscreen = data.get("fullscreen", false)
+	var loaded: Resource = null
+	if ResourceLoader.exists(SETTINGS_PATH):
+		loaded = ResourceLoader.load(SETTINGS_PATH)
+
+	if loaded is SettingsData:
+		_settings_data = loaded as SettingsData
+		_settings_data.migrate()
+	else:
+		if loaded != null:
+			push_warning("Settings: corrupt or incompatible settings file; creating fresh settings.")
+		_settings_data = SettingsData.new()
+		_settings_data.migrate()
+		_save_settings_to_disk()
+
+	_sync_from_data()
 	_apply_settings()
 
 
 func save_settings() -> void:
-	if SaveManager.current_data:
-		SaveManager.current_data.settings = {
-			"master_volume": master_volume,
-			"music_volume": music_volume,
-			"sfx_volume": sfx_volume,
-			"fullscreen": fullscreen
-		}
-		SaveManager.save_to_disk()
+	_sync_to_data()
+	_schedule_save()
 	_apply_settings()
+
+
+func _schedule_save() -> void:
+	if _settings_data == null:
+		return
+	_pending_save = true
+	if _save_timer == null:
+		_save_settings_to_disk()
+		return
+	if not _save_timer.is_stopped():
+		_save_timer.stop()
+	_save_timer.start()
+
+
+func _flush_pending_save() -> void:
+	if _pending_save:
+		_save_settings_to_disk()
+		_pending_save = false
+
+
+func _save_settings_to_disk() -> void:
+	if _settings_data == null:
+		return
+	var err := ResourceSaver.save(_settings_data, SETTINGS_PATH)
+	if err != OK:
+		push_error("Settings: failed to save settings to %s (error %s)" % [SETTINGS_PATH, err])
+
+
+func _sync_from_data() -> void:
+	master_volume = _settings_data.master_volume
+	music_volume = _settings_data.music_volume
+	sfx_volume = _settings_data.sfx_volume
+	fullscreen = _settings_data.fullscreen
+
+
+func _sync_to_data() -> void:
+	_settings_data.master_volume = master_volume
+	_settings_data.music_volume = music_volume
+	_settings_data.sfx_volume = sfx_volume
+	_settings_data.fullscreen = fullscreen
 
 
 func set_master_volume(value: float) -> void:

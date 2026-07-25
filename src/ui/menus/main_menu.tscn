@@ -103,6 +103,13 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 text = "PRACTICE"
 
+[node name="StatsButton" parent="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer" unique_id=1896212049 instance=ExtResource("2_xaiw4")]
+custom_minimum_size = Vector2(176, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "STATS"
+
 [node name="Panel2" type="Panel" parent="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2" unique_id=1686692204]
 custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
@@ -167,6 +174,7 @@ material = SubResource("ShaderMaterial_hcfgv")
 layout_mode = 2
 
 [connection signal="pressed" from="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer/StatsButton" to="." method="_on_stats_button_pressed"]
 [connection signal="pressed" from="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel2/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
 [connection signal="pressed" from="SubViewportContainer/SubViewport/TagScreen/Panel/MarginContainer/VBoxContainer/HBoxContainer/ConfirmButton" to="." method="_on_confirm_button_pressed"]
 [connection signal="pressed" from="SubViewportContainer/SubViewport/TagScreen/Panel/MarginContainer/VBoxContainer/HBoxContainer/SkipButton" to="." method="_on_skip_button_pressed"]

@@ -2,25 +2,15 @@
 set -euo pipefail
 
 # CI / local headless test runner for Dragon Jump Remaster.
-# Runs the combined TestRunner scene and each focused test scene.
+# Runs the centralized TestRunner scene, which executes every registered test.
 
 GODOT="${GODOT:-godot}"
 
-run_scene() {
-	local scene_path="$1"
-	echo ""
-	echo "==> Running $scene_path"
-	"$GODOT" --headless --path . "$scene_path"
-}
-
-echo "Dragon Jump Remaster — Phase 1.7 Performance & Architecture Smoke Tests"
-
-run_scene "src/tests/test_runner.tscn"
-run_scene "src/tests/test_boot.tscn"
-run_scene "src/tests/test_level_load.tscn"
-run_scene "src/tests/test_save_score.tscn"
-run_scene "src/tests/test_frame_time.tscn"
-run_scene "src/tests/smoke_test.tscn"
+echo "Dragon Jump Remaster — Phase 2.6 Full Test Suite"
 
 echo ""
-echo "All smoke tests passed."
+echo "==> Running src/tests/test_runner.tscn"
+"$GODOT" --headless --path . "src/tests/test_runner.tscn"
+
+echo ""
+echo "All tests passed."

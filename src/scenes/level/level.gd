@@ -336,6 +336,8 @@ func set_level(level_code: String) -> void:
 	var cell_size = Vector2i(terrain_layer.rendering_quadrant_size, terrain_layer.rendering_quadrant_size)
 	level_size = Vector2i(level_width_cell, level_height_cell) * cell_size
 	level_size_updated.emit(level_size)
+	
+	_compute_flow_field()
 
 
 func get_level_size_cell() -> Vector2i:
@@ -395,11 +397,73 @@ func get_tile_names() -> Array:
 
 
 func get_flowfield_value(object_global_position: Vector2) -> float:
-	if len(flow_field) == 0:
-		print("Undefined Flow Field: Returning default value 0")
-		return 0
+	if flow_field.is_empty():
+		push_warning("Undefined Flow Field: Returning default value 0")
+		return 0.0
+	
 	var cell_coords = terrain_layer.local_to_map(to_local(object_global_position))
+	if not _is_cell_in_bounds(cell_coords):
+		return INF
 	return flow_field[cell_coords.x][cell_coords.y]
+
+
+func _is_cell_in_bounds(cell_coords: Vector2i) -> bool:
+	return (
+		cell_coords.x >= 0 and cell_coords.x < level_width_cell
+		and cell_coords.y >= 0 and cell_coords.y < level_height_cell
+	)
+
+
+func _compute_flow_field() -> void:
+	## Dijkstra distance field from the exit cell.
+	## Lower values mean closer to the exit. Walls and spikes are impassable (INF).
+	flow_field = []
+	if level_width_cell == 0 or level_height_cell == 0:
+		return
+	
+	for x in range(level_width_cell):
+		var column = []
+		column.resize(level_height_cell)
+		column.fill(INF)
+		flow_field.append(column)
+	
+	var exit_cell := get_exit_cell_coords()
+	if not _is_cell_in_bounds(exit_cell):
+		push_warning("Cannot compute flow field: exit cell is outside bounds")
+		return
+	
+	var costs := get_level_costs()
+	var open_set: Array[Vector2i] = [exit_cell]
+	flow_field[exit_cell.x][exit_cell.y] = 0.0
+	
+	var directions := [Vector2i.RIGHT, Vector2i.LEFT, Vector2i.UP, Vector2i.DOWN]
+	
+	while not open_set.is_empty():
+		# Simple Dijkstra: pop the cell with the smallest known distance.
+		var best_index := 0
+		var best_dist: float = flow_field[open_set[0].x][open_set[0].y]
+		for i in range(1, open_set.size()):
+			var d: float = flow_field[open_set[i].x][open_set[i].y]
+			if d < best_dist:
+				best_dist = d
+				best_index = i
+		
+		var current: Vector2i = open_set[best_index]
+		open_set.remove_at(best_index)
+		
+		for direction in directions:
+			var neighbour: Vector2i = current + direction
+			if not _is_cell_in_bounds(neighbour):
+				continue
+			
+			var move_cost: float = costs[neighbour.x][neighbour.y]
+			if move_cost == INF:
+				continue
+			
+			var tentative: float = flow_field[current.x][current.y] + move_cost
+			if tentative < flow_field[neighbour.x][neighbour.y]:
+				flow_field[neighbour.x][neighbour.y] = tentative
+				open_set.append(neighbour)
 
 
 func _is_tilemap_symbol(symbol: String) -> bool:

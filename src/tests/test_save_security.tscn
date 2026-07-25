@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://mvquyk6q03dr"]
+
+[ext_resource type="Script" path="res://src/tests/test_save_security.gd" id="1_amvqu"]
+
+[node name="TestSaveSecurity" type="Node"]
+script = ExtResource("1_amvqu")

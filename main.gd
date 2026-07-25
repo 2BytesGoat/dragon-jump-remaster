@@ -39,6 +39,7 @@ func _ready():
 	end_screen.visible = false
 	
 	SignalBus.new_run_attempt.emit(level_name)
+	TelemetrySystem.level_started(level_name)
 
 
 func update_level(level_data: CampaignLevelData):
@@ -82,7 +83,8 @@ func initialize_players() -> void:
 
 func update_players():
 	var player_position = level.player_start_position
-	for player: Player in player_container.get_children():
+	var current_players := player_container.get_children()
+	for player: Player in current_players:
 		player.starting_position = player_position
 		player.speed_modifier = player_speed_modifier
 		player.is_done = false
@@ -105,10 +107,12 @@ func set_game_paused(value: bool) -> void:
 func _on_player_restarted_run(_player: Player):
 	reset_ui()
 	SignalBus.new_run_attempt.emit(level_name)
+	TelemetrySystem.run_restarted(level_name)
 
 
 func _on_player_finished_run(_player: Player) -> void:
 	SignalBus.new_time_submission.emit(level_name, total_time)
+	TelemetrySystem.level_finished(level_name, total_time)
 	
 	var stats = {
 		"level_name": level_name,
@@ -130,10 +134,10 @@ func _on_resume_button_pressed() -> void:
 
 
 func _on_pause_screen_restart_button_pressed() -> void:
+	reset_ui()
 	for player: Player in player_container.get_children():
 		player.is_done = false
 		player.reset()
-	#reset_ui() # TODO: check if we still need this
 
 
 func _on_end_screen_restart_button_pressed() -> void:
@@ -144,6 +148,7 @@ func _on_end_screen_restart_button_pressed() -> void:
 
 
 func _on_exit_button_pressed() -> void:
+	TelemetrySystem.menu_opened("level_select")
 	SceneLoader.go_to(level_scene_path)
 
 

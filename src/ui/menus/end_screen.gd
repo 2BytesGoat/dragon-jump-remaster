@@ -13,7 +13,7 @@ extends MarginContainer
 
 
 func _ready() -> void:
-	next_button._on_mouse_entered()
+	next_button.grab_focus()
 
 
 func update_stats(stats: Dictionary) -> void:
