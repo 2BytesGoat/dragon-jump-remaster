@@ -273,7 +273,7 @@ func get_level_code():
 	var layers = [terrain_layer, static_layer, objects_layer, secrets_layer]
 	
 	for layer in layers:
-		var rect_size = terrain_layer.get_used_rect()
+		var rect_size = layer.get_used_rect()
 		min_x = min(rect_size.position.x, min_x)
 		min_y = min(rect_size.position.y, min_y)
 		max_x = max(rect_size.end.x, max_x)

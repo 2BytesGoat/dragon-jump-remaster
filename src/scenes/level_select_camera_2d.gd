@@ -1,6 +1,6 @@
 extends Camera2D
 
-var viewport_size = Vector2i(640, 480)
+var viewport_size = Vector2i(320, 240)
 
 
 func _on_level_level_size_updated(level_size: Vector2i) -> void:

@@ -64,9 +64,9 @@ Phase 1 execution plan. Each task is small enough to hand to a freelancer or to 
 - [x] Audit each file in `src/scripts/singletons/` for scene-local state leaks; move scene state into owning scenes
 - [x] Convert cross-scene communication to signals; remove direct node manipulation from autoloads
 - [x] Audit SubViewport usage in `src/ui/components/`; remove from latency-sensitive HUD if present
-- [ ] Reconfigure unavoidable SubViewports: smallest size, no `stretch=true` + manual resize, `UPDATE_WHEN_VISIBLE`/`UPDATE_ONCE`
+- [x] Reconfigure unavoidable SubViewports: smallest size, no `stretch=true` + manual resize, `UPDATE_WHEN_VISIBLE`/`UPDATE_ONCE`
 - [x] Verify `TileMap.clear()` is called before every symbol-based level rebuild in `level.gd` / parser
-- [ ] Verify TileMap bounds match playable area; eliminate oversized empty tile layers
+- [x] Verify TileMap bounds match playable area; eliminate oversized empty tile layers
 - [x] Cache node references with `@onready` in `player_one_controller.gd` and `level.gd`; remove `get_node()` from `_process`/`_physics_process`
 - [x] Ensure movement/collision logic lives in `_physics_process`; keep visual interpolation in `_process`
 - [x] Audit signal connections for duplicates on reload; disconnect in `_exit_tree` or use one-shot where safe
