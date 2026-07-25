@@ -220,6 +220,8 @@ func _process(_delta: float) -> void:
 
 
 func _ready() -> void:
+	add_to_group("Level")
+	
 	for info in SYMBOL_TO_TILE_INFO.values():
 		tile_names.append(info["name"])
 	

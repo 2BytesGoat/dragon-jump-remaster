@@ -23,7 +23,6 @@ config/icon="uid://cwkemtynu1s2u"
 
 [autoload]
 
-Constants="*res://src/scripts/singletons/constants.gd"
 SignalBus="*res://src/scripts/singletons/signal_bus.gd"
 SceneLoader="*res://src/scripts/singletons/scene_loader.gd"
 SaveManager="*res://src/scripts/singletons/save_manager.gd"

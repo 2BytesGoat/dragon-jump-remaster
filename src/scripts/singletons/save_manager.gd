@@ -31,9 +31,17 @@ func save_to_disk():
 
 func load_game():
 	var save_path = SAVE_PATH % [current_player_name]
+	var loaded_data: Resource = null
 	if ResourceLoader.exists(save_path):
-		current_data = ResourceLoader.load(save_path) # Standard ResourceLoader.load works too
-	if not current_data:
+		loaded_data = ResourceLoader.load(save_path)
+	
+	# Validate the loaded resource; fall back to a fresh save on corruption/mismatch.
+	if loaded_data is GameData:
+		current_data = loaded_data as GameData
+	else:
+		if loaded_data != null:
+			push_warning("SaveManager: corrupt or incompatible save at %s; creating new save." % save_path)
+		current_data = null
 		create_new_save()
 
 

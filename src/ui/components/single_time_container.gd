@@ -13,9 +13,19 @@ func _ready() -> void:
 
 
 func track_player(player: Player) -> void:
+	_disconnect_player_signals(player)
 	player.run_started.connect(_on_player_run_started)
 	player.run_restarted.connect(_on_player_run_restarted)
 	player.run_finished.connect(_on_player_run_finished)
+
+
+func _disconnect_player_signals(player: Player) -> void:
+	if player.run_started.is_connected(_on_player_run_started):
+		player.run_started.disconnect(_on_player_run_started)
+	if player.run_restarted.is_connected(_on_player_run_restarted):
+		player.run_restarted.disconnect(_on_player_run_restarted)
+	if player.run_finished.is_connected(_on_player_run_finished):
+		player.run_finished.disconnect(_on_player_run_finished)
 
 
 func _process(delta: float) -> void:

@@ -1,9 +1,9 @@
-extends Node
+class_name Constants
+extends RefCounted
 
 ## Constants
-## Transitional helper autoload for V1.0.
-## Default values and shared resource references only; tunable data now lives
-## in Resource assets under res://resources/.
+## Static helper for V1.0. Default values and shared resource references only;
+## tunable data lives in Resource assets under res://resources/. Not an autoload.
 
 const DEFAULT_PLAYER_NAME := "UNK"
 

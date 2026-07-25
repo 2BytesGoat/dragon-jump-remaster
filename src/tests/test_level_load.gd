@@ -36,4 +36,5 @@ func _ready() -> void:
 	if get_tree().current_scene == self:
 		var passed := run()
 		print("LEVEL LOAD TEST: %s" % ("PASS" if passed else "FAIL"))
+		await get_tree().process_frame
 		get_tree().quit(0 if passed else 1)

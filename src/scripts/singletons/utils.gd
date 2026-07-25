@@ -32,11 +32,17 @@ static func instance_scene_on_main(scene, position, rotation=0.0, scale=Vector2.
 	var level_scenes: Array = tree.get_nodes_in_group("Level")
 	if level_scenes.size() == 0:
 		print("can't instance scene, level scene missing")
-		return
+		return null
 	
 	var level = level_scenes[0]
+	if level.is_queued_for_deletion():
+		return null
+	
 	var instance = scene.instantiate()
-	level.add_child.call_deferred(instance)
+	if level.is_inside_tree():
+		level.add_child(instance)
+	else:
+		level.add_child.call_deferred(instance)
 	instance.rotation = rotation
 	instance.scale = scale
 	instance.global_position = position

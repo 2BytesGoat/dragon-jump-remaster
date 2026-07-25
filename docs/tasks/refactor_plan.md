@@ -57,3 +57,22 @@ Phase 1 execution plan. Each task is small enough to hand to a freelancer or to 
 - [ ] Update `docs/tracking/decisions.md` ✅ Done
 - [ ] Create `docs/direction/ai_training_mode.md`
 - [ ] Update `docs/backlog/shelved_features.md` to reflect what was removed vs deferred
+
+## Phase 1.7 — Performance & Architecture Audit
+
+- [x] Audit `project.godot` autoload roster; remove any singleton that is not a cross-scene concern
+- [x] Audit each file in `src/scripts/singletons/` for scene-local state leaks; move scene state into owning scenes
+- [x] Convert cross-scene communication to signals; remove direct node manipulation from autoloads
+- [x] Audit SubViewport usage in `src/ui/components/`; remove from latency-sensitive HUD if present
+- [ ] Reconfigure unavoidable SubViewports: smallest size, no `stretch=true` + manual resize, `UPDATE_WHEN_VISIBLE`/`UPDATE_ONCE`
+- [x] Verify `TileMap.clear()` is called before every symbol-based level rebuild in `level.gd` / parser
+- [ ] Verify TileMap bounds match playable area; eliminate oversized empty tile layers
+- [x] Cache node references with `@onready` in `player_one_controller.gd` and `level.gd`; remove `get_node()` from `_process`/`_physics_process`
+- [x] Ensure movement/collision logic lives in `_physics_process`; keep visual interpolation in `_process`
+- [x] Audit signal connections for duplicates on reload; disconnect in `_exit_tree` or use one-shot where safe
+- [x] Audit `await` chains for dangling coroutines when scenes change
+- [x] Verify `duplicate()` usage on Resources in `src/resources/` and gameplay code; keep base resources immutable
+- [x] Confirm save/telemetry writes are gated through dedicated `SaveSystem`/`TelemetrySystem`
+- [x] Validate save data on load with fallback defaults; never crash on corrupt or missing save file
+- [x] Confirm AI training scene is fully decoupled: arcade boot never instantiates or connects training nodes/signals
+- [x] Add frame-time smoke test: 60 fps stable during level load and first 30 seconds of gameplay

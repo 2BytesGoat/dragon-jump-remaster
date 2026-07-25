@@ -8,6 +8,7 @@ var _level_scene := preload("res://src/scenes/level/level.tscn")
 
 func _ready() -> void:
 	_run_checks()
+	await get_tree().process_frame
 	get_tree().quit()
 
 
@@ -17,8 +18,8 @@ func _run_checks() -> void:
 	_check_autoload("AudioManager", AudioManager)
 	_check_autoload("Settings", Settings)
 	_check_autoload("GameSession", GameSession)
-	_check_autoload("Constants", Constants)
 	
+	_check_constants()
 	_check_resources()
 	_check_level_load()
 	_check_save_round_trip()
@@ -32,10 +33,15 @@ func _check_autoload(name: String, node: Node) -> void:
 		get_tree().quit(1)
 
 
-func _check_resources() -> void:
+func _check_constants() -> void:
+	assert(Constants.DEFAULT_PLAYER_NAME != "", "Constants helper must be reachable")
 	assert(Constants.PHYSICS_PARAMS != null, "PhysicsParams resource must be loaded")
 	assert(Constants.MEDAL_CONFIG != null, "MedalConfig resource must be loaded")
 	assert(Constants.POWERUP_PALETTE != null, "PowerupPalette resource must be loaded")
+	assert(Constants.AUDIO_BUS_CONFIG != null, "AudioBusConfig resource must be loaded")
+
+
+func _check_resources() -> void:
 	assert(CampaignLevelLibrary.get_level("1-1") != null, "Campaign level 1-1 must exist")
 
 
@@ -60,3 +66,5 @@ func _check_save_round_trip() -> void:
 	assert(SaveManager.has_level_data("1-2"), "Unlocked level should persist")
 	SaveManager.current_player_name = original_name
 	SaveManager.load_game()
+	# Give queued nodes a frame to be freed before shutdown to reduce exit leaks.
+	await get_tree().process_frame

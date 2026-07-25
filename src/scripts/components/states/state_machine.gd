@@ -10,15 +10,21 @@ signal transitioned(state_name)
 @export var initial_state := NodePath()
 
 # The current active state. At the start of the game, we get the `initial_state`.
-@onready var state: State = get_node(initial_state)
+var state: State
 
 var initialized = false
+# Cached state nodes by name to avoid repeated get_node() lookups on transition.
+var _state_cache: Dictionary = {}
 
 
 func _ready() -> void:
 	# The state machine assigns itself to the State objects' state_machine property.
 	for child in get_children():
 		child.state_machine = self
+		_state_cache[child.name] = child
+	
+	var initial_name := _node_path_name(initial_state)
+	state = _state_cache.get(initial_name)
 	reset()
 
 
@@ -44,21 +50,43 @@ func _physics_process(delta: float) -> void:
 # This function calls the current state's exit() function, then changes the active state,
 # and calls its enter function.
 # It optionally takes a `msg` dictionary to pass to the next state's enter() function.
+func _node_path_name(path: NodePath) -> String:
+	if path.get_name_count() == 0:
+		return ""
+	return path.get_name(path.get_name_count() - 1)
+
+
+# This function calls the current state's exit() function, then changes the active state,
+# and calls its enter function.
+# It optionally takes a `msg` dictionary to pass to the next state's enter function.
 func transition_to(target_state_name: String, msg: Dictionary = {}) -> void:
 	# Safety check, you could use an assert() here to report an error if the state name is incorrect.
 	# We don't use an assert here to help with code reuse. If you reuse a state in different state machines
 	# but you don't want them all, they won't be able to transition to states that aren't in the scene tree.
-	if not has_node(target_state_name):
+	var next_state: State = _state_cache.get(target_state_name)
+	if next_state == null:
 		return
 
 	state.exit()
-	state = get_node(target_state_name)
+	state = next_state
 	state.enter(msg)
 	emit_signal("transitioned", state.name)
 
 func reset() -> void:
 	if not initialized:
 		await owner.ready
+		if not is_inside_tree() or is_queued_for_deletion():
+			return
 		initialized = true
-	state = get_node(initial_state)
+		# Cache may not have been built if children were added after _ready.
+		if _state_cache.is_empty():
+			for child in get_children():
+				if child is State:
+					_state_cache[child.name] = child
+	
+	var initial_name := _node_path_name(initial_state)
+	state = _state_cache.get(initial_name)
+	if state == null:
+		state = get_node(initial_state)
+		_state_cache[initial_name] = state
 	state.enter()

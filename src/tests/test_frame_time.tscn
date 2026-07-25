@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://c4j0ixxrtykku"]
+
+[ext_resource type="Script" uid="uid://f4j0ixxrtykku" path="res://src/tests/test_frame_time.gd" id="1_0fy72"]
+
+[node name="TestFrameTime" type="Node"]
+script = ExtResource("1_0fy72")
