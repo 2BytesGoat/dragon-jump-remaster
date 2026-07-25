@@ -8,9 +8,9 @@ extends Node
 const SAVE_PATH = "user://%s_savegame.bin"
 const SAVE_VERSION := 1
 
-## Simple fixed secret used for the HMAC layer. In a shipped title this should
-## be injected at build time (e.g. via CI secret) and never committed.
-const HMAC_SECRET := "CHANGE_ME_IN_BUILD_PIPELINE"
+## Fallback secret used for the HMAC layer. In a shipped title this must be
+## injected at build time via RuntimeSecrets and never committed.
+const HMAC_SECRET_FALLBACK := "CHANGE_ME_IN_BUILD_PIPELINE"
 
 var current_data: GameData
 var current_player_name: String = Constants.DEFAULT_PLAYER_NAME : set = _on_player_name_changed
@@ -211,10 +211,18 @@ func _on_player_name_changed(value) -> void:
 
 # --- HMAC / checksum helpers ---
 
+func _get_hmac_secret() -> String:
+	# Prefer build-injected RuntimeSecrets when available; otherwise use the
+	# local-dev fallback so the game still works in the editor.
+	if RuntimeSecrets.is_set:
+		return RuntimeSecrets.HMAC_SECRET
+	return HMAC_SECRET_FALLBACK
+
+
 func _compute_hmac(data: PackedByteArray) -> PackedByteArray:
 	# HMAC-SHA256 implemented using the available HashingContext.
 	var block_size := 64
-	var key_bytes := HMAC_SECRET.to_utf8_buffer()
+	var key_bytes := _get_hmac_secret().to_utf8_buffer()
 	
 	# Normalize key length.
 	if key_bytes.size() > block_size:

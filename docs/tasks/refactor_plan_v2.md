@@ -44,19 +44,21 @@ Post-audit execution plan. Each task is scoped to a single focused session and c
 
 ## Phase 2.3 — Clean Up CI/CD & Export Settings
 
-- [ ] Add `src/scripts/singletons/runtime_secrets.gd` and `*_secrets.gd` to `.gitignore`
+- [x] Add `src/scripts/singletons/runtime_secrets.gd` and `*_secrets.gd` to `.gitignore`
   - File: `.gitignore`
-- [ ] Remove `*.env` from Windows export include filter
+- [x] Remove `*.env` from Windows export include filter
   - File: `export_presets.cfg`
-- [ ] Unify encryption settings across Windows/Web/Linux presets
+- [x] Unify encryption settings across Windows/Web/Linux presets
   - File: `export_presets.cfg`
-  - Decide whether PCK/directory encryption is required; if so, apply consistently
-- [ ] Fix `publish_steam` condition string/boolean comparison in workflow
+  - Directory encryption enabled consistently; PCK encryption remains disabled to avoid template/key friction
+- [x] Fix `publish_steam` condition string/boolean comparison in workflow
   - File: `.github/workflows/build-and-publish.yml`
-- [ ] Add a `test` job to CI that runs `run_tests.sh` headless before any build/publish
+- [x] Add a `test` job to CI that runs `run_tests.sh` headless before any build/publish
   - File: `.github/workflows/build-and-publish.yml`
-- [ ] Verify `runtime_secrets.gd` is actually consumed by game code; integrate SilentWolf or remove injection
-  - File: `.github/workflows/build-and-publish.yml`
+- [x] Verify `runtime_secrets.gd` is actually consumed by game code; integrate SilentWolf or remove injection
+  - File: `.github/workflows/build-and-publish.yml` and `src/scripts/singletons/save_manager.gd`
+  - SilentWolf placeholders retained in `runtime_secrets.gd` but are no-op; HMAC secret is now injected and consumed by `SaveManager`
+  - Required GitHub secret: `SAVE_HMAC_SECRET` (a strong random string used to sign save files in exported builds)
 
 ---
 

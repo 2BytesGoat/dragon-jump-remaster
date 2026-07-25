@@ -23,6 +23,7 @@ config/icon="uid://cwkemtynu1s2u"
 
 [autoload]
 
+RuntimeSecrets="*res://src/scripts/singletons/runtime_secrets.gd"
 SignalBus="*res://src/scripts/singletons/signal_bus.gd"
 SceneLoader="*res://src/scripts/singletons/scene_loader.gd"
 SaveManager="*res://src/scripts/singletons/save_manager.gd"

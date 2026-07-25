@@ -9,3 +9,7 @@
 
 *.tmp
 docs/lightrag/
+
+# Runtime secrets injected at build time; must never be committed.
+src/scripts/singletons/runtime_secrets.gd
+*_secrets.gd
