@@ -58,7 +58,10 @@ func _input(event: InputEvent) -> void:
 	if not is_inside_tree() or is_queued_for_deletion():
 		return
 	if not race_finished and event.is_action_pressed("ui_cancel"):
-		set_game_paused(not pause_screen.visible)
+		if pause_screen.visible and pause_screen.has_method("close_settings_if_open"):
+			pause_screen.close_settings_if_open()
+		else:
+			set_game_paused(not pause_screen.visible)
 
 
 func initialize_players() -> void:

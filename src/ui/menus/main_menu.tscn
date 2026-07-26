@@ -9,6 +9,7 @@
 [ext_resource type="Shader" uid="uid://b87hi538ipc5q" path="res://assets/shaders/screen_crt.gdshader" id="7_csvuu"]
 [ext_resource type="PackedScene" uid="uid://fcxn3r6i8mg5" path="res://src/ui/menus/crt_screen_effect.tscn" id="7_ltlti"]
 [ext_resource type="PackedScene" uid="uid://p3lou48biwtg" path="res://src/scenes/effects/background_particles.tscn" id="9_l3u6v"]
+[ext_resource type="PackedScene" uid="uid://dws2c5qkd8x6q" path="res://src/ui/menus/settings_menu.tscn" id="10_abc12"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_jmap8"]
 texture = ExtResource("3_vs67m")
@@ -34,7 +35,7 @@ shader_parameter/min_scanline_thickness = 0.5
 shader_parameter/aspect = 0.75
 shader_parameter/wobble_strength = 0.250000011875
 
-[node name="MainMenu" type="MarginContainer" unique_id=298348625 node_paths=PackedStringArray("tag_screen")]
+[node name="MainMenu" type="MarginContainer" unique_id=298348625 node_paths=PackedStringArray("tag_screen", "settings_menu")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -42,6 +43,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_xaiw4")
 tag_screen = NodePath("SubViewportContainer/SubViewport/TagScreen")
+settings_menu = NodePath("SubViewportContainer/SubViewport/SettingsMenu")
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=1628232823]
 texture_filter = 1
@@ -52,7 +54,7 @@ size_flags_vertical = 4
 handle_input_locally = false
 canvas_item_default_texture_filter = 0
 size = Vector2i(640, 360)
-render_target_update_mode = 2
+render_target_update_mode = 4
 
 [node name="GPUParticles2D" parent="SubViewportContainer/SubViewport" unique_id=248882165 instance=ExtResource("9_l3u6v")]
 z_index = 0
@@ -109,6 +111,13 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 text = "STATS"
+
+[node name="SoundButton" parent="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer" unique_id=1896212050 instance=ExtResource("2_xaiw4")]
+custom_minimum_size = Vector2(176, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "SOUND"
 
 [node name="Panel2" type="Panel" parent="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2" unique_id=1686692204]
 custom_minimum_size = Vector2(0, 52)
@@ -168,6 +177,15 @@ script = ExtResource("6_y3puo")
 [node name="TagLineEdit" parent="SubViewportContainer/SubViewport/TagScreen/Panel/MarginContainer/VBoxContainer" index="2"]
 placeholder_text = "UNK"
 
+[node name="SettingsMenu" parent="SubViewportContainer/SubViewport" unique_id=1896212051 instance=ExtResource("10_abc12")]
+visible = false
+offset_left = -175.0
+offset_top = -120.0
+offset_right = 175.0
+offset_bottom = 120.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
 [node name="CRTScreenEffect" parent="." unique_id=1412518820 instance=ExtResource("7_ltlti")]
 visible = false
 material = SubResource("ShaderMaterial_hcfgv")
@@ -175,6 +193,8 @@ layout_mode = 2
 
 [connection signal="pressed" from="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer/StatsButton" to="." method="_on_stats_button_pressed"]
+[connection signal="pressed" from="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer/SoundButton" to="." method="_on_sound_button_pressed"]
+[connection signal="pressed" from="SubViewportContainer/SubViewport/SettingsMenu/Panel/MarginContainer/VBoxContainer/CloseButton" to="." method="_on_settings_menu_closed"]
 [connection signal="pressed" from="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel2/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
 [connection signal="pressed" from="SubViewportContainer/SubViewport/TagScreen/Panel/MarginContainer/VBoxContainer/HBoxContainer/ConfirmButton" to="." method="_on_confirm_button_pressed"]
 [connection signal="pressed" from="SubViewportContainer/SubViewport/TagScreen/Panel/MarginContainer/VBoxContainer/HBoxContainer/SkipButton" to="." method="_on_skip_button_pressed"]
