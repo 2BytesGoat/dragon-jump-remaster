@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://cg5ctntixs1fk"]
+[gd_scene load_steps=6 format=3 uid="uid://cg5ctntixs1fk"]
 
 [ext_resource type="Theme" uid="uid://se7xk3lcwng8" path="res://src/ui/components/themes/main_theme.tres" id="1_5hkai"]
 [ext_resource type="Texture2D" uid="uid://dolawuug5bvhc" path="res://assets/sprites/ui/silver_panel-export.png" id="2_3fw6s"]
 [ext_resource type="PackedScene" uid="uid://bnxudkobrdgtb" path="res://src/ui/menus/menu_button.tscn" id="3_golrs"]
 [ext_resource type="Script" uid="uid://b3y7m1l8x2w5p" path="res://src/ui/menus/pause_screen.gd" id="4_8k3m2"]
+[ext_resource type="PackedScene" uid="uid://dws2c5qkd8x6q" path="res://src/ui/menus/settings_menu.tscn" id="5_abc12"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_b38vx"]
 texture = ExtResource("2_3fw6s")
@@ -14,20 +15,20 @@ texture_margin_bottom = 16.0
 
 [node name="PauseScreen" type="MarginContainer"]
 anchors_preset = 8
-script = ExtResource("4_8k3m2")
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -48.0
-offset_top = -80.0
-offset_right = 48.0
-offset_bottom = 80.0
+offset_left = -175.0
+offset_top = -120.0
+offset_right = 175.0
+offset_bottom = 120.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 6
 size_flags_vertical = 6
 theme = ExtResource("1_5hkai")
+script = ExtResource("4_8k3m2")
 
 [node name="Panel" type="Panel" parent="."]
 custom_minimum_size = Vector2(180, 210)
@@ -83,7 +84,6 @@ text = "RESTART"
 [node name="SettingsButton" parent="Panel/VBoxContainer" instance=ExtResource("3_golrs")]
 custom_minimum_size = Vector2(145, 32)
 layout_mode = 2
-disabled = true
 text = "SETTINGS"
 
 [node name="HSeparator2" type="HSeparator" parent="Panel/VBoxContainer"]
@@ -95,3 +95,15 @@ theme_override_constants/separation = 4
 custom_minimum_size = Vector2(145, 32)
 layout_mode = 2
 text = "EXIT"
+
+[node name="SettingsMenu" parent="." instance=ExtResource("5_abc12")]
+visible = false
+offset_left = -175.0
+offset_top = -120.0
+offset_right = 175.0
+offset_bottom = 120.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[connection signal="pressed" from="Panel/VBoxContainer/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="SettingsMenu/Panel/MarginContainer/VBoxContainer/CloseButton" to="." method="_on_settings_menu_closed"]
