@@ -26,6 +26,9 @@ static func _load_levels() -> void:
 		if dir.current_is_dir() or not file_name.ends_with(".tres"):
 			file_name = dir.get_next()
 			continue
+		if file_name.begins_with("_"):
+			file_name = dir.get_next()
+			continue
 		
 		var resource_path := LEVEL_DATA_PATH.path_join(file_name)
 		var resource := ResourceLoader.load(resource_path)

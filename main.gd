@@ -20,11 +20,13 @@ var total_time: float = 0.0
 var delta_time: float = 0.0
 var update_interval: float = 0.2
 
-var level_name = "1-17"
+var level_name = "tmp"
 var player_speed_modifier = 1.0 
 var player_nodes = []
 
 signal game_paused(is_paused: bool)
+
+const TMP_PREVIEW_PATH := "res://resources/level_data/_editor_preview.tres"
 
 
 func _ready():
