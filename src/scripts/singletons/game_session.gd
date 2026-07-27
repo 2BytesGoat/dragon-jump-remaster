@@ -2,10 +2,15 @@ extends Node
 
 ## GameSession
 ## Ephemeral session state: current level, current seed, run flags.
+enum GameModes {
+	ARCADE,
+	PRACTICE
+}
 
 var level_name: String = ""
 var speed_modifier: float = 1.0
 var run_seed: int = 0
+var game_mode: GameModes = GameModes.PRACTICE
 
 
 func start_run(new_level_name: String, new_speed_modifier: float = 1.0) -> void:

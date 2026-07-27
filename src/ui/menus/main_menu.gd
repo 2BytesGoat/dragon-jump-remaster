@@ -5,6 +5,7 @@ extends MarginContainer
 
 @onready var level_select = "res://src/ui/menus/level_select.tscn"
 @onready var stats_screen = "res://src/ui/menus/stats_screen.tscn"
+@onready var game_main_scene = "res://main.tscn"
 @onready var play_button: Button = $SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer/PlayButton
 @onready var stats_button: Button = $SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer/StatsButton
 @onready var sound_button: Button = $SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer/SoundButton
@@ -35,8 +36,25 @@ func _on_settings_menu_closed() -> void:
 
 
 func _on_play_button_pressed() -> void:
+	ArcadeDirector.start_arcade_run()
+	_try_enter_game()
+
+
+func _on_practice_button_pressed() -> void:
+	GameSession.game_mode = GameSession.GameModes.PRACTICE
+	_try_enter_game()
+
+
+func _try_enter_game() -> void:
 	if SaveManager.get_player_name() == Constants.DEFAULT_PLAYER_NAME:
 		tag_screen.visible = true
+	else:
+		_go_to_current_game_scene()
+
+
+func _go_to_current_game_scene() -> void:
+	if GameSession.game_mode == GameSession.GameModes.ARCADE:
+		SceneLoader.go_to(game_main_scene)
 	else:
 		SceneLoader.go_to(level_select)
 
@@ -53,7 +71,7 @@ func _on_confirm_button_pressed() -> void:
 		return
 	
 	SaveManager.current_player_name = tag_screen.player_tag
-	SceneLoader.go_to(level_select)
+	_go_to_current_game_scene()
 
 
 func _on_skip_button_pressed() -> void:

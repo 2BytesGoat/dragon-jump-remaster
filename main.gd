@@ -81,6 +81,7 @@ func initialize_players() -> void:
 	player.has_resetted.connect(level.reset_objects)
 	player.run_restarted.connect(_on_player_restarted_run)
 	player.run_finished.connect(_on_player_finished_run)
+	player.died.connect(_on_player_died)
 	time_container.track_player(player)
 	
 	card_container.map_player_signals(player_nodes)
@@ -110,12 +111,34 @@ func set_game_paused(value: bool) -> void:
 
 
 func _on_player_restarted_run(_player: Player):
+	if race_finished:
+		return
 	reset_ui()
 	SignalBus.new_run_attempt.emit(level_name)
 	TelemetrySystem.run_restarted(level_name)
 
 
-func _on_player_finished_run(_player: Player) -> void:
+func _on_player_finished_run(player: Player) -> void:
+	match GameSession.game_mode:
+		GameSession.GameModes.PRACTICE:
+			_on_player_finished_practice_run(player)
+		GameSession.GameModes.ARCADE:
+			_on_arcade_level_finished()
+
+
+func _on_player_died(player: Player) -> void:
+	if GameSession.game_mode != GameSession.GameModes.ARCADE:
+		return
+	
+	var result := ArcadeDirector.on_player_died()
+	if result == ArcadeDirector.RunResult.GAME_OVER:
+		# TODO: show arcade game-over / leaderboard screen
+		race_finished = true
+		for p in player_container.get_children():
+			p.is_paused = true
+
+
+func _on_player_finished_practice_run(_player: Player) -> void:
 	SignalBus.new_time_submission.emit(level_name, total_time)
 	TelemetrySystem.level_finished(level_name, total_time)
 	
@@ -158,9 +181,25 @@ func _on_exit_button_pressed() -> void:
 
 
 func _on_next_button_pressed() -> void:
+	_progress_to_next_level()
+
+
+func _on_arcade_level_finished() -> void:
+	level_name = ArcadeDirector.on_level_finished()
+	if not level_name:
+		# TODO: add final end screen / game-over menu
+		return
+	
+	var level_data := CampaignLevelLibrary.get_level(level_name)
+	update_level(level_data)
+	reset_ui()
+
+
+func _progress_to_next_level() -> void:
 	level_name = CampaignLevelLibrary.get_next_level(level_name)
 	if not level_name:
-		return
+		# TODO: add final end screen to show
+		return 
 	
 	var level_data := CampaignLevelLibrary.get_level(level_name)
 	update_level(level_data)

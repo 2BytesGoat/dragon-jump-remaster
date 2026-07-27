@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ArcadeConfig" format=3]
+
+[ext_resource type="Script" path="res://src/scripts/resources/arcade_config.gd" id="1_arcade"]
+
+[resource]
+script = ExtResource("1_arcade")
+starting_level_id = "1-1"
+starting_lives = 3
+max_lives = 3

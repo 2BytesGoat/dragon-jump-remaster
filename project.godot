@@ -30,6 +30,7 @@ SaveManager="*res://src/scripts/singletons/save_manager.gd"
 AudioManager="*res://src/scripts/singletons/audio_manager.gd"
 Settings="*res://src/scripts/singletons/settings.gd"
 GameSession="*res://src/scripts/singletons/game_session.gd"
+ArcadeDirector="*res://src/scripts/singletons/arcade_director.gd"
 TelemetrySystem="*res://src/scripts/singletons/telemetry_system.gd"
 MonetizationSystem="*res://src/scripts/singletons/monetization_system.gd"
 
