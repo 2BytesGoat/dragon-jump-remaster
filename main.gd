@@ -132,10 +132,15 @@ func _on_player_died(player: Player) -> void:
 	
 	var result := ArcadeDirector.on_player_died()
 	if result == ArcadeDirector.RunResult.GAME_OVER:
-		# TODO: show arcade game-over / leaderboard screen
-		race_finished = true
-		for p in player_container.get_children():
-			p.is_paused = true
+		_show_arcade_game_over()
+
+
+func _show_arcade_game_over() -> void:
+	race_finished = true
+	for p in player_container.get_children():
+		p.is_paused = true
+	# TODO: show 3-letter tag entry + arcade leaderboard
+	#       ArcadeDirector.get_run_summary() contains the run data to display.
 
 
 func _on_player_finished_practice_run(_player: Player) -> void:
@@ -186,8 +191,8 @@ func _on_next_button_pressed() -> void:
 
 func _on_arcade_level_finished() -> void:
 	level_name = ArcadeDirector.on_level_finished()
-	if not level_name:
-		# TODO: add final end screen / game-over menu
+	if ArcadeDirector.has_run_to_submit():
+		_show_arcade_game_over()
 		return
 	
 	var level_data := CampaignLevelLibrary.get_level(level_name)

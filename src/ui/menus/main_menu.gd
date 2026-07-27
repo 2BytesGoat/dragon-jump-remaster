@@ -37,26 +37,12 @@ func _on_settings_menu_closed() -> void:
 
 func _on_play_button_pressed() -> void:
 	ArcadeDirector.start_arcade_run()
-	_try_enter_game()
+	SceneLoader.go_to(game_main_scene)
 
 
 func _on_practice_button_pressed() -> void:
-	GameSession.game_mode = GameSession.GameModes.PRACTICE
-	_try_enter_game()
-
-
-func _try_enter_game() -> void:
-	if SaveManager.get_player_name() == Constants.DEFAULT_PLAYER_NAME:
-		tag_screen.visible = true
-	else:
-		_go_to_current_game_scene()
-
-
-func _go_to_current_game_scene() -> void:
-	if GameSession.game_mode == GameSession.GameModes.ARCADE:
-		SceneLoader.go_to(game_main_scene)
-	else:
-		SceneLoader.go_to(level_select)
+	GameSession.set_game_mode(GameSession.GameModes.PRACTICE)
+	SceneLoader.go_to(level_select)
 
 
 func _on_quit_button_pressed() -> void:
@@ -70,8 +56,8 @@ func _on_confirm_button_pressed() -> void:
 		tag_screen.placeholder = "Only Letters Allowed"
 		return
 	
-	SaveManager.current_player_name = tag_screen.player_tag
-	_go_to_current_game_scene()
+	ArcadeDirector.submit_tag(input_player_tag)
+	SceneLoader.go_to(level_select)
 
 
 func _on_skip_button_pressed() -> void:
