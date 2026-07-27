@@ -48,7 +48,10 @@ From `docs/level_design/level_editor_export_migration.md`:
 - [x] Fix `get_level_code()` to rebuild from TileMap layers in editor.
 - [x] Fix `clear_level()` to preserve editor tiles.
 - [x] Update `_init_atlas_symbol_mapping()` to reset dictionaries.
-- [ ] Test editor paint → export → clipboard → runtime load.
+- [x] Add TMP preview resource export button.
+- [x] Wire `main.gd` to load TMP preview if present.
+- [x] Filter `CampaignLevelLibrary` to ignore underscore-prefixed resources.
+- [ ] Test editor paint → export → clipboard / TMP preview → runtime load.
 
 ### Track 3 — Polish
 
@@ -65,6 +68,7 @@ Goal: make the game feel finished.
 
 Goal: run on the modded Switch / arcade cabinet.
 
+- [ ] Telemetry level completion time not correctly saved
 - [ ] Install Emulation Station on the modded Switch.
 - [ ] Identify how to launch web builds from Emulation Station (browser core, standalone HTML5 loader).
 - [ ] Set up itch.io web build pipeline so games download/launch automatically.
