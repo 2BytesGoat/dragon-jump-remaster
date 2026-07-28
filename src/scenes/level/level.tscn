@@ -169,7 +169,7 @@ colors = PackedColorArray(0.03529412, 0.043137256, 0.08235294, 1, 0.078431375, 0
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_dt0xs"]
 noise_type = 4
-frequency = 0.0223
+frequency = 0.0446
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_4iyit"]
 noise = SubResource("FastNoiseLite_dt0xs")
@@ -242,13 +242,21 @@ position = Vector2(-8, -8)
 tile_set = SubResource("TileSet_exkae")
 y_sort_origin = 1
 
-[node name="LevelBackground" type="Polygon2D" parent="." unique_id=425700536]
-visible = false
+[node name="Parallax2D3" type="Parallax2D" parent="." unique_id=454077528]
+z_index = -1
+scroll_scale = Vector2(0.005, 0.025)
+scroll_offset = Vector2(1, 1)
+script = ExtResource("12_25vab")
+parallax_speed = Vector2(0.005, 0.025)
+
+[node name="LevelBackground" type="Polygon2D" parent="Parallax2D3" unique_id=425700536]
 z_index = -1
 texture_filter = 1
 texture_repeat = 2
-color = Color(1, 1, 1, 0.19215687)
+position = Vector2(-1, -1)
+color = Color(1, 1, 1, 0.5372549)
 texture = SubResource("NoiseTexture2D_4iyit")
+polygon = PackedVector2Array(-338, -192, 338, -193, 336, 194, -339, 196)
 script = ExtResource("9_25vab")
 
 [node name="Parallax2D2" type="Parallax2D" parent="." unique_id=977153204]
@@ -291,5 +299,5 @@ texture_repeat = 2
 texture = SubResource("GradientTexture2D_4iyit")
 script = ExtResource("10_n7bl3")
 
-[connection signal="level_outline_updated" from="." to="LevelBackground" method="_on_level_level_outline_updated"]
+[connection signal="level_outline_updated" from="." to="Parallax2D3/LevelBackground" method="_on_level_level_outline_updated"]
 [connection signal="level_outline_updated" from="." to="LevelWallBlend" method="_on_level_level_outline_updated"]
