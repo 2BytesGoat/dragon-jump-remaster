@@ -5,6 +5,7 @@ extends MarginContainer
 
 @onready var level_select = "res://src/ui/menus/level_select.tscn"
 @onready var stats_screen = "res://src/ui/menus/stats_screen.tscn"
+@onready var game_main_scene = "res://main.tscn"
 @onready var play_button: Button = $SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer/PlayButton
 @onready var stats_button: Button = $SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer/StatsButton
 @onready var sound_button: Button = $SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer/SoundButton
@@ -35,10 +36,13 @@ func _on_settings_menu_closed() -> void:
 
 
 func _on_play_button_pressed() -> void:
-	if SaveManager.get_player_name() == Constants.DEFAULT_PLAYER_NAME:
-		tag_screen.visible = true
-	else:
-		SceneLoader.go_to(level_select)
+	ArcadeDirector.start_arcade_run()
+	SceneLoader.go_to(game_main_scene)
+
+
+func _on_practice_button_pressed() -> void:
+	GameSession.set_game_mode(GameSession.GameModes.PRACTICE)
+	SceneLoader.go_to(level_select)
 
 
 func _on_quit_button_pressed() -> void:
@@ -52,7 +56,7 @@ func _on_confirm_button_pressed() -> void:
 		tag_screen.placeholder = "Only Letters Allowed"
 		return
 	
-	SaveManager.current_player_name = tag_screen.player_tag
+	ArcadeDirector.submit_tag(input_player_tag)
 	SceneLoader.go_to(level_select)
 
 

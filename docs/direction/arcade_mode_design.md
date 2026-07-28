@@ -49,6 +49,36 @@ Title screen → Press start → Level 1-1 → reach exit → auto-teleport to 1
 | Time bonus | TBD (optional, post-pilot) |
 
 - Final score is shown on the game-over screen.
+
+### Manual reset in arcade mode
+
+- In **Practice** mode the reset button is free, because the goal is learning the level.
+- In **Arcade** mode a manual reset is treated as a deliberate “do-over” and costs **1 life**, the same as a death. The player respawns at the current level start with powerups reset.
+- Rationale: arcade runs are limited to 3 lives. If a reset were free, players could repeatedly restart to chase perfect execution without consuming the run’s core resource, which undermines the arcade stakes. By making reset and death share the same cost, the 3 lives stay meaningful and secret heart pickups remain valuable.
+
+### Balancing reset against scoring
+
+Because a reset trades **1 life = 500 end-of-run points**, the scoring system must reward faster clears enough that a reset can be worth it:
+
+- **Time bonus per level** should decay from a maximum down to zero as level clear time increases.
+- A reset should be expected to pay for itself when the new clear time is meaningfully faster than the player’s previous attempt (e.g., below a target percentile of the level’s average completion time).
+- Rough tuning target:
+  - `max_time_bonus_per_level` should be **≥ 2× life_remaining_score** so that one successful re-try can compensate the lost life.
+  - `time_bonus_decay` should be tuned so that an average clear time earns roughly `1× life_remaining_score`, making a “good” clear profitable and a sloppy clear break-even or worse.
+
+Concrete draft formula:
+
+```gdscript
+time_bonus = max(0, max_time_bonus_per_level - floor(level_clear_time * time_bonus_decay_per_second))
+```
+
+- Example: `max_time_bonus_per_level = 1000`, `time_bonus_decay_per_second = 100`.
+  - 5s clear → 500 bonus.
+  - 10s clear → 0 bonus.
+  - Resetting costs 500 end-of-run points, so a 5s re-clear is break-even on the life trade and still gains the base 1,000 level-clear points.
+
+> This is a design placeholder. Exact values require play-testing and per-level target times.
+
 - Highest score is saved locally.
 - Online submission via SilentWolf when internet is available.
 
@@ -96,6 +126,7 @@ Title screen → Press start → Level 1-1 → reach exit → auto-teleport to 1
   - Branch run finish behavior based on `GameSession.is_arcade_mode`.
   - Arcade: advance to next level instead of showing end screen.
   - Handle `arcade_life_lost` and `arcade_game_over`.
+  - In arcade mode, treat the manual reset button as a life loss (same cost as death) and respawn the player at the current level start.
 - `Level.gd`:
   - Auto-spawn heart pickups at the center of each secret island in `_init_hidden_areas()` when `GameSession.is_arcade_mode` is true.
   - Or add a new `H` symbol and place hearts manually. Default to auto-spawn for the pilot.
@@ -176,6 +207,7 @@ Title screen → Press start → Level 1-1 → reach exit → auto-teleport to 1
 | Hearts over-heal convert to +100 points | Keeps secrets valuable at full health |
 | SilentWolf leaderboard + local fallback | Online for v1 leaderboards, local cache for offline arcade cabinets |
 | Ghost/2-player deferred | Scope control; can reuse existing ghost playback later |
+| Manual reset costs 1 life in arcade mode | Aligns reset with death semantics; protects the 3-life arcade tension and keeps secret heart pickups valuable |
 
 ## See also
 

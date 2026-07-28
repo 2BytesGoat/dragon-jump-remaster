@@ -17,12 +17,16 @@ This consolidates all work needed to ship the arcade vertical slice, including t
 
 Goal: playable 3-life continuous-run mode with scoring and local/online leaderboards.
 
-From `docs/direction/arcade_mode_design.md`:
+From `docs/direction/arcade_mode_design.md`. Work in this order:
 
-- [ ] Create `ArcadeConfig` resource (`resources/arcade_config.tres`).
+- [ ] Add a new arcade scene where you start from 1-1; when you finish a level, transition to the next scene in the sequence.
+- [ ] Make death count up to 3; on the 3rd death, show the current progress / leaderboard menu.
+- [ ] Make reset start the arcade run from 1-1 again.
+- [ ] Add a new pickable scene that is the equivalent of the heart.
+- [ ] Make hearts increment the player's lives up to a max of 3 when picked up.
 - [ ] Extend `GameSession` with arcade fields.
 - [ ] Extend `GameData` with arcade high-score persistence.
-- [ ] Create heart pickup scene and auto-spawn in secret islands.
+- [ ] Create `ArcadeConfig` resource (`resources/arcade_config.tres`).
 - [ ] Create `ArcadeDirector` autoload.
 - [ ] Modify `main.gd` for arcade run finish / game-over / continuous level transitions.
 - [ ] Build `ArcadeHud` and integrate into `main.tscn`.

@@ -18,13 +18,13 @@ texture_margin_top = 16.0
 texture_margin_right = 16.0
 texture_margin_bottom = 16.0
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_l3u6v"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_hcfgv"]
 viewport_path = NodePath("../SubViewportContainer/SubViewport")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_hcfgv"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rs8ex"]
 resource_local_to_scene = true
 shader = ExtResource("7_csvuu")
-shader_parameter/tex = SubResource("ViewportTexture_l3u6v")
+shader_parameter/tex = SubResource("ViewportTexture_hcfgv")
 shader_parameter/mask_type = 2
 shader_parameter/curve = 0.0400000019
 shader_parameter/sharpness = 0.7550000121125
@@ -99,6 +99,13 @@ size_flags_vertical = 3
 alignment = 1
 
 [node name="PlayButton" parent="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer" unique_id=1896212048 instance=ExtResource("2_xaiw4")]
+custom_minimum_size = Vector2(176, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "PLAY"
+
+[node name="PracticeButton" parent="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer" unique_id=2468351 instance=ExtResource("2_xaiw4")]
 custom_minimum_size = Vector2(176, 32)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -179,22 +186,16 @@ placeholder_text = "UNK"
 
 [node name="SettingsMenu" parent="SubViewportContainer/SubViewport" unique_id=1896212051 instance=ExtResource("10_abc12")]
 visible = false
-offset_left = -175.0
-offset_top = -120.0
-offset_right = 175.0
-offset_bottom = 120.0
-size_flags_horizontal = 4
-size_flags_vertical = 4
 
 [node name="CRTScreenEffect" parent="." unique_id=1412518820 instance=ExtResource("7_ltlti")]
 visible = false
-material = SubResource("ShaderMaterial_hcfgv")
+material = SubResource("ShaderMaterial_rs8ex")
 layout_mode = 2
 
 [connection signal="pressed" from="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer/PracticeButton" to="." method="_on_practice_button_pressed"]
 [connection signal="pressed" from="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer/StatsButton" to="." method="_on_stats_button_pressed"]
 [connection signal="pressed" from="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer/SoundButton" to="." method="_on_sound_button_pressed"]
-[connection signal="pressed" from="SubViewportContainer/SubViewport/SettingsMenu/Panel/MarginContainer/VBoxContainer/CloseButton" to="." method="_on_settings_menu_closed"]
 [connection signal="pressed" from="SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel2/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
 [connection signal="pressed" from="SubViewportContainer/SubViewport/TagScreen/Panel/MarginContainer/VBoxContainer/HBoxContainer/ConfirmButton" to="." method="_on_confirm_button_pressed"]
 [connection signal="pressed" from="SubViewportContainer/SubViewport/TagScreen/Panel/MarginContainer/VBoxContainer/HBoxContainer/SkipButton" to="." method="_on_skip_button_pressed"]

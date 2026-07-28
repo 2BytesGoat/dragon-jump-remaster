@@ -61,6 +61,7 @@ signal has_resetted
 signal run_started(player: Player)
 signal run_restarted(player: Player)
 signal run_finished(player: Player)
+signal died(player: Player)
 signal dropped_crown(player: Player)
 
 # Effects
@@ -343,6 +344,7 @@ func _on_hurt_box_body_entered(body: Node2D) -> void:
 	# This is for spikes
 	if body is TileMapLayer:
 		TelemetrySystem.death("hazard", level_reference.level_name if level_reference != null else "")
+		died.emit(self)
 		reset()
 
 
