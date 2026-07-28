@@ -169,7 +169,7 @@ colors = PackedColorArray(0.03529412, 0.043137256, 0.08235294, 1, 0.078431375, 0
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_dt0xs"]
 noise_type = 4
-frequency = 0.0446
+frequency = 0.0146
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_4iyit"]
 noise = SubResource("FastNoiseLite_dt0xs")
@@ -243,6 +243,7 @@ tile_set = SubResource("TileSet_exkae")
 y_sort_origin = 1
 
 [node name="Parallax2D3" type="Parallax2D" parent="." unique_id=454077528]
+modulate = Color(1, 1, 1, 0.61960787)
 z_index = -1
 scroll_scale = Vector2(0.005, 0.025)
 scroll_offset = Vector2(1, 1)
@@ -254,9 +255,9 @@ z_index = -1
 texture_filter = 1
 texture_repeat = 2
 position = Vector2(-1, -1)
-color = Color(1, 1, 1, 0.5372549)
 texture = SubResource("NoiseTexture2D_4iyit")
-polygon = PackedVector2Array(-338, -192, 338, -193, 336, 194, -339, 196)
+polygon = PackedVector2Array(3.026123, 84.72818)
+uv = PackedVector2Array(3.026123, 84.72818)
 script = ExtResource("9_25vab")
 
 [node name="Parallax2D2" type="Parallax2D" parent="." unique_id=977153204]
@@ -273,7 +274,6 @@ scale = Vector2(2.1, 2.1)
 texture = ExtResource("10_4iyit")
 
 [node name="Parallax2D" type="Parallax2D" parent="." unique_id=262726023]
-modulate = Color(1, 1, 1, 0.84313726)
 z_index = -1
 scroll_scale = Vector2(0.04, 0.2)
 scroll_offset = Vector2(-1, 2)
@@ -289,7 +289,6 @@ texture = ExtResource("11_yr4yg")
 
 [node name="Sprite2D" type="Sprite2D" parent="Parallax2D" unique_id=1740454424]
 modulate = Color(0.03529412, 0.043137256, 0.08235294, 0.7647059)
-position = Vector2(1, 0)
 scale = Vector2(2.1, 2.1)
 texture = SubResource("NoiseTexture2D_yr4yg")
 
