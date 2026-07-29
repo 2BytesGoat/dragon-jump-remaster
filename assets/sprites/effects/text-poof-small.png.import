@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://7rlbn16w5pn8"
-path="res://.godot/imported/mountains.png-964d249eaf98fffda601f0a9620b8325.ctex"
+uid="uid://cv7lpgrnu62bj"
+path="res://.godot/imported/text-poof-small.png-085b25a0c058e5efad6d68b83a6ec8eb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/world/backgrounds/mountains.png"
-dest_files=["res://.godot/imported/mountains.png-964d249eaf98fffda601f0a9620b8325.ctex"]
+source_file="res://assets/sprites/effects/text-poof-small.png"
+dest_files=["res://.godot/imported/text-poof-small.png-085b25a0c058e5efad6d68b83a6ec8eb.ctex"]
 
 [params]
 
