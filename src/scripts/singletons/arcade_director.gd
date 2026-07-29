@@ -3,8 +3,6 @@ extends Node
 ## ArcadeDirector
 ## Central controller for arcade mode setup, life tracking, run progression,
 ## and run summary for the local arcade leaderboard.
-
-const ArcadeConfig := preload("res://src/scripts/resources/arcade_config.gd")
 const ARCADE_CONFIG_PATH := "res://resources/arcade_config.tres"
 
 enum RunResult {

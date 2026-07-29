@@ -126,7 +126,7 @@ func _on_player_finished_run(player: Player) -> void:
 			_on_arcade_level_finished()
 
 
-func _on_player_died(player: Player) -> void:
+func _on_player_died(_player: Player) -> void:
 	if GameSession.game_mode != GameSession.GameModes.ARCADE:
 		return
 	

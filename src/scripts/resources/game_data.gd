@@ -39,8 +39,8 @@ func get_today_date() -> String:
 func get_current_week() -> String:
 	var dict := Time.get_datetime_dict_from_system(true)
 	# Godot does not expose week number directly; approximate via epoch day.
-	var epoch_day := int(Time.get_unix_time_from_system()) / 86400
-	var week := (epoch_day + 3) / 7
+	var epoch_day := int(Time.get_unix_time_from_system() / 86400)
+	var week := int((epoch_day + 3.0) / 7)
 	return "%04d-W%02d" % [dict.year, week % 52]
 
 
@@ -56,4 +56,3 @@ func refresh_periodic_counters() -> void:
 		weekly_attempts = 0
 		weekly_time_played_seconds = 0.0
 		last_played_week = week
-

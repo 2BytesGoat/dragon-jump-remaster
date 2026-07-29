@@ -82,7 +82,7 @@ func register_product(product_id: String, price: String, description: String) ->
 	_iap_products[product_id] = {"price": price, "description": description}
 
 
-func purchase_product(product_id: String, success_callback: Callable) -> void:
+func purchase_product(_product_id: String, _success_callback: Callable) -> void:
 	if not is_iap_enabled():
 		return
 	# Backend integration point. On success, call success_callback and
