@@ -86,6 +86,13 @@ func get_visual_cell_atlas_coords(cell_coords: Vector2i) -> Vector2i:
 	return visual_layer.get_cell_atlas_coords(cell_coords)
 
 
+func get_visual_cell_source_id(cell_coords: Vector2i) -> int:
+	return visual_layer.get_cell_source_id(cell_coords)
+
+func set_visual_tile(cell_coords: Vector2i, source_id: int, atlas_coords: Vector2i) -> void:
+	visual_layer.set_cell(cell_coords, source_id, atlas_coords)
+
+
 func set_tile_hidden_area(cell_coords: Vector2i) -> void:
 	set_cell(cell_coords, 0, HIDDEN_AREA_ATLAS_COORDS)
 	update_visual_tile(cell_coords)
