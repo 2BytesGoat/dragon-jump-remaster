@@ -249,7 +249,7 @@ func _ready() -> void:
 	for info in SYMBOL_TO_TILE_INFO.values():
 		tile_names.append(info["name"])
 	
-	#var level_name = "1-16"
+	#var level_name = "1-4"
 	#var level_data := CampaignLevelLibrary.get_level(level_name)
 	#load_level(level_data)
 	
