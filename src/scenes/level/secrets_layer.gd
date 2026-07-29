@@ -5,10 +5,9 @@ extends TileMapLayer
 ## the layer fades out when the player enters and fades back in when leaving.
 
 @export var terrain_tilemap: TileMapLayer
-
 @onready var visual_layer: TileMapLayer = $VisualLayer
 
-const SECRET_VISUAL_SOURCE_ID := 2
+const HIDDEN_AREA_ATLAS_COORDS := Vector2i(2, 0)
 
 # Offsets of the four visual tiles that cover one terrain cell.
 const DIRECTIONS: Array[Vector2i] = [Vector2i(0, 0), Vector2i(0, 1), Vector2i(1, 0), Vector2i(1, 1)]
@@ -21,9 +20,9 @@ func _init_secrets() -> void:
 		_hide_secret_cells(island)
 
 
-## Replaces the secret cells with terrain tiles, hides the secret-rock visuals
-## on the terrain visual layer, and covers them with the original terrain
-## visuals on the secrets visual layer. Then clears the secret cells.
+## Replaces the secret cells with hidden-area terrain tiles, autotiles the
+## secret-rock visuals on the terrain visual layer, and covers them with the
+## original terrain visuals on the secrets visual layer. Then clears the secret cells.
 func _hide_secret_cells(cell_array: Array) -> void:
 	# 1. Capture original terrain visuals for every visual cell touched by the
 	#    secret island, before any terrain cell is modified.
@@ -44,12 +43,11 @@ func _hide_secret_cells(cell_array: Array) -> void:
 		var terrain_source_id := terrain_tilemap.get_cell_source_id(cell_coords)
 		if terrain_source_id == -1:
 			continue
-		terrain_tilemap.set_tile_hidden_area(cell_coords)
+		terrain_tilemap.set_cell(cell_coords, 0, HIDDEN_AREA_ATLAS_COORDS)
 		self.erase_cell(cell_coords)
 
-	# 3. Copy the captured original visuals onto the secrets visual layer and
-	#    switch the terrain visual layer to the secret rock atlas. This must be
-	#    a single pass so the secrets layer never copies a source-2 tile.
+	# 3. Copy the captured original visuals onto the secrets visual layer so it
+	#    can fade out and reveal the terrain underneath.
 	for visual_coords in original_visual_tiles:
 		var tile: Dictionary = original_visual_tiles[visual_coords]
 		if tile.atlas_coords == Vector2i(-1, -1):
@@ -57,7 +55,12 @@ func _hide_secret_cells(cell_array: Array) -> void:
 			continue
 
 		visual_layer.set_cell(visual_coords, tile.source_id, tile.atlas_coords)
-		terrain_tilemap.set_visual_tile(visual_coords, SECRET_VISUAL_SOURCE_ID, tile.atlas_coords)
+
+	# 4. Rebuild the terrain visual layer for every secret cell. Because hidden
+	#    terrain uses atlas x == 2, update_visual_tile will use the secret rock
+	#    source and autotile its 2x2 visual area against neighboring hidden cells.
+	for cell_coords in cell_array:
+		terrain_tilemap.update_visual_tile(cell_coords)
 
 
 ## Returns a list of contiguous secret cell groups using 4-way connectivity.

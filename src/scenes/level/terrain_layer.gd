@@ -6,9 +6,9 @@ extends TileMapLayer
 ## Wang-style neighbor mask so each 16x16 visual tile blends with its neighbors.
 
 @export var visual_layer: TileMapLayer
+@export var hidden_layer: TileMapLayer
 
 const HIDDEN_AREA_ATLAS_COORDS := Vector2i(2, 0)
-const RECT_FILL_TILE := Vector2i(1, 1)
 
 ## 2-bit neighbor mask lookup table (index 1..15). Index 0 is unused because a
 ## visual cell with no neighbors is skipped.
@@ -38,6 +38,7 @@ const AUTOTILE_MAP: Array = [
 ## Updates the visual tile for a single terrain cell and its 2x2 neighbors.
 func update_visual_tile(cell_coords: Vector2i) -> void:
 	var source_id := get_cell_atlas_coords(cell_coords).x
+	var update_layer = hidden_layer if source_id == 2 else visual_layer
 
 	var directions: Array[Vector2i] = [Vector2i(0, 0), Vector2i(0, 1), Vector2i(1, 0), Vector2i(1, 1)]
 	for direction in directions:
@@ -49,15 +50,15 @@ func update_visual_tile(cell_coords: Vector2i) -> void:
 		var choices: Array = AUTOTILE_MAP[mask - 1]
 		var probabilities: Array = [1.0]
 		if choices.size() > 1:
-			probabilities = _get_tile_probabilities(choices, visual_layer, 0)
+			probabilities = _get_tile_probabilities(choices, visual_layer, source_id)
 
 		var atlas_coords: Vector2i = _pick_weighted(choices, probabilities)
-		visual_layer.set_cell(visual_coords, source_id, atlas_coords)
+		update_layer.set_cell(visual_coords, source_id, atlas_coords)
 
 
 func clear_visual_tiles() -> void:
 	visual_layer.clear()
-
+	hidden_layer.clear()
 
 ## Returns the visual layer's bounding rectangle as four global corner points
 ## in CCW order: top-left, top-right, bottom-right, bottom-left.
@@ -89,24 +90,18 @@ func get_visual_cell_atlas_coords(cell_coords: Vector2i) -> Vector2i:
 func get_visual_cell_source_id(cell_coords: Vector2i) -> int:
 	return visual_layer.get_cell_source_id(cell_coords)
 
-func set_visual_tile(cell_coords: Vector2i, source_id: int, atlas_coords: Vector2i) -> void:
-	visual_layer.set_cell(cell_coords, source_id, atlas_coords)
-
-
-func set_tile_hidden_area(cell_coords: Vector2i) -> void:
-	set_cell(cell_coords, 0, HIDDEN_AREA_ATLAS_COORDS)
-	update_visual_tile(cell_coords)
-
 
 ## Counts the four diagonal neighbors of a visual cell that belong to the same
-## source, returning a 4-bit mask that matches the original bit ordering.
+## visual source, returning a 4-bit mask that matches the original bit ordering.
+## The visual source is encoded in the terrain cell's atlas x-coordinate.
 func _compute_neighbor_mask(cell_coords: Vector2i, source_id: int) -> int:
 	var neighbours := []
 	var directions: Array[Vector2i] = [Vector2i(0, 0), Vector2i(0, 1), Vector2i(1, 0), Vector2i(1, 1)]
 
 	for direction in directions:
 		var neighbor_coords: Vector2i = cell_coords + direction - Vector2i(1, 1)
-		var has_neighbor := get_cell_source_id(neighbor_coords) == source_id
+		var neighbor_atlas := get_cell_atlas_coords(neighbor_coords)
+		var has_neighbor := neighbor_atlas.x == source_id
 		neighbours.insert(0, has_neighbor)
 
 	var mask := 0
