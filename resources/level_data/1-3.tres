@@ -1,11 +1,10 @@
-[gd_resource type="Resource" script_class="CampaignLevelData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="CampaignLevelData" format=3 uid="uid://cotlowbbcw6b6"]
 
-[ext_resource type="Script" path="res://src/scripts/resources/campaign_level_data.gd" id="1_1_3"]
+[ext_resource type="Script" uid="uid://42xlw1erlcnx" path="res://src/scripts/resources/campaign_level_data.gd" id="1_1_3"]
 
 [resource]
 script = ExtResource("1_1_3")
 level_id = "1-3"
 display_name = "WALL_JUMP"
-code = "E6W19|E6W19|E6W19|E6W4E12W3|E6W3E14W2|E6W2E16W1|E6W1E17W1|E6W1E17W1|E6W1E17W1|E6W1E17W1|E6W1E15Q1E1W1|E6W1E4W14|E6W1E4W14|W7E4W14|W1E10W3E9W2|W1E10W2E11W1|W1E10W2E11W1|W1E23W1|W1E23W1|W8E16W1|W8E16W1|W3E21W1|W2E10W7E5W1|W1E11W7E5W1|W1E23W1|W1E23W1|W1E2P1E20W1|W25"
+code = "W29|W29|W29|W11E12W6|W10E14W5|W9E16W4|W8E17W4|W8E17W4|W8E17W4|W8E17W4|W8E15Q1E1W4|W8E4W17|W8E4W17|W8E4W17|W2E10W3E9W5|W2E10W2E11W4|W2E10W2E11W4|W2E23W4|W2E23WM3W1|W9E16WM3W1|W9E16WM3W1|W4E21W4|W3E10W7E5W4|W2E11W7E5W4|W2E23W4|W2E23W4|W2E23W4|W2E2P1E20W4|W29"
 times = Array[float]([8.025, 5.2965, 3.852])
-hidden = false

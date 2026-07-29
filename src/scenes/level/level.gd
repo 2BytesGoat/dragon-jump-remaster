@@ -114,6 +114,10 @@ func _ready() -> void:
 		_tile_names.append(info)
 
 	_init_atlas_symbol_mapping()
+	
+	#var level_name = "1-4"
+	#var level_data := CampaignLevelLibrary.get_level(level_name)
+	#load_level(level_data)
 
 	if Engine.is_editor_hint():
 		_init_terrain_layer()
@@ -128,7 +132,6 @@ func _ready() -> void:
 	_update_static_alt_tiles()
 	_populate_objects()
 	_init_hidden_areas()
-	print(get_level_code())
 
 
 func _process(_delta: float) -> void:

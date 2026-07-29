@@ -128,7 +128,7 @@ func _generate_area_for_island(island: Array) -> void:
 
 	var polygon := CollisionPolygon2D.new()
 	polygon.polygon = area_poly
-	area.add_child(polygon)
+	area.call_deferred("add_child", polygon)
 
 
 func _on_secret_area_entered(_area: Area2D) -> void:
