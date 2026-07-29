@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cnsmcxeq8h7qa"]
+[gd_scene format=3 uid="uid://cnsmcxeq8h7qa"]
 
 [ext_resource type="Texture2D" uid="uid://cgg3xu3cn33a5" path="res://assets/sprites/effects/poof-effect.png" id="1_0rsrb"]
 [ext_resource type="Script" uid="uid://dukjeejg3osoe" path="res://src/scenes/effects/despawn_smoke_effect.gd" id="2_viej5"]
@@ -46,7 +46,8 @@ animations = [{
 "speed": 12.0
 }]
 
-[node name="despawn_effect" type="AnimatedSprite2D"]
+[node name="despawn_effect" type="AnimatedSprite2D" unique_id=24855437]
+z_index = 1
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_yjxx2")
 autoplay = "default"

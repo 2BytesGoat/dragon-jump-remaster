@@ -138,4 +138,4 @@ func _on_secret_area_entered(_area: Area2D) -> void:
 
 func _on_secret_area_exited(_area: Area2D) -> void:
 	var tween := create_tween()
-	tween.tween_property(self, "modulate:a", 1.0, 0.4)
+	tween.tween_property(self, "modulate:a", 1.0, 0.3)
