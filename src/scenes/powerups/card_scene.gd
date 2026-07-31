@@ -1,34 +1,69 @@
 class_name CardUI
 extends Control
 
+const POWERUP_DISPLAY_NAMES := {
+	"DoubleJump": "APEX",
+	"Dash": "DASH",
+	"Grapple": "GRAP",
+	"Stomp": "STOMP",
+}
+
 @onready var container: MarginContainer = $MarginContainer
-@onready var texture: TextureRect = $MarginContainer/TextureRect
-@onready var label: Label = $MarginContainer/TextureRect/Label
+@onready var texture: TextureRect = $MarginContainer/CardTexture
+@onready var label_top: Label = %CardLabel_TopLeft
+@onready var label_bottom: Label = %CardLabel_BottomRight
 @onready var _palette: PowerupPalette = Constants.POWERUP_PALETTE
+
+@export var y_scale_single_player: float = 0.72
+@export var container_scale_single_player: Vector2 = Vector2.ONE
+@export var y_scale_split_screen: float = 0.57
+@export var container_scale_split_screen: Vector2 = Vector2(0.75, 0.75)
+
+@export var draw_duration: float = 0.6
+@export var position_curve: Curve
+@export var scale_curve: Curve
+@export var start_scale: Vector2 = Vector2(0.15, 0.15)
 
 var is_splitscreen: bool = false
 var powerup_type: String = ""
-var scales = {
-	"single_player": [0.72, Vector2.ONE],
-	"split_screen": [0.57, Vector2(0.75, 0.75)]
-}
 var y_scale: float
 var container_scale: Vector2
+
+var _draw_progress: float = -1.0
+var _draw_start_position: Vector2
+var _draw_end_position: Vector2
 
 
 func _ready() -> void:
 	if not is_splitscreen:
-		y_scale = scales["single_player"][0]
-		container_scale = scales["single_player"][1]
+		y_scale = y_scale_single_player
+		container_scale = container_scale_single_player
 	else:
-		y_scale = scales["split_screen"][0]
-		container_scale = scales["split_screen"][1]
+		y_scale = y_scale_split_screen
+		container_scale = container_scale_split_screen
+
+
+func _process(delta: float) -> void:
+	if _draw_progress < 0.0:
+		return
+	
+	_draw_progress += delta / draw_duration
+	if _draw_progress >= 1.0:
+		_draw_progress = 1.0
+		set_process(false)
+	
+	var position_t := position_curve.sample_baked(_draw_progress) if position_curve else _draw_progress
+	var scale_t := scale_curve.sample_baked(_draw_progress) if scale_curve else _draw_progress
+	
+	container.position = _draw_start_position.lerp(_draw_end_position, position_t)
+	container.scale = start_scale.lerp(container_scale, scale_t)
 
 
 func draw(type: String, exists: bool = false) -> void:
 	powerup_type = type
-	
-	label.text = type
+	var display_name = POWERUP_DISPLAY_NAMES.get(type, type.to_upper())
+	label_top.text = display_name
+	label_bottom.text = display_name
 	texture.self_modulate = _palette.get_color(type)
 	
 	if not exists:
@@ -52,24 +87,30 @@ func shift_by(offsets: Array):
 
 
 func play_draw_new_animation():
-	var y_size = self.size.y
+	var card_half_size := Vector2(40, 45)
+	_draw_start_position = Vector2(self.size.x * 0.5, self.size.y * 0.5) - card_half_size
+	_draw_end_position = Vector2(0.0, self.size.y * y_scale)
 	
-	container.position = Vector2(600.0, y_size*0.45)
-	container.scale = Vector2(0.2, 0.2)
+	container.position = _draw_start_position
+	container.scale = start_scale
+	container.rotation = 0.0
+	container.pivot_offset = Vector2(40, 45)
+	container.self_modulate = Color.WHITE
 	
-	var tween = self.create_tween()
-	tween.tween_property(container, "position", Vector2(-56.0, y_size*0.9), 0.1)
-	tween.chain().tween_property(container, "position", Vector2(0.0, y_size*y_scale), 0.05)
-	tween.tween_property(container, "scale", container_scale, 0.15)
+	_draw_progress = 0.0
+	set_process(true)
 
 
 func play_draw_same_animation():
 	var y_size = self.size.y
 	
 	container.position = Vector2(-20.0, y_size * y_scale)
-	container.modulate = Color(1.0, 1.0, 1.0, 0.5)
+	container.self_modulate = Color(1.0, 1.0, 1.0, 0.5)
 	container.scale = container_scale
+	container.rotation = 0.0
 	
 	var tween = self.create_tween()
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_CUBIC)
 	tween.tween_property(container, "position", Vector2(0.0, y_size * y_scale), 0.35)
-	tween.tween_property(container, "modulate", Color.WHITE, 0.35)
+	tween.parallel().tween_property(container, "self_modulate", Color.WHITE, 0.35)

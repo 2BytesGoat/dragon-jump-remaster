@@ -1,13 +1,13 @@
-[gd_scene load_steps=4 format=3 uid="uid://cldij6xkdi5rh"]
+[gd_scene format=3 uid="uid://cldij6xkdi5rh"]
 
-[ext_resource type="Texture2D" uid="uid://cjjf8vs25msrp" path="res://assets/sprites/cards/Void_Card_8.png" id="1_5vsbu"]
 [ext_resource type="Script" uid="uid://1ela5ki2cm8j" path="res://src/scenes/powerups/card_scene.gd" id="1_uqjuy"]
+[ext_resource type="Texture2D" uid="uid://b5un0qnotkur2" path="res://assets/sprites/cards/joker blank.png" id="2_el3mm"]
+[ext_resource type="Texture2D" uid="uid://gmas1ccvaejt" path="res://assets/sprites/cards/card_print.png" id="3_pltcw"]
+[ext_resource type="Theme" uid="uid://se7xk3lcwng8" path="res://src/ui/components/themes/main_theme.tres" id="3_ydyeq"]
+[ext_resource type="Curve" uid="uid://bsv80ebrv1lmc" path="res://resources/curves/card_position_curve.tres" id="5_abc12"]
+[ext_resource type="Curve" uid="uid://c2v70q2q1v3x8" path="res://resources/curves/card_scale_curve.tres" id="6_def34"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_7mycd"]
-atlas = ExtResource("1_5vsbu")
-region = Rect2(112, 16, 80, 128)
-
-[node name="Card" type="Control"]
+[node name="Card" type="Control" unique_id=21110977]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -15,8 +15,15 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_uqjuy")
+y_scale_single_player = 0.72
+container_scale_single_player = Vector2(1, 1)
+y_scale_split_screen = 0.57
+container_scale_split_screen = Vector2(0.75, 0.75)
+draw_duration = 0.6
+position_curve = ExtResource("5_abc12")
+scale_curve = ExtResource("6_def34")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=2116437657]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -26,32 +33,65 @@ offset_right = 170.0
 grow_vertical = 0
 metadata/_edit_group_ = true
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer"]
+[node name="CardTexture" type="TextureRect" parent="MarginContainer" unique_id=1894720491]
 custom_minimum_size = Vector2(80, 90)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
-texture = SubResource("AtlasTexture_7mycd")
-expand_mode = 3
+texture = ExtResource("2_el3mm")
+expand_mode = 5
 stretch_mode = 5
 
-[node name="Label" type="Label" parent="MarginContainer/TextureRect"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -85.0
-offset_top = -35.0
-offset_right = 85.0
-offset_bottom = -15.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/outline_size = 2
-theme_override_font_sizes/font_size = 12
-text = "DOUBLE JUMP"
+[node name="CardLabel_TopLeft" type="Label" parent="MarginContainer/CardTexture" unique_id=1391871676]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(4, 44)
+layout_mode = 0
+offset_left = 10.0
+offset_top = 8.0
+offset_right = 22.0
+offset_bottom = 62.0
+theme = ExtResource("3_ydyeq")
+theme_override_colors/font_color = Color(0.25882354, 0.2, 0.18431373, 1)
+theme_override_colors/font_outline_color = Color(0.25882354, 0.2, 0.18431373, 1)
+theme_override_constants/line_spacing = 1
+theme_override_font_sizes/font_size = 8
+text = ""
 horizontal_alignment = 1
 vertical_alignment = 1
+autowrap_mode = 1
+autowrap_trim_flags = 64
+clip_text = true
+uppercase = true
+
+[node name="CardLabel_BottomRight" type="Label" parent="MarginContainer/CardTexture" unique_id=1614009277]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(4, 44)
+layout_mode = 0
+offset_left = 72.0
+offset_top = 96.0
+offset_right = 76.0
+offset_bottom = 140.0
+rotation = 3.1415927
+size_flags_horizontal = 0
+theme = ExtResource("3_ydyeq")
+theme_override_colors/font_color = Color(0.25882354, 0.2, 0.18431373, 1)
+theme_override_colors/font_outline_color = Color(0.25882354, 0.2, 0.18431373, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 4
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 1
+autowrap_trim_flags = 64
+uppercase = true
+
+[node name="OverlayTexture" type="TextureRect" parent="MarginContainer/CardTexture" unique_id=1584530239]
+custom_minimum_size = Vector2(80, 90)
+layout_mode = 0
+offset_right = 80.0
+offset_bottom = 90.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("3_pltcw")
+expand_mode = 5

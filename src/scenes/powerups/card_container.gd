@@ -2,8 +2,9 @@ extends Panel
 
 const margin_shift_draw := [-10, 0, 0, 10]
 const margin_shift_play := [10, 0, 0, -10]
-@onready var card_scene = preload("res://src/scenes/powerups/card_scene.tscn")
+@onready var card_scene: PackedScene = preload("res://src/scenes/powerups/card_scene.tscn")
 var is_splitscreen: bool = false
+var _cards: Dictionary = {}
 
 
 func shift_card_positions(backward: bool = false) -> void:
@@ -14,17 +15,18 @@ func shift_card_positions(backward: bool = false) -> void:
 
 func _on_player_picked_powerup(powerup_name: String, id: int) -> void:
 	shift_card_positions()
-	var card_object = card_scene.instantiate()
+	var card_object: CardUI = card_scene.instantiate()
 	card_object.is_splitscreen = is_splitscreen
-	self.add_child(card_object)
 	card_object.name = str(id)
+	self.add_child(card_object)
+	_cards[id] = card_object
 	card_object.draw(powerup_name)
 
 
 func _on_player_used_powerup(id: int) -> void:
 	shift_card_positions(true)
-	for child in self.get_children():
-		if child.name == str(id):
-			remove_child(child)
-			child.queue_free()
-			break
+	var card := _cards.get(id) as CardUI
+	if card:
+		_cards.erase(id)
+		remove_child(card)
+		card.queue_free()
