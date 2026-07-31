@@ -6,8 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://6rwx7rq1h31i" path="res://assets/sprites/world/rock-tiles-wang/tileset_rock-tiles-wang.png" id="3_n86tn"]
 [ext_resource type="Script" uid="uid://bqlmtoyls3un1" path="res://src/scenes/level/terrain_layer.gd" id="3_qnuiv"]
 [ext_resource type="Texture2D" uid="uid://bbctyrj856eo4" path="res://assets/sprites/world/rock-tiles-wang/tileset_green-nico-wang.png" id="5_n7bl3"]
-[ext_resource type="Texture2D" uid="uid://sg0wq6dg7a8n" path="res://assets/sprites/world/rock-tiles-wang/tilest-secret-rock-tiles-wang.png" id="5_n86tn"]
 [ext_resource type="Script" uid="uid://b6vvfthmemhgb" path="res://src/scenes/level/secrets_layer.gd" id="6_qnuiv"]
+[ext_resource type="Texture2D" uid="uid://c42y8hv2d2ngd" path="res://assets/sprites/world/rock-tiles-wang/tilest-secret-rock-tiles-new-wang.png" id="7_yr4yg"]
 [ext_resource type="Script" uid="uid://bu64t7tql4ych" path="res://src/scenes/level/level_background.gd" id="9_25vab"]
 [ext_resource type="Texture2D" uid="uid://dds3jyqkjdevf" path="res://assets/sprites/world/backgrounds/bg2.png" id="10_4iyit"]
 [ext_resource type="Script" uid="uid://bas5rdqvcwnqw" path="res://src/scenes/level/level_wall_blend.gd" id="10_n7bl3"]
@@ -80,7 +80,7 @@ texture = ExtResource("3_n86tn")
 1:3/0/probability = 0.01
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yr4yg"]
-texture = ExtResource("5_n86tn")
+texture = ExtResource("7_yr4yg")
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0
