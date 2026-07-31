@@ -32,6 +32,7 @@ var container_scale: Vector2
 var _draw_progress: float = -1.0
 var _draw_start_position: Vector2
 var _draw_end_position: Vector2
+var _pickup_position: Vector2 = Vector2.ZERO
 
 
 func _ready() -> void:
@@ -41,7 +42,7 @@ func _ready() -> void:
 	else:
 		y_scale = y_scale_split_screen
 		container_scale = container_scale_split_screen
-
+ 
 
 func _process(delta: float) -> void:
 	if _draw_progress < 0.0:
@@ -59,8 +60,9 @@ func _process(delta: float) -> void:
 	container.scale = start_scale.lerp(container_scale, scale_t)
 
 
-func draw(type: String, exists: bool = false) -> void:
+func draw(type: String, exists: bool = false, from_position: Vector2 = Vector2.ZERO) -> void:
 	powerup_type = type
+	_pickup_position = from_position
 	var display_name = POWERUP_DISPLAY_NAMES.get(type, type.to_upper())
 	label_top.text = display_name
 	label_bottom.text = display_name
@@ -88,13 +90,15 @@ func shift_by(offsets: Array):
 
 func play_draw_new_animation():
 	var card_half_size := Vector2(40, 45)
-	_draw_start_position = Vector2(self.size.x * 0.5, self.size.y * 0.5) - card_half_size
+	if _pickup_position != Vector2.ZERO:
+		_draw_start_position = _pickup_position - card_half_size
+	else:
+		_draw_start_position = Vector2(self.size.x * 0.5, self.size.y * 0.5) - card_half_size
 	_draw_end_position = Vector2(0.0, self.size.y * y_scale)
 	
 	container.position = _draw_start_position
 	container.scale = start_scale
 	container.rotation = 0.0
-	container.pivot_offset = Vector2(40, 45)
 	container.self_modulate = Color.WHITE
 	
 	_draw_progress = 0.0

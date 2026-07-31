@@ -5,6 +5,15 @@ const margin_shift_play := [10, 0, 0, -10]
 @onready var card_scene: PackedScene = preload("res://src/scenes/powerups/card_scene.tscn")
 var is_splitscreen: bool = false
 var _cards: Dictionary = {}
+var _last_pickup_position: Vector2 = Vector2.ZERO
+
+
+func _ready() -> void:
+	SignalBus.powerup_picked_up.connect(_on_powerup_picked_up)
+
+
+func _on_powerup_picked_up(powerup_name: String, pickup_screen_position: Vector2) -> void:
+	_last_pickup_position = pickup_screen_position
 
 
 func shift_card_positions(backward: bool = false) -> void:
@@ -20,7 +29,7 @@ func _on_player_picked_powerup(powerup_name: String, id: int) -> void:
 	card_object.name = str(id)
 	self.add_child(card_object)
 	_cards[id] = card_object
-	card_object.draw(powerup_name)
+	card_object.draw(powerup_name, false, _last_pickup_position)
 
 
 func _on_player_used_powerup(id: int) -> void:

@@ -210,6 +210,8 @@ func pick_powerup(area: Area2D) -> void:
 	area.pickup()
 	powerups.append(area)
 	var powerup_type = area.type
+	var pickup_screen_position := get_viewport().canvas_transform * area.global_position
+	SignalBus.powerup_picked_up.emit(powerup_type, pickup_screen_position)
 	picked_powerup.emit(powerup_type, len(powerups) - 1)
 
 
