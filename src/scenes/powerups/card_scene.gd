@@ -14,19 +14,17 @@ const POWERUP_DISPLAY_NAMES := {
 @onready var label_bottom: Label = %CardLabel_BottomRight
 @onready var _palette: PowerupPalette = Constants.POWERUP_PALETTE
 
-@export var y_scale_single_player: float = 0.72
 @export var container_scale_single_player: Vector2 = Vector2.ONE
-@export var y_scale_split_screen: float = 0.57
 @export var container_scale_split_screen: Vector2 = Vector2(0.75, 0.75)
 
 @export var draw_duration: float = 0.6
 @export var position_curve: Curve
 @export var scale_curve: Curve
 @export var start_scale: Vector2 = Vector2(0.15, 0.15)
+@export var draw_start_offset: Vector2 = Vector2(-40, -45)
 
 var is_splitscreen: bool = false
 var powerup_type: String = ""
-var y_scale: float
 var container_scale: Vector2
 
 var _draw_progress: float = -1.0
@@ -37,10 +35,8 @@ var _pickup_position: Vector2 = Vector2.ZERO
 
 func _ready() -> void:
 	if not is_splitscreen:
-		y_scale = y_scale_single_player
 		container_scale = container_scale_single_player
 	else:
-		y_scale = y_scale_split_screen
 		container_scale = container_scale_split_screen
  
 
@@ -89,12 +85,12 @@ func shift_by(offsets: Array):
 
 
 func play_draw_new_animation():
-	var card_half_size := Vector2(40, 45)
 	if _pickup_position != Vector2.ZERO:
-		_draw_start_position = _pickup_position - card_half_size
+		var pickup_local: Vector2 = self.get_global_transform().affine_inverse() * _pickup_position
+		_draw_start_position = pickup_local + draw_start_offset
 	else:
-		_draw_start_position = Vector2(self.size.x * 0.5, self.size.y * 0.5) - card_half_size
-	_draw_end_position = Vector2(0.0, self.size.y * y_scale)
+		_draw_start_position = Vector2(self.size.x * 0.5, self.size.y * 0.5) + draw_start_offset
+	_draw_end_position = Vector2(0.0, self.size.y + container.offset_top)
 	
 	container.position = _draw_start_position
 	container.scale = start_scale
@@ -106,9 +102,9 @@ func play_draw_new_animation():
 
 
 func play_draw_same_animation():
-	var y_size = self.size.y
+	var target_y := self.size.y + container.offset_top
 	
-	container.position = Vector2(-20.0, y_size * y_scale)
+	container.position = Vector2(-20.0, target_y)
 	container.self_modulate = Color(1.0, 1.0, 1.0, 0.5)
 	container.scale = container_scale
 	container.rotation = 0.0
@@ -116,5 +112,5 @@ func play_draw_same_animation():
 	var tween = self.create_tween()
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_CUBIC)
-	tween.tween_property(container, "position", Vector2(0.0, y_size * y_scale), 0.35)
+	tween.tween_property(container, "position", Vector2(0.0, target_y), 0.35)
 	tween.parallel().tween_property(container, "self_modulate", Color.WHITE, 0.35)

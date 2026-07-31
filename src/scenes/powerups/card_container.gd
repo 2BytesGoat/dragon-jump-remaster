@@ -1,8 +1,7 @@
 extends Panel
 
-const margin_shift_draw := [-10, 0, 0, 10]
-const margin_shift_play := [10, 0, 0, -10]
 @onready var card_scene: PackedScene = preload("res://src/scenes/powerups/card_scene.tscn")
+@export var margin_shift: Array = [-10, 0, 0, 10]
 var is_splitscreen: bool = false
 var _cards: Dictionary = {}
 var _last_pickup_position: Vector2 = Vector2.ZERO
@@ -12,12 +11,15 @@ func _ready() -> void:
 	SignalBus.powerup_picked_up.connect(_on_powerup_picked_up)
 
 
-func _on_powerup_picked_up(powerup_name: String, pickup_screen_position: Vector2) -> void:
-	_last_pickup_position = pickup_screen_position
+func _on_powerup_picked_up(_powerup_name: String, pickup_global_position: Vector2) -> void:
+	_last_pickup_position = pickup_global_position
 
 
 func shift_card_positions(backward: bool = false) -> void:
-	var offset = margin_shift_play if backward else margin_shift_draw
+	var offset: Array = margin_shift.duplicate()
+	if backward:
+		for i in range(offset.size()):
+			offset[i] *= -1
 	for child in self.get_children():
 		child.shift_by(offset)
 
