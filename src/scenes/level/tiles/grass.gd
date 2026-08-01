@@ -7,6 +7,17 @@ extends Area2D
 @export var grassReturnAnimationSpeed = 5.0
 
 
+func _ready() -> void:
+	var atlas_texture := sprite_2d.texture as AtlasTexture
+	if atlas_texture:
+		atlas_texture = atlas_texture.duplicate()
+		sprite_2d.texture = atlas_texture
+		var region := atlas_texture.region
+		region.position.x = region.position.x + (randi() % 3) * region.size.x
+		atlas_texture.region = region
+		print(atlas_texture.region)
+
+
 func _on_area_entered(area: Area2D) -> void:
 	var direction = global_position.direction_to(area.global_position)
 	var skew : int = -direction.x * skewValue
