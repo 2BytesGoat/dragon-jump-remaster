@@ -61,7 +61,7 @@ streams_count = 1
 stream_0/stream = ExtResource("3_fljik")
 
 [node name="SpawnSmokeEffect" type="AnimatedSprite2D" unique_id=1239705229]
-z_index = 1
+z_index = 2
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_fpks8")
 autoplay = "default"
