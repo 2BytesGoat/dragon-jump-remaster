@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://bgt0b3l0ktsri"]
+
+[ext_resource type="Script" uid="uid://bafgyx7yketlj" path="res://src/scenes/level/tiles/grass.gd" id="1_agr0w"]
+[ext_resource type="Shader" uid="uid://cds5kuq1rt65e" path="res://assets/shaders/grass.gdshader" id="2_apjq0"]
+[ext_resource type="Texture2D" uid="uid://riso1kxfjte0" path="res://assets/sprites/world/tile-types.png" id="3_m2nje"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_swgxb"]
+resource_local_to_scene = true
+shader = ExtResource("2_apjq0")
+shader_parameter/skew = 0.0
+shader_parameter/anchor_at_top = true
+shader_parameter/sprite_y_offset = -7.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_swgxb"]
+atlas = ExtResource("3_m2nje")
+region = Rect2(48, 80, 16, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rkqys"]
+size = Vector2(16, 16)
+
+[node name="Vines" type="Area2D" unique_id=1833415975]
+z_index = 2
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_agr0w")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2026664786]
+material = SubResource("ShaderMaterial_swgxb")
+position = Vector2(0, -7)
+texture = SubResource("AtlasTexture_swgxb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=497084404]
+position = Vector2(0, -7)
+shape = SubResource("RectangleShape2D_rkqys")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]

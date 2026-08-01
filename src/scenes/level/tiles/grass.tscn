@@ -8,6 +8,8 @@
 resource_local_to_scene = true
 shader = ExtResource("1_swgxb")
 shader_parameter/skew = 0.0
+shader_parameter/anchor_at_top = false
+shader_parameter/sprite_y_offset = 8.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_swgxb"]
 atlas = ExtResource("1_rkqys")
@@ -21,11 +23,12 @@ z_index = 2
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("1_j4qjq")
+skewValue = 50
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=2026664786]
 material = SubResource("ShaderMaterial_swgxb")
-position = Vector2(0, -8)
 texture = SubResource("AtlasTexture_swgxb")
+offset = Vector2(0, -8)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=497084404]
 position = Vector2(0, -8)

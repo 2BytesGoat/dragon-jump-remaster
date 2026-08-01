@@ -14,6 +14,7 @@ const TMP_PREVIEW_PATH := "res://resources/level_data/tmp.tres"
 
 const _TileRegistry := preload("res://src/scripts/resources/tile_registry.gd")
 const _GRASS_SCENE := preload("res://src/scenes/level/tiles/grass.tscn")
+const _VINES_SCENE := preload("res://src/scenes/level/tiles/vines.tscn")
 
 const _EMPTY_SYMBOL := _TileRegistry.EMPTY_SYMBOL
 const _WALL_SYMBOL := _TileRegistry.WALL_SYMBOL
@@ -37,6 +38,9 @@ const _SEPARATOR_SYMBOL := _TileRegistry.SEPARATOR_SYMBOL
 
 ## Chance (0.0-1.0) to spawn decorative grass on each exposed top terrain edge.
 @export_range(0.0, 1.0) var grass_density: float = 0.4
+
+## Chance (0.0-1.0) to spawn decorative vines on each exposed bottom terrain edge.
+@export_range(0.0, 1.0) var vine_density: float = 0.4
 
 ## Editor-only buttons. Toggling any of them performs an action and resets.
 @export var refresh_editor_preview: bool = false:
@@ -138,6 +142,7 @@ func _ready() -> void:
 	_populate_objects()
 	_init_hidden_areas()
 	_spawn_decoration_grass()
+	_spawn_decoration_vines()
 
 
 func _process(_delta: float) -> void:
@@ -179,6 +184,7 @@ func update_level(level_code: String) -> void:
 	_init_hidden_areas()
 	_update_static_alt_tiles()
 	_spawn_decoration_grass()
+	_spawn_decoration_vines()
 	_current_level_code = level_code
 
 
@@ -640,7 +646,36 @@ func _spawn_decoration_grass() -> void:
 
 			var grass: Node2D = _GRASS_SCENE.instantiate()
 			grass.global_position = terrain_layer.to_global(terrain_layer.map_to_local(run_cell) + half_tile)
-			decorations_layer.add_child(grass)
+			decorations_layer.call_deferred("add_child", grass)
+
+
+func _spawn_decoration_vines() -> void:
+	if not decorations_layer or not terrain_layer:
+		return
+	if vine_density <= 0.0:
+		return
+
+	var half_tile := Vector2(0, 8)
+	var ceiling_cells := _collect_ceiling_cells()
+	var visited: Dictionary = {}
+
+	for cell_coords: Vector2i in ceiling_cells.keys():
+		if visited.has(cell_coords):
+			continue
+
+		var run: Array[Vector2i] = _expand_horizontal_run(cell_coords, ceiling_cells, visited)
+		var run_probability: float = vine_density * clamp((run.size() - 1.0) / 9.0, 0.0, 1.0)
+		if run_probability <= 0.0:
+			continue
+
+		for run_cell: Vector2i in run:
+			if randf() > run_probability:
+				continue
+
+			var vine_cell := run_cell + Vector2i.DOWN
+			var vine: Node2D = _VINES_SCENE.instantiate()
+			vine.global_position = terrain_layer.to_global(terrain_layer.map_to_local(vine_cell) + half_tile)
+			decorations_layer.call_deferred("add_child", vine)
 
 
 func _collect_surface_cells() -> Dictionary:
@@ -653,6 +688,27 @@ func _collect_surface_cells() -> Dictionary:
 
 		var above := cell_coords + Vector2i.UP
 		if populated_cells.has(above):
+			continue
+
+		var left := cell_coords + Vector2i.LEFT
+		var right := cell_coords + Vector2i.RIGHT
+		if not _has_wall_at(left) or not _has_wall_at(right):
+			continue
+
+		result[cell_coords] = true
+	return result
+
+
+func _collect_ceiling_cells() -> Dictionary:
+	var result := {}
+	for cell_coords: Vector2i in populated_cells.keys():
+		if cell_coords.y == _level_height_cell - 1:
+			continue
+		if not _WALL_SYMBOL in populated_cells[cell_coords]:
+			continue
+
+		var below := cell_coords + Vector2i.DOWN
+		if populated_cells.has(below):
 			continue
 
 		var left := cell_coords + Vector2i.LEFT
