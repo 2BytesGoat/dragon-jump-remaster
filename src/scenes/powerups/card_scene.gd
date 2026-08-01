@@ -30,7 +30,6 @@ var container_scale: Vector2
 var _draw_progress: float = -1.0
 var _draw_start_position: Vector2
 var _draw_end_position: Vector2
-var _pickup_position: Vector2 = Vector2.ZERO
 
 
 func _ready() -> void:
@@ -58,14 +57,13 @@ func _process(delta: float) -> void:
 
 func draw(type: String, exists: bool = false, from_position: Vector2 = Vector2.ZERO) -> void:
 	powerup_type = type
-	_pickup_position = from_position
 	var display_name = POWERUP_DISPLAY_NAMES.get(type, type.to_upper())
 	label_top.text = display_name
 	label_bottom.text = display_name
 	texture.self_modulate = _palette.get_color(type)
 	
 	if not exists:
-		play_draw_new_animation()
+		play_draw_new_animation(from_position)
 	else:
 		play_draw_same_animation()
 
@@ -84,10 +82,10 @@ func shift_by(offsets: Array):
 		container.add_theme_constant_override(margin_names[i], new_value)
 
 
-func play_draw_new_animation():
-	if _pickup_position != Vector2.ZERO:
-		var pickup_local: Vector2 = self.get_global_transform().affine_inverse() * _pickup_position
-		_draw_start_position = pickup_local + draw_start_offset
+func play_draw_new_animation(pickup_position: Vector2 = Vector2.ZERO):
+	if pickup_position != Vector2.ZERO:
+		var pickup_local: Vector2 = _to_card_local(pickup_position)
+		_draw_start_position = pickup_local
 	else:
 		_draw_start_position = Vector2(self.size.x * 0.5, self.size.y * 0.5) + draw_start_offset
 	_draw_end_position = Vector2(0.0, self.size.y + container.offset_top)
@@ -99,6 +97,35 @@ func play_draw_new_animation():
 	
 	_draw_progress = 0.0
 	set_process(true)
+
+
+func _to_card_local(pickup_position: Vector2) -> Vector2:
+	var sub_viewport := _find_gameplay_sub_viewport()
+	if sub_viewport == null:
+		return self.get_global_transform().affine_inverse() * pickup_position
+	
+	# pickup_position is in the SubViewport's world/canvas space.
+	# Convert it to the SubViewport's viewport coordinates (i.e. where it appears
+	# on the rendered sub-viewport), which map 1:1 to the root viewport's canvas
+	# coordinates where this card UI lives.
+	var viewport_position: Vector2 = sub_viewport.get_canvas_transform() * pickup_position
+	return self.get_global_transform().affine_inverse() * viewport_position
+
+
+func _find_gameplay_sub_viewport() -> SubViewport:
+	var current_scene := get_tree().current_scene
+	if current_scene == null:
+		return null
+	
+	var sub_viewport_container := current_scene.get_node_or_null("SubViewportContainer")
+	if sub_viewport_container == null:
+		return null
+	
+	for child in sub_viewport_container.get_children():
+		if child is SubViewport:
+			return child
+	
+	return null
 
 
 func play_draw_same_animation():

@@ -7,14 +7,6 @@ var _cards: Dictionary = {}
 var _last_pickup_position: Vector2 = Vector2.ZERO
 
 
-func _ready() -> void:
-	SignalBus.powerup_picked_up.connect(_on_powerup_picked_up)
-
-
-func _on_powerup_picked_up(_powerup_name: String, pickup_global_position: Vector2) -> void:
-	_last_pickup_position = pickup_global_position
-
-
 func shift_card_positions(backward: bool = false) -> void:
 	var offset: Array = margin_shift.duplicate()
 	if backward:
@@ -24,14 +16,15 @@ func shift_card_positions(backward: bool = false) -> void:
 		child.shift_by(offset)
 
 
-func _on_player_picked_powerup(powerup_name: String, id: int) -> void:
-	shift_card_positions()
+func _on_player_picked_powerup(powerup_name: String, id: int, pickup_global_position: Vector2) -> void:
+	_last_pickup_position = pickup_global_position
 	var card_object: CardUI = card_scene.instantiate()
 	card_object.is_splitscreen = is_splitscreen
 	card_object.name = str(id)
 	self.add_child(card_object)
 	_cards[id] = card_object
 	card_object.draw(powerup_name, false, _last_pickup_position)
+	shift_card_positions()
 
 
 func _on_player_used_powerup(id: int) -> void:
