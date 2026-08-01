@@ -18,6 +18,7 @@ const POWERUP_DISPLAY_NAMES := {
 @export var container_scale_split_screen: Vector2 = Vector2(0.75, 0.75)
 
 @export var draw_duration: float = 0.6
+@export var dissolve_duration: float = 0.35
 @export var position_curve: Curve
 @export var scale_curve: Curve
 @export var start_scale: Vector2 = Vector2(0.15, 0.15)
@@ -60,6 +61,8 @@ func draw(type: String, exists: bool = false, from_position: Vector2 = Vector2.Z
 	var display_name = POWERUP_DISPLAY_NAMES.get(type, type.to_upper())
 	label_top.text = display_name
 	label_bottom.text = display_name
+	label_top.self_modulate.a = 1.0
+	label_bottom.self_modulate.a = 1.0
 	texture.self_modulate = _palette.get_color(type)
 	
 	if not exists:
@@ -141,3 +144,32 @@ func play_draw_same_animation():
 	tween.set_trans(Tween.TRANS_CUBIC)
 	tween.tween_property(container, "position", Vector2(0.0, target_y), 0.35)
 	tween.parallel().tween_property(container, "self_modulate", Color.WHITE, 0.35)
+
+
+func dissolve_out(on_finished: Callable = Callable()) -> void:
+	var material := texture.material as ShaderMaterial
+	if material == null:
+		if on_finished.is_valid():
+			on_finished.call()
+		return
+	
+	# Start the burn from the center of the card in UV space.
+	material.set_shader_parameter("position", Vector2(0.5, 0.5))
+	material.set_shader_parameter("radius", 0.0)
+	
+	var tween := create_tween()
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_CUBIC)
+	tween.tween_method(
+		func(value: float) -> void: material.set_shader_parameter("radius", value),
+		0.0,
+		1.5,
+		dissolve_duration
+	)
+	tween.parallel().tween_property(label_top, "self_modulate:a", 0.0, dissolve_duration * 0.5)
+	tween.parallel().tween_property(label_bottom, "self_modulate:a", 0.0, dissolve_duration * 0.5)
+	
+	tween.finished.connect(func() -> void:
+		if on_finished.is_valid():
+			on_finished.call()
+	, CONNECT_ONE_SHOT)

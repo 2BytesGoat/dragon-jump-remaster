@@ -32,5 +32,8 @@ func _on_player_used_powerup(id: int) -> void:
 	var card := _cards.get(id) as CardUI
 	if card:
 		_cards.erase(id)
-		remove_child(card)
-		card.queue_free()
+		card.dissolve_out(func() -> void:
+			if is_instance_valid(card) and card.get_parent() == self:
+				remove_child(card)
+			card.queue_free()
+		)
