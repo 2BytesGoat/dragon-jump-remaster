@@ -15,7 +15,6 @@ func _ready() -> void:
 		var region := atlas_texture.region
 		region.position.x = region.position.x + (randi() % 3) * region.size.x
 		atlas_texture.region = region
-		print(atlas_texture.region)
 
 
 func _on_area_entered(area: Area2D) -> void:
