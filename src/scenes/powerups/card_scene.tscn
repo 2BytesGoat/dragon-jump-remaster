@@ -22,11 +22,11 @@ shader_parameter/radius = 0.0
 shader_parameter/borderWidth = 0.02
 shader_parameter/burnMult = 0.135
 shader_parameter/noiseTexture = SubResource("NoiseTexture2D_5dk5w")
-shader_parameter/burnColor = Color(0, 0, 0, 1)
+shader_parameter/burnColor = Color(0.8509804, 0.81960785, 0.8, 1)
 
 [sub_resource type="Gradient" id="Gradient_5dk5w"]
-offsets = PackedFloat32Array(0, 0.31578946, 0.9311741)
-colors = PackedColorArray(0.96862745, 0.92941177, 0.9019608, 0.8086229, 0.96862745, 0.92941177, 0.9019608, 0.84313726, 0.96862745, 0.92941177, 0.9019608, 0)
+offsets = PackedFloat32Array(0, 0.4048583, 0.902834)
+colors = PackedColorArray(0.03529412, 0.043137256, 0.08235294, 1, 0.03876, 0.03876, 0.07846785, 0.82500005, 0.03876, 0.03876, 0.07846785, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_s752x"]
 gradient = SubResource("Gradient_5dk5w")
