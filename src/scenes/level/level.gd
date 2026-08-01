@@ -13,6 +13,7 @@ const LEVEL_GD_PATH := "res://src/scenes/level/level.gd"
 const TMP_PREVIEW_PATH := "res://resources/level_data/tmp.tres"
 
 const _TileRegistry := preload("res://src/scripts/resources/tile_registry.gd")
+const _GRASS_SCENE := preload("res://src/scenes/level/tiles/grass.tscn")
 
 const _EMPTY_SYMBOL := _TileRegistry.EMPTY_SYMBOL
 const _WALL_SYMBOL := _TileRegistry.WALL_SYMBOL
@@ -32,6 +33,10 @@ const _SEPARATOR_SYMBOL := _TileRegistry.SEPARATOR_SYMBOL
 @export var secrets_layer: TileMapLayer
 @export var terrain_visual_layer: TileMapLayer
 @export var secrets_visual_layer: TileMapLayer
+@export var decorations_layer: Node2D
+
+## Chance (0.0-1.0) to spawn decorative grass on each exposed top terrain edge.
+@export_range(0.0, 1.0) var grass_density: float = 0.4
 
 ## Editor-only buttons. Toggling any of them performs an action and resets.
 @export var refresh_editor_preview: bool = false:
@@ -132,6 +137,7 @@ func _ready() -> void:
 	_update_static_alt_tiles()
 	_populate_objects()
 	_init_hidden_areas()
+	_spawn_decoration_grass()
 
 
 func _process(_delta: float) -> void:
@@ -172,6 +178,7 @@ func update_level(level_code: String) -> void:
 	_populate_objects()
 	_init_hidden_areas()
 	_update_static_alt_tiles()
+	_spawn_decoration_grass()
 	_current_level_code = level_code
 
 
@@ -183,6 +190,11 @@ func clear_level() -> void:
 	if not Engine.is_editor_hint() and objects_layer:
 		for child in objects_layer.get_children():
 			objects_layer.remove_child(child)
+			child.queue_free()
+
+	if not Engine.is_editor_hint() and decorations_layer:
+		for child in decorations_layer.get_children():
+			decorations_layer.remove_child(child)
 			child.queue_free()
 
 	objects_map = {}
@@ -565,6 +577,9 @@ func _populate_objects() -> void:
 		_add_to_populated_cells(cell_coords, symbol)
 		objects_layer.erase_cell(cell_coords)
 
+		if info.scene == null:
+			continue
+
 		if symbol == _PLAYER_SYMBOL:
 			player_start_position = object_position
 			continue
@@ -594,6 +609,81 @@ func _init_hidden_areas() -> void:
 	for cell_coords in secrets_layer.get_used_cells():
 		_add_to_populated_cells(cell_coords, _SECRET_SYMBOL)
 	secrets_layer._init_secrets()
+
+
+# ---------------------------------------------------------------------------
+# Internal: decoration spawning
+# ---------------------------------------------------------------------------
+
+func _spawn_decoration_grass() -> void:
+	if not decorations_layer or not terrain_layer:
+		return
+	if grass_density <= 0.0:
+		return
+
+	var half_tile := Vector2(0, -8)
+	var surface_cells := _collect_surface_cells()
+	var visited: Dictionary = {}
+
+	for cell_coords: Vector2i in surface_cells.keys():
+		if visited.has(cell_coords):
+			continue
+
+		var run: Array[Vector2i] = _expand_horizontal_run(cell_coords, surface_cells, visited)
+		var run_probability: float = grass_density * clamp((run.size() - 1.0) / 9.0, 0.0, 1.0)
+		if run_probability <= 0.0:
+			continue
+
+		for run_cell: Vector2i in run:
+			if randf() > run_probability:
+				continue
+
+			var grass: Node2D = _GRASS_SCENE.instantiate()
+			grass.global_position = terrain_layer.to_global(terrain_layer.map_to_local(run_cell) + half_tile)
+			decorations_layer.add_child(grass)
+
+
+func _collect_surface_cells() -> Dictionary:
+	var result := {}
+	for cell_coords: Vector2i in populated_cells.keys():
+		if cell_coords.y == 0:
+			continue
+		if not _WALL_SYMBOL in populated_cells[cell_coords]:
+			continue
+
+		var above := cell_coords + Vector2i.UP
+		if populated_cells.has(above):
+			continue
+
+		var left := cell_coords + Vector2i.LEFT
+		var right := cell_coords + Vector2i.RIGHT
+		if not _has_wall_at(left) or not _has_wall_at(right):
+			continue
+
+		result[cell_coords] = true
+	return result
+
+
+func _expand_horizontal_run(start: Vector2i, surface_cells: Dictionary, visited: Dictionary) -> Array[Vector2i]:
+	var run: Array[Vector2i] = []
+	var x := start.x
+	var y := start.y
+
+	while surface_cells.has(Vector2i(x, y)):
+		x -= 1
+	x += 1
+
+	while surface_cells.has(Vector2i(x, y)):
+		var cell := Vector2i(x, y)
+		run.append(cell)
+		visited[cell] = true
+		x += 1
+
+	return run
+
+
+func _has_wall_at(cell_coords: Vector2i) -> bool:
+	return populated_cells.has(cell_coords) and _WALL_SYMBOL in populated_cells[cell_coords]
 
 
 # ---------------------------------------------------------------------------

@@ -24,9 +24,11 @@ script = ExtResource("1_j4qjq")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=2026664786]
 material = SubResource("ShaderMaterial_swgxb")
+position = Vector2(0, -8)
 texture = SubResource("AtlasTexture_swgxb")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=497084404]
+position = Vector2(0, -8)
 shape = SubResource("RectangleShape2D_rkqys")
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
