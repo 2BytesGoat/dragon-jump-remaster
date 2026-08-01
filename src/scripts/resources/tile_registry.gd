@@ -84,6 +84,8 @@ func _register_defaults() -> void:
 		preload("res://src/scenes/powerups/powerup.tscn"), ["Dash"]))
 	_register(TileInfo.new("G", "Grapple", TileType.OBJECT, Vector2i(3, 4),
 		preload("res://src/scenes/powerups/powerup.tscn"), ["Grapple"]))
+	_register(TileInfo.new("g", "Grass", TileType.OBJECT, Vector2i(0, 5),
+		preload("res://src/scenes/level/tiles/grass.tscn"), []))
 	_register(TileInfo.new(SECRET_SYMBOL, "Secret", TileType.SECRETS, Vector2i(0, 1), null, [], true))
 
 
