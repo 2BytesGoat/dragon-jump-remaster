@@ -2,9 +2,9 @@ class_name CardUI
 extends Control
 
 const POWERUP_DISPLAY_NAMES := {
-	"DoubleJump": "APEX",
+	"DoubleJump": "BOOST",
 	"Dash": "DASH",
-	"Grapple": "GRAP",
+	"Grapple": "HOOK",
 	"Stomp": "STOMP",
 }
 
@@ -166,8 +166,8 @@ func dissolve_out(on_finished: Callable = Callable()) -> void:
 		1.5,
 		dissolve_duration
 	)
-	tween.parallel().tween_property(label_top, "self_modulate:a", 0.0, dissolve_duration * 0.5)
-	tween.parallel().tween_property(label_bottom, "self_modulate:a", 0.0, dissolve_duration * 0.5)
+	tween.parallel().tween_property(label_top, "self_modulate:a", 0.0, dissolve_duration * 0.4)
+	tween.parallel().tween_property(label_bottom, "self_modulate:a", 0.0, dissolve_duration * 0.4)
 	
 	tween.finished.connect(func() -> void:
 		if on_finished.is_valid():
