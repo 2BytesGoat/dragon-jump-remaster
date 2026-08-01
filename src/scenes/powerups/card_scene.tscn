@@ -9,6 +9,10 @@
 [ext_resource type="Curve" uid="uid://c2v70q2q1v3x8" path="res://resources/curves/card_scale_curve.tres" id="6_def34"]
 [ext_resource type="Texture2D" uid="uid://b1yamu13fwph6" path="res://assets/sprites/icons/sk3_jet_boots_A.png" id="7_5dk5w"]
 
+[sub_resource type="Curve" id="Curve_5dk5w"]
+_data = [Vector2(0.09964412, 0), 0.0, 0.0, 0, 0, Vector2(0.49822062, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_5dk5w"]
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_5dk5w"]
@@ -51,6 +55,7 @@ draw_duration = 0.4
 dissolve_duration = 1.0
 position_curve = ExtResource("5_abc12")
 scale_curve = ExtResource("6_def34")
+fade_curve = SubResource("Curve_5dk5w")
 start_scale = Vector2(0.05, 0.05)
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=2116437657]

@@ -28,12 +28,13 @@ func _on_player_picked_powerup(powerup_name: String, id: int, pickup_global_posi
 
 
 func _on_player_used_powerup(id: int) -> void:
-	shift_card_positions(true)
 	var card := _cards.get(id) as CardUI
 	if card:
 		_cards.erase(id)
+		card.z_index = -1
 		card.dissolve_out(func() -> void:
 			if is_instance_valid(card) and card.get_parent() == self:
 				remove_child(card)
 			card.queue_free()
 		)
+	shift_card_positions(true)
