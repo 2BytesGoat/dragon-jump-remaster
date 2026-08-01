@@ -4,8 +4,10 @@ extends RefCounted
 ## Parses a level code string (e.g. "W10E5|W3E2Q1...") into a flat list of
 ## (symbol, count, cell_offset) instructions for a Level to consume.
 
-const EMPTY_SYMBOL = "E"
-const SEPARATOR_SYMBOL = "|"
+const EMPTY_SYMBOL := "E"
+const SEPARATOR_SYMBOL := "|"
+
+const _TileRegistry := preload("res://src/scripts/resources/tile_registry.gd")
 
 
 static func parse(level_code: String) -> Dictionary:
@@ -66,4 +68,4 @@ static func parse(level_code: String) -> Dictionary:
 
 
 static func _is_tilemap_symbol(symbol: String) -> bool:
-	return symbol == EMPTY_SYMBOL or symbol in Level.SYMBOL_TO_TILE_INFO
+	return _TileRegistry.default().is_valid(symbol)

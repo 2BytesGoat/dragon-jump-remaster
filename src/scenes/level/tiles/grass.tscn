@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://cgh3gu6mqk4go"]
+
+[ext_resource type="Script" uid="uid://bafgyx7yketlj" path="res://src/scenes/level/tiles/grass.gd" id="1_j4qjq"]
+[ext_resource type="Texture2D" uid="uid://riso1kxfjte0" path="res://assets/sprites/world/tile-types.png" id="1_rkqys"]
+[ext_resource type="Shader" uid="uid://cds5kuq1rt65e" path="res://assets/shaders/grass.gdshader" id="1_swgxb"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_swgxb"]
+resource_local_to_scene = true
+shader = ExtResource("1_swgxb")
+shader_parameter/skew = 0.0
+shader_parameter/anchor_at_top = false
+shader_parameter/sprite_y_offset = 8.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_swgxb"]
+atlas = ExtResource("1_rkqys")
+region = Rect2(0, 80, 16, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rkqys"]
+size = Vector2(16, 16)
+
+[node name="Grass" type="Area2D" unique_id=1833415975]
+z_index = 2
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_j4qjq")
+skewValue = 50
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2026664786]
+material = SubResource("ShaderMaterial_swgxb")
+texture = SubResource("AtlasTexture_swgxb")
+offset = Vector2(0, -8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=497084404]
+position = Vector2(0, -8)
+shape = SubResource("RectangleShape2D_rkqys")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]

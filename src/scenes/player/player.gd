@@ -55,7 +55,7 @@ var last_floor_position: Vector2 = Vector2.ZERO
 var is_done: bool = false
 
 # Signals
-signal picked_powerup(powerup_name: String, id: int)
+signal picked_powerup(powerup_name: String, id: int, pickup_global_position: Vector2)
 signal used_powerup(id: int)
 signal has_resetted
 signal run_started(player: Player)
@@ -210,7 +210,7 @@ func pick_powerup(area: Area2D) -> void:
 	area.pickup()
 	powerups.append(area)
 	var powerup_type = area.type
-	picked_powerup.emit(powerup_type, len(powerups) - 1)
+	picked_powerup.emit(powerup_type, len(powerups) - 1, area.global_position)
 
 
 func has_powerups() -> bool:

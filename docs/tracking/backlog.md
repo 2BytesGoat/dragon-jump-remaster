@@ -45,38 +45,45 @@ This backlog is ordered by priority. The rule is: **fix what's blocking now, har
 | 20 | Move hardcoded default levels / agent counts into `Constants` | `main.gd`, `main_multiplayer.gd` | Low |
 | 21 | Document custom synchronizer | `src/scenes/training/synchronizer.gd` | Medium |
 | 22 | Document `multiplayer_world.gd` | currently untracked | Low |
-
+| 23 | Screen shake | Juice/polish | Medium |
+| 24 | Grass blades | Level visual polish | Low |
+| 25 | Glow for portal | Level visual polish | Low |
+| 26 | UI texture revamp | UI visual overhaul | Medium |
+| 27 | Update duplicate level | Level design cleanup | Medium |
+| 28 | Make CRT effect global + add toggleable setting | Settings / visual effect | Medium |
+| 29 | Player outline as toggleable setting | Settings / visual effect | Medium |
+ 
 ## Phase 3 — Verify all 17 levels and ship arcade (arcade is done, ship ASAP)
 
 | # | Task | Notes | Priority |
 |---|------|-------|----------|
-| 23 | Final playtest all 17 campaign levels (`1-1` through `1-17`) | Ensure medals and unlocks feel right | High |
-| 24 | Build and verify arcade mode | Limited lives, `M` tiles give extra lives, QR code to Steam | High |
-| 25 | Smoke-test arcade attract / game-over / restart loop | Must survive long exhibition days | High |
-| 26 | Produce arcade build artifacts | Export and checksum the arcade binary | High |
-| 27 | Update top-level README for arcade + V1.0 scope | Cut promises about multiplayer/editor | High |
+| 30 | Final playtest all 17 campaign levels (`1-1` through `1-17`) | Ensure medals and unlocks feel right | High |
+| 31 | Build and verify arcade mode | Limited lives, `M` tiles give extra lives, QR code to Steam | High |
+| 32 | Smoke-test arcade attract / game-over / restart loop | Must survive long exhibition days | High |
+| 33 | Produce arcade build artifacts | Export and checksum the arcade binary | High |
+| 34 | Update top-level README for arcade + V1.0 scope | Cut promises about multiplayer/editor | High |
 
 ## Phase 4 — Steam release prep (before any big new features)
 
 | # | Task | Notes | Priority |
 |---|------|-------|----------|
-| 28 | Decide Steam vs arcade ordering and write it in [[tracking/decisions]] | Arcade ships now; Steam is next | High |
-| 29 | Set exact V1.0 release deadline | Steam/itch.io for ~$5 | High |
-| 30 | Decide AI training mode delivery | Hidden menu vs separate build/launch flag | Medium |
-| 31 | Final Steam build checklist | store page, builds, playtest branch, leaderboards | High |
-| 32 | Update README to match final Steam scope | Remove arcade-only notes where irrelevant | Medium |
+| 35 | Decide Steam vs arcade ordering and write it in [[tracking/decisions]] | Arcade ships now; Steam is next | High |
+| 36 | Set exact V1.0 release deadline | Steam/itch.io for ~$5 | High |
+| 37 | Decide AI training mode delivery | Hidden menu vs separate build/launch flag | Medium |
+| 38 | Final Steam build checklist | store page, builds, playtest branch, leaderboards | High |
+| 39 | Update README to match final Steam scope | Remove arcade-only notes where irrelevant | Medium |
 
 ## Phase 5 — Post-Steam (only after real player feedback)
 
 | # | Task | Notes | Priority |
 |---|------|-------|----------|
-| 33 | Secret areas in campaign levels | Neon White-style hidden routes | TBD |
-| 34 | Ghost race mode | Race your own best time / bot ghost | TBD |
-| 35 | Map editor + QR-code sharing | Big feature; only if players ask for it | TBD |
-| 36 | More campaign levels (target 25+) | Fill gaps for Dash, Stomp, Grapple | TBD |
-| 37 | Procedural / weekly levels | Randomly generated maps for weekly events | TBD |
-| 38 | Steam Workshop integration | Depends on map editor existing | TBD |
-| 39 | Full leaderboard integration test | SilentWolf submission flow | TBD |
+| 40 | Secret areas in campaign levels | Neon White-style hidden routes | TBD |
+| 41 | Ghost race mode | Race your own best time / bot ghost | TBD |
+| 42 | Map editor + QR-code sharing | Big feature; only if players ask for it | TBD |
+| 43 | More campaign levels (target 25+) | Fill gaps for Dash, Stomp, Grapple | TBD |
+| 44 | Procedural / weekly levels | Randomly generated maps for weekly events | TBD |
+| 45 | Steam Workshop integration | Depends on map editor existing | TBD |
+| 46 | Full leaderboard integration test | SilentWolf submission flow | TBD |
 
 ## Research & experiments
 

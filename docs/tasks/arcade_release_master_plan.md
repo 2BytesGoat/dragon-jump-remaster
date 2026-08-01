@@ -67,6 +67,11 @@ Goal: make the game feel finished.
 - [ ] Add bounce-pad sound effect and animation.
 - [ ] Add music and SFX to main menu / menus.
 - [ ] Draft new menu layout (mood board + paper/digital mockup).
+- [ ] Parallax background.
+- [ ] Improved poof effect.
+- [ ] Boing effect + SFX.
+- [ ] Grass that reacts to the player.
+- [ ] Weeds on ledges.
 
 ### Track 4 — Deployment Research
 

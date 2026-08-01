@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://xpit7s51fesv"]
+[gd_scene format=3 uid="uid://xpit7s51fesv"]
 
 [ext_resource type="Texture2D" uid="uid://cupg1ps48vj4e" path="res://assets/sprites/effects/smoke-2.png" id="1_ri3rv"]
 [ext_resource type="Script" uid="uid://6l0lp36ko8dg" path="res://src/scenes/effects/jump_smoke_effect.gd" id="2_0ki2s"]
@@ -52,7 +52,8 @@ random_pitch = 1.2
 streams_count = 1
 stream_0/stream = ExtResource("3_jwvwm")
 
-[node name="JumpSmokeEffect" type="AnimatedSprite2D"]
+[node name="JumpSmokeEffect" type="AnimatedSprite2D" unique_id=313458286]
+z_index = 1
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_a52dn")
 autoplay = "default"
@@ -61,7 +62,7 @@ frame_progress = 1.0
 offset = Vector2(0, -8)
 script = ExtResource("2_0ki2s")
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1818477373]
 stream = SubResource("AudioStreamRandomizer_a57rw")
 volume_db = -12.0
 autoplay = true

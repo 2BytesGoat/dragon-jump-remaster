@@ -1,11 +1,10 @@
-[gd_resource type="Resource" script_class="CampaignLevelData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="CampaignLevelData" format=3 uid="uid://clmdx1aqjh1l4"]
 
-[ext_resource type="Script" path="res://src/scripts/resources/campaign_level_data.gd" id="1_1_1"]
+[ext_resource type="Script" uid="uid://42xlw1erlcnx" path="res://src/scripts/resources/campaign_level_data.gd" id="1_1_1"]
 
 [resource]
 script = ExtResource("1_1_1")
 level_id = "1-1"
 display_name = "YOUR_TURN"
-code = "W26|W2E21W3|W1E23W2|W1E24W1|W1E24W1|W1E24W1|W1E24W1|W1E12Q1E11W1|W4E6W7E8W1|W4E6W7E8W1|W4E21W1|W4E18W4|W4E18W4|W4E18W4|W4E3P1E6W2E6W4|W26"
+code = "W32|W5E21W6|W4E23W5|W4E24W4|W4E24W4|W1WM3E24W4|W1WM3E24W4|W1WM3E12Q1E11W4|W7E6W7E8W4|W7E6W7E8W4|W7E21W4|W7E18W7|W7E18W7|W7E18W7|W7E3P1E6W2E6W7|W32"
 times = Array[float]([5.9750000000000005, 3.9435, 2.868])
-hidden = false
