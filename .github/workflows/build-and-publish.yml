@@ -114,6 +114,8 @@ jobs:
           rm -rf /tmp/windows_templates windows.zip
 
       - name: Export game (Web)
+        env:
+          GODOT_SCRIPT_ENCRYPTION_KEY: ${{ secrets.GODOT_PCK_ENCRYPTION_KEY }}
         run: |
           mkdir -p build/web
           ./godot --headless --path . --export-release "Web" build/web/index.html
@@ -126,6 +128,8 @@ jobs:
           ./godot --headless --path . --export-release "Windows Desktop" build/windows/${{ secrets.EXPORT_NAME }}.exe
 
       - name: Export game (Linux)
+        env:
+          GODOT_SCRIPT_ENCRYPTION_KEY: ${{ secrets.GODOT_PCK_ENCRYPTION_KEY }}
         run: |
           mkdir -p build/linux
           ./godot --headless --path . --export-release "Linux Desktop" build/linux/${{ secrets.EXPORT_NAME }}.x86_64
