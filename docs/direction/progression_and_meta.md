@@ -40,8 +40,8 @@ See `[[systems/save_system/save_system]]` and `[[systems/save_system/level_data]
 
 ## Leaderboards
 
-- Times can be submitted to SilentWolf leaderboards.
-- The leaderboard UI shows top global scores per level.
+- Times can be submitted to online leaderboards post-launch (SilentWolf, deferred; see [[systems/architecture]]).
+- The leaderboard UI shows a "Leaderboard disabled in V1.0." placeholder; global scores are not fetched in V1.0.
 
 See `[[systems/leaderboard_system/leaderboard_system]]`.
 

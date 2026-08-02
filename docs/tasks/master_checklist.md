@@ -97,5 +97,5 @@ Updated: 2026-07-24
 
 ## Notes
 
-- The `progress_bar.gd` UI component is actively used in `loading_screen`, `game_hud`, and `level_completed_overlay`. It is **not** the "progress-bar mode" mentioned in the report. The actual "progress-bar mode" (a separate game mode) has not been found in code yet and may already be gone.
+- There is no standalone `progress_bar.gd` UI component in the repo. Progress bars are implemented as `%LevelProgressBar` nodes inside `src/ui/menus/level_select.tscn` and `src/ui/menus/end_screen.tscn`. The scenes `loading_screen`, `game_hud`, and `level_completed_overlay` do not exist. This is **not** the "progress-bar mode" (a separate game mode) mentioned in the report; that mode has been cut from V1.0.
 - The `win_crown.gd` / `WinCrown` scene appear to be core collectables/end-goal objects, not dead code. Only the unused `first_time_touching_crown` variable was removed.

@@ -57,9 +57,8 @@ The LevelData resource integrates with the SaveManager singleton and GameData st
 4. **Loading**: When loading game state, LevelData objects are automatically deserialized from disk through ResourceLoader.load()
 
 ### Cross-system Relationships for RAG Linking
-- [[save_manager]] - Primary system that updates and manages LevelData objects
+- [[save_system]] - Primary system that updates and manages LevelData objects
 - [[game_data]] - Container that holds all LevelData objects in the levels dictionary
-- [[player_progress_system]] - System that uses LevelData for progress tracking and UI display
 
 
 ## Design Patterns

@@ -2,10 +2,10 @@
 title: RL Integration System Documentation
 tags: [godot, game-engine, rl-integration, reinforcement-learning, ai, architecture, tcp-communication]
 related:
-  - "[[training_system/training_system.md]]"
-  - "[[player_system/player_system.md]]"
-  - "[[signal_bus/signal_bus.md]]"
-  - "[[main_system/main_system.md]]"
+  - "[[systems/training_system/training_system.md]]"
+  - "[[systems/player_system/player_system.md]]"
+  - "[[systems/signal_bus/signal_bus.md]]"
+  - "[[systems/main_system/main_system.md]]"
 search_terms: [rl-integration, reinforcement-learning, python-server, tcp-socket, agent-control, training-mode, inference-mode, human-mode, onnx-model, architecture, communication-pattern]
 ---
 
@@ -104,8 +104,8 @@ search_terms: [rl-integration, reinforcement-learning, python-server, tcp-socket
 
 
 ## See Also
-- [[training_system/training_system.md]]
-- [[player_system/player_system.md]]
-- [[signal_bus/signal_bus.md]]
-- [[main_system/main_system.md]]
+- [[systems/training_system/training_system.md]]
+- [[systems/player_system/player_system.md]]
+- [[systems/signal_bus/signal_bus.md]]
+- [[systems/main_system/main_system.md]]
 

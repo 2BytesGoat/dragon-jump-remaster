@@ -2,9 +2,9 @@
 title: GameData Resource Documentation
 tags: [godot, game-engine, data-resource, player-progress, level-data, save-system]
 related:
-  - "[[save_system/save_system.md]]"
-  - "[[level_system/level_system.md]]"
-  - "[[player_system/player_system.md]]"
+  - "[[systems/save_system/save_system.md]]"
+  - "[[systems/level_system/level_system.md]]"
+  - "[[systems/player_system/player_system.md]]"
 search_terms: [game-data-resource, player-save, level-progress, data-structure, serialization, deserialization, save-manager, resource-system, game-state]
 ---
 
@@ -87,7 +87,7 @@ search_terms: [game-data-resource, player-save, level-progress, data-structure, 
   - Proper resource handling to avoid memory leaks
 
 ## See Also
-- [[save_system/save_system.md]]
-- [[level_system/level_system.md]]
-- [[player_system/player_system.md]]
+- [[systems/save_system/save_system.md]]
+- [[systems/level_system/level_system.md]]
+- [[systems/player_system/player_system.md]]
 

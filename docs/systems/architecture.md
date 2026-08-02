@@ -4,7 +4,7 @@
 
 ## Target Autoloads (Singletons)
 
-The approved V1.0 autoload roster is five core singletons. Two helper autoloads (`Constants`, `SignalBus`) remain for V1.0 hardening; they are documented here as transitional.
+The approved V1.0 autoload roster is eight autoloads: seven core singletons plus the transitional `SignalBus` helper. `Constants` and `Utils` are static classes, not autoloads.
 
 | Autoload | Responsibility |
 |---|---|
@@ -13,11 +13,13 @@ The approved V1.0 autoload roster is five core singletons. Two helper autoloads 
 | `AudioManager` | Cross-scene music and global bus mixing only. Local one-shots live in scenes. |
 | `Settings` | Global user preferences: volume, fullscreen, input remap. |
 | `GameSession` | Ephemeral session state: current level, current seed, speed modifier, run flags. |
-| `Constants` *(helper)* | Default player name and shared resource references only. Tunable data lives in `res://resources/`. |
+| `ArcadeDirector` | Arcade mode setup, life tracking, run progression, and run summary for the local arcade leaderboard. |
+| `TelemetrySystem` | Lightweight analytics abstraction; events log locally in debug builds. |
 | `SignalBus` *(helper)* | Cross-scene signals only (`new_run_attempt`, `new_time_submission`). |
 
 | Static Class | Responsibility |
 |---|---|
+| `Constants` | Default player name and shared resource references only. Tunable data lives in `res://resources/`. Call via `Constants.DEFAULT_PLAYER_NAME`; not an autoload. |
 | `Utils` | Shared pure helpers: time formatting, Dijkstra map generation, name validation. No longer an autoload; use `Utils.method()`. |
 | `CampaignLevelLibrary` | Loads all `CampaignLevelData` resources from `res://resources/level_data/`. |
 
@@ -48,7 +50,8 @@ Tunable values live in Godot Resource assets, not code:
 - Progress-bar mode
 - Duplicate/placeholder UI screens
 - Online leaderboards (`LeaderboardManager` + `SilentWolf`) — deferred to post-launch
-- `RuntimeSecrets` / `EnvironmentVariables` autoloads — folded into hidden AI training scene
+- `MonetizationSystem` — removed; no IAP/ad backend planned for V1.0
+- `RuntimeSecrets` — build-time-only template (`runtime_secrets.gd.template`); copied to a gitignored `runtime_secrets.gd` and optionally registered as an autoload by the build pipeline when injecting the real HMAC secret
 
 ## Hidden AI Training Mode
 

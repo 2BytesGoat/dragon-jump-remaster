@@ -131,6 +131,6 @@ search_terms: [powerups, collectibles, items, abilities, player-upgrades, jump-p
   - Smooth animations
 
 ## See Also
-- [[player_system/player_system.md]]
-- [[level_system/level_system.md]]
-- [[main_system/main_system.md]]
+- [[systems/player_system/player_system.md]]
+- [[systems/level_system/level_system.md]]
+- [[systems/main_system/main_system.md]]

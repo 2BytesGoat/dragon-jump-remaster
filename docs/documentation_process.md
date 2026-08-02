@@ -79,21 +79,21 @@ When determining if a file needs documentation, consider these criteria for "com
 
 ### 5. Documentation Location and Organization (RAG-Friendly)
 - **Documentation should always result in an `.md` file located in the `docs` folder**
-- **Preferably split by component subfolders (e.g., `/docs/player_system/`, `/docs/level_system/`)**
+- **Preferably split by component subfolders under `docs/systems/` (e.g., `/docs/systems/player_system/`, `/docs/systems/level_system/`)**
 - **Each documentation file should be linked from its corresponding tracking entry**
 - **When creating documentation, link to both original scripts and other relevant documentation files for quick navigation**
 - **Include metadata headers for searchability and indexing**
 
 ## Documentation Folder Structure Guidelines (RAG-Optimized)
-Documentation files should be organized in a hierarchical structure that mirrors the project's component organization:
-- Main system documentation: `/docs/main_system/`
-- Player-related systems: `/docs/player_system/`
-- Level-related systems: `/docs/level_system/`
-- Save and data management: `/docs/save_system/`
-- UI components: `/docs/ui_components/`
-- Effects and visual elements: `/docs/effects/`
-- Training and RL integration: `/docs/training_system/`
-- Leaderboard functionality: `/docs/leaderboard_system/`
+Documentation files should be organized in a hierarchical structure under `docs/systems/` that mirrors the project's component organization:
+- Main system documentation: `/docs/systems/main_system/`
+- Player-related systems: `/docs/systems/player_system/`
+- Level-related systems: `/docs/systems/level_system/`
+- Save and data management: `/docs/systems/save_system/`
+- UI components: `/docs/systems/ui_components/`
+- Effects and visual elements: `/docs/systems/effects/`
+- Training and RL integration: `/docs/systems/training_system/`
+- Leaderboard functionality: `/docs/systems/leaderboard_system/`
 
 Each subfolder should contain a single documentation file for that specific system, named appropriately (e.g., `player_system.md`, `level_system.md`).
 
@@ -108,9 +108,9 @@ When documenting new files that don't fit into existing component folders:
 
 ## Implementation Example (RAG-Optimized)
 For main system files:
-- Create `/docs/main_system/main_system.md` 
+- Create `/docs/systems/main_system/main_system.md` 
 - Document both `main.gd` and `main.tscn`
-- Update tracking to show: `main.gd - (Added documentation to /docs/main_system/main_system.md)` and `sample.tscn - (Skipped because there is no complex logic)`
+- Update tracking to show: `main.gd - (Added documentation to /docs/systems/main_system/main_system.md)` and `sample.tscn - (Skipped because there is no complex logic)`
 - **Include metadata headers for RAG indexing**
 
 ## Documentation Review Process (RAG-Focused)
@@ -121,7 +121,7 @@ When reviewing the documentation tracking:
    - If complex logic exists: Create documentation file and update tracking
    - If simple/empty: Mark as "Skipped - No complex logic found"
 4. Update tracking with appropriate resolution notes
-5. **Documentation files should be located in the `docs` folder, preferably organized into component subfolders** (e.g., `/docs/player_system/`, `/docs/level_system/`, etc.)
+5. **Documentation files should be located in the `docs` folder, preferably organized into component subfolders under `docs/systems/`** (e.g., `/docs/systems/player_system/`, `/docs/systems/level_system/`, etc.)
 6. **When creating documentation, link to both original scripts and other relevant documentation files for quick navigation**
 7. **Remember: Documentation is only required when there's complex logic or system integration that needs explanation - simple UI components without complex behavior don't require extensive documentation**
 8. **Maintain consistency in documentation style across all files**

@@ -77,7 +77,7 @@ This checklist ensures all documentation files in the Dragon Jump Remaster proje
 
 ## File Location & Organization
 - [ ] Documentation file located in the `docs` folder
-- [ ] Properly organized into component subfolders (e.g., `/docs/player_system/`, `/docs/level_system/`)
+- [ ] Properly organized into component subfolders under `docs/systems/` (e.g., `/docs/systems/player_system/`, `/docs/systems/level_system/`)
 - [ ] Each documentation file linked from its corresponding tracking entry
 - [ ] Links between original scripts and documentation files for quick navigation
 - [ ] Metadata headers included for searchability and indexing

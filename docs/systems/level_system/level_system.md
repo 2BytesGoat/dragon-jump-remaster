@@ -39,7 +39,7 @@ The Level system is responsible for managing game levels, including level genera
 | `exit_global_position` | Vector2 | Global position of the exit point |
 | `is_initialized` | bool | Flag indicating if the level has been initialized |
 | `terrain_layer_used_cells` | Array | Tracks used cells in terrain layer for optimization |
-| `elapsed_time` | float | Timer for editor updates (currently named `emplased_time` in code; rename pending) |
+| `elapsed_time` | float | Timer for editor updates |
 | `update_interval` | float | Update interval for editor |
 | `current_level_code` | String | Current level code representation |
 | `level_width_cell` | int | Width of the level in cells |

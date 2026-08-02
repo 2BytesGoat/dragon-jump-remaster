@@ -16,7 +16,7 @@ These are experiments and research directions related to the AI training mode. T
 
 - **Cleaner observation interface:** Decouple the AI controller from internal player state (`level_reference`, `state_machine`, `global_position`).
 - **Curriculum learning:** Train agents on progressively harder level sequences.
-- **Multi-level training loop:** Replace the hardcoded `DEFAULT_LEVEL_NAME = "1-14"` in `main_multiplayer.gd` with a loop through all levels.
+- **Multi-level training loop:** Iterate the hidden training scene through all campaign levels instead of a single hardcoded level.
 - **Deterministic playback:** Ensure runs are deterministic so ghosts/bot replays can be recorded and raced against.
 
 ## Competition metrics

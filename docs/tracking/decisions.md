@@ -65,7 +65,7 @@ This document captures high-level decisions as the project evolves.
 
 | Old | New | Status |
 |---|---|---|
-| `SceneManger` / `scene_manger.gd` | `SceneManager` / `scene_manager.gd` | Done |
+| `SceneManger` / `scene_manger.gd` | `SceneLoader` / `scene_loader.gd` | Done (superseded; see backlog #13) |
 | `emplased_time` | `elapsed_time` | Done (then removed as dead) |
 
 ### Removed files
@@ -87,3 +87,14 @@ This document captures high-level decisions as the project evolves.
 - Launch discount percentage (10% vs 20%).
 - Web demo timing (before or alongside desktop demo).
 - Gamepad support for V1.0 or post-launch.
+
+---
+
+## 2026-08-02 — Autoload roster amendment
+
+**Context:** During Phase 1 foundation hardening, the autoload roster grew beyond the five originally approved on 2026-07-24.
+
+- **Current V1.0 autoloads (8):** `SignalBus`, `SceneLoader`, `SaveManager`, `AudioManager`, `Settings`, `GameSession`, `ArcadeDirector`, `TelemetrySystem`.
+- **What changed:** `SignalBus` remained as a transitional helper autoload; `ArcadeDirector` was added for arcade run state; `TelemetrySystem` was added for local analytics.
+- **What stayed out:** `Constants` and `Utils` are static classes, not autoloads. `RuntimeSecrets` is build-time-only. `MonetizationSystem` remains removed.
+- **Source of truth:** [[systems/architecture]].

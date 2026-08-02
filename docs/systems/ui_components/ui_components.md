@@ -23,7 +23,6 @@ System relationships and dependencies: This system integrates with player system
 - **Key properties**:
   - `tag_screen`: Reference to the player tag input screen
   - `level_select`: Path to level selection scene
-  - `main_multiplayer`: Path to multiplayer training scene
 - **Main methods**:
   - `_ready()`: Initializes menu state based on command line arguments
   - `_on_play_button_pressed()`: Handles play button press, shows tag screen if needed
@@ -31,9 +30,8 @@ System relationships and dependencies: This system integrates with player system
   - `_on_confirm_button_pressed()`: Processes player tag input and navigates to level select
   - `_on_skip_button_pressed()`: Skips player tag input and goes directly to level select
 - **Integration points with other systems**:
-  - Connects to `SceneManager` for scene navigation (currently named `SceneManger` in code; rename pending)
+  - Connects to the `SceneLoader` autoload for scene navigation
   - Uses SaveManager to check player name
-  - Integrates with EnvironmentVariables for command line arguments
   - Uses Constants for default player name
   - Uses Utils for player name validation
 - **RAG metadata**: Performance considerations include efficient scene transitions, optimization hints involve preloading scenes and validating input early
@@ -49,24 +47,8 @@ System relationships and dependencies: This system integrates with player system
   - Connected to game completion events
 - **RAG metadata**: Visual design patterns include simple panel layout with labeled statistics
 
-### `progress_bar.gd`
-- **Purpose**: Visual progress indicator showing player advancement in levels or races
-- **Key properties**:
-  - `x_start`: Starting x position for progress calculation
-  - `x_length`: Total length of progress bar area
-  - `player_with_crown`: Name of player currently holding the crown
-  - `crown_shift_on_pickup`: Vertical shift when crown is picked up
-- **Main methods**:
-  - `_ready()`: Calculates progress bar dimensions on initialization
-  - `update_player_progress(progress_data: Dictionary)`: Updates progress for players
-  - `set_progress(node: Sprite2D, progress: float)`: Sets position of progress indicator
-  - `_on_player_touched_crown(player: Player)`: Handles crown pickup event
-  - `_on_player_dropped_crown(_player: Player)`: Handles crown drop event
-- **Integration points with other systems**:
-  - Uses `SceneManager` for scene navigation (currently named `SceneManger` in code; rename pending)
-  - Connects to player system for player events
-  - Integrates with level system for progress tracking
-- **RAG metadata**: UI flow considerations include smooth animations and proper positioning
+### `progress_bar.gd` *(removed)*
+Progress-bar mode was cut for V1.0 (see [[systems/architecture]]). No such file exists in the repo.
 
 ## Scene Components (`*.tscn`)
 ### `main_menu.tscn`
@@ -74,7 +56,7 @@ System relationships and dependencies: This system integrates with player system
 - **Key connections between elements**:
   - Connects to button press signals for navigation
   - Links to tag_screen for player name input
-  - Uses `SceneManager` for scene transitions (currently named `SceneManger` in code; rename pending)
+  - Uses the `SceneLoader` autoload for scene transitions
 - **Visual layout considerations**: 
   - Uses MarginContainer for proper positioning
   - Includes responsive UI elements
@@ -90,15 +72,8 @@ System relationships and dependencies: This system integrates with player system
   - Labels positioned for clear readability
 - **RAG metadata**: Visual design patterns include simple statistic display with clear labeling
 
-### `progress_bar.tscn`
-- **Scene hierarchy and organization**: MarginContainer containing texture panel and icon container with crown sprite
-- **Key connections between elements**:
-  - Connects to player events for crown handling
-  - Uses Sprite2D nodes for visual progress indicators
-- **Visual layout considerations**:
-  - Horizontal layout for progress bar visualization
-  - Crown icon that moves with player progress
-- **RAG metadata**: Visual design patterns include progress visualization with moving elements
+### `progress_bar.tscn` *(removed)*
+No such file exists in the repo.
 
 ## System Integration
 - How the system interacts with other components: UI components connect to various game systems through signals and data passing, providing visual feedback for player actions and game events
@@ -109,21 +84,18 @@ System relationships and dependencies: This system integrates with player system
 ## Design Patterns
 - Architecture patterns used: Component pattern for UI elements, Observer pattern for event handling
 - Code organization principles: Separation of concerns between UI presentation and game logic
-- Reusability considerations: Progress bar component can be reused across different contexts
+- Reusability considerations: Shared menu and HUD components can be reused across contexts
 - Pattern-specific RAG tags and categorization: component-pattern, observer-pattern, ui-system
 
 ## Implementation Details
 - Key code examples:
-  - `SceneManager.go_to(level_select)` - Navigation between scenes (currently `SceneManger` in code; rename pending)
-  - `set_progress(node, progress)` - Updating visual progress indicators
+  - `SceneLoader.go_to(level_select)` - Navigation between scenes
   - `show_stats(stats)` - Displaying game statistics
 - Important algorithms or logic: 
-  - Progress calculation based on x_start and x_length values
-  - Player crown handling with vertical positioning shifts
   - Scene navigation with command-line argument checking
-- Performance considerations: Efficient scene transitions, pre-calculated progress bar dimensions
+- Performance considerations: Efficient scene transitions, preloaded scenes
 
 ## See Also
-- [[player_system/player_system.md]]
-- [[leaderboard_system/leaderboard_system.md]]
-- [[save_system/save_system.md]]
+- [[systems/player_system/player_system.md]]
+- [[systems/leaderboard_system/leaderboard_system.md]]
+- [[systems/save_system/save_system.md]]

@@ -2,9 +2,9 @@
 title: CampaignLevelData Resource Documentation
 tags: [godot, game-engine, resource, campaign, level-data]
 related:
-  - "[[save_system/save_system.md]]"
-  - "[[level_system/level_system.md]]"
-  - "[[player_system/player_system.md]]"
+  - "[[systems/save_system/save_system.md]]"
+  - "[[systems/level_system/level_system.md]]"
+  - "[[systems/player_system/player_system.md]]"
 search_terms: [campaign-level-data, level-resource, game-progression, level-tracking, save-system, level-code, completion-times]
 ---
 
@@ -85,7 +85,7 @@ search_terms: [campaign-level-data, level-resource, game-progression, level-trac
   - Proper handling of time arrays for performance tracking
 
 ## See Also
-- [[save_system/save_system.md]]
-- [[level_system/level_system.md]]
-- [[player_system/player_system.md]]
+- [[systems/save_system/save_system.md]]
+- [[systems/level_system/level_system.md]]
+- [[systems/player_system/player_system.md]]
 

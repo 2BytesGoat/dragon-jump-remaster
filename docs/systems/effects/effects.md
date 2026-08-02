@@ -2,9 +2,9 @@
 title: Effects System Documentation
 tags: [godot, game-engine, effects, particles, animations, visual-effects]
 related:
-  - "[[player_system/player_system.md]]"
-  - "[[level_system/level_system.md]]"
-  - "[[main_system/main_system.md]]"
+  - "[[systems/player_system/player_system.md]]"
+  - "[[systems/level_system/level_system.md]]"
+  - "[[systems/main_system/main_system.md]]"
 search_terms: [particle-effects, smoke-effects, jump-effects, background-particles, visual-effects, animation-effects, effect-system, particle-emission, animation-completion]
 ---
 
@@ -191,8 +191,8 @@ search_terms: [particle-effects, smoke-effects, jump-effects, background-particl
 
 
 ## See Also
-- [[player_system/player_system.md]]
-- [[level_system/level_system.md]]
-- [[main_system/main_system.md]]
-- [[signal_bus/signal_bus.md]]
+- [[systems/player_system/player_system.md]]
+- [[systems/level_system/level_system.md]]
+- [[systems/main_system/main_system.md]]
+- [[systems/signal_bus/signal_bus.md]]
 

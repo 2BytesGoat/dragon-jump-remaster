@@ -11,6 +11,7 @@ const SAVE_VERSION := 1
 ## Fallback secret used for the HMAC layer. In a shipped title this must be
 ## injected at build time via RuntimeSecrets and never committed.
 const HMAC_SECRET_FALLBACK := "CHANGE_ME_IN_BUILD_PIPELINE"
+const RUNTIME_SECRETS_PATH := "res://src/scripts/singletons/runtime_secrets.gd"
 
 var current_data: GameData
 var current_player_name: String = Constants.DEFAULT_PLAYER_NAME : set = _on_player_name_changed
@@ -268,9 +269,13 @@ func _on_player_name_changed(value) -> void:
 
 func _get_hmac_secret() -> String:
 	# Prefer build-injected RuntimeSecrets when available; otherwise use the
-	# local-dev fallback so the game still works in the editor.
-	if RuntimeSecrets.is_set:
-		return RuntimeSecrets.HMAC_SECRET
+	# local-dev fallback so the game still works in the editor / a fresh clone.
+	# RuntimeSecrets is intentionally not registered as an autoload in the
+	# committed project file; the build pipeline can add it when injecting
+	# real secrets.
+	var secrets = Engine.get_singleton("RuntimeSecrets")
+	if secrets != null and secrets.is_set:
+		return secrets.HMAC_SECRET
 	return HMAC_SECRET_FALLBACK
 
 

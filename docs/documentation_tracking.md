@@ -32,13 +32,12 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 - [x] src/scenes/player/player.tscn - (Added documentation to /docs/systems/player_system/player_system.md)
 - [x] src/scenes/player/ghost.gd - (Added documentation to /docs/systems/player_system/player_system.md)
 - [x] src/scenes/player/ghost.tscn - (Added documentation to /docs/systems/player_system/player_system.md)
-- [x] src/scenes/player/gapling_hook.gd - (Added documentation to /docs/systems/player_system/player_system.md)
+- [x] src/scenes/player/grappling_hook.gd - (Added documentation to /docs/systems/player_system/player_system.md)
 - [x] src/scenes/player/observer.gd - (Added documentation to /docs/systems/player_system/player_system.md)
 - [x] src/scenes/player/state_label.gd - (Added documentation to /docs/systems/player_system/player_system.md)
 - [ ] src/scenes/player/controller/player_one_controller.gd - (Not yet documented)
-- [ ] src/scenes/player/controller/player_two_controller.gd - (Not yet documented)
 - [ ] src/scenes/player/controller/player_character_controller.gd - (Not yet documented)
-- [ ] src/scenes/player/controller/player_ai_training_controller.gd - (Not yet documented; file currently has a duplicated `.gd` extension)
+- [ ] src/scenes/player/controller/player_ai_training_controller.gd - (Not yet documented)
 - [ ] src/scenes/player/controller/commands/jump_command.gd - (Not yet documented)
 - [ ] src/scenes/player/controller/commands/reset_command.gd - (Not yet documented)
 - [ ] src/scenes/player/states/idle_state.gd - (Not yet documented)
@@ -76,11 +75,10 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 - [x] src/scripts/singletons/save_manager.gd - (Added documentation to /docs/systems/save_system/save_system.md)
 - [x] src/scripts/resources/game_data.gd - (Added documentation to /docs/systems/save_system/game_data.md)
 - [x] src/scripts/resources/level_data.gd - (Added documentation to /docs/systems/save_system/level_data.md)
-- [x] src/scripts/resources/campaing_level_data.gd - (Added documentation to /docs/systems/save_system/campaign_level_data.md; rename pending: CampaingLevelData → CampaignLevelData)
+- [x] src/scripts/resources/campaign_level_data.gd - (Added documentation to /docs/systems/save_system/campaign_level_data.md)
 
 ## Leaderboard System
 
-- [x] src/scripts/singletons/leaderboard_manager.gd - (Added documentation to /docs/systems/leaderboard_system/leaderboard_system.md)
 - [x] src/ui/components/leaderboard.gd - (Added documentation to /docs/systems/leaderboard_system/leaderboard_system.md)
 - [x] src/ui/components/leaderboard.tscn - (Added documentation to /docs/systems/leaderboard_system/leaderboard_system.md)
 - [x] src/ui/components/leaderboard_entry.gd - (Added documentation to /docs/systems/leaderboard_system/leaderboard_system.md)
@@ -93,8 +91,6 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 
 ## UI Components
 
-- [x] src/ui/end_screen.gd - (Added documentation to /docs/systems/ui_components/ui_components.md)
-- [x] src/ui/components/progress_bar.gd - (Added documentation to /docs/systems/ui_components/ui_components.md)
 - [x] src/ui/menus/main_menu.gd - (Added documentation to /docs/systems/ui_components/ui_components.md)
 - [x] src/ui/menus/main_menu.tscn - (Added documentation to /docs/systems/ui_components/ui_components.md)
 - [x] src/ui/menus/level_select.gd - (Not yet documented)
@@ -136,19 +132,16 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 
 ## Training System
 
-- [x] src/scenes/training/main_multiplayer.gd - (Added documentation to /docs/systems/training_system/training_system.md)
-- [x] src/scenes/training/main_multiplayer.tscn - (Added documentation to /docs/systems/training_system/training_system.md)
 - [x] src/scenes/training/synchronizer.gd - (Added documentation to /docs/systems/training_system/training_system.md)
-- [ ] src/scenes/training/multiplayer_world.gd - (Not yet documented)
-- [ ] src/scenes/training/multiplayer_world.tscn - (Not yet documented)
 
 ## Other Scripts / Shared Components
 
 - [x] src/scripts/singletons/constants.gd - (Added documentation to /docs/systems/other_scripts/other_scripts.md)
-- [x] src/scripts/singletons/environment_variables.gd - (Added documentation to /docs/systems/other_scripts/other_scripts.md)
-- [x] src/scripts/singletons/runtime_secrets.gd - (Added documentation to /docs/systems/other_scripts/other_scripts.md)
-- [x] src/scripts/singletons/scene_manger.gd - (Added documentation to /docs/systems/other_scripts/other_scripts.md)
+- [x] src/scripts/singletons/runtime_secrets.gd.template - (Build-time template; copy to `runtime_secrets.gd` with real values. Never committed.)
+- [x] src/scripts/singletons/scene_loader.gd - (Added documentation to /docs/systems/other_scripts/other_scripts.md)
 - [x] src/scripts/singletons/utils.gd - (Added documentation to /docs/systems/other_scripts/other_scripts.md)
+- [x] src/scripts/singletons/arcade_director.gd - (Arcade mode run controller; V1.0 autoload)
+- [x] src/scripts/singletons/telemetry_system.gd - (Local analytics abstraction; V1.0 autoload)
 - [ ] src/scripts/components/states/state.gd - (Not yet documented)
 - [ ] src/scripts/components/states/state_machine.gd - (Not yet documented)
 - [ ] src/scripts/components/patterns/command.gd - (Not yet documented)

@@ -85,7 +85,7 @@ The Player scene is organized as follows:
    - **Sprite** (Sprite2D) - Visual representation of player
    - **HatContainer** (Node2D) - Container for accessories like crowns
    - **AfterImage** (CPUParticles2D) - Visual effect for movement trails
-   - **GrapplingHook** (Node2D) - Grappling hook system (currently named `GaplingHook` in code; rename pending)
+   - **GrapplingHook** (Node2D) - Grappling hook system
      - **GrapplingPoints** (Node2D) - Points for grappling hook
      - **RayCast2D** - Raycast for detecting hook targets
      - **GrappleIndicator** (Sprite2D) - Visual indicator for hook
@@ -116,7 +116,7 @@ The player scene uses a layered approach:
 - **Sprite** - Main visual representation with frame animation
 - **HatContainer** - For accessories like crowns that can be added/removed
 - **AfterImage** - Particle effect for movement trails when enabled
-- **GrapplingHook** - Interactive grappling hook system with raycast detection (currently named `GaplingHook` in code; rename pending)
+- **GrapplingHook** - Interactive grappling hook system with raycast detection
 - **StateLabel** - Debug overlay showing current player state
 
 ## System Integration

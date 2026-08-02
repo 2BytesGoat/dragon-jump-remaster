@@ -23,7 +23,6 @@ config/icon="uid://cwkemtynu1s2u"
 
 [autoload]
 
-RuntimeSecrets="*res://src/scripts/singletons/runtime_secrets.gd"
 SignalBus="*res://src/scripts/singletons/signal_bus.gd"
 SceneLoader="*res://src/scripts/singletons/scene_loader.gd"
 SaveManager="*res://src/scripts/singletons/save_manager.gd"
@@ -32,7 +31,6 @@ Settings="*res://src/scripts/singletons/settings.gd"
 GameSession="*res://src/scripts/singletons/game_session.gd"
 ArcadeDirector="*res://src/scripts/singletons/arcade_director.gd"
 TelemetrySystem="*res://src/scripts/singletons/telemetry_system.gd"
-MonetizationSystem="*res://src/scripts/singletons/monetization_system.gd"
 
 [display]
 

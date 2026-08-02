@@ -1,54 +1,80 @@
-# Dragon Jump
+# Dragon Jump Remaster
 
+A single-button arcade speedrun platformer built in Godot 4.
 
-## Release plan
-Demo
-- map where you can race a friend (co-op) / bot
-- 20 practices maps
-- can load maps from friends
+## What is this?
 
-Full Game
-- leaderboard for maps
-- online multiplayer
-- map editor
-- more maps 
-- custom game modes 
+Dragon Jump Remaster is a **single-player arcade speedrun platformer** for Windows, Linux, macOS, and Web. The V1.0 release focuses on a tight one-button loop: jump, reset, chase medals, and beat the clock across 10–20 handcrafted levels.
 
-## Multiplayer 
+See [`docs/direction/product_identity.md`](docs/direction/product_identity.md) for the full product pitch and [`docs/direction/release_plan.md`](docs/direction/release_plan.md) for the locked V1.0 scope.
 
-Powerup Ideas
-- start later but get increased movements speed
+## Getting started
 
-Map Modifiers
-- all powerups are random
+### Open the project
 
-Game Modes
-- tag-mode -> get crown and race back to the end
-- chicken-horse -> can edit map between levels to break AI / beat friends
+1. Install [Godot 4.x](https://godotengine.org/download) (version pinned during Phase 1).
+2. Open `project.godot` in the Godot editor.
+3. Press **F5** (or the play button) to run the game from the main scene.
 
-## Graphify + Godot bridge
+No build step is required for local development.
 
-Graphify does not natively AST-parse `.gd` and `.tscn`, so this repo includes a deterministic bridge that converts them into Python sidecars Graphify can parse for rule-based links.
+### Runtime secrets (release builds only)
 
-Generate bridge files:
+`SaveManager` signs save files with an HMAC secret that is injected at build time. The committed project does **not** include the real secret, so a fresh clone loads without it.
+
+For release builds, copy the template and fill in the real value:
 
 ```bash
-python3 tools/graphify_godot_bridge.py
+cp src/scripts/singletons/runtime_secrets.gd.template src/scripts/singletons/runtime_secrets.gd
 ```
 
-This writes generated files to `graphify-bridge/`.
+Then edit `src/scripts/singletons/runtime_secrets.gd`:
 
-Run Graphify on the bridge output:
+```gdscript
+var is_set := true
+var HMAC_SECRET := "YOUR_BUILD_PIPELINE_SECRET"
+```
+
+The `.gd` file is gitignored and must never be committed. The build pipeline can also register `RuntimeSecrets` as an autoload in `project.godot` when injecting the real secret.
+
+### Run tests
 
 ```bash
-graphify extract graphify-bridge --backend ollama
+./run_tests.sh
 ```
 
-Optional: point to a custom output path:
+A Windows batch file is also available: `run_tests.bat`.
 
-```bash
-python3 tools/graphify_godot_bridge.py --out graphify-input/godot
-graphify extract graphify-input/godot --backend ollama
-```
+## V1.0 scope
 
-graphify . --backend ollama --model qwen3.5:35b-mlx
+Dragon Jump Remaster V1.0 ships as a single-player arcade speedrun platformer:
+
+- One-button jump/reset loop
+- 10–20 handcrafted campaign levels
+- Local high-score and best-time tracking
+- Medal progression and local save encryption
+- Title → level select / endless mode → run → death/retry → score screen
+- Windows, Linux, macOS, and Web exports
+
+Features intentionally **out of V1.0** (post-launch or shelved):
+
+- Online leaderboards and networked multiplayer
+- Level editor and player-made maps
+- Co-op / bot race and crown/tag modes
+- Phone-as-controller local multiplayer
+
+See [`docs/backlog/shelved_features.md`](docs/backlog/shelved_features.md) for the full list.
+
+## Documentation
+
+This repo uses an Obsidian-style docs vault under `docs/`:
+
+- [`docs/00_index.md`](docs/00_index.md) — vault entry point
+- [`docs/direction/`](docs/direction/) — game design and release plan
+- [`docs/systems/`](docs/systems/) — technical reference for code and scenes
+- [`docs/tracking/`](docs/tracking/) — backlog, sprints, and decision log
+- [`docs/backlog/`](docs/backlog/) — shelved features and research ideas
+
+## License
+
+See [`LICENSE`](LICENSE).

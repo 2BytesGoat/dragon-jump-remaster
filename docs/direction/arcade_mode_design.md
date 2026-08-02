@@ -6,7 +6,7 @@ related:
   - "[[direction/product_identity]]"
   - "[[direction/core_loop]]"
   - "[[backlog/shelved_features]]"
-  - "[[ui_components/arcade_hud_integration_draft]]"
+  - "[[systems/ui_components/arcade_hud_integration_draft]]"
 ---
 
 # Arcade Mode Design — Dragon Jump Remaster
@@ -80,7 +80,7 @@ time_bonus = max(0, max_time_bonus_per_level - floor(level_clear_time * time_bon
 > This is a design placeholder. Exact values require play-testing and per-level target times.
 
 - Highest score is saved locally.
-- Online submission via SilentWolf when internet is available.
+- Online submission via SilentWolf when internet is available (deferred to post-launch; see [[systems/architecture]]).
 
 ### Continuous level transition
 
@@ -134,9 +134,9 @@ time_bonus = max(0, max_time_bonus_per_level - floor(level_clear_time * time_bon
   - Replace `TimeContainer` + `CardContainerContainer` with `ArcadeHud`.
   - Keep `PauseScreen`, `EndScreen` hidden in arcade mode.
 
-### Leaderboard
+### Leaderboard (post-launch)
 
-- `LeaderboardManager`:
+- `LeaderboardManager` (post-launch):
   - Keep SilentWolf submission path for online leaderboards.
   - Add a local cache path that works offline.
   - Expose `submit_arcade_score(player_name, score, levels)` and `get_arcade_leaderboard()`.
@@ -214,4 +214,4 @@ time_bonus = max(0, max_time_bonus_per_level - floor(level_clear_time * time_bon
 - `[[direction/release_plan]]`
 - `[[direction/core_loop]]`
 - `[[backlog/shelved_features]]`
-- `[[ui_components/arcade_hud_integration_draft]]`
+- `[[systems/ui_components/arcade_hud_integration_draft]]`

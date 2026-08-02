@@ -44,7 +44,7 @@ The `main.gd` script manages the core gameplay loop by:
 
 #### `_ready()`
 Initializes the game by:
-- Loading level data from `SceneManager` (currently named `SceneManger` in code; rename pending)
+- Loading level data via the `SceneLoader` autoload
 - Setting up the player with appropriate starting position and speed modifier
 - Connecting signal handlers for player events
 - Initializing UI states
@@ -119,7 +119,7 @@ The scene handles various signal connections:
 ## Integration Points
 
 ### With Level System
-- Loads level data using `SceneManager` (currently named `SceneManger` in code; rename pending)
+- Loads level data using the `SceneLoader` autoload
 - Updates level with new codes via `update_level()` method
 
 ### With Player System

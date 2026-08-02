@@ -77,7 +77,7 @@ The SaveManager works as a singleton that integrates with other systems through:
 1. Signal-based communication with the SignalBus
 2. Integration with Constants for level definitions and time milestones
 3. Interaction with GameData and LevelData resources for data storage
-4. Connection to the LeaderboardManager via `SignalBus.new_leaderboard_submission` signal
+4. Post-launch: connection to a `LeaderboardManager` via a reserved `SignalBus.new_leaderboard_submission` signal (deferred; see [[systems/architecture]])
 
 ## Design Patterns
 

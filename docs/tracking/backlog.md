@@ -34,17 +34,17 @@ This backlog is ordered by priority. The rule is: **fix what's blocking now, har
 | 9 | Add tutorial / input clarity for casual players | Playtest feedback: players did not know the inputs | High |
 | 10 | Remove or hide unused half-implemented systems | `MULTIPLAYER_LEVELS`, crown tile, progress bar, tag-mode code | High |
 | 11 | Fix `last_agent_intput` typo throughout `set_jump` | `src/scenes/player/player.gd` | Medium |
-| 12 | Rename `GaplingHook` / `gapling_hook.gd` to `GrapplingHook` | `src/scenes/player/gapling_hook.gd` | Medium |
-| 13 | Fix `SceneManger` → `SceneManager` typo | multiple files | Medium |
-| 14 | Fix `emplased_time` → `elapsed_time` typo | `src/scenes/level/level.gd` | Medium |
-| 15 | Fix `preogress_bar` → `progress_bar` typo in end screen | `src/ui/menus/end_screen.gd` | Medium |
-| 16 | Rename `CampaingLevelData` → `CampaignLevelData` everywhere | `src/scripts/resources/campaing_level_data.gd` and docs | Medium |
-| 17 | Remove duplicated `.gd` extension from `player_ai_training_controller.gd.gd` | `src/scenes/player/controller/player_ai_training_controller.gd.gd` | Low |
-| 18 | Decide what to do with duplicate end screen files | `src/ui/end_screen.gd` vs `src/ui/menus/end_screen.gd` | Low |
+| 12 | [x] Rename `GaplingHook` / `gapling_hook.gd` to `GrapplingHook` | `src/scenes/player/grappling_hook.gd` | Medium |
+| 13 | [x] Fix `SceneManger` → `SceneManager` typo | Superseded: scene navigation now uses `SceneLoader` / `scene_loader.gd` | Medium |
+| 14 | [x] Fix `emplased_time` → `elapsed_time` typo | Resolved in code (variable since removed as dead) | Medium |
+| 15 | [x] Fix `preogress_bar` → `progress_bar` typo in end screen | Code now uses `progress_bar` / `%LevelProgressBar` | Medium |
+| 16 | [x] Rename `CampaingLevelData` → `CampaignLevelData` everywhere | `src/scripts/resources/campaign_level_data.gd` and docs | Medium |
+| 17 | [x] Remove duplicated `.gd` extension from `player_ai_training_controller.gd.gd` | File is now `src/scenes/player/controller/player_ai_training_controller.gd` | Low |
+| 18 | [x] Decide what to do with duplicate end screen files | `src/ui/end_screen.gd` does not exist; the only end screen is `src/ui/menus/end_screen.gd` | Low |
 | 19 | Move medal threshold multipliers into `Constants` | `src/scripts/singletons/constants.gd` | Low |
-| 20 | Move hardcoded default levels / agent counts into `Constants` | `main.gd`, `main_multiplayer.gd` | Low |
+| 20 | Move hardcoded default levels / agent counts into `Constants` | `main.gd` (multiplayer training scene was deleted; only arcade entry point remains) | Low |
 | 21 | Document custom synchronizer | `src/scenes/training/synchronizer.gd` | Medium |
-| 22 | Document `multiplayer_world.gd` | currently untracked | Low |
+| 22 | [x] Document `multiplayer_world.gd` | File was deleted along with the multiplayer training scene; no longer needed | Low |
 | 23 | Screen shake | Juice/polish | Medium |
 | 24 | Grass blades | Level visual polish | Low |
 | 25 | Glow for portal | Level visual polish | Low |
@@ -61,7 +61,7 @@ This backlog is ordered by priority. The rule is: **fix what's blocking now, har
 | 31 | Build and verify arcade mode | Limited lives, `M` tiles give extra lives, QR code to Steam | High |
 | 32 | Smoke-test arcade attract / game-over / restart loop | Must survive long exhibition days | High |
 | 33 | Produce arcade build artifacts | Export and checksum the arcade binary | High |
-| 34 | Update top-level README for arcade + V1.0 scope | Cut promises about multiplayer/editor | High |
+| 34 | [x] Update top-level README for arcade + V1.0 scope | Cut promises about multiplayer/editor | High |
 
 ## Phase 4 — Steam release prep (before any big new features)
 
