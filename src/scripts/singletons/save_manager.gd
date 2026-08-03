@@ -273,9 +273,10 @@ func _get_hmac_secret() -> String:
 	# RuntimeSecrets is intentionally not registered as an autoload in the
 	# committed project file; the build pipeline can add it when injecting
 	# real secrets.
-	var secrets = Engine.get_singleton("RuntimeSecrets")
-	if secrets != null and secrets.is_set:
-		return secrets.HMAC_SECRET
+	if Engine.has_singleton("RuntimeSecrets"):
+		var secrets = Engine.get_singleton("RuntimeSecrets")
+		if secrets.is_set:
+			return secrets.HMAC_SECRET
 	return HMAC_SECRET_FALLBACK
 
 

@@ -130,7 +130,7 @@ func is_valid(symbol: String) -> bool:
 	return is_empty(symbol) or has(symbol)
 
 
-func get_layer_for_type(type: TileType) -> TileMapLayer:
+func get_layer_for_type(_type: TileType) -> TileMapLayer:
 	# This is a lookup helper used by Level. It cannot return a node itself
 	# because TileRegistry is a RefCounted resource with no scene access.
 	# Callers pass the result to their own layer mapping.

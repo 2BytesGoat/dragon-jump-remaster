@@ -19,13 +19,13 @@ func _ready() -> void:
 
 func _on_area_entered(area: Area2D) -> void:
 	var direction = global_position.direction_to(area.global_position)
-	var skew : int = -direction.x * skewValue
+	var sprite_skew : int = -direction.x * skewValue
 	
 	var tween = create_tween()
 	tween.tween_property(
 		sprite_2d.material, 
 		"shader_parameter/skew", 
-		skew, 
+		sprite_skew, 
 		bendGrassnimationSpeed
 		).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 		

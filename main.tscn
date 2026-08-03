@@ -63,7 +63,6 @@ death_strength = 2.0
 death_duration = 0.15
 
 [node name="HitStop" parent="SubViewportContainer/SubViewport" unique_id=1013442456 instance=ExtResource("3_hitstop")]
-freeze_duration = 0.1
 slowmo_time_scale = 0.5
 slowmo_duration = 0.2
 
