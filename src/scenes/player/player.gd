@@ -56,11 +56,13 @@ var is_done: bool = false
 # Signals
 signal picked_powerup(powerup_name: String, id: int, pickup_global_position: Vector2)
 signal used_powerup(id: int)
+signal powerup_consumed(type: String)
 signal has_resetted
 signal run_started(player: Player)
 signal run_restarted(player: Player)
 signal run_finished(player: Player)
-signal died(player: Player)
+signal is_dying(player: Player)
+signal has_died(player: Player)
 
 # Effects
 @onready var spawn_smoke = preload("res://src/scenes/effects/spawn_smoke_effect.tscn")
@@ -91,6 +93,7 @@ func _ready() -> void:
 	starting_position = global_position
 	_on_player_controller_changed(controller_type)
 	_on_speed_modifier_changed(speed_modifier)
+	animation_player.animation_finished.connect(_on_animation_finished)
 	reset()
 
 
@@ -158,16 +161,14 @@ func set_jump(input: bool) -> void:
 func die() -> void:
 	if is_dead:
 		return
-	is_dead = true
-	is_paused = true
-	velocity = Vector2.ZERO
-	Utils.instance_scene_on_main(despawn_smoke, self.global_position)
-	flippable_container.visible = false
-	var lost := len(powerups)
-	for i in range(lost):
-		drop_powerup()
-	TelemetrySystem.death("hazard", level_reference.level_name if level_reference != null else "", lost)
-	died.emit(self)
+	TelemetrySystem.death("hazard", level_reference.level_name if level_reference != null else "", len(powerups))
+	state_machine.transition_to("Die")
+	is_dying.emit(self)
+
+
+func _on_animation_finished(anim_name: String) -> void:
+	if anim_name == "Die":
+		has_died.emit(self)
 
 
 func reset() -> void:
@@ -238,6 +239,7 @@ func consume_powerup() -> String:
 	powerup.consume()
 	used_powerup.emit(len(powerups))
 	TelemetrySystem.powerup_used(powerup.type)
+	powerup_consumed.emit(powerup.type)
 	return powerup.type
 
 

@@ -12,4 +12,5 @@ func _input(event: InputEvent) -> void:
 	elif event.is_action_released("player_one_jump"):
 		jump_command.execute(player, JumpCommand.Params.new(false))
 	elif event.is_action_pressed("player_one_reset"):
+		Utils.instance_scene_on_main(player.despawn_smoke, player.global_position)
 		reset_command.execute(player)

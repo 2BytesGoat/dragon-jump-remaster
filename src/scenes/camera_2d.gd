@@ -14,6 +14,11 @@ var shake_strength: float = 0.0
 
 var initial_offset: Vector2 = Vector2.ZERO
 
+var _is_panning: bool = false
+var _pan_tween: Tween
+
+signal pan_completed
+
 
 func _ready() -> void:
 	initial_offset = self.offset
@@ -37,6 +42,8 @@ func _process(delta: float) -> void:
 
 
 func _physics_process(_delta: float) -> void:
+	if _is_panning:
+		return
 	if player_node == null:
 		return
 	
@@ -46,6 +53,22 @@ func _physics_process(_delta: float) -> void:
 func zoom_on(target_position: Vector2, zoom_factor: float = 5.0):
 	position = target_position
 	zoom = Vector2(zoom_factor, zoom_factor)
+
+
+func pan_to(target: Vector2, duration: float) -> void:
+	_is_panning = true
+	if _pan_tween != null and _pan_tween.is_valid():
+		_pan_tween.kill()
+	_pan_tween = create_tween()
+	_pan_tween.set_trans(Tween.TRANS_SINE)
+	_pan_tween.set_ease(Tween.EASE_IN_OUT)
+	_pan_tween.tween_property(self, "global_position", target, duration)
+	_pan_tween.finished.connect(_on_pan_finished)
+
+
+func _on_pan_finished() -> void:
+	_is_panning = false
+	pan_completed.emit()
 
 
 func apply_shake(strength: float = 30, duration: float = 0.4):

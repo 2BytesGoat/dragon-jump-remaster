@@ -10,6 +10,8 @@ extends Node
 @export var pause_screen: MarginContainer
 @export var end_screen: MarginContainer
 @export var time_container: MarginContainer
+@export var transition_wipe: TransitionWipe
+@export var respawn_delay: float = 0.5
 
 @onready var player_scene = preload("res://src/scenes/player/player.tscn")
 @onready var camera_scene = preload("res://src/scenes/camera_2d.tscn")
@@ -83,7 +85,9 @@ func initialize_players() -> void:
 	player.has_resetted.connect(level.reset_objects)
 	player.run_restarted.connect(_on_player_restarted_run)
 	player.run_finished.connect(_on_player_finished_run)
-	player.died.connect(_on_player_died)
+	player.is_dying.connect(_on_player_is_dying)
+	player.has_died.connect(_on_player_has_died)
+	player.powerup_consumed.connect(_on_player_used_powerup)
 	time_container.track_player(player)
 	
 	card_container.map_player_signals(player_nodes)
@@ -128,16 +132,32 @@ func _on_player_finished_run(player: Player) -> void:
 			_on_arcade_level_finished()
 
 
-func _on_player_died(player: Player) -> void:
+func _on_player_is_dying(_player: Player) -> void:
 	screen_shake.shake(ScreenShake.Event.DEATH)
 	await hit_stop.trigger()
+	transition_wipe.cover(respawn_delay * 0.1)
+	await transition_wipe.cover_midpoint
+	for i in range(len(_player.powerups)):
+		_player.drop_powerup()
+
+
+func _on_player_has_died(player: Player) -> void:
+	if not transition_wipe.is_covered:
+		await transition_wipe.covered
+	camera.pan_to(player.starting_position, 0)
 	player.reset()
+	transition_wipe.reveal(respawn_delay * 0.1)
+	await transition_wipe.reveal_midpoint
 	if GameSession.game_mode != GameSession.GameModes.ARCADE:
 		return
 
 	var result := ArcadeDirector.on_player_died()
 	if result == ArcadeDirector.RunResult.GAME_OVER:
 		_show_arcade_game_over()
+
+
+func _on_player_used_powerup(_type: String) -> void:
+	screen_shake.shake(ScreenShake.Event.POWERUP)
 
 
 func _show_arcade_game_over() -> void:
