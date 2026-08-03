@@ -50,7 +50,6 @@ var active_controller: PlayerCharacterController = null
 @onready var afterimage: CPUParticles2D = $Flippable/AfterImage
 @onready var grappling_hook: Node2D = $Flippable/GrapplingHook
 @onready var hat_container: Node2D = $Flippable/HatContainer
-var has_crown: bool = false
 var last_floor_position: Vector2 = Vector2.ZERO
 var is_done: bool = false
 
@@ -62,7 +61,6 @@ signal run_started(player: Player)
 signal run_restarted(player: Player)
 signal run_finished(player: Player)
 signal died(player: Player)
-signal dropped_crown(player: Player)
 
 # Effects
 @onready var spawn_smoke = preload("res://src/scenes/effects/spawn_smoke_effect.tscn")
@@ -74,6 +72,7 @@ var current_friction: float = default_friction   # Current friction based on sur
 var facing_direction: int = Vector2i.RIGHT.x
 var started_walking: bool = false
 var is_paused: bool = false
+var is_dead: bool = false
 var wants_to_jump: bool = false
 var needs_to_release: bool = false
 var modifiers: Dictionary = {}
@@ -156,14 +155,30 @@ func set_jump(input: bool) -> void:
 		needs_to_release = false
 
 
+func die() -> void:
+	if is_dead:
+		return
+	is_dead = true
+	is_paused = true
+	velocity = Vector2.ZERO
+	Utils.instance_scene_on_main(despawn_smoke, self.global_position)
+	flippable_container.visible = false
+	var lost := len(powerups)
+	for i in range(lost):
+		drop_powerup()
+	TelemetrySystem.death("hazard", level_reference.level_name if level_reference != null else "", lost)
+	died.emit(self)
+
+
 func reset() -> void:
 	if is_done:
 		return
-	
-	drop_crown()
+
+	is_dead = false
+	is_paused = false
+	flippable_container.visible = true
 	run_restarted.emit(self)
-	Utils.instance_scene_on_main(despawn_smoke, self.global_position)
-	current_friction = default_friction 
+	current_friction = default_friction
 	facing_direction = starting_facing_direction
 	if controller_type != CONTROLLERS.TRAINING:
 		started_walking = false
@@ -172,9 +187,9 @@ func reset() -> void:
 	show_afterimage = false
 	modifiers = {}
 	last_agent_input = false
-	
+
 	for i in range(len(powerups)):
-		consume_powerup()
+		drop_powerup()
 	
 	velocity = Vector2.ZERO
 	global_position = starting_position
@@ -226,24 +241,18 @@ func consume_powerup() -> String:
 	return powerup.type
 
 
+func drop_powerup() -> void:
+	var powerup = powerups.pop_back()
+	powerup.consume()
+	used_powerup.emit(len(powerups))
+
+
 func launch_grappling_hook() -> void:
 	grappling_hook.launch()
 
 
 func release_grappling_hook() -> void:
 	grappling_hook.release()
-
-
-func drop_crown() -> void:
-	for child in hat_container.get_children():
-		if not child.is_in_group("Crown"):
-			continue
-		
-		child.reparent(get_parent())
-		child.global_position = last_floor_position
-		child.drop()
-		has_crown = false
-		dropped_crown.emit(self)
 
 
 func percentage_towards_jump_peak() -> float:
@@ -342,10 +351,8 @@ func _on_starting_position_changed(new_position: Vector2) -> void:
 
 func _on_hurt_box_body_entered(body: Node2D) -> void:
 	# This is for spikes
-	if body is TileMapLayer:
-		TelemetrySystem.death("hazard", level_reference.level_name if level_reference != null else "")
-		died.emit(self)
-		reset()
+	if body is TileMapLayer and not is_dead:
+		die()
 
 
 func _on_interact_box_area_entered(area: Area2D) -> void:

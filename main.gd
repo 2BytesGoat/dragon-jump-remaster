@@ -3,6 +3,8 @@ extends Node
 @export var level: Node2D
 @export var player_container: Node2D
 @export var camera: Camera2D
+@export var screen_shake: ScreenShake
+@export var hit_stop: HitStop
 @export var card_container: VBoxContainer
 @export var level_music: AudioStreamPlayer
 @export var pause_screen: MarginContainer
@@ -126,10 +128,13 @@ func _on_player_finished_run(player: Player) -> void:
 			_on_arcade_level_finished()
 
 
-func _on_player_died(_player: Player) -> void:
+func _on_player_died(player: Player) -> void:
+	screen_shake.shake(ScreenShake.Event.DEATH)
+	await hit_stop.trigger()
+	player.reset()
 	if GameSession.game_mode != GameSession.GameModes.ARCADE:
 		return
-	
+
 	var result := ArcadeDirector.on_player_died()
 	if result == ArcadeDirector.RunResult.GAME_OVER:
 		_show_arcade_game_over()
@@ -150,8 +155,7 @@ func _on_player_finished_practice_run(_player: Player) -> void:
 	var stats = {
 		"level_name": level_name,
 		"time": total_time,
-		"restarts": 1,
-		"crowns_dropped": 0
+		"restarts": 1
 	}
 	end_screen.update_stats(stats)
 	

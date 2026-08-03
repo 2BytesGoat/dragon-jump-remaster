@@ -7,7 +7,9 @@ extends Camera2D
 var noise_i: float = 0.0
 var noise_seed: float = 30.0
 
-var shake_decay_rate: float = 3.0
+var shake_duration: float = 0.0
+var shake_time_remaining: float = 0.0
+var initial_shake_strength: float = 0.0
 var shake_strength: float = 0.0
 
 var initial_offset: Vector2 = Vector2.ZERO
@@ -18,15 +20,20 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	if shake_strength <= 1:
+	if shake_time_remaining <= 0:
 		return
-	
-	shake_strength = snapped(lerp(shake_strength, 0.0, shake_decay_rate * delta), 0.01)
+
+	shake_time_remaining -= delta
+	if shake_time_remaining <= 0:
+		shake_time_remaining = 0.0
+		shake_strength = 0.0
+		self.offset = initial_offset
+		return
+
+	if shake_duration > 0.0:
+		shake_strength = initial_shake_strength * (shake_time_remaining / shake_duration)
 	var shake_offset = get_random_offset()
 	self.offset = initial_offset + shake_offset
-	
-	if shake_strength <= 1:
-		self.offset = initial_offset
 
 
 func _physics_process(_delta: float) -> void:
@@ -41,8 +48,11 @@ func zoom_on(target_position: Vector2, zoom_factor: float = 5.0):
 	zoom = Vector2(zoom_factor, zoom_factor)
 
 
-func apply_shake(strength: float = 30):
+func apply_shake(strength: float = 30, duration: float = 0.4):
 	noise_i = 0.0
+	initial_shake_strength = strength
+	shake_duration = duration
+	shake_time_remaining = duration
 	shake_strength = strength
 
 

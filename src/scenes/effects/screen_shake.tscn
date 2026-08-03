@@ -1,0 +1,6 @@
+[gd_scene format=4 uid="uid://drao4n00meosi"]
+
+[ext_resource type="Script" uid="uid://8dp42icrw4wbw" path="res://src/scenes/effects/screen_shake.gd" id="1_shake"]
+
+[node name="ScreenShake" type="Node" unique_id=222222222]
+script = ExtResource("1_shake")

@@ -11,6 +11,8 @@ related:
 
 # Arcade Mode Design — Dragon Jump Remaster
 
+> **Implementation is tracked in [[tracking/backlog]]** (Phase 3 — reproducible arcade pipeline, Phase 5 — post-pipeline game polish). This document is the design reference for how arcade mode should feel and behave.
+
 ## Goal
 
 Ship a vertical-slice arcade build that is simple to understand and hard to master:

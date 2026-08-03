@@ -5,7 +5,7 @@ related:
   - "[[direction/release_plan]]"
   - "[[direction/product_identity]]"
   - "[[tracking/backlog]]"
-search_terms: [shelved, future, multiplayer, editor, crown, tag, chicken-horse, arcade, secrets, procedural]
+search_terms: [shelved, future, multiplayer, editor, crown, tag, chicken-horse, arcade, secrets, procedural, tcg, cards, steam, marketplace, meta, retention]
 ---
 
 # Shelved Features
@@ -58,6 +58,15 @@ See [[direction/release_plan]] for the full V1.0 plan.
   - Useful for parties, exhibitions, and viral local sessions.
   - Big architecture change: network discovery, web input client, spectator UI, latency handling.
   - Only viable after Steam ships and the core loop is locked.
+
+## Meta / retention (post-launch only)
+
+- **TCG-style collectibles**
+  - Players collect points during runs.
+  - Points can be spent to open card packs.
+  - Card packs drop cosmetic powerup card skins for the game.
+  - Skins are linked to Steam inventory items.
+  - Items can be sold on the Steam Marketplace.
 
 ## Shelved indefinitely unless explicitly revived
 

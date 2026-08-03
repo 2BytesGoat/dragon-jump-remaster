@@ -84,6 +84,35 @@ When determining if a file needs documentation, consider these criteria for "com
 - **When creating documentation, link to both original scripts and other relevant documentation files for quick navigation**
 - **Include metadata headers for searchability and indexing**
 
+## Sprint Workflow
+
+This project runs **2-week sprints** that feed into release milestones. The cadence is capacity-aware: a sprint's deliverables must fit a realistic hours budget, not a fixed task count. Low-output weeks are normal and expected — unfinished items roll back to the backlog without guilt.
+
+### Sprint start
+
+1. Copy `docs/tracking/sprints/_template.md` to `docs/tracking/sprints/sprint_YYYY_MM_DD.md` (use the sprint end date).
+2. Fill in the **Milestone** line — which phase of [[direction/release_plan]] § Release milestones this sprint feeds.
+3. Fill in the **Capacity** section honestly: estimate hours available this sprint given IRL load. A 1–2h sprint is valid.
+4. Pull 1–6 rows from [[tracking/backlog]] into **Deliverables** by their `#`. Estimate each in hours so the total fits the capacity budget. Leave the rest in the backlog.
+5. Write **Definition of done** as concrete checkboxes.
+6. Update [[tracking/current_sprint]] to link the new sprint file and reflect the new goal.
+
+### During the sprint
+
+- Tick backlog rows `[x]` in [[tracking/backlog]] as they complete, not just the sprint file. The backlog is the single source of truth.
+- If something blocks you, note it in the sprint file under a `## Blockers` heading.
+
+### Sprint end
+
+1. Fill in the **Retrospective** section (3 lines: Done / Carried over / Note).
+2. Any unfinished deliverables stay `[ ]` in [[tracking/backlog]] — they are not "failed", just re-pickable next sprint.
+3. If the milestone's target date slipped, update it in [[direction/release_plan]] § Release milestones and add a one-line note to [[tracking/decisions]].
+4. Start the next sprint from step 1.
+
+### One-milestone focus
+
+Each sprint targets exactly one release milestone. If a sprint can't finish its milestone, the milestone date slips (noted in [[tracking/decisions]]) — the sprint is still successful if the retro shows honest capacity use.
+
 ## Documentation Folder Structure Guidelines (RAG-Optimized)
 Documentation files should be organized in a hierarchical structure under `docs/systems/` that mirrors the project's component organization:
 - Main system documentation: `/docs/systems/main_system/`
