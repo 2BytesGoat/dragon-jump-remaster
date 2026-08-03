@@ -22,23 +22,6 @@ theme_override_font_sizes/font_size = 6
 horizontal_alignment = 1
 text = "+0 READY"
 
-[node name="ComboLostLabel" type="Label" parent="."]
-unique_name_in_owner = true
-visible = false
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -80.0
-offset_top = 46.0
-offset_right = 80.0
-offset_bottom = 68.0
-grow_horizontal = 2
-theme = ExtResource("1_theme")
-theme_override_colors/font_color = Color(1, 0.25, 0.25, 1)
-theme_override_font_sizes/font_size = 6
-horizontal_alignment = 1
-text = "COMBO LOST"
-
 [node name="RankCard" type="Label" parent="."]
 unique_name_in_owner = true
 visible = false
@@ -59,3 +42,34 @@ theme_override_font_sizes/font_size = 14
 horizontal_alignment = 1
 vertical_alignment = 1
 text = "GOLD x2.00"
+
+[node name="ScoreVBox" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -152.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = 36.0
+grow_horizontal = 0
+theme_override_constants/separation = 2
+alignment = 2
+
+[node name="ScoreLabel" type="Label" parent="ScoreVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("1_theme")
+theme_override_font_sizes/font_size = 7
+horizontal_alignment = 2
+vertical_alignment = 1
+text = "SCORE 00000000"
+
+[node name="MultiplierLabel" type="Label" parent="ScoreVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("1_theme")
+theme_override_font_sizes/font_size = 6
+horizontal_alignment = 2
+vertical_alignment = 1
+text = "x1.00"

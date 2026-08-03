@@ -4,7 +4,7 @@ extends CanvasLayer
 ## Neon White-style feedback for the arcade time-bonus system:
 ## - Rank card popup at level clear (GOLD x2.0 +1303)
 ## - Pending bonus readout under the timer ("+1303 READY")
-## - Red "COMBO LOST -1303" flash when a pending bonus is forfeited by death.
+## - Multiplier readout under the score; pops on clear, resets red to x1.00 on death.
 
 const RANK_COLORS := {
 	"": Color(1.0, 1.0, 1.0, 1.0),
@@ -16,10 +16,13 @@ const RANK_COLORS := {
 
 @onready var rank_card: Label = %RankCard
 @onready var combo_readout: Label = %ComboReadout
-@onready var combo_lost_label: Label = %ComboLostLabel
+@onready var score_vbox: VBoxContainer = %ScoreVBox
+@onready var score_label: Label = %ScoreLabel
+@onready var multiplier_label: Label = %MultiplierLabel
 
 var _rank_tween: Tween = null
-var _lost_tween: Tween = null
+var _multiplier_tween: Tween = null
+var _last_rendered_score: int = -1
 
 
 func _ready() -> void:
@@ -37,15 +40,25 @@ func _exit_tree() -> void:
 		ArcadeDirector.combo_lost.disconnect(_on_combo_lost)
 
 
+func _process(_delta: float) -> void:
+	if GameSession.game_mode != GameSession.GameModes.ARCADE:
+		if score_vbox.visible:
+			score_vbox.visible = false
+		return
+	score_vbox.visible = true
+	var current_score := ArcadeDirector.score
+	if current_score != _last_rendered_score:
+		_last_rendered_score = current_score
+		score_label.text = "SCORE %08d" % current_score
+
+
 func reset() -> void:
-	_kill_tweens()
 	rank_card.visible = false
-	combo_lost_label.visible = false
-	combo_readout.visible = false
+	_last_rendered_score = ArcadeDirector.score
+	score_label.text = "SCORE %08d" % ArcadeDirector.score
 
 
 func _on_level_rank_awarded(_level_id: String, rank: String, multiplier: float, bonus: int) -> void:
-	_kill_tweens()
 	if bonus <= 0:
 		combo_readout.text = "READY"
 		combo_readout.visible = false
@@ -63,6 +76,19 @@ func _on_level_rank_awarded(_level_id: String, rank: String, multiplier: float, 
 	_rank_tween.tween_interval(0.9)
 	_rank_tween.tween_property(rank_card, "modulate:a", 0.0, 0.4)
 	_rank_tween.tween_callback(func() -> void: rank_card.visible = false)
+	_show_multiplier_pop(multiplier, rank)
+
+
+func _show_multiplier_pop(multiplier: float, rank: String) -> void:
+	if _multiplier_tween != null and _multiplier_tween.is_valid():
+		_multiplier_tween.kill()
+	multiplier_label.text = "x%.2f" % multiplier
+	multiplier_label.add_theme_color_override("font_color", RANK_COLORS.get(rank, Color.WHITE))
+	multiplier_label.modulate.a = 1.0
+	multiplier_label.scale = Vector2(0.4, 0.4)
+	_multiplier_tween = create_tween()
+	_multiplier_tween.tween_property(multiplier_label, "scale", Vector2(1.3, 1.3), 0.18).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_multiplier_tween.tween_property(multiplier_label, "scale", Vector2(1.0, 1.0), 0.12).set_trans(Tween.TRANS_SINE)
 
 
 func _on_pending_bonus_changed(bonus: int) -> void:
@@ -74,23 +100,24 @@ func _on_pending_bonus_changed(bonus: int) -> void:
 	combo_readout.visible = true
 
 
-func _on_combo_lost(_streak_before: int, lost_bonus: int) -> void:
-	if _lost_tween != null and _lost_tween.is_valid():
-		_lost_tween.kill()
-	combo_lost_label.text = "COMBO LOST -%d" % lost_bonus
-	combo_lost_label.modulate.a = 1.0
-	combo_lost_label.visible = true
+func _on_combo_lost(_streak_before: int, _lost_bonus: int) -> void:
+	if _multiplier_tween != null and _multiplier_tween.is_valid():
+		_multiplier_tween.kill()
+	multiplier_label.modulate.a = 1.0
+	multiplier_label.scale = Vector2.ONE
+	multiplier_label.add_theme_color_override("font_color", Color(1.0, 0.25, 0.25, 1.0))
+	_multiplier_tween = create_tween()
+	_multiplier_tween.tween_property(multiplier_label, "scale", Vector2(1.4, 1.4), 0.12).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_multiplier_tween.tween_callback(func() -> void:
+		multiplier_label.text = "x1.00"
+		multiplier_label.scale = Vector2(1.4, 1.4)
+	)
+	_multiplier_tween.tween_property(multiplier_label, "scale", Vector2(1.0, 1.0), 0.2).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_multiplier_tween.tween_interval(0.4)
+	_multiplier_tween.tween_property(multiplier_label, "modulate:a", 0.25, 0.4)
+	_multiplier_tween.tween_callback(func() -> void:
+		multiplier_label.add_theme_color_override("font_color", Color.WHITE)
+		multiplier_label.modulate.a = 1.0
+		multiplier_label.scale = Vector2.ONE
+	)
 	combo_readout.visible = false
-	_lost_tween = create_tween()
-	_lost_tween.tween_interval(1.1)
-	_lost_tween.tween_property(combo_lost_label, "modulate:a", 0.0, 0.4)
-	_lost_tween.tween_callback(func() -> void: combo_lost_label.visible = false)
-
-
-func _kill_tweens() -> void:
-	if _rank_tween != null and _rank_tween.is_valid():
-		_rank_tween.kill()
-	_rank_tween = null
-	if _lost_tween != null and _lost_tween.is_valid():
-		_lost_tween.kill()
-	_lost_tween = null

@@ -61,13 +61,13 @@ func on_level_finished(level_time: float) -> String:
 		silver = campaign_level.times[1] if campaign_level.times.size() >= 3 else gold
 	var multiplier := calculate_time_multiplier(level_time, bronze, silver, gold, config)
 	var bonus := roundi(config.level_clear_score * (multiplier - 1.0))
+	level_rank_awarded.emit(level_id, _rank_for_multiplier(multiplier), multiplier, bonus)
 	if bonus > 0:
 		score += bonus
 		_level_bonuses.append({"level_id": level_id, "time": level_time, "multiplier": multiplier, "bonus": bonus})
 		_set_pending_bonus(bonus)
 	else:
 		_set_pending_bonus(0)
-	level_rank_awarded.emit(level_id, _rank_for_multiplier(multiplier), multiplier, bonus)
 	var next_level := CampaignLevelLibrary.get_next_level(GameSession.level_name)
 	if next_level.is_empty():
 		_end_run()
