@@ -23,6 +23,10 @@ const SAVE_VERSION := 1
 ## Unlocked cosmetic ids (hats/skins).
 @export var unlocked_cosmetics: Array[String] = []
 
+## Local arcade leaderboard, sorted by score descending, trimmed to top 10.
+## Each entry: {"tag": String, "score": int, "levels": int, "date": String}
+@export var arcade_top_runs: Array[Dictionary] = []
+
 
 func migrate() -> void:
 	if save_version < SAVE_VERSION:

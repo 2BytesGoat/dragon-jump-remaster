@@ -38,6 +38,7 @@ func can_start_run() -> bool:
 
 
 func on_level_finished() -> String:
+	score += config.level_clear_score
 	var next_level := CampaignLevelLibrary.get_next_level(GameSession.level_name)
 	if next_level.is_empty():
 		_end_run()
@@ -56,16 +57,25 @@ func on_player_died() -> RunResult:
 
 
 var _run_ended: bool = false
+var _run_to_submit: bool = false
 
 
 func submit_tag(tag: String) -> void:
 	player_tag = tag
 	_run_ended = false
-	# TODO: persist to local arcade leaderboard via SaveManager / GameData
+	if _run_to_submit and score > 0:
+		SaveManager.submit_arcade_run(tag, score, levels_reached)
+	_run_to_submit = false
+
+
+func skip_run_submission() -> void:
+	player_tag = ""
+	_run_ended = false
+	_run_to_submit = false
 
 
 func has_run_to_submit() -> bool:
-	return _run_ended and player_tag.is_empty()
+	return _run_to_submit and player_tag.is_empty()
 
 
 func get_run_summary() -> Dictionary:
@@ -83,8 +93,10 @@ func _reset_run_state() -> void:
 	levels_reached = 1
 	player_tag = ""
 	_run_ended = false
+	_run_to_submit = false
 
 
 func _end_run() -> void:
 	_run_ended = true
+	_run_to_submit = true
 	run_ended.emit(get_run_summary())

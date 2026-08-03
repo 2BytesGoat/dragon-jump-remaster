@@ -9,6 +9,7 @@ extends Node
 @export var level_music: AudioStreamPlayer
 @export var pause_screen: MarginContainer
 @export var end_screen: MarginContainer
+@export var arcade_game_over_screen: MarginContainer
 @export var time_container: MarginContainer
 @export var transition_wipe: TransitionWipe
 
@@ -42,6 +43,7 @@ func _ready():
 	
 	pause_screen.visible = false
 	end_screen.visible = false
+	arcade_game_over_screen.visible = false
 	
 	SignalBus.new_run_attempt.emit(level_name)
 	TelemetrySystem.level_started(level_name)
@@ -57,6 +59,7 @@ func reset_ui():
 	time_container.reset()
 	race_finished = false
 	end_screen.visible = false
+	arcade_game_over_screen.visible = false
 
 
 func _input(event: InputEvent) -> void:
@@ -144,8 +147,8 @@ func _show_arcade_game_over() -> void:
 	race_finished = true
 	for p in player_container.get_children():
 		p.is_paused = true
-	# TODO: show 3-letter tag entry + arcade leaderboard
-	#       ArcadeDirector.get_run_summary() contains the run data to display.
+	arcade_game_over_screen.show_run_summary(ArcadeDirector.get_run_summary())
+	arcade_game_over_screen.visible = true
 
 
 func _on_player_finished_practice_run(_player: Player) -> void:

@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://c3arc4d3t0001"]
+
+[ext_resource type="Script" path="res://src/tests/test_arcade_leaderboard.gd" id="1_amvqu"]
+
+[node name="TestArcadeLeaderboard" type="Node"]
+script = ExtResource("1_amvqu")

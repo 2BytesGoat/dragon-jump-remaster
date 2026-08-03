@@ -225,6 +225,45 @@ func get_unlocked_cosmetics() -> Array[String]:
 	return current_data.unlocked_cosmetics.duplicate()
 
 
+const ARCADE_LEADERBOARD_SIZE := 10
+
+
+func submit_arcade_run(tag: String, score: int, levels: int) -> void:
+	var entry := {
+		"tag": tag,
+		"score": score,
+		"levels": levels,
+		"date": Time.get_date_string_from_system(true),
+	}
+	current_data.arcade_top_runs.append(entry)
+	_trim_arcade_leaderboard()
+	save_to_disk()
+
+
+func get_arcade_leaderboard() -> Array[Dictionary]:
+	return current_data.arcade_top_runs.duplicate()
+
+
+func get_arcade_high_score() -> int:
+	if current_data.arcade_top_runs.is_empty():
+		return 0
+	return current_data.arcade_top_runs[0]["score"]
+
+
+func _trim_arcade_leaderboard() -> void:
+	current_data.arcade_top_runs.sort_custom(_sort_arcade_runs_desc)
+	if current_data.arcade_top_runs.size() > ARCADE_LEADERBOARD_SIZE:
+		current_data.arcade_top_runs.resize(ARCADE_LEADERBOARD_SIZE)
+
+
+func _sort_arcade_runs_desc(a: Dictionary, b: Dictionary) -> bool:
+	var a_score: int = a.get("score", 0)
+	var b_score: int = b.get("score", 0)
+	if a_score != b_score:
+		return a_score > b_score
+	return a.get("levels", 0) > b.get("levels", 0)
+
+
 func _try_unlock_cosmetic_for_milestone(milestone: int) -> void:
 	var cosmetic_id := Constants.MEDAL_CONFIG.get_cosmetic_for_milestone(milestone)
 	unlock_cosmetic(cosmetic_id)
