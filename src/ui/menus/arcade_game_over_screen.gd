@@ -15,6 +15,7 @@ const LETTERS := "ABCDEFGHIJKLMNOPQRSTUVWXYZ "
 @onready var score_label = %ScoreLabel
 @onready var levels_label = %LevelsLabel
 @onready var new_high_score_label = %NewHighScoreLabel
+@onready var bonus_label = %BonusLabel
 @onready var hint_label = %HintLabel
 @onready var save_hint_label = %SaveHintLabel
 @onready var letter_edit_container = %LetterEditContainer
@@ -95,6 +96,10 @@ func show_run_summary(summary: Dictionary) -> void:
 	score_label.text = "%08d" % int(summary.get("score", 0))
 	levels_label.text = "%02d" % int(summary.get("levels_reached", 1))
 	new_high_score_label.visible = int(summary.get("score", 0)) > SaveManager.get_arcade_high_score()
+	var bonus_total := int(summary.get("bonus_total", 0))
+	bonus_label.visible = bonus_total > 0
+	if bonus_total > 0:
+		bonus_label.text = "TIME BONUS +%04d" % bonus_total
 	_mode = "edit"
 	leaderboard_container.visible = false
 	buttons_row.visible = false

@@ -8,3 +8,7 @@ starting_level_id = "1-1"
 starting_lives = 3
 max_lives = 3
 level_clear_score = 1000
+bronze_multiplier = 1.0
+silver_multiplier = 1.5
+gold_multiplier = 2.0
+max_multiplier = 3.0

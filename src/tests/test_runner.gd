@@ -11,6 +11,7 @@ const TEST_SCENES: Array[PackedScene] = [
 	preload("res://src/tests/test_save_score.tscn"),
 	preload("res://src/tests/test_save_security.tscn"),
 	preload("res://src/tests/test_arcade_leaderboard.tscn"),
+	preload("res://src/tests/test_arcade_time_bonus.tscn"),
 	preload("res://src/tests/test_frame_time.tscn"),
 	preload("res://src/tests/test_replay.tscn"),
 ]

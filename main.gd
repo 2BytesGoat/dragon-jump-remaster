@@ -12,6 +12,7 @@ extends Node
 @export var arcade_game_over_screen: MarginContainer
 @export var time_container: MarginContainer
 @export var transition_wipe: TransitionWipe
+@export var arcade_rank_hud: CanvasLayer
 
 @onready var player_scene = preload("res://src/scenes/player/player.tscn")
 @onready var camera_scene = preload("res://src/scenes/camera_2d.tscn")
@@ -60,6 +61,8 @@ func reset_ui():
 	race_finished = false
 	end_screen.visible = false
 	arcade_game_over_screen.visible = false
+	if arcade_rank_hud != null:
+		arcade_rank_hud.reset()
 
 
 func _input(event: InputEvent) -> void:
@@ -147,6 +150,8 @@ func _show_arcade_game_over() -> void:
 	race_finished = true
 	for p in player_container.get_children():
 		p.is_paused = true
+	if arcade_rank_hud != null:
+		arcade_rank_hud.reset()
 	arcade_game_over_screen.show_run_summary(ArcadeDirector.get_run_summary())
 	arcade_game_over_screen.visible = true
 
@@ -197,7 +202,10 @@ func _on_next_button_pressed() -> void:
 
 
 func _on_arcade_level_finished() -> void:
-	level_name = ArcadeDirector.on_level_finished()
+	var finished_level = level_name
+	var clear_time = time_container.total_time
+	SignalBus.new_time_submission.emit(finished_level, clear_time)
+	level_name = ArcadeDirector.on_level_finished(clear_time)
 	if ArcadeDirector.has_run_to_submit():
 		_show_arcade_game_over()
 		return

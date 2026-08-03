@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://uc05jq38ov1m"]
+
+[ext_resource type="Script" uid="uid://d10562p7vd168" path="res://src/tests/test_arcade_time_bonus.gd" id="1_tab"]
+
+[node name="TestArcadeTimeBonus" type="Node"]
+script = ExtResource("1_tab")
