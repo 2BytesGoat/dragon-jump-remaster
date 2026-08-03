@@ -1,7 +1,7 @@
 class_name ScreenShake
 extends Node
 
-enum Event { DEATH, STOMP, DASH, LAND, POWERUP }
+enum Event { DEATH, POWERUP }
 
 @export var enabled: bool = true
 @export var camera: Camera2D

@@ -55,7 +55,6 @@ pause_screen = NodePath("SubViewportContainer/SubViewport/CanvasLayer/PauseScree
 end_screen = NodePath("SubViewportContainer/SubViewport/CanvasLayer/EndScreen")
 time_container = NodePath("SubViewportContainer/SubViewport/CanvasLayer/TimeContainer")
 transition_wipe = NodePath("SubViewportContainer/SubViewport/CanvasLayer/TransitionWipe")
-respawn_delay = 3.5
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=858590886]
 texture_filter = 1

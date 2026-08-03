@@ -61,8 +61,14 @@ signal has_resetted
 signal run_started(player: Player)
 signal run_restarted(player: Player)
 signal run_finished(player: Player)
-signal is_dying(player: Player)
-signal has_died(player: Player)
+signal died(player: Player)
+
+# Juice nodes - assigned by main.gd in initialize_players()
+var screen_shake: ScreenShake
+var hit_stop: HitStop
+var transition_wipe: TransitionWipe
+var camera: Camera2D
+@export var wipe_duration: float = 0.35
 
 # Effects
 @onready var spawn_smoke = preload("res://src/scenes/effects/spawn_smoke_effect.tscn")
@@ -93,7 +99,6 @@ func _ready() -> void:
 	starting_position = global_position
 	_on_player_controller_changed(controller_type)
 	_on_speed_modifier_changed(speed_modifier)
-	animation_player.animation_finished.connect(_on_animation_finished)
 	reset()
 
 
@@ -161,14 +166,30 @@ func set_jump(input: bool) -> void:
 func die() -> void:
 	if is_dead:
 		return
+	is_dead = true
 	TelemetrySystem.death("hazard", level_reference.level_name if level_reference != null else "", len(powerups))
 	state_machine.transition_to("Die")
-	is_dying.emit(self)
+	_run_death_sequence()
 
 
-func _on_animation_finished(anim_name: String) -> void:
-	if anim_name == "Die":
-		has_died.emit(self)
+func _run_death_sequence() -> void:
+	if screen_shake != null:
+		screen_shake.shake(ScreenShake.Event.DEATH)
+	if hit_stop != null:
+		await hit_stop.trigger()
+	if transition_wipe != null:
+		transition_wipe.cover(wipe_duration)
+		await transition_wipe.cover_midpoint
+		for i in range(len(powerups)):
+			drop_powerup()
+		await transition_wipe.covered
+	if camera != null:
+		camera.pan_to(starting_position, 0.0)
+	reset()
+	if transition_wipe != null:
+		transition_wipe.reveal(wipe_duration)
+		await transition_wipe.reveal_midpoint
+	died.emit(self)
 
 
 func reset() -> void:
@@ -191,12 +212,12 @@ func reset() -> void:
 
 	for i in range(len(powerups)):
 		drop_powerup()
-	
+
 	velocity = Vector2.ZERO
 	global_position = starting_position
 	state_machine.transition_to(initial_state.name)
 	has_resetted.emit()
-	
+
 	_update_facing_direction()
 	animation_player.play("Spawn")
 	Utils.instance_scene_on_main(spawn_smoke, self.global_position)
@@ -235,18 +256,21 @@ func has_powerups() -> bool:
 
 func consume_powerup() -> String:
 	# TODO: find a better way to do this
-	var powerup = powerups.pop_back()
-	powerup.consume()
-	used_powerup.emit(len(powerups))
+	var powerup = _pop_powerup()
 	TelemetrySystem.powerup_used(powerup.type)
 	powerup_consumed.emit(powerup.type)
 	return powerup.type
 
 
 func drop_powerup() -> void:
+	_pop_powerup()
+
+
+func _pop_powerup():
 	var powerup = powerups.pop_back()
 	powerup.consume()
 	used_powerup.emit(len(powerups))
+	return powerup
 
 
 func launch_grappling_hook() -> void:

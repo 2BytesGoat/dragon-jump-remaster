@@ -59,6 +59,10 @@ func pan_to(target: Vector2, duration: float) -> void:
 	_is_panning = true
 	if _pan_tween != null and _pan_tween.is_valid():
 		_pan_tween.kill()
+	if duration <= 0.0:
+		global_position = target
+		_on_pan_finished()
+		return
 	_pan_tween = create_tween()
 	_pan_tween.set_trans(Tween.TRANS_SINE)
 	_pan_tween.set_ease(Tween.EASE_IN_OUT)
