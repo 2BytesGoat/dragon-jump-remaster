@@ -12,16 +12,14 @@ enum RunResult {
 
 signal run_ended(summary: Dictionary)
 signal level_rank_awarded(level_id: String, rank: String, multiplier: float, bonus: int)
-signal pending_bonus_changed(bonus: int)
-signal combo_lost(streak_before: int, lost_bonus: int)
+signal run_multiplier_changed(multiplier: float)
 
 var config: ArcadeConfig
 var lives: int = 3
 var score: int = 0
 var levels_reached: int = 1
 var player_tag: String = ""
-var combo_streak: int = 0
-var _pending_bonus: int = 0
+var run_multiplier: float = 1.0
 var _level_bonuses: Array[Dictionary] = []
 
 
@@ -43,13 +41,7 @@ func can_start_run() -> bool:
 	return config != null
 
 
-func get_pending_bonus() -> int:
-	return _pending_bonus
-
-
 func on_level_finished(level_time: float) -> String:
-	_bank_pending_bonus()
-	score += config.level_clear_score
 	var level_id := GameSession.level_name
 	var campaign_level := CampaignLevelLibrary.get_level(level_id)
 	var bronze: float = INF
@@ -59,15 +51,13 @@ func on_level_finished(level_time: float) -> String:
 		bronze = campaign_level.times[0]
 		gold = campaign_level.times[-1]
 		silver = campaign_level.times[1] if campaign_level.times.size() >= 3 else gold
-	var multiplier := calculate_time_multiplier(level_time, bronze, silver, gold, config)
-	var bonus := roundi(config.level_clear_score * (multiplier - 1.0))
-	level_rank_awarded.emit(level_id, _rank_for_multiplier(multiplier), multiplier, bonus)
+	var time_multiplier := calculate_time_multiplier(level_time, bronze, silver, gold, config)
+	var bonus := roundi(config.level_clear_score * time_multiplier * run_multiplier)
+	_streak_apply()
+	level_rank_awarded.emit(level_id, _rank_for_multiplier(time_multiplier), run_multiplier, bonus)
 	if bonus > 0:
 		score += bonus
-		_level_bonuses.append({"level_id": level_id, "time": level_time, "multiplier": multiplier, "bonus": bonus})
-		_set_pending_bonus(bonus)
-	else:
-		_set_pending_bonus(0)
+		_level_bonuses.append({"level_id": level_id, "time": level_time, "multiplier": run_multiplier, "bonus": bonus})
 	var next_level := CampaignLevelLibrary.get_next_level(GameSession.level_name)
 	if next_level.is_empty():
 		_end_run()
@@ -78,15 +68,23 @@ func on_level_finished(level_time: float) -> String:
 
 
 func on_player_died() -> RunResult:
-	if _pending_bonus > 0:
-		combo_lost.emit(combo_streak, _pending_bonus)
-	combo_streak = 0
-	_set_pending_bonus(0)
+	_reset_run_multiplier()
 	lives -= 1
 	if lives <= 0:
 		_end_run()
 		return RunResult.GAME_OVER
 	return RunResult.CONTINUE
+
+
+func _streak_apply() -> void:
+	run_multiplier += 1.0
+	run_multiplier_changed.emit(run_multiplier)
+
+
+func _reset_run_multiplier() -> void:
+	if run_multiplier != 1.0:
+		run_multiplier = 1.0
+		run_multiplier_changed.emit(run_multiplier)
 
 
 static func calculate_time_multiplier(level_time: float, bronze: float, silver: float, gold: float, config: ArcadeConfig) -> float:
@@ -115,19 +113,6 @@ static func _rank_for_multiplier(multiplier: float) -> String:
 	if multiplier > 1.0:
 		return "BRONZE"
 	return ""
-
-
-func _set_pending_bonus(bonus: int) -> void:
-	_pending_bonus = maxi(bonus, 0)
-	pending_bonus_changed.emit(_pending_bonus)
-
-
-func _bank_pending_bonus() -> void:
-	if _pending_bonus <= 0:
-		return
-	score += _pending_bonus
-	combo_streak += 1
-	_set_pending_bonus(0)
 
 
 var _run_ended: bool = false
@@ -175,15 +160,13 @@ func _reset_run_state() -> void:
 	score = 0
 	levels_reached = 1
 	player_tag = ""
-	combo_streak = 0
-	_pending_bonus = 0
+	run_multiplier = 1.0
 	_level_bonuses = []
 	_run_ended = false
 	_run_to_submit = false
 
 
 func _end_run() -> void:
-	_bank_pending_bonus()
 	_run_ended = true
 	_run_to_submit = true
 	run_ended.emit(get_run_summary())

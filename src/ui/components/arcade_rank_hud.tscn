@@ -1,28 +1,75 @@
 [gd_scene format=3 uid="uid://brluo13ccn1u1"]
 
-[ext_resource type="Script" uid="uid://ciq7tn4th2qcx" path="res://src/ui/components/arcade_rank_hud.gd" id="2_script"]
 [ext_resource type="Theme" uid="uid://d1kdwbwfx60gf" path="res://src/ui/components/themes/level_select_theme.tres" id="1_theme"]
+[ext_resource type="Script" uid="uid://ciq7tn4th2qcx" path="res://src/ui/components/arcade_rank_hud.gd" id="2_script"]
+[ext_resource type="Script" uid="uid://u12281ncqv4x" path="res://src/ui/components/single_time_container.gd" id="10_ycdy4"]
 
-[node name="ArcadeRankHud" type="CanvasLayer"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_medal_track"]
+bg_color = Color(0, 0, 0, 0.35)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[node name="ArcadeRankHud" type="CanvasLayer" unique_id=1227228912]
 script = ExtResource("2_script")
 
-[node name="ComboReadout" type="Label" parent="."]
+[node name="TimeContainer" type="MarginContainer" parent="." unique_id=1338096448]
 unique_name_in_owner = true
-visible = false
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -48.0
+offset_right = 48.0
+offset_bottom = 26.0
+grow_horizontal = 2
+theme = ExtResource("1_theme")
+theme_override_constants/margin_top = 4
+script = ExtResource("10_ycdy4")
+
+[node name="TimeLabel" type="Label" parent="TimeContainer" unique_id=1415804941]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0.78431374)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "00:00.00"
+
+[node name="MedalBar" type="Panel" parent="." unique_id=991122001]
+unique_name_in_owner = true
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -48.0
+offset_top = 26.0
+offset_right = 48.0
+offset_bottom = 31.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_medal_track")
+
+[node name="MedalBarFill" type="ColorRect" parent="MedalBar" unique_id=991122002]
+unique_name_in_owner = true
+layout_mode = 0
+offset_bottom = 5.0
+mouse_filter = 2
+color = Color(0.996, 0.843, 0, 1)
+
+[node name="BandLabel" type="Label" parent="." unique_id=862910358]
+unique_name_in_owner = true
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -80.0
-offset_top = 24.0
+offset_top = 32.0
 offset_right = 80.0
-offset_bottom = 46.0
+offset_bottom = 48.0
 grow_horizontal = 2
 theme = ExtResource("1_theme")
-theme_override_font_sizes/font_size = 6
+theme_override_font_sizes/font_size = 5
+text = "GOLD"
 horizontal_alignment = 1
-text = "+0 READY"
 
-[node name="RankCard" type="Label" parent="."]
+[node name="RankCard" type="Label" parent="." unique_id=266142296]
 unique_name_in_owner = true
 visible = false
 anchors_preset = 8
@@ -39,11 +86,11 @@ grow_vertical = 2
 theme = ExtResource("1_theme")
 theme_override_colors/font_color = Color(0.996, 0.843, 0, 1)
 theme_override_font_sizes/font_size = 14
+text = "GOLD x2.00"
 horizontal_alignment = 1
 vertical_alignment = 1
-text = "GOLD x2.00"
 
-[node name="ScoreVBox" type="VBoxContainer" parent="."]
+[node name="ScoreVBox" type="VBoxContainer" parent="." unique_id=524472576]
 unique_name_in_owner = true
 anchors_preset = 1
 anchor_left = 1.0
@@ -56,20 +103,20 @@ grow_horizontal = 0
 theme_override_constants/separation = 2
 alignment = 2
 
-[node name="ScoreLabel" type="Label" parent="ScoreVBox"]
+[node name="ScoreLabel" type="Label" parent="ScoreVBox" unique_id=889982808]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("1_theme")
 theme_override_font_sizes/font_size = 7
+text = "SCORE 00000000"
 horizontal_alignment = 2
 vertical_alignment = 1
-text = "SCORE 00000000"
 
-[node name="MultiplierLabel" type="Label" parent="ScoreVBox"]
+[node name="MultiplierLabel" type="Label" parent="ScoreVBox" unique_id=1793750243]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("1_theme")
 theme_override_font_sizes/font_size = 6
+text = "x1.00"
 horizontal_alignment = 2
 vertical_alignment = 1
-text = "x1.00"

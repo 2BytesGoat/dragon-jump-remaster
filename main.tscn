@@ -10,9 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://drao4n00meosi" path="res://src/scenes/effects/screen_shake.tscn" id="3_shake"]
 [ext_resource type="Script" uid="uid://e8fwy0piod4u" path="res://src/scenes/powerups/card_container_container.gd" id="6_dg77c"]
 [ext_resource type="PackedScene" uid="uid://cg5ctntixs1fk" path="res://src/ui/menus/pause_screen.tscn" id="6_ycdy4"]
-[ext_resource type="PackedScene" uid="uid://tlcqsbymcr7g" path="res://src/ui/components/time_container.tscn" id="9_dg77c"]
 [ext_resource type="PackedScene" uid="uid://fcxn3r6i8mg5" path="res://src/ui/menus/crt_screen_effect.tscn" id="9_efxa6"]
-[ext_resource type="Script" uid="uid://u12281ncqv4x" path="res://src/ui/components/single_time_container.gd" id="10_ycdy4"]
 [ext_resource type="Shader" uid="uid://b87hi538ipc5q" path="res://assets/shaders/screen_crt.gdshader" id="11_dg77c"]
 [ext_resource type="PackedScene" uid="uid://btnxex4dvvbmn" path="res://src/ui/menus/end_screen.tscn" id="12_ycdy4"]
 [ext_resource type="PackedScene" path="res://src/scenes/effects/transition_wipe.tscn" id="13_wipe"]
@@ -56,7 +54,7 @@ level_music = NodePath("AudioStreamPlayer")
 pause_screen = NodePath("SubViewportContainer/SubViewport/CanvasLayer/PauseScreen")
 end_screen = NodePath("SubViewportContainer/SubViewport/CanvasLayer/EndScreen")
 arcade_game_over_screen = NodePath("SubViewportContainer/SubViewport/CanvasLayer/ArcadeGameOverScreen")
-time_container = NodePath("SubViewportContainer/SubViewport/CanvasLayer/TimeContainer")
+time_container = NodePath("SubViewportContainer/SubViewport/CanvasLayer/ArcadeRankHud/TimeContainer")
 transition_wipe = NodePath("SubViewportContainer/SubViewport/CanvasLayer/TransitionWipe")
 arcade_rank_hud = NodePath("SubViewportContainer/SubViewport/CanvasLayer/ArcadeRankHud")
 
@@ -130,10 +128,6 @@ visible = false
 [node name="ArcadeGameOverScreen" parent="SubViewportContainer/SubViewport/CanvasLayer" unique_id=1987654321 instance=ExtResource("15_ogos")]
 visible = false
 
-[node name="TimeContainer" parent="SubViewportContainer/SubViewport/CanvasLayer" unique_id=872347357 instance=ExtResource("9_dg77c")]
-unique_name_in_owner = true
-script = ExtResource("10_ycdy4")
-
 [node name="ArcadeRankHud" parent="SubViewportContainer/SubViewport/CanvasLayer" unique_id=1938472015 instance=ExtResource("16_rhud")]
 
 [node name="TransitionWipe" parent="SubViewportContainer/SubViewport/CanvasLayer" unique_id=1840942799 instance=ExtResource("13_wipe")]
@@ -191,7 +185,7 @@ autoplay = true
 bus = &"Music"
 parameters/looping = true
 
-[connection signal="game_paused" from="." to="SubViewportContainer/SubViewport/CanvasLayer/TimeContainer" method="_on_main_game_paused"]
+[connection signal="game_paused" from="." to="SubViewportContainer/SubViewport/CanvasLayer/ArcadeRankHud/TimeContainer" method="_on_main_game_paused"]
 [connection signal="pressed" from="SubViewportContainer/SubViewport/CanvasLayer/PauseScreen/Panel/VBoxContainer/ResumeButton" to="." method="_on_resume_button_pressed"]
 [connection signal="pressed" from="SubViewportContainer/SubViewport/CanvasLayer/PauseScreen/Panel/VBoxContainer/RestartButton" to="." method="_on_pause_screen_restart_button_pressed"]
 [connection signal="pressed" from="SubViewportContainer/SubViewport/CanvasLayer/PauseScreen/Panel/VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]

@@ -10,7 +10,8 @@ extends Resource
 
 ## Medal-band time multipliers. Continuous piecewise-linear between bands:
 ## t >= bronze -> bronze_multiplier, t -> 0s -> max_multiplier.
-@export var bronze_multiplier: float = 1.0
+## Bronze is a penalty tier (< 1.0): slower-than-bronze clears pay half.
+@export var bronze_multiplier: float = 0.5
 @export var silver_multiplier: float = 1.5
 @export var gold_multiplier: float = 2.0
 @export var max_multiplier: float = 3.0

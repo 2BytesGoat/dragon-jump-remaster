@@ -1,10 +1,11 @@
 extends CanvasLayer
 
 ## ArcadeRankHud
-## Neon White-style feedback for the arcade time-bonus system:
-## - Rank card popup at level clear (GOLD x2.0 +1303)
-## - Pending bonus readout under the timer ("+1303 READY")
-## - Multiplier readout under the score; pops on clear, resets red to x1.00 on death.
+## Neon White-style feedback for the arcade score system:
+## - Rank card popup at level clear (GOLD x2.00 +2000)
+## - Streak multiplier readout under the score; pops on clear, resets red to x1.00 on death.
+## - Level timer with live medal-pace tint: starts GOLD, downgrades through
+##   SILVER/BRONZE as time crosses each threshold.
 
 const RANK_COLORS := {
 	"": Color(1.0, 1.0, 1.0, 1.0),
@@ -14,33 +15,46 @@ const RANK_COLORS := {
 	"GOLD+": Color(0.996, 0.843, 0.0, 1.0),
 }
 
+const MEDAL_TAGS := {
+	"GOLD+": "GOLD+",
+	"GOLD": "GOLD",
+	"SILVER": "SILVER",
+	"BRONZE": "BRONZE",
+	"": "---",
+}
+
+@onready var time_container: MarginContainer = %TimeContainer
+@onready var band_label: Label = %BandLabel
+@onready var medal_bar: Panel = %MedalBar
+@onready var medal_bar_fill: ColorRect = %MedalBarFill
 @onready var rank_card: Label = %RankCard
-@onready var combo_readout: Label = %ComboReadout
 @onready var score_vbox: VBoxContainer = %ScoreVBox
 @onready var score_label: Label = %ScoreLabel
 @onready var multiplier_label: Label = %MultiplierLabel
 
 var _rank_tween: Tween = null
 var _multiplier_tween: Tween = null
+var _band_tween: Tween = null
 var _last_rendered_score: int = -1
+var _current_level_id: String = ""
+var _level_times: Array[float] = []
+var _current_band: String = ""
 
 
 func _ready() -> void:
 	ArcadeDirector.level_rank_awarded.connect(_on_level_rank_awarded)
-	ArcadeDirector.pending_bonus_changed.connect(_on_pending_bonus_changed)
-	ArcadeDirector.combo_lost.connect(_on_combo_lost)
+	ArcadeDirector.run_multiplier_changed.connect(_on_run_multiplier_changed)
 
 
 func _exit_tree() -> void:
 	if ArcadeDirector.level_rank_awarded.is_connected(_on_level_rank_awarded):
 		ArcadeDirector.level_rank_awarded.disconnect(_on_level_rank_awarded)
-	if ArcadeDirector.pending_bonus_changed.is_connected(_on_pending_bonus_changed):
-		ArcadeDirector.pending_bonus_changed.disconnect(_on_pending_bonus_changed)
-	if ArcadeDirector.combo_lost.is_connected(_on_combo_lost):
-		ArcadeDirector.combo_lost.disconnect(_on_combo_lost)
+	if ArcadeDirector.run_multiplier_changed.is_connected(_on_run_multiplier_changed):
+		ArcadeDirector.run_multiplier_changed.disconnect(_on_run_multiplier_changed)
 
 
 func _process(_delta: float) -> void:
+	_update_medal_pace()
 	if GameSession.game_mode != GameSession.GameModes.ARCADE:
 		if score_vbox.visible:
 			score_vbox.visible = false
@@ -60,8 +74,6 @@ func reset() -> void:
 
 func _on_level_rank_awarded(_level_id: String, rank: String, multiplier: float, bonus: int) -> void:
 	if bonus <= 0:
-		combo_readout.text = "READY"
-		combo_readout.visible = false
 		return
 	var multiplier_text := "x%.2f" % multiplier
 	rank_card.text = "%s %s  +%d" % [rank, multiplier_text, bonus]
@@ -91,16 +103,19 @@ func _show_multiplier_pop(multiplier: float, rank: String) -> void:
 	_multiplier_tween.tween_property(multiplier_label, "scale", Vector2(1.0, 1.0), 0.12).set_trans(Tween.TRANS_SINE)
 
 
-func _on_pending_bonus_changed(bonus: int) -> void:
-	if bonus <= 0:
-		combo_readout.text = "READY"
-		combo_readout.visible = false
+func _on_run_multiplier_changed(multiplier: float) -> void:
+	if multiplier == 1.0:
+		_play_multiplier_death_reset()
 		return
-	combo_readout.text = "+%d READY" % bonus
-	combo_readout.visible = true
+	if _multiplier_tween != null and _multiplier_tween.is_valid():
+		_multiplier_tween.kill()
+	multiplier_label.text = "x%.2f" % multiplier
+	multiplier_label.modulate.a = 1.0
+	multiplier_label.scale = Vector2.ONE
+	multiplier_label.add_theme_color_override("font_color", RANK_COLORS.get("GOLD", Color.WHITE))
 
 
-func _on_combo_lost(_streak_before: int, _lost_bonus: int) -> void:
+func _play_multiplier_death_reset() -> void:
 	if _multiplier_tween != null and _multiplier_tween.is_valid():
 		_multiplier_tween.kill()
 	multiplier_label.modulate.a = 1.0
@@ -120,4 +135,91 @@ func _on_combo_lost(_streak_before: int, _lost_bonus: int) -> void:
 		multiplier_label.modulate.a = 1.0
 		multiplier_label.scale = Vector2.ONE
 	)
-	combo_readout.visible = false
+
+
+func _update_medal_pace() -> void:
+	var level_id := GameSession.level_name
+	if level_id != _current_level_id:
+		_current_level_id = level_id
+		_level_times = []
+		var level_data := CampaignLevelLibrary.get_level(level_id)
+		if level_data != null:
+			_level_times = level_data.times.duplicate()
+		_current_band = ""
+	if _level_times.is_empty():
+		medal_bar.visible = false
+		return
+	medal_bar.visible = true
+	var time = time_container.total_time
+	_update_medal_bar(time)
+	var band := _band_for_time(time)
+	if band == _current_band:
+		return
+	var downgraded := _current_band != "" and _rank_weight(band) < _rank_weight(_current_band)
+	_current_band = band
+	band_label.text = MEDAL_TAGS.get(band, "---")
+	band_label.add_theme_color_override("font_color", RANK_COLORS.get(band, Color.WHITE))
+	if downgraded:
+		band_label.scale = Vector2(0.5, 0.5)
+		band_label.modulate.a = 1.0
+		if _band_tween != null and _band_tween.is_valid():
+			_band_tween.kill()
+		_band_tween = create_tween()
+		_band_tween.tween_property(band_label, "scale", Vector2(1.4, 1.4), 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		_band_tween.tween_property(band_label, "scale", Vector2.ONE, 0.1).set_trans(Tween.TRANS_SINE)
+
+
+func _update_medal_bar(time: float) -> void:
+	var times := _level_times
+	var bronze: float = times[0]
+	var silver: float = times[1] if times.size() >= 3 else times[0]
+	var gold: float = times[-1]
+	var fill: float
+	var color: Color
+	if time >= bronze:
+		fill = 0.0
+		color = RANK_COLORS.get("", Color.WHITE)
+	elif time >= silver:
+		fill = clampf((bronze - time) / maxf(bronze - silver, 0.0001), 0.0, 1.0)
+		color = RANK_COLORS["BRONZE"]
+	elif time >= gold:
+		fill = clampf((silver - time) / maxf(silver - gold, 0.0001), 0.0, 1.0)
+		color = RANK_COLORS["SILVER"]
+	else:
+		fill = clampf((gold - time) / maxf(gold, 0.0001), 0.0, 1.0)
+		color = RANK_COLORS["GOLD"]
+	medal_bar_fill.color = color
+	var width := medal_bar.size.x * fill
+	medal_bar_fill.size.x = width
+	if fill <= 0.001 and medal_bar_fill.visible:
+		medal_bar_fill.visible = false
+	elif fill > 0.001 and not medal_bar_fill.visible:
+		medal_bar_fill.visible = true
+
+
+func _band_for_time(time: float) -> String:
+	var times := _level_times
+	var bronze: float = times[0]
+	var silver: float = times[1] if times.size() >= 3 else times[0]
+	var gold: float = times[-1]
+	if time >= bronze:
+		return ""
+	if time >= silver:
+		return "BRONZE"
+	if time >= gold:
+		return "SILVER"
+	return "GOLD"
+
+
+func _rank_weight(band: String) -> int:
+	match band:
+		"GOLD+":
+			return 5
+		"GOLD":
+			return 4
+		"SILVER":
+			return 3
+		"BRONZE":
+			return 2
+		_:
+			return 1
