@@ -3,6 +3,9 @@
 [ext_resource type="Theme" uid="uid://d1kdwbwfx60gf" path="res://src/ui/components/themes/level_select_theme.tres" id="1_theme"]
 [ext_resource type="Script" uid="uid://ciq7tn4th2qcx" path="res://src/ui/components/arcade_rank_hud.gd" id="2_script"]
 [ext_resource type="Script" uid="uid://u12281ncqv4x" path="res://src/ui/components/single_time_container.gd" id="10_ycdy4"]
+[ext_resource type="AudioStream" uid="uid://35l4xnse0nlc" path="res://assets/sfx/SoundBonus.wav" id="11_sfx_bonus"]
+[ext_resource type="AudioStream" uid="uid://bo175m0kiuwev" path="res://assets/sfx/heavenly.ogg" id="12_sfx_gold"]
+[ext_resource type="AudioStream" uid="uid://djubut3dgdmkp" path="res://assets/sfx/SoundSlide.wav" id="13_sfx_death"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_medal_track"]
 bg_color = Color(0, 0, 0, 0.35)
@@ -89,6 +92,55 @@ theme_override_font_sizes/font_size = 14
 text = "GOLD x2.00"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="BonusPopup" type="Label" parent="." unique_id=991122003]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -140.0
+offset_top = -70.0
+offset_right = 140.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_theme")
+theme_override_font_sizes/font_size = 10
+text = "+4000"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ClearFlash" type="ColorRect" parent="." unique_id=991122004]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0)
+
+[node name="ClearSFX" type="AudioStreamPlayer" parent="." unique_id=991122005]
+unique_name_in_owner = true
+stream = ExtResource("11_sfx_bonus")
+volume_db = -12.0
+bus = &"SFX"
+
+[node name="GoldSFX" type="AudioStreamPlayer" parent="." unique_id=991122006]
+unique_name_in_owner = true
+stream = ExtResource("12_sfx_gold")
+volume_db = -10.0
+bus = &"SFX"
+
+[node name="DeathSFX" type="AudioStreamPlayer" parent="." unique_id=991122007]
+unique_name_in_owner = true
+stream = ExtResource("13_sfx_death")
+volume_db = -8.0
+bus = &"SFX"
 
 [node name="ScoreVBox" type="VBoxContainer" parent="." unique_id=524472576]
 unique_name_in_owner = true
