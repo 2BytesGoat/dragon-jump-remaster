@@ -17,6 +17,14 @@ corner_radius_bottom_left = 2
 [node name="ArcadeRankHud" type="CanvasLayer" unique_id=1227228912]
 script = ExtResource("2_script")
 
+[node name="LivesBox" type="HBoxContainer" parent="." unique_id=1227228913]
+unique_name_in_owner = true
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 80.0
+offset_bottom = 24.0
+theme_override_constants/separation = 2
+
 [node name="TimeContainer" type="MarginContainer" parent="." unique_id=1338096448]
 unique_name_in_owner = true
 anchors_preset = 5
@@ -32,10 +40,10 @@ script = ExtResource("10_ycdy4")
 
 [node name="TimeLabel" type="Label" parent="TimeContainer" unique_id=1415804941]
 unique_name_in_owner = true
-modulate = Color(1, 1, 1, 0.6)
 layout_mode = 2
 theme_override_font_sizes/font_size = 9
 text = "00:00.00"
+horizontal_alignment = 1
 
 [node name="MedalBar" type="Panel" parent="." unique_id=991122001]
 unique_name_in_owner = true
@@ -74,22 +82,18 @@ horizontal_alignment = 1
 
 [node name="BonusPopup" type="Label" parent="." unique_id=991122003]
 unique_name_in_owner = true
-visible = false
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -140.0
-offset_top = -50.0
-offset_right = 140.0
-offset_bottom = -10.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -152.0
+offset_top = 54.0
+offset_right = -8.0
+offset_bottom = 70.0
+grow_horizontal = 0
 theme = ExtResource("1_theme")
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 9
 text = "+4000"
-horizontal_alignment = 1
+horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="ClearSFX" type="AudioStreamPlayer" parent="." unique_id=991122005]

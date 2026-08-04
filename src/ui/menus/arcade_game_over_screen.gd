@@ -15,7 +15,6 @@ const LETTERS := "ABCDEFGHIJKLMNOPQRSTUVWXYZ "
 @onready var score_label = %ScoreLabel
 @onready var levels_label = %LevelsLabel
 @onready var new_high_score_label = %NewHighScoreLabel
-@onready var bonus_label = %BonusLabel
 @onready var best_streak_label = %BestStreakLabel
 @onready var hint_label = %HintLabel
 @onready var save_hint_label = %SaveHintLabel
@@ -100,10 +99,6 @@ func show_run_summary(summary: Dictionary) -> void:
 	levels_label.text = "%02d" % int(summary.get("levels_reached", 1))
 	var is_new_high := int(summary.get("score", 0)) > SaveManager.get_arcade_high_score()
 	new_high_score_label.visible = is_new_high
-	var bonus_total := int(summary.get("bonus_total", 0))
-	bonus_label.visible = bonus_total > 0
-	if bonus_total > 0:
-		bonus_label.text = "TIME BONUS +%04d" % bonus_total
 	var streak := float(summary.get("best_streak", 1.0))
 	best_streak_label.visible = streak > 1.0
 	if streak > 1.0:

@@ -13,6 +13,7 @@ enum RunResult {
 signal run_ended(summary: Dictionary)
 signal level_rank_awarded(level_id: String, rank: String, multiplier: float, bonus: int)
 signal run_multiplier_changed(multiplier: float)
+signal lives_changed(lives: int)
 
 var config: ArcadeConfig
 var lives: int = 3
@@ -71,6 +72,7 @@ func on_level_finished(level_time: float) -> String:
 func on_player_died() -> RunResult:
 	_reset_run_multiplier()
 	lives -= 1
+	lives_changed.emit(lives)
 	if lives <= 0:
 		_end_run()
 		return RunResult.GAME_OVER
@@ -168,6 +170,7 @@ func _reset_run_state() -> void:
 	_level_bonuses = []
 	_run_ended = false
 	_run_to_submit = false
+	lives_changed.emit(lives)
 
 
 func _end_run() -> void:

@@ -391,6 +391,8 @@ func _on_interact_box_area_entered(area: Area2D) -> void:
 		state_machine.transition_to("Bounce", {"push_direction": area.facing_direction})
 	elif area.is_in_group("Exit"):
 		is_done = true
+		show_afterimage = false
+		animation_player.play("Idle")
 		run_finished.emit(self)
 
 

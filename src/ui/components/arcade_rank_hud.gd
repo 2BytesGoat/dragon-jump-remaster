@@ -7,27 +7,42 @@ extends CanvasLayer
 ## - Level timer with live medal-pace tint: starts GOLD, downgrades through
 ##   SILVER/BRONZE as time crosses each threshold.
 
-const RANK_COLORS := {
-	"": Color(1.0, 1.0, 1.0, 1.0),
-	"BRONZE": Color(0.804, 0.502, 0.196, 1.0),
-	"SILVER": Color(0.753, 0.753, 0.753, 1.0),
-	"GOLD": Color(0.996, 0.843, 0.0, 1.0),
-	"GOLD+": Color(0.996, 0.843, 0.0, 1.0),
-}
-
 const MEDAL_TAGS := {
 	"GOLD+": "GOLD+",
 	"GOLD": "GOLD",
 	"SILVER": "SILVER",
 	"BRONZE": "BRONZE",
-	"": "---",
+	"": "NO BONUS",
 }
+
+const MEDAL_INDEX := {
+	"BRONZE": 0,
+	"SILVER": 1,
+	"GOLD": 2,
+	"GOLD+": 2,
+}
+
+
+func _rank_color(rank: String) -> Color:
+	if rank == "" or not MEDAL_INDEX.has(rank):
+		return Color.WHITE
+	return Constants.MEDAL_CONFIG.medal_colors[MEDAL_INDEX[rank]]
 
 const MEDAL_BAR_PULSE_THRESHOLD := 0.5
 const MEDAL_BAR_HEARTBEAT_INTERVAL := 0.5
 const MEDAL_BAR_HEARTBEAT_MIN_INTERVAL := 0.12
+const LIFE_ICON_SIZE := 12.0
+const LIFE_ICON_LOST_ALPHA := 0.25
+
+const BONUS_POPUP_DRIFT := 24.0
+const BONUS_POPUP_POP_IN_TIME := 0.15
+const BONUS_POPUP_FADE_OUT_TIME := 0.3
+
+@export var bonus_popup_lifetime: float = 1.1
+@export var multiplier_pop_delay: float = 0.3
 
 @onready var time_container: MarginContainer = %TimeContainer
+@onready var lives_box: HBoxContainer = %LivesBox
 @onready var band_label: Label = %BandLabel
 @onready var medal_bar: Panel = %MedalBar
 @onready var medal_bar_fill: ColorRect = %MedalBarFill
@@ -39,11 +54,16 @@ const MEDAL_BAR_HEARTBEAT_MIN_INTERVAL := 0.12
 @onready var score_label: Label = %ScoreLabel
 @onready var multiplier_label: Label = %MultiplierLabel
 
+var _life_icons: Array[TextureRect] = []
 var _multiplier_tween: Tween = null
 var _band_tween: Tween = null
 var _bar_pulse_tween: Tween = null
 var _score_tween: Tween = null
 var _popup_tween: Tween = null
+var _popup_base_offset_top: float = 0.0
+var _popup_base_offset_bottom: float = 0.0
+var _popup_base_captured: bool = false
+var _multiplier_pop_timer: SceneTreeTimer = null
 var _last_rendered_score: int = -1
 var _current_level_id: String = ""
 var _level_times: Array[float] = []
@@ -54,8 +74,10 @@ var _heartbeat_crossed: bool = false
 
 
 func _ready() -> void:
+	_build_life_icons()
 	ArcadeDirector.level_rank_awarded.connect(_on_level_rank_awarded)
 	ArcadeDirector.run_multiplier_changed.connect(_on_run_multiplier_changed)
+	ArcadeDirector.lives_changed.connect(_on_lives_changed)
 
 
 func _exit_tree() -> void:
@@ -63,6 +85,34 @@ func _exit_tree() -> void:
 		ArcadeDirector.level_rank_awarded.disconnect(_on_level_rank_awarded)
 	if ArcadeDirector.run_multiplier_changed.is_connected(_on_run_multiplier_changed):
 		ArcadeDirector.run_multiplier_changed.disconnect(_on_run_multiplier_changed)
+	if ArcadeDirector.lives_changed.is_connected(_on_lives_changed):
+		ArcadeDirector.lives_changed.disconnect(_on_lives_changed)
+
+
+func _build_life_icons() -> void:
+	for child in lives_box.get_children():
+		child.queue_free()
+	_life_icons = []
+	var max_lives := ArcadeDirector.config.max_lives if ArcadeDirector.config != null else 3
+	for i in range(max_lives):
+		var icon := TextureRect.new()
+		icon.texture = preload("res://icon.png")
+		icon.custom_minimum_size = Vector2(LIFE_ICON_SIZE, LIFE_ICON_SIZE)
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		icon.modulate.a = LIFE_ICON_LOST_ALPHA
+		lives_box.add_child(icon)
+		_life_icons.append(icon)
+	_refresh_lives(ArcadeDirector.lives)
+
+
+func _on_lives_changed(lives: int) -> void:
+	_refresh_lives(lives)
+
+
+func _refresh_lives(lives: int) -> void:
+	for i in range(_life_icons.size()):
+		_life_icons[i].modulate.a = 1.0 if i < lives else LIFE_ICON_LOST_ALPHA
 
 
 func _process(delta: float) -> void:
@@ -70,8 +120,11 @@ func _process(delta: float) -> void:
 	if GameSession.game_mode != GameSession.GameModes.ARCADE:
 		if score_vbox.visible:
 			score_vbox.visible = false
+		if lives_box.visible:
+			lives_box.visible = false
 		return
 	score_vbox.visible = true
+	lives_box.visible = true
 	var current_score := ArcadeDirector.score
 	if current_score != _last_rendered_score:
 		_last_rendered_score = current_score
@@ -99,6 +152,7 @@ func reset() -> void:
 	if _popup_tween != null and _popup_tween.is_valid():
 		_popup_tween.kill()
 	bonus_popup.visible = false
+	_refresh_lives(ArcadeDirector.lives)
 	_last_rendered_score = ArcadeDirector.score
 	score_label.text = "SCORE %08d" % ArcadeDirector.score
 
@@ -106,41 +160,62 @@ func reset() -> void:
 func _on_level_rank_awarded(_level_id: String, rank: String, multiplier: float, bonus: int) -> void:
 	if bonus <= 0:
 		return
-	_show_multiplier_pop(multiplier, rank)
 	_show_bonus_popup(bonus, rank)
+	_schedule_multiplier_pop(multiplier, rank)
 	# _play_clear_sfx(rank)  # SFX disabled for now — see game_juice_plan.md
+
+
+func _schedule_multiplier_pop(multiplier: float, rank: String) -> void:
+	_multiplier_pop_timer = get_tree().create_timer(multiplier_pop_delay)
+	_multiplier_pop_timer.timeout.connect(func() -> void:
+		if is_inside_tree():
+			_show_multiplier_pop(multiplier, rank)
+	)
 
 
 func _show_multiplier_pop(multiplier: float, rank: String) -> void:
 	if _multiplier_tween != null and _multiplier_tween.is_valid():
 		_multiplier_tween.kill()
 	multiplier_label.text = "x%.2f" % multiplier
-	multiplier_label.add_theme_color_override("font_color", RANK_COLORS.get(rank, Color.WHITE))
+	multiplier_label.add_theme_color_override("font_color", _rank_color(rank))
 	multiplier_label.modulate.a = 1.0
 	multiplier_label.scale = Vector2(0.4, 0.4)
 	_multiplier_tween = create_tween()
-	_multiplier_tween.tween_property(multiplier_label, "scale", Vector2(1.3, 1.3), 0.18).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_multiplier_tween.tween_property(multiplier_label, "scale", Vector2(1.15, 1.15), 0.18).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	_multiplier_tween.tween_property(multiplier_label, "scale", Vector2(1.0, 1.0), 0.12).set_trans(Tween.TRANS_SINE)
 
 
 func _show_bonus_popup(bonus: int, rank: String) -> void:
 	if _popup_tween != null and _popup_tween.is_valid():
 		_popup_tween.kill()
+	if not _popup_base_captured:
+		_popup_base_offset_top = bonus_popup.offset_top
+		_popup_base_offset_bottom = bonus_popup.offset_bottom
+		_popup_base_captured = true
+	bonus_popup.offset_top = _popup_base_offset_top
+	bonus_popup.offset_bottom = _popup_base_offset_bottom
 	bonus_popup.text = "+%d" % bonus
-	bonus_popup.add_theme_color_override("font_color", RANK_COLORS.get(rank, Color.WHITE))
+	bonus_popup.add_theme_color_override("font_color", _rank_color(rank))
 	bonus_popup.modulate.a = 0.0
 	bonus_popup.scale = Vector2(0.4, 0.4)
 	bonus_popup.visible = true
-	var start_pos := bonus_popup.position
+	var drift_time := maxf(0.1, bonus_popup_lifetime - BONUS_POPUP_POP_IN_TIME - BONUS_POPUP_FADE_OUT_TIME)
+	var target_offset_top := _popup_base_offset_top - BONUS_POPUP_DRIFT
 	_popup_tween = create_tween().set_parallel(true)
 	_popup_tween.tween_property(bonus_popup, "modulate:a", 1.0, 0.1)
 	_popup_tween.tween_property(bonus_popup, "scale", Vector2(1.25, 1.25), 0.18).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	_popup_tween.set_parallel(false)
 	_popup_tween.tween_property(bonus_popup, "scale", Vector2.ONE, 0.12).set_trans(Tween.TRANS_SINE)
-	_popup_tween.tween_property(bonus_popup, "position", start_pos + Vector2(0, -30), 0.8).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	_popup_tween.tween_interval(0.35)
-	_popup_tween.tween_property(bonus_popup, "modulate:a", 0.0, 0.35)
-	_popup_tween.tween_callback(func() -> void: bonus_popup.visible = false)
+	_popup_tween.parallel().tween_property(bonus_popup, "offset_top", target_offset_top, drift_time).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	_popup_tween.parallel().tween_property(bonus_popup, "offset_bottom", target_offset_top + bonus_popup.size.y, drift_time).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	_popup_tween.tween_property(bonus_popup, "modulate:a", 0.0, BONUS_POPUP_FADE_OUT_TIME)
+	_popup_tween.tween_callback(_reset_bonus_popup)
+
+
+func _reset_bonus_popup() -> void:
+	bonus_popup.visible = false
+	bonus_popup.offset_top = _popup_base_offset_top
+	bonus_popup.offset_bottom = _popup_base_offset_bottom
 
 
 func _play_clear_sfx(rank: String) -> void:
@@ -159,7 +234,7 @@ func _on_run_multiplier_changed(multiplier: float) -> void:
 	multiplier_label.text = "x%.2f" % multiplier
 	multiplier_label.modulate.a = 1.0
 	multiplier_label.scale = Vector2.ONE
-	multiplier_label.add_theme_color_override("font_color", RANK_COLORS.get("GOLD", Color.WHITE))
+	multiplier_label.add_theme_color_override("font_color", _rank_color("GOLD"))
 
 
 func _play_multiplier_death_reset() -> void:
@@ -200,13 +275,15 @@ func _update_medal_pace(delta: float) -> void:
 	medal_bar.visible = true
 	var time = time_container.total_time
 	_update_medal_bar(time, delta)
+	if not time_container.race_started:
+		return
 	var band := _band_for_time(time)
 	if band == _current_band:
 		return
 	var downgraded := _current_band != "" and _rank_weight(band) < _rank_weight(_current_band)
 	_current_band = band
 	band_label.text = MEDAL_TAGS.get(band, "---")
-	band_label.add_theme_color_override("font_color", RANK_COLORS.get(band, Color.WHITE))
+	band_label.add_theme_color_override("font_color", _rank_color(band))
 	if downgraded:
 		band_label.scale = Vector2(0.5, 0.5)
 		band_label.modulate.a = 1.0
@@ -223,7 +300,7 @@ func _pulse_medal_bar(pulse_from_percent: float, delta: float) -> bool:
 		_heartbeat_crossed = false
 		return false
 	var band := _band_for_time(time_container.total_time)
-	var color: Color = RANK_COLORS.get(band, Color.WHITE)
+	var color: Color = _rank_color(band)
 	if not _heartbeat_crossed:
 		_heartbeat_crossed = true
 		_heartbeat_elapsed = 0.0
@@ -264,6 +341,9 @@ func _pulse_bar_scale() -> void:
 
 
 func _update_medal_bar(time: float, delta: float) -> void:
+	if not time_container.race_started:
+		_stop_medal_bar_pulse()
+		return
 	var times := _level_times
 	var bronze: float = times[0]
 	var silver: float = times[1] if times.size() >= 3 else times[0]
@@ -272,16 +352,16 @@ func _update_medal_bar(time: float, delta: float) -> void:
 	var color: Color
 	if time >= bronze:
 		fill = 0.0
-		color = RANK_COLORS.get("", Color.WHITE)
+		color = _rank_color("")
 	elif time >= silver:
 		fill = clampf((bronze - time) / maxf(bronze - silver, 0.0001), 0.0, 1.0)
-		color = RANK_COLORS["BRONZE"]
+		color = _rank_color("BRONZE")
 	elif time >= gold:
 		fill = clampf((silver - time) / maxf(silver - gold, 0.0001), 0.0, 1.0)
-		color = RANK_COLORS["SILVER"]
+		color = _rank_color("SILVER")
 	else:
 		fill = clampf((gold - time) / maxf(gold, 0.0001), 0.0, 1.0)
-		color = RANK_COLORS["GOLD"]
+		color = _rank_color("GOLD")
 	medal_bar_fill.color = color
 	_medal_fill = fill
 	var width := medal_bar.size.x * fill
@@ -293,6 +373,14 @@ func _update_medal_bar(time: float, delta: float) -> void:
 	if not medal_bar_fill.visible:
 		return
 	_pulse_medal_bar(MEDAL_BAR_PULSE_THRESHOLD, delta)
+
+
+func _stop_medal_bar_pulse() -> void:
+	if _bar_pulse_tween != null and _bar_pulse_tween.is_valid():
+		_bar_pulse_tween.kill()
+	medal_bar.scale = Vector2.ONE
+	_heartbeat_elapsed = 0.0
+	_heartbeat_crossed = false
 
 
 func _band_for_time(time: float) -> String:
