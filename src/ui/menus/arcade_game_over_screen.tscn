@@ -100,6 +100,17 @@ text = "TIME BONUS +0000"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="BestStreakLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(0.996, 0.843, 0, 1)
+theme_override_font_sizes/font_size = 7
+text = "BEST STREAK x7"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="HSeparator" type="HSeparator" parent="Panel/MarginContainer/VBoxContainer"]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2

@@ -34,7 +34,7 @@ script = ExtResource("10_ycdy4")
 unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0.78431374)
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 14
 text = "00:00.00"
 
 [node name="MedalBar" type="Panel" parent="." unique_id=991122001]

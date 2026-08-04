@@ -20,6 +20,7 @@ var score: int = 0
 var levels_reached: int = 1
 var player_tag: String = ""
 var run_multiplier: float = 1.0
+var best_streak: float = 1.0
 var _level_bonuses: Array[Dictionary] = []
 
 
@@ -78,6 +79,7 @@ func on_player_died() -> RunResult:
 
 func _streak_apply() -> void:
 	run_multiplier += 1.0
+	best_streak = maxf(best_streak, run_multiplier)
 	run_multiplier_changed.emit(run_multiplier)
 
 
@@ -87,13 +89,13 @@ func _reset_run_multiplier() -> void:
 		run_multiplier_changed.emit(run_multiplier)
 
 
-static func calculate_time_multiplier(level_time: float, bronze: float, silver: float, gold: float, config: ArcadeConfig) -> float:
-	if config == null:
+static func calculate_time_multiplier(level_time: float, bronze: float, silver: float, gold: float, arcade_config: ArcadeConfig) -> float:
+	if arcade_config == null:
 		return 1.0
-	var min_multiplier := config.bronze_multiplier
-	var silver_multiplier := config.silver_multiplier
-	var gold_multiplier := config.gold_multiplier
-	var max_multiplier := config.max_multiplier
+	var min_multiplier := arcade_config.bronze_multiplier
+	var silver_multiplier := arcade_config.silver_multiplier
+	var gold_multiplier := arcade_config.gold_multiplier
+	var max_multiplier := arcade_config.max_multiplier
 	if level_time >= bronze:
 		return min_multiplier
 	if level_time >= silver:
@@ -145,6 +147,7 @@ func get_run_summary() -> Dictionary:
 		"final_level": GameSession.level_name,
 		"bonus_total": _sum_level_bonuses(),
 		"bonuses": _level_bonuses.duplicate(),
+		"best_streak": best_streak,
 	}
 
 
@@ -161,6 +164,7 @@ func _reset_run_state() -> void:
 	levels_reached = 1
 	player_tag = ""
 	run_multiplier = 1.0
+	best_streak = 1.0
 	_level_bonuses = []
 	_run_ended = false
 	_run_to_submit = false

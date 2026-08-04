@@ -23,6 +23,10 @@ const MEDAL_TAGS := {
 	"": "---",
 }
 
+const MEDAL_BAR_PULSE_THRESHOLD := 0.5
+const MEDAL_BAR_HEARTBEAT_INTERVAL := 0.5
+const MEDAL_BAR_HEARTBEAT_MIN_INTERVAL := 0.12
+
 @onready var time_container: MarginContainer = %TimeContainer
 @onready var band_label: Label = %BandLabel
 @onready var medal_bar: Panel = %MedalBar
@@ -48,6 +52,9 @@ var _last_rendered_score: int = -1
 var _current_level_id: String = ""
 var _level_times: Array[float] = []
 var _current_band: String = ""
+var _medal_fill: float = 1.0
+var _heartbeat_elapsed: float = 0.0
+var _heartbeat_crossed: bool = false
 
 
 func _ready() -> void:
@@ -62,8 +69,8 @@ func _exit_tree() -> void:
 		ArcadeDirector.run_multiplier_changed.disconnect(_on_run_multiplier_changed)
 
 
-func _process(_delta: float) -> void:
-	_update_medal_pace()
+func _process(delta: float) -> void:
+	_update_medal_pace(delta)
 	if GameSession.game_mode != GameSession.GameModes.ARCADE:
 		if score_vbox.visible:
 			score_vbox.visible = false
@@ -211,7 +218,7 @@ func _play_multiplier_death_reset() -> void:
 	)
 
 
-func _update_medal_pace() -> void:
+func _update_medal_pace(delta: float) -> void:
 	var level_id := GameSession.level_name
 	if level_id != _current_level_id:
 		_current_level_id = level_id
@@ -225,7 +232,7 @@ func _update_medal_pace() -> void:
 		return
 	medal_bar.visible = true
 	var time = time_container.total_time
-	_update_medal_bar(time)
+	_update_medal_bar(time, delta)
 	var band := _band_for_time(time)
 	if band == _current_band:
 		return
@@ -241,10 +248,45 @@ func _update_medal_pace() -> void:
 		_band_tween = create_tween()
 		_band_tween.tween_property(band_label, "scale", Vector2(1.4, 1.4), 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 		_band_tween.tween_property(band_label, "scale", Vector2.ONE, 0.1).set_trans(Tween.TRANS_SINE)
-	_pulse_medal_bar()
 
 
-func _pulse_medal_bar() -> void:
+func _pulse_medal_bar(pulse_from_percent: float, delta: float) -> bool:
+	if _medal_fill > pulse_from_percent:
+		_heartbeat_elapsed = 0.0
+		_heartbeat_crossed = false
+		return false
+	var band := _band_for_time(time_container.total_time)
+	var color: Color = RANK_COLORS.get(band, Color.WHITE)
+	if not _heartbeat_crossed:
+		_heartbeat_crossed = true
+		_heartbeat_elapsed = 0.0
+		_flash_fill(color)
+		return true
+	_heartbeat_elapsed += delta
+	var interval := _heartbeat_interval()
+	if _heartbeat_elapsed < interval:
+		return false
+	_heartbeat_elapsed = 0.0
+	_flash_fill(color)
+	return true
+
+
+func _heartbeat_interval() -> float:
+	var t := clampf(_medal_fill / MEDAL_BAR_PULSE_THRESHOLD, 0.0, 1.0)
+	return lerpf(MEDAL_BAR_HEARTBEAT_MIN_INTERVAL, MEDAL_BAR_HEARTBEAT_INTERVAL, t)
+
+
+func _flash_fill(color: Color) -> void:
+	medal_bar_fill.color = color.lightened(0.35)
+	var timer := get_tree().create_timer(0.12)
+	timer.timeout.connect(func() -> void:
+		if _medal_fill > 0.0:
+			medal_bar_fill.color = color
+	)
+	_pulse_bar_scale()
+
+
+func _pulse_bar_scale() -> void:
 	if _bar_pulse_tween != null and _bar_pulse_tween.is_valid():
 		_bar_pulse_tween.kill()
 	medal_bar.pivot_offset = medal_bar.size / 2.0
@@ -254,7 +296,7 @@ func _pulse_medal_bar() -> void:
 	_bar_pulse_tween.tween_property(medal_bar, "scale", Vector2.ONE, 0.15).set_trans(Tween.TRANS_SINE)
 
 
-func _update_medal_bar(time: float) -> void:
+func _update_medal_bar(time: float, delta: float) -> void:
 	var times := _level_times
 	var bronze: float = times[0]
 	var silver: float = times[1] if times.size() >= 3 else times[0]
@@ -274,12 +316,16 @@ func _update_medal_bar(time: float) -> void:
 		fill = clampf((gold - time) / maxf(gold, 0.0001), 0.0, 1.0)
 		color = RANK_COLORS["GOLD"]
 	medal_bar_fill.color = color
+	_medal_fill = fill
 	var width := medal_bar.size.x * fill
 	medal_bar_fill.size.x = width
 	if fill <= 0.001 and medal_bar_fill.visible:
 		medal_bar_fill.visible = false
 	elif fill > 0.001 and not medal_bar_fill.visible:
 		medal_bar_fill.visible = true
+	if not medal_bar_fill.visible:
+		return
+	_pulse_medal_bar(MEDAL_BAR_PULSE_THRESHOLD, delta)
 
 
 func _band_for_time(time: float) -> String:

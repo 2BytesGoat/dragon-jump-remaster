@@ -16,6 +16,7 @@ const LETTERS := "ABCDEFGHIJKLMNOPQRSTUVWXYZ "
 @onready var levels_label = %LevelsLabel
 @onready var new_high_score_label = %NewHighScoreLabel
 @onready var bonus_label = %BonusLabel
+@onready var best_streak_label = %BestStreakLabel
 @onready var hint_label = %HintLabel
 @onready var save_hint_label = %SaveHintLabel
 @onready var letter_edit_container = %LetterEditContainer
@@ -31,6 +32,8 @@ var _summary: Dictionary = {}
 var _mode: String = "edit"
 var _letter_labels: Array[Label] = []
 var _hint_tween: Tween = null
+var _score_tween: Tween = null
+var _high_score_tween: Tween = null
 
 
 func _ready() -> void:
@@ -93,13 +96,18 @@ func _handle_leaderboard_input(event: InputEvent) -> void:
 
 func show_run_summary(summary: Dictionary) -> void:
 	_summary = summary
-	score_label.text = "%08d" % int(summary.get("score", 0))
+	score_label.text = "%08d" % 0
 	levels_label.text = "%02d" % int(summary.get("levels_reached", 1))
-	new_high_score_label.visible = int(summary.get("score", 0)) > SaveManager.get_arcade_high_score()
+	var is_new_high := int(summary.get("score", 0)) > SaveManager.get_arcade_high_score()
+	new_high_score_label.visible = is_new_high
 	var bonus_total := int(summary.get("bonus_total", 0))
 	bonus_label.visible = bonus_total > 0
 	if bonus_total > 0:
 		bonus_label.text = "TIME BONUS +%04d" % bonus_total
+	var streak := float(summary.get("best_streak", 1.0))
+	best_streak_label.visible = streak > 1.0
+	if streak > 1.0:
+		best_streak_label.text = "BEST STREAK x%.0f" % streak
 	_mode = "edit"
 	leaderboard_container.visible = false
 	buttons_row.visible = false
@@ -108,6 +116,9 @@ func show_run_summary(summary: Dictionary) -> void:
 	save_hint_label.visible = true
 	_refresh_letters()
 	_start_hint_blink()
+	_roll_score(int(summary.get("score", 0)))
+	if is_new_high:
+		_flash_new_high_score()
 
 
 func get_entered_tag() -> String:
@@ -115,6 +126,33 @@ func get_entered_tag() -> String:
 	for i in range(TAG_LENGTH):
 		result += LETTERS[_tag[i]]
 	return result
+
+
+func _roll_score(target: int) -> void:
+	if _score_tween != null and _score_tween.is_valid():
+		_score_tween.kill()
+	_score_tween = create_tween()
+	_score_tween.tween_method(_set_score_text, 0, target, 0.8).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+
+
+func _set_score_text(value: int) -> void:
+	score_label.text = "%08d" % value
+
+
+func _flash_new_high_score() -> void:
+	if _high_score_tween != null and _high_score_tween.is_valid():
+		_high_score_tween.kill()
+	new_high_score_label.modulate.a = 1.0
+	new_high_score_label.scale = Vector2(0.5, 0.5)
+	_high_score_tween = create_tween()
+	_high_score_tween.tween_property(new_high_score_label, "scale", Vector2(1.3, 1.3), 0.2).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_high_score_tween.tween_property(new_high_score_label, "scale", Vector2.ONE, 0.12).set_trans(Tween.TRANS_SINE)
+	_high_score_tween.tween_interval(0.5)
+	_high_score_tween.tween_property(new_high_score_label, "modulate:a", 0.0, 0.3)
+	_high_score_tween.tween_callback(func() -> void:
+		new_high_score_label.modulate.a = 1.0
+		new_high_score_label.scale = Vector2.ONE
+	)
 
 
 func _move_cursor(offset: int) -> void:
@@ -221,7 +259,13 @@ func _render_leaderboard() -> void:
 		row.add_child(score)
 		if is_new:
 			row.modulate = Color(1.0, 0.85, 0.3, 1.0)
+		row.modulate.a = 0.0
+		row.scale = Vector2(0.8, 0.8)
 		leaderboard_entries_box.add_child(row)
+		var tween := create_tween()
+		tween.tween_interval(0.05 * i)
+		tween.tween_property(row, "modulate:a", 1.0, 0.15)
+		tween.parallel().tween_property(row, "scale", Vector2.ONE, 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 	if entries.is_empty():
 		var empty := Label.new()

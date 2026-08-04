@@ -33,21 +33,21 @@ Goal: make the reward loop say *"look at me, play me for some more time"* — Va
 2. **Floating "+N" popup** — on level clear, a "+4000" drifts up from the rank card and fades (Vampire Survivors style).
 3. **Screen flash on clear** — quick full-screen tint flash, colored by rank (gold for GOLD/GOLD+, silver, bronze).
 4. **Medal bar pulse** — tweened fill + scale pulse when crossing into a new band (was instant).
-5. **SFX for reward moments** — clear chime, gold "jackpot" sound, death thud. Placeholder assets from the existing pool (`SoundBonus.wav`, `SoundSlide.wav`) until real sounds are sourced.
+5. **SFX for reward moments** — clear chime, gold "jackpot" sound, death thud. Placeholder assets from the existing pool (`SoundBonus.wav`, `SoundSlide.wav`) until real sounds are sourced. **Calls commented out — see Open questions.**
 
-## Tier 2 — celebration moments (not yet implemented)
+## Tier 2 — celebration moments (implemented 2026-08-04)
 
-- Streak milestone celebrations at x3 / x5 / x10 (banner + bigger flash + particle burst).
-- Gold confetti burst on GOLD rank (GPUParticles2D).
-- Game-over screen juice: score counts up, leaderboard entries pop in staggered, "NEW HIGH SCORE" banner flash.
+- **Streak milestone celebrations** at x3 / x5 / x10 — "STREAK xN!" banner pops above the rank card, gold flash, confetti burst.
+- **Gold confetti burst** on GOLD/GOLD+ rank (GPUParticles2D, gold/silver/bronze/white palette).
+- **Game-over screen juice:** score counts up (0.8s ease-out), "NEW HIGH SCORE!" pops and flashes, leaderboard entries pop in staggered (50ms apart, TRANS_BACK).
 
-## Tier 3 — retention polish (not yet implemented)
+## Tier 3 — retention polish (implemented 2026-08-04)
 
-- Menu button hover/click scale-pop (`menu_button.gd` currently does nothing on hover).
-- Best-streak stat on game over ("BEST STREAK x7") — a chase target per run.
-- Timer tension tick in the last ~10% of a medal band.
+- **Menu button hover/click scale-pop** — `menu_button.gd` now scales on focus/hover (1.08), press (0.92), release (1.08) with TRANS_BACK.
+- **Best-streak stat on game over** — "BEST STREAK xN" shown on the game-over screen; tracked in `ArcadeDirector.best_streak` (max consecutive clears per run).
+- **Timer tension tick** — the medal bar flashes brighter + pulses once when the fill drops below 10% of the current band (once per band).
 
 ## Open questions
 
-- **SFX sourcing:** only 2 SFX exist (`SoundBonus.wav`, `SoundSlide.wav`). Real clear/gold/death sounds need a source decision (freesound / opengameart, see `assets/sfx/sources.txt`).
+- **SFX sourcing:** only 2 SFX exist (`SoundBonus.wav`, `SoundSlide.wav`). Real clear/gold/death sounds need a source decision (freesound / opengameart, see `assets/sfx/sources.txt`). SFX calls are commented out in `arcade_rank_hud.gd` until then.
 - **Flash intensity:** full-screen tint vs. edge vignette — tune after playtest.
