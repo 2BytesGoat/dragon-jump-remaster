@@ -113,7 +113,6 @@ mouse_filter = 2
 script = ExtResource("3_lquwl")
 
 [node name="PauseScreen" parent="SubViewportContainer/SubViewport/CanvasLayer" unique_id=247255432 instance=ExtResource("6_ycdy4")]
-visible = false
 offset_left = -90.0
 offset_top = -105.0
 offset_right = 90.0

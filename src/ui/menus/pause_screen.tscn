@@ -31,6 +31,7 @@ theme = ExtResource("1_5hkai")
 script = ExtResource("4_8k3m2")
 
 [node name="Panel" type="Panel" parent="."]
+visible = false
 custom_minimum_size = Vector2(180, 210)
 layout_mode = 2
 size_flags_vertical = 3

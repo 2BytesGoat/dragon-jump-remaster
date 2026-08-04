@@ -7,20 +7,18 @@ extends MarginContainer
 @onready var settings_menu: MarginContainer = $SettingsMenu
 
 
-func _ready() -> void:
-	visibility_changed.connect(_on_visibility_changed)
-	_on_visibility_changed()
-
-
-func _on_visibility_changed() -> void:
-	if not visible:
-		return
-	if settings_menu != null and settings_menu.visible:
-		var close_button := settings_menu.find_child("CloseButton", true, false)
-		if close_button is Button:
-			close_button.grab_focus()
-	elif resume_button != null:
-		resume_button.grab_focus()
+func set_pause_active(value: bool) -> void:
+	if value:
+		pause_panel.visible = true
+		if settings_menu != null:
+			settings_menu.visible = false
+		if resume_button != null:
+			resume_button.grab_focus()
+	else:
+		if pause_panel != null:
+			pause_panel.visible = false
+		if settings_menu != null:
+			settings_menu.visible = false
 
 
 func _on_settings_button_pressed() -> void:
@@ -42,6 +40,8 @@ func _on_settings_menu_closed() -> void:
 		settings_button.grab_focus()
 
 
-func close_settings_if_open() -> void:
+func close_settings_if_open() -> bool:
 	if settings_menu != null and settings_menu.visible:
 		_on_settings_menu_closed()
+		return true
+	return false

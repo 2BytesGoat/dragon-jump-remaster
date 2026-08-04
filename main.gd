@@ -20,6 +20,7 @@ extends Node
 var level_scene_path = "res://src/ui/menus/level_select.tscn"
 
 var race_finished: bool = false
+var is_game_paused: bool = false
 var first_pickup: bool = true
 var total_time: float = 0.0
 var delta_time: float = 0.0
@@ -42,7 +43,7 @@ func _ready():
 	level.load_level(level_data)
 	initialize_players()
 	
-	pause_screen.visible = false
+	pause_screen.set_pause_active(false)
 	end_screen.visible = false
 	arcade_game_over_screen.visible = false
 	
@@ -69,10 +70,13 @@ func _input(event: InputEvent) -> void:
 	if not is_inside_tree() or is_queued_for_deletion():
 		return
 	if not race_finished and event.is_action_pressed("ui_cancel"):
-		if pause_screen.visible and pause_screen.has_method("close_settings_if_open"):
-			pause_screen.close_settings_if_open()
+		if is_game_paused:
+			if pause_screen.has_method("close_settings_if_open") and pause_screen.close_settings_if_open():
+				pass
+			else:
+				set_game_paused(false)
 		else:
-			set_game_paused(not pause_screen.visible)
+			set_game_paused(true)
 
 
 func initialize_players() -> void:
@@ -112,9 +116,10 @@ func update_players():
 
 
 func set_game_paused(value: bool) -> void:
+	is_game_paused = value
 	for player in player_container.get_children():
 		player.is_paused = value
-	pause_screen.visible = value 
+	pause_screen.set_pause_active(value)
 	game_paused.emit(value)
 
 
