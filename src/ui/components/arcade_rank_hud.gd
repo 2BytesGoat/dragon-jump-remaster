@@ -31,9 +31,7 @@ const MEDAL_BAR_HEARTBEAT_MIN_INTERVAL := 0.12
 @onready var band_label: Label = %BandLabel
 @onready var medal_bar: Panel = %MedalBar
 @onready var medal_bar_fill: ColorRect = %MedalBarFill
-@onready var rank_card: Label = %RankCard
 @onready var bonus_popup: Label = %BonusPopup
-@onready var clear_flash: ColorRect = %ClearFlash
 @onready var clear_sfx: AudioStreamPlayer = %ClearSFX
 @onready var gold_sfx: AudioStreamPlayer = %GoldSFX
 @onready var death_sfx: AudioStreamPlayer = %DeathSFX
@@ -41,13 +39,11 @@ const MEDAL_BAR_HEARTBEAT_MIN_INTERVAL := 0.12
 @onready var score_label: Label = %ScoreLabel
 @onready var multiplier_label: Label = %MultiplierLabel
 
-var _rank_tween: Tween = null
 var _multiplier_tween: Tween = null
 var _band_tween: Tween = null
 var _bar_pulse_tween: Tween = null
 var _score_tween: Tween = null
 var _popup_tween: Tween = null
-var _flash_tween: Tween = null
 var _last_rendered_score: int = -1
 var _current_level_id: String = ""
 var _level_times: Array[float] = []
@@ -100,15 +96,9 @@ func _set_score_text(value: int) -> void:
 
 
 func reset() -> void:
-	if _rank_tween != null and _rank_tween.is_valid():
-		_rank_tween.kill()
 	if _popup_tween != null and _popup_tween.is_valid():
 		_popup_tween.kill()
-	if _flash_tween != null and _flash_tween.is_valid():
-		_flash_tween.kill()
-	rank_card.visible = false
 	bonus_popup.visible = false
-	clear_flash.visible = false
 	_last_rendered_score = ArcadeDirector.score
 	score_label.text = "SCORE %08d" % ArcadeDirector.score
 
@@ -116,22 +106,8 @@ func reset() -> void:
 func _on_level_rank_awarded(_level_id: String, rank: String, multiplier: float, bonus: int) -> void:
 	if bonus <= 0:
 		return
-	var multiplier_text := "x%.2f" % multiplier
-	rank_card.text = "%s %s  +%d" % [rank, multiplier_text, bonus]
-	rank_card.add_theme_color_override("font_color", RANK_COLORS.get(rank, Color.WHITE))
-	rank_card.scale = Vector2(0.4, 0.4)
-	rank_card.modulate.a = 0.0
-	rank_card.visible = true
-	_rank_tween = create_tween().set_parallel(true)
-	_rank_tween.tween_property(rank_card, "scale", Vector2(1.2, 1.2), 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	_rank_tween.tween_property(rank_card, "modulate:a", 1.0, 0.1)
-	_rank_tween.set_parallel(false)
-	_rank_tween.tween_interval(0.9)
-	_rank_tween.tween_property(rank_card, "modulate:a", 0.0, 0.4)
-	_rank_tween.tween_callback(func() -> void: rank_card.visible = false)
 	_show_multiplier_pop(multiplier, rank)
 	_show_bonus_popup(bonus, rank)
-	_play_clear_flash(rank)
 	# _play_clear_sfx(rank)  # SFX disabled for now — see game_juice_plan.md
 
 
@@ -153,27 +129,18 @@ func _show_bonus_popup(bonus: int, rank: String) -> void:
 	bonus_popup.text = "+%d" % bonus
 	bonus_popup.add_theme_color_override("font_color", RANK_COLORS.get(rank, Color.WHITE))
 	bonus_popup.modulate.a = 0.0
+	bonus_popup.scale = Vector2(0.4, 0.4)
 	bonus_popup.visible = true
 	var start_pos := bonus_popup.position
 	_popup_tween = create_tween().set_parallel(true)
-	_popup_tween.tween_property(bonus_popup, "modulate:a", 1.0, 0.12)
-	_popup_tween.tween_property(bonus_popup, "position", start_pos + Vector2(0, -30), 0.7).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	_popup_tween.tween_property(bonus_popup, "modulate:a", 1.0, 0.1)
+	_popup_tween.tween_property(bonus_popup, "scale", Vector2(1.25, 1.25), 0.18).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	_popup_tween.set_parallel(false)
+	_popup_tween.tween_property(bonus_popup, "scale", Vector2.ONE, 0.12).set_trans(Tween.TRANS_SINE)
+	_popup_tween.tween_property(bonus_popup, "position", start_pos + Vector2(0, -30), 0.8).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	_popup_tween.tween_interval(0.35)
 	_popup_tween.tween_property(bonus_popup, "modulate:a", 0.0, 0.35)
 	_popup_tween.tween_callback(func() -> void: bonus_popup.visible = false)
-
-
-func _play_clear_flash(rank: String) -> void:
-	if _flash_tween != null and _flash_tween.is_valid():
-		_flash_tween.kill()
-	var color: Color = RANK_COLORS.get(rank, Color.WHITE)
-	clear_flash.color = Color(color.r, color.g, color.b, 0.0)
-	clear_flash.visible = true
-	_flash_tween = create_tween()
-	_flash_tween.tween_property(clear_flash, "color:a", 0.22, 0.08)
-	_flash_tween.tween_property(clear_flash, "color:a", 0.0, 0.35).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	_flash_tween.tween_callback(func() -> void: clear_flash.visible = false)
 
 
 func _play_clear_sfx(rank: String) -> void:

@@ -206,6 +206,15 @@ func _on_arcade_level_finished() -> void:
 	var clear_time = time_container.total_time
 	SignalBus.new_time_submission.emit(finished_level, clear_time)
 	level_name = ArcadeDirector.on_level_finished(clear_time)
+	
+	# Let the +bonus popup and score roll play out over the finished level
+	# before advancing — reset_ui() would otherwise kill them same-frame.
+	for p in player_container.get_children():
+		p.is_paused = true
+	await get_tree().create_timer(1.3).timeout
+	for p in player_container.get_children():
+		p.is_paused = false
+	
 	if ArcadeDirector.has_run_to_submit():
 		_show_arcade_game_over()
 		return
