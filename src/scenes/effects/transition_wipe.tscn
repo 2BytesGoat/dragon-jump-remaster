@@ -1,0 +1,22 @@
+[gd_scene format=4]
+
+[ext_resource type="Shader" path="res://assets/shaders/transition_wipe.gdshader" id="1_wipe"]
+[ext_resource type="Script" path="res://src/scenes/effects/transition_wipe.gd" id="2_wipe"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wipe"]
+resource_local_to_scene = true
+shader = ExtResource("1_wipe")
+shader_parameter/progress = 0.0
+shader_parameter/reveal = false
+shader_parameter/diamondPixelSize = 10.0
+
+[node name="TransitionWipe" type="ColorRect"]
+color = Color(0.035, 0.043, 0.082, 1)
+material = SubResource("ShaderMaterial_wipe")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_wipe")

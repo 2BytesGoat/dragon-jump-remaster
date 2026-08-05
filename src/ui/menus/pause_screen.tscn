@@ -3,7 +3,7 @@
 [ext_resource type="Theme" uid="uid://se7xk3lcwng8" path="res://src/ui/components/themes/main_theme.tres" id="1_5hkai"]
 [ext_resource type="Texture2D" uid="uid://dolawuug5bvhc" path="res://assets/sprites/ui/silver_panel-export.png" id="2_3fw6s"]
 [ext_resource type="PackedScene" uid="uid://bnxudkobrdgtb" path="res://src/ui/menus/menu_button.tscn" id="3_golrs"]
-[ext_resource type="Script" uid="uid://b3y7m1l8x2w5p" path="res://src/ui/menus/pause_screen.gd" id="4_8k3m2"]
+[ext_resource type="Script" uid="uid://cvq0uc28yatn2" path="res://src/ui/menus/pause_screen.gd" id="4_8k3m2"]
 [ext_resource type="PackedScene" uid="uid://dws2c5qkd8x6q" path="res://src/ui/menus/settings_menu.tscn" id="5_abc12"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_b38vx"]
@@ -31,6 +31,7 @@ theme = ExtResource("1_5hkai")
 script = ExtResource("4_8k3m2")
 
 [node name="Panel" type="Panel" parent="."]
+visible = false
 custom_minimum_size = Vector2(180, 210)
 layout_mode = 2
 size_flags_vertical = 3

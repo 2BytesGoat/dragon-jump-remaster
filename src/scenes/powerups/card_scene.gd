@@ -194,15 +194,15 @@ func dissolve_out(on_finished: Callable = Callable()) -> void:
 			on_finished.call()
 		return
 	
-	var material := texture.material as ShaderMaterial
-	if material == null:
+	var texture_material := texture.material as ShaderMaterial
+	if texture_material == null:
 		if on_finished.is_valid():
 			on_finished.call()
 		return
 	
 	# Start the burn from the center of the card in UV space.
-	material.set_shader_parameter("position", Vector2(0.5, 0.5))
-	material.set_shader_parameter("radius", 0.0)
+	texture_material.set_shader_parameter("position", Vector2(0.5, 0.5))
+	texture_material.set_shader_parameter("radius", 0.0)
 	
 	if _dissolve_tween != null and _dissolve_tween.is_valid():
 		_dissolve_tween.kill()
@@ -222,7 +222,7 @@ func dissolve_out(on_finished: Callable = Callable()) -> void:
 	
 	# Dissolve the card textures.
 	tween.parallel().tween_method(
-		func(value: float) -> void: material.set_shader_parameter("radius", value),
+		func(value: float) -> void: texture_material.set_shader_parameter("radius", value),
 		0.0,
 		1.5,
 		dissolve_duration

@@ -6,7 +6,7 @@ A single-button arcade speedrun platformer built in Godot 4.
 
 Dragon Jump Remaster is a **single-player arcade speedrun platformer** for Windows, Linux, macOS, and Web. The V1.0 release focuses on a tight one-button loop: jump, reset, chase medals, and beat the clock across 10–20 handcrafted levels.
 
-See [`docs/direction/product_identity.md`](docs/direction/product_identity.md) for the full product pitch and [`docs/direction/release_plan.md`](docs/direction/release_plan.md) for the locked V1.0 scope.
+See [`docs/design/product-identity.md`](docs/design/product-identity.md) for the full product pitch and [`docs/design/release-plan.md`](docs/design/release-plan.md) for the locked V1.0 scope. New to the project? Start with [`docs/getting-started.md`](docs/getting-started.md).
 
 ## Getting started
 
@@ -63,17 +63,20 @@ Features intentionally **out of V1.0** (post-launch or shelved):
 - Co-op / bot race and crown/tag modes
 - Phone-as-controller local multiplayer
 
-See [`docs/backlog/shelved_features.md`](docs/backlog/shelved_features.md) for the full list.
+See [`docs/future/shelved-features.md`](docs/future/shelved-features.md) for the full list.
 
 ## Documentation
 
 This repo uses an Obsidian-style docs vault under `docs/`:
 
-- [`docs/00_index.md`](docs/00_index.md) — vault entry point
-- [`docs/direction/`](docs/direction/) — game design and release plan
-- [`docs/systems/`](docs/systems/) — technical reference for code and scenes
-- [`docs/tracking/`](docs/tracking/) — backlog, sprints, and decision log
-- [`docs/backlog/`](docs/backlog/) — shelved features and research ideas
+- [`docs/index.md`](docs/index.md) — vault entry point and full directory
+- [`docs/getting-started.md`](docs/getting-started.md) — 5-minute newcomer orientation
+- [`docs/design/`](docs/design/) — game design documents (product identity, core loop, release plan)
+- [`docs/technical/`](docs/technical/) — technical reference for code and scenes
+- [`docs/level-design/`](docs/level-design/) — level design rules and tooling
+- [`docs/project/`](docs/project/) — backlog, sprints, decisions, and checklists
+- [`docs/future/`](docs/future/) — shelved features and research ideas
+- [`docs/meta/`](docs/meta/) — documentation about documentation
 
 ## License
 

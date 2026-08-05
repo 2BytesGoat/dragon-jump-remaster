@@ -62,8 +62,8 @@ func powerup_used(powerup_name: String) -> void:
 	track(EventName.POWERUP_USED, {"powerup_name": powerup_name})
 
 
-func death(reason: String, level_name: String = "") -> void:
-	track(EventName.DEATH, {"reason": reason, "level_name": level_name})
+func death(reason: String, level_name: String = "", powerups_lost: int = 0) -> void:
+	track(EventName.DEATH, {"reason": reason, "level_name": level_name, "powerups_lost": powerups_lost})
 
 
 func menu_opened(menu_name: String) -> void:

@@ -1,0 +1,6 @@
+[gd_scene format=4]
+
+[ext_resource type="Script" path="res://src/scenes/effects/hit_stop.gd" id="1_hitstop"]
+
+[node name="HitStop" type="Node"]
+script = ExtResource("1_hitstop")

@@ -7,10 +7,17 @@ extends Camera2D
 var noise_i: float = 0.0
 var noise_seed: float = 30.0
 
-var shake_decay_rate: float = 3.0
+var shake_duration: float = 0.0
+var shake_time_remaining: float = 0.0
+var initial_shake_strength: float = 0.0
 var shake_strength: float = 0.0
 
 var initial_offset: Vector2 = Vector2.ZERO
+
+var _is_panning: bool = false
+var _pan_tween: Tween
+
+signal pan_completed
 
 
 func _ready() -> void:
@@ -18,18 +25,25 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	if shake_strength <= 1:
+	if shake_time_remaining <= 0:
 		return
-	
-	shake_strength = snapped(lerp(shake_strength, 0.0, shake_decay_rate * delta), 0.01)
+
+	shake_time_remaining -= delta
+	if shake_time_remaining <= 0:
+		shake_time_remaining = 0.0
+		shake_strength = 0.0
+		self.offset = initial_offset
+		return
+
+	if shake_duration > 0.0:
+		shake_strength = initial_shake_strength * (shake_time_remaining / shake_duration)
 	var shake_offset = get_random_offset()
 	self.offset = initial_offset + shake_offset
-	
-	if shake_strength <= 1:
-		self.offset = initial_offset
 
 
 func _physics_process(_delta: float) -> void:
+	if _is_panning:
+		return
 	if player_node == null:
 		return
 	
@@ -41,8 +55,31 @@ func zoom_on(target_position: Vector2, zoom_factor: float = 5.0):
 	zoom = Vector2(zoom_factor, zoom_factor)
 
 
-func apply_shake(strength: float = 30):
+func pan_to(target: Vector2, duration: float) -> void:
+	_is_panning = true
+	if _pan_tween != null and _pan_tween.is_valid():
+		_pan_tween.kill()
+	if duration <= 0.0:
+		global_position = target
+		_on_pan_finished()
+		return
+	_pan_tween = create_tween()
+	_pan_tween.set_trans(Tween.TRANS_SINE)
+	_pan_tween.set_ease(Tween.EASE_IN_OUT)
+	_pan_tween.tween_property(self, "global_position", target, duration)
+	_pan_tween.finished.connect(_on_pan_finished)
+
+
+func _on_pan_finished() -> void:
+	_is_panning = false
+	pan_completed.emit()
+
+
+func apply_shake(strength: float = 30, duration: float = 0.4):
 	noise_i = 0.0
+	initial_shake_strength = strength
+	shake_duration = duration
+	shake_time_remaining = duration
 	shake_strength = strength
 
 

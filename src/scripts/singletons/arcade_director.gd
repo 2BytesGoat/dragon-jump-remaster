@@ -11,12 +11,18 @@ enum RunResult {
 }
 
 signal run_ended(summary: Dictionary)
+signal level_rank_awarded(level_id: String, rank: String, multiplier: float, bonus: int)
+signal run_multiplier_changed(multiplier: float)
+signal lives_changed(lives: int)
 
 var config: ArcadeConfig
 var lives: int = 3
 var score: int = 0
 var levels_reached: int = 1
 var player_tag: String = ""
+var run_multiplier: float = 1.0
+var best_streak: float = 1.0
+var _level_bonuses: Array[Dictionary] = []
 
 
 func _ready() -> void:
@@ -37,7 +43,24 @@ func can_start_run() -> bool:
 	return config != null
 
 
-func on_level_finished() -> String:
+func on_level_finished(level_time: float) -> String:
+	var level_id := GameSession.level_name
+	var campaign_level := CampaignLevelLibrary.get_level(level_id)
+	var bronze: float = INF
+	var silver: float = INF
+	var gold: float = INF
+	if campaign_level != null and not campaign_level.times.is_empty():
+		bronze = campaign_level.times[0]
+		gold = campaign_level.times[-1]
+		silver = campaign_level.times[1] if campaign_level.times.size() >= 3 else gold
+	var time_multiplier := calculate_time_multiplier(level_time, bronze, silver, gold, config)
+	var streak_multiplier := run_multiplier
+	var bonus := roundi(config.level_clear_score * time_multiplier * streak_multiplier)
+	_streak_apply()
+	level_rank_awarded.emit(level_id, _rank_for_multiplier(time_multiplier, config), streak_multiplier, bonus)
+	if bonus > 0:
+		score += bonus
+		_level_bonuses.append({"level_id": level_id, "time": level_time, "multiplier": run_multiplier, "bonus": bonus})
 	var next_level := CampaignLevelLibrary.get_next_level(GameSession.level_name)
 	if next_level.is_empty():
 		_end_run()
@@ -48,24 +71,78 @@ func on_level_finished() -> String:
 
 
 func on_player_died() -> RunResult:
+	_reset_run_multiplier()
 	lives -= 1
+	lives_changed.emit(lives)
 	if lives <= 0:
 		_end_run()
 		return RunResult.GAME_OVER
 	return RunResult.CONTINUE
 
 
+func _streak_apply() -> void:
+	run_multiplier += 1.0
+	best_streak = maxf(best_streak, run_multiplier)
+	run_multiplier_changed.emit(run_multiplier)
+
+
+func _reset_run_multiplier() -> void:
+	if run_multiplier != 1.0:
+		run_multiplier = 1.0
+		run_multiplier_changed.emit(run_multiplier)
+
+
+static func calculate_time_multiplier(level_time: float, bronze: float, silver: float, gold: float, arcade_config: ArcadeConfig) -> float:
+	if arcade_config == null:
+		return 1.0
+	var min_multiplier := arcade_config.bronze_multiplier
+	var silver_multiplier := arcade_config.silver_multiplier
+	var gold_multiplier := arcade_config.gold_multiplier
+	var max_multiplier := arcade_config.max_multiplier
+	if level_time >= bronze:
+		return min_multiplier
+	if level_time >= silver:
+		return lerpf(min_multiplier, silver_multiplier, (bronze - level_time) / maxf(bronze - silver, 0.0001))
+	if level_time >= gold:
+		return lerpf(silver_multiplier, gold_multiplier, (silver - level_time) / maxf(silver - gold, 0.0001))
+	return lerpf(gold_multiplier, max_multiplier, (gold - level_time) / maxf(gold, 0.0001))
+
+
+static func _rank_for_multiplier(multiplier: float, arcade_config: ArcadeConfig) -> String:
+	if arcade_config == null:
+		return ""
+	if multiplier >= arcade_config.max_multiplier:
+		return "GOLD+"
+	if multiplier >= arcade_config.gold_multiplier:
+		return "GOLD"
+	if multiplier >= arcade_config.silver_multiplier:
+		return "SILVER"
+	if multiplier > arcade_config.bronze_multiplier:
+		return "BRONZE"
+	return ""
+
+
 var _run_ended: bool = false
+var _run_to_submit: bool = false
+var _pending_run_id: String = ""
 
 
 func submit_tag(tag: String) -> void:
 	player_tag = tag
 	_run_ended = false
-	# TODO: persist to local arcade leaderboard via SaveManager / GameData
+	if _run_to_submit and score > 0:
+		SaveManager.submit_arcade_run(tag, score, levels_reached, _pending_run_id)
+	_run_to_submit = false
+
+
+func skip_run_submission() -> void:
+	player_tag = ""
+	_run_ended = false
+	_run_to_submit = false
 
 
 func has_run_to_submit() -> bool:
-	return _run_ended and player_tag.is_empty()
+	return _run_to_submit and player_tag.is_empty()
 
 
 func get_run_summary() -> Dictionary:
@@ -73,8 +150,19 @@ func get_run_summary() -> Dictionary:
 		"tag": player_tag,
 		"score": score,
 		"levels_reached": levels_reached,
-		"final_level": GameSession.level_name
+		"final_level": GameSession.level_name,
+		"bonus_total": _sum_level_bonuses(),
+		"bonuses": _level_bonuses.duplicate(),
+		"best_streak": best_streak,
+		"run_id": _pending_run_id,
 	}
+
+
+func _sum_level_bonuses() -> int:
+	var total := 0
+	for entry in _level_bonuses:
+		total += int(entry.get("bonus", 0))
+	return total
 
 
 func _reset_run_state() -> void:
@@ -82,9 +170,17 @@ func _reset_run_state() -> void:
 	score = 0
 	levels_reached = 1
 	player_tag = ""
+	run_multiplier = 1.0
+	best_streak = 1.0
+	_level_bonuses = []
 	_run_ended = false
+	_run_to_submit = false
+	_pending_run_id = ""
+	lives_changed.emit(lives)
 
 
 func _end_run() -> void:
 	_run_ended = true
+	_run_to_submit = true
+	_pending_run_id = str(Time.get_ticks_msec())
 	run_ended.emit(get_run_summary())

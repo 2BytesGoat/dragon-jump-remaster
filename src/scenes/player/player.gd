@@ -43,6 +43,7 @@ var velocity_x_locked: bool = false
 # Controllers
 @onready var controller_container: Node = $ControllerContainer
 var active_controller: PlayerCharacterController = null
+var _current_controller_type: int = -1
 
 # Nodes
 @onready var flippable_container: Node2D = $Flippable
@@ -50,19 +51,25 @@ var active_controller: PlayerCharacterController = null
 @onready var afterimage: CPUParticles2D = $Flippable/AfterImage
 @onready var grappling_hook: Node2D = $Flippable/GrapplingHook
 @onready var hat_container: Node2D = $Flippable/HatContainer
-var has_crown: bool = false
 var last_floor_position: Vector2 = Vector2.ZERO
 var is_done: bool = false
 
 # Signals
 signal picked_powerup(powerup_name: String, id: int, pickup_global_position: Vector2)
 signal used_powerup(id: int)
+signal powerup_consumed(type: String)
 signal has_resetted
 signal run_started(player: Player)
 signal run_restarted(player: Player)
 signal run_finished(player: Player)
 signal died(player: Player)
-signal dropped_crown(player: Player)
+
+# Juice nodes - assigned by main.gd in initialize_players()
+var screen_shake: ScreenShake
+var hit_stop: HitStop
+var transition_wipe: TransitionWipe
+var camera: Camera2D
+@export var wipe_duration: float = 0.35
 
 # Effects
 @onready var spawn_smoke = preload("res://src/scenes/effects/spawn_smoke_effect.tscn")
@@ -74,6 +81,7 @@ var current_friction: float = default_friction   # Current friction based on sur
 var facing_direction: int = Vector2i.RIGHT.x
 var started_walking: bool = false
 var is_paused: bool = false
+var is_dead: bool = false
 var wants_to_jump: bool = false
 var needs_to_release: bool = false
 var modifiers: Dictionary = {}
@@ -156,14 +164,53 @@ func set_jump(input: bool) -> void:
 		needs_to_release = false
 
 
+func die() -> void:
+	if is_dead:
+		return
+	is_dead = true
+	TelemetrySystem.death("hazard", level_reference.level_name if level_reference != null else "", len(powerups))
+	state_machine.transition_to("Die")
+	_run_death_sequence()
+
+
+func _run_death_sequence() -> void:
+	if screen_shake != null:
+		screen_shake.shake(ScreenShake.Event.DEATH)
+	if hit_stop != null:
+		await hit_stop.trigger()
+	# The player node may be freed (e.g. scene change) during any await below.
+	if not is_instance_valid(self):
+		return
+	if transition_wipe != null:
+		transition_wipe.cover(wipe_duration)
+		await transition_wipe.cover_midpoint
+		if not is_instance_valid(self):
+			return
+		for i in range(len(powerups)):
+			drop_powerup()
+		await transition_wipe.covered
+		if not is_instance_valid(self):
+			return
+	if camera != null:
+		camera.pan_to(starting_position, 0.0)
+	reset()
+	if transition_wipe != null:
+		transition_wipe.reveal(wipe_duration)
+		await transition_wipe.reveal_midpoint
+		if not is_instance_valid(self):
+			return
+	died.emit(self)
+
+
 func reset() -> void:
 	if is_done:
 		return
-	
-	drop_crown()
+
+	is_dead = false
+	is_paused = false
+	flippable_container.visible = true
 	run_restarted.emit(self)
-	Utils.instance_scene_on_main(despawn_smoke, self.global_position)
-	current_friction = default_friction 
+	current_friction = default_friction
 	facing_direction = starting_facing_direction
 	if controller_type != CONTROLLERS.TRAINING:
 		started_walking = false
@@ -172,15 +219,15 @@ func reset() -> void:
 	show_afterimage = false
 	modifiers = {}
 	last_agent_input = false
-	
+
 	for i in range(len(powerups)):
-		consume_powerup()
-	
+		drop_powerup()
+
 	velocity = Vector2.ZERO
 	global_position = starting_position
 	state_machine.transition_to(initial_state.name)
 	has_resetted.emit()
-	
+
 	_update_facing_direction()
 	animation_player.play("Spawn")
 	Utils.instance_scene_on_main(spawn_smoke, self.global_position)
@@ -219,11 +266,25 @@ func has_powerups() -> bool:
 
 func consume_powerup() -> String:
 	# TODO: find a better way to do this
+	var powerup = _pop_powerup()
+	if powerup == null:
+		return ""
+	TelemetrySystem.powerup_used(powerup.type)
+	powerup_consumed.emit(powerup.type)
+	return powerup.type
+
+
+func drop_powerup() -> void:
+	_pop_powerup()
+
+
+func _pop_powerup():
+	if powerups.is_empty():
+		return null
 	var powerup = powerups.pop_back()
 	powerup.consume()
 	used_powerup.emit(len(powerups))
-	TelemetrySystem.powerup_used(powerup.type)
-	return powerup.type
+	return powerup
 
 
 func launch_grappling_hook() -> void:
@@ -232,18 +293,6 @@ func launch_grappling_hook() -> void:
 
 func release_grappling_hook() -> void:
 	grappling_hook.release()
-
-
-func drop_crown() -> void:
-	for child in hat_container.get_children():
-		if not child.is_in_group("Crown"):
-			continue
-		
-		child.reparent(get_parent())
-		child.global_position = last_floor_position
-		child.drop()
-		has_crown = false
-		dropped_crown.emit(self)
 
 
 func percentage_towards_jump_peak() -> float:
@@ -269,8 +318,11 @@ func unlock_velocity_x() -> void:
 func _on_speed_modifier_changed(value) -> void:
 	speed_modifier = value
 	
-	jump_time_to_peak = default_jump_time_to_peak * (1 / speed_modifier)
-	jump_time_to_descent = default_jump_time_to_descent * (1 / speed_modifier)
+	# Guard against division by zero. A zero modifier would freeze jump timing;
+	# treat it as 1.0 (no modifier) for the duration/velocity math.
+	var safe_modifier := speed_modifier if speed_modifier > 0.0 else 1.0
+	jump_time_to_peak = default_jump_time_to_peak * (1.0 / safe_modifier)
+	jump_time_to_descent = default_jump_time_to_descent * (1.0 / safe_modifier)
 	
 	jump_velocity = ((-2.0 * jump_height) / jump_time_to_peak)         # Calculated jump velocity
 	jump_gravity  = (2.0 * jump_height) / (jump_time_to_peak ** 2)     # Calculated gravity for jump
@@ -328,6 +380,12 @@ func _on_show_after_image_changed(value: bool) -> void:
 
 func _on_player_controller_changed(new_controller_type: CONTROLLERS) -> void:
 	controller_type = new_controller_type
+	# Guard against double-calls (e.g. setter re-entry or repeated export set):
+	# if the type is unchanged, the existing controller is already correct and
+	# creating another would leak/orphan the previous one.
+	if _current_controller_type == new_controller_type:
+		return
+	_current_controller_type = new_controller_type
 	match controller_type:
 		CONTROLLERS.PLAYER_ONE:
 			set_controller(PlayerOneController.new(self))
@@ -341,11 +399,11 @@ func _on_starting_position_changed(new_position: Vector2) -> void:
 
 
 func _on_hurt_box_body_entered(body: Node2D) -> void:
-	# This is for spikes
-	if body is TileMapLayer:
-		TelemetrySystem.death("hazard", level_reference.level_name if level_reference != null else "")
-		died.emit(self)
-		reset()
+	# This is for spikes. Spikes live on the StaticLayer (collision layer 4, which
+	# the HurtBox masks). Restrict to that group so any other TileMapLayer that
+	# might overlap the hurtbox doesn't trigger a death.
+	if body.is_in_group("StaticLayer") and not is_dead:
+		die()
 
 
 func _on_interact_box_area_entered(area: Area2D) -> void:
@@ -358,6 +416,8 @@ func _on_interact_box_area_entered(area: Area2D) -> void:
 		state_machine.transition_to("Bounce", {"push_direction": area.facing_direction})
 	elif area.is_in_group("Exit"):
 		is_done = true
+		show_afterimage = false
+		animation_player.play("Idle")
 		run_finished.emit(self)
 
 
@@ -368,5 +428,8 @@ func _on_interact_box_area_exited(area: Area2D) -> void:
 
 func _on_interact_box_body_entered(body: Node2D) -> void:
 	if body.is_in_group("StaticLayer"):
-		starting_position = global_position
-		starting_facing_direction = facing_direction
+		# Only update the checkpoint when grounded. Without this, brushing a
+		# static tile (e.g. a wall) mid-jump moves the respawn point into the air.
+		if is_on_floor():
+			starting_position = global_position
+			starting_facing_direction = facing_direction

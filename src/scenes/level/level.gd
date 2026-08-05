@@ -185,6 +185,7 @@ func update_level(level_code: String) -> void:
 	_update_static_alt_tiles()
 	_spawn_decoration_grass()
 	_spawn_decoration_vines()
+	_compute_flow_field()
 	_current_level_code = level_code
 
 
@@ -479,8 +480,6 @@ func _build_level_from_code(level_code: String) -> void:
 	var cell_size := Vector2i(terrain_layer.rendering_quadrant_size, terrain_layer.rendering_quadrant_size)
 	level_size = Vector2i(_level_width_cell, _level_height_cell) * cell_size
 	level_size_updated.emit(level_size)
-
-	_compute_flow_field()
 
 
 func _fill_rectangle_with_walls(width: int, height: int) -> void:
@@ -879,4 +878,4 @@ func _compute_used_bounds() -> Rect2i:
 	if max_x == -INF:
 		return Rect2i()
 
-	return Rect2i(min_x, min_y, max_x - min_x, max_y - min_y)
+	return Rect2i(int(min_x), int(min_y), int(max_x - min_x), int(max_y - min_y))

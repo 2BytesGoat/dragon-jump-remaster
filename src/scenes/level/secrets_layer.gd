@@ -14,16 +14,37 @@ const DIRECTIONS: Array[Vector2i] = [Vector2i(0, 0), Vector2i(0, 1), Vector2i(1,
 
 
 func _init_secrets() -> void:
+	# Remove per-island visual layers and Area2D children from a previous init.
+	# clear_level() clears the TileMapLayer's own cells but not its child nodes,
+	# so without this they accumulate across level reloads and render stale tiles.
+	for child in visual_layer.get_children():
+		child.queue_free()
+	for child in get_children():
+		if child is Area2D:
+			child.queue_free()
+
 	var islands := _get_islands()
 	for island in islands:
-		_generate_area_for_island(island)
-		_hide_secret_cells(island)
+		var island_visual := _create_island_visual_layer()
+		_generate_area_for_island(island, island_visual)
+		_hide_secret_cells(island, island_visual)
+
+
+## Creates a per-island visual TileMapLayer so each island can fade in/out
+## independently instead of fading the entire secrets visual layer at once.
+func _create_island_visual_layer() -> TileMapLayer:
+	var layer := TileMapLayer.new()
+	visual_layer.add_child(layer)
+	layer.tile_set = visual_layer.tile_set
+	# Position is inherited from visual_layer (the parent); setting it again
+	# would double the offset (visual_layer is already at -8,-8).
+	return layer
 
 
 ## Replaces the secret cells with hidden-area terrain tiles, autotiles the
 ## secret-rock visuals on the terrain visual layer, and covers them with the
-## original terrain visuals on the secrets visual layer. Then clears the secret cells.
-func _hide_secret_cells(cell_array: Array) -> void:
+## original terrain visuals on the island's own visual layer. Then clears the secret cells.
+func _hide_secret_cells(cell_array: Array, island_visual: TileMapLayer) -> void:
 	# 1. Capture original terrain visuals for every visual cell touched by the
 	#    secret island, before any terrain cell is modified.
 	var original_visual_tiles: Dictionary[Vector2i, Dictionary] = {}
@@ -46,15 +67,15 @@ func _hide_secret_cells(cell_array: Array) -> void:
 		terrain_tilemap.set_cell(cell_coords, 0, HIDDEN_AREA_ATLAS_COORDS)
 		self.erase_cell(cell_coords)
 
-	# 3. Copy the captured original visuals onto the secrets visual layer so it
-	#    can fade out and reveal the terrain underneath.
+	# 3. Copy the captured original visuals onto this island's visual layer so it
+	#    can fade out independently and reveal the terrain underneath.
 	for visual_coords in original_visual_tiles:
 		var tile: Dictionary = original_visual_tiles[visual_coords]
 		if tile.atlas_coords == Vector2i(-1, -1):
-			visual_layer.erase_cell(visual_coords)
+			island_visual.erase_cell(visual_coords)
 			continue
 
-		visual_layer.set_cell(visual_coords, tile.source_id, tile.atlas_coords)
+		island_visual.set_cell(visual_coords, tile.source_id, tile.atlas_coords)
 
 	# 4. Rebuild the terrain visual layer for every secret cell. Because hidden
 	#    terrain uses atlas x == 2, update_visual_tile will use the secret rock
@@ -94,14 +115,15 @@ func _get_islands() -> Array:
 
 
 ## Builds an Area2D + CollisionPolygon2D that covers one secret island.
-func _generate_area_for_island(island: Array) -> void:
+## `island_visual` is the per-island visual layer that fades when entered.
+func _generate_area_for_island(island: Array, island_visual: TileMapLayer) -> void:
 	var area := Area2D.new()
 	add_child(area)
 	area.name = "Island_%d" % island.size()
 	area.set_collision_mask_value(1, false)
 	area.set_collision_mask_value(5, true)
-	area.area_entered.connect(_on_secret_area_entered)
-	area.area_exited.connect(_on_secret_area_exited)
+	area.area_entered.connect(_on_secret_area_entered.bind(island_visual))
+	area.area_exited.connect(_on_secret_area_exited.bind(island_visual))
 
 	var cell_size := Vector2(self.tile_set.tile_size)
 	var area_poly := PackedVector2Array()
@@ -126,16 +148,32 @@ func _generate_area_for_island(island: Array) -> void:
 		else:
 			push_warning("Failed to merge secret island polygon for cell %s" % cell)
 
-	var polygon := CollisionPolygon2D.new()
-	polygon.polygon = area_poly
-	area.call_deferred("add_child", polygon)
+	# Fallback: if the merged polygon ended up empty (every merge failed), build
+	# a per-cell polygon so the Area2D still has collision and the fade triggers.
+	if area_poly.is_empty():
+		push_warning("Secret island has no merged polygon; falling back to per-cell collision.")
+		for cell in island:
+			var pos := self.map_to_local(cell)
+			var half := cell_size / 2.0
+			var cell_polygon := CollisionPolygon2D.new()
+			cell_polygon.polygon = PackedVector2Array([
+				pos + Vector2(-half.x, -half.y),
+				pos + Vector2(half.x, -half.y),
+				pos + Vector2(half.x, half.y),
+				pos + Vector2(-half.x, half.y)
+			])
+			area.call_deferred("add_child", cell_polygon)
+	else:
+		var polygon := CollisionPolygon2D.new()
+		polygon.polygon = area_poly
+		area.call_deferred("add_child", polygon)
 
 
-func _on_secret_area_entered(_area: Area2D) -> void:
+func _on_secret_area_entered(_area: Area2D, island_visual: TileMapLayer) -> void:
 	var tween := create_tween()
-	tween.tween_property(self, "modulate:a", 0.1, 0.2)
+	tween.tween_property(island_visual, "modulate:a", 0.1, 0.2)
 
 
-func _on_secret_area_exited(_area: Area2D) -> void:
+func _on_secret_area_exited(_area: Area2D, island_visual: TileMapLayer) -> void:
 	var tween := create_tween()
-	tween.tween_property(self, "modulate:a", 1.0, 0.3)
+	tween.tween_property(island_visual, "modulate:a", 1.0, 0.3)

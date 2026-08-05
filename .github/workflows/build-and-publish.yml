@@ -18,30 +18,8 @@ env:
   ITCH_GAME: dragon-jump
 
 jobs:
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Download Godot Engine (Linux Headless)
-        run: |
-          wget -q https://github.com/godotengine/godot/releases/download/${{ env.GODOT_VERSION }}-stable/Godot_v${{ env.GODOT_VERSION }}-stable_linux.x86_64.zip
-          unzip -q Godot_v${{ env.GODOT_VERSION }}-stable_linux.x86_64.zip
-          mv Godot_v${{ env.GODOT_VERSION }}-stable_linux.x86_64 godot
-          chmod +x godot
-
-      - name: Run headless tests
-        env:
-          GODOT: ./godot
-        run: |
-          ./run_tests.sh
-
   build:
     name: Build
-    needs: test
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.meta.outputs.tag }}

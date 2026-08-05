@@ -3,11 +3,16 @@ extends Node
 @export var level: Node2D
 @export var player_container: Node2D
 @export var camera: Camera2D
+@export var screen_shake: ScreenShake
+@export var hit_stop: HitStop
 @export var card_container: VBoxContainer
 @export var level_music: AudioStreamPlayer
 @export var pause_screen: MarginContainer
 @export var end_screen: MarginContainer
+@export var arcade_game_over_screen: MarginContainer
 @export var time_container: MarginContainer
+@export var transition_wipe: TransitionWipe
+@export var arcade_rank_hud: ArcadeRankHud
 
 @onready var player_scene = preload("res://src/scenes/player/player.tscn")
 @onready var camera_scene = preload("res://src/scenes/camera_2d.tscn")
@@ -15,6 +20,7 @@ extends Node
 var level_scene_path = "res://src/ui/menus/level_select.tscn"
 
 var race_finished: bool = false
+var is_game_paused: bool = false
 var first_pickup: bool = true
 var total_time: float = 0.0
 var delta_time: float = 0.0
@@ -37,8 +43,9 @@ func _ready():
 	level.load_level(level_data)
 	initialize_players()
 	
-	pause_screen.visible = false
+	pause_screen.set_pause_active(false)
 	end_screen.visible = false
+	arcade_game_over_screen.visible = false
 	
 	SignalBus.new_run_attempt.emit(level_name)
 	TelemetrySystem.level_started(level_name)
@@ -54,16 +61,22 @@ func reset_ui():
 	time_container.reset()
 	race_finished = false
 	end_screen.visible = false
+	arcade_game_over_screen.visible = false
+	if arcade_rank_hud != null:
+		arcade_rank_hud.reset()
 
 
 func _input(event: InputEvent) -> void:
 	if not is_inside_tree() or is_queued_for_deletion():
 		return
 	if not race_finished and event.is_action_pressed("ui_cancel"):
-		if pause_screen.visible and pause_screen.has_method("close_settings_if_open"):
-			pause_screen.close_settings_if_open()
+		if is_game_paused:
+			if pause_screen.has_method("close_settings_if_open") and pause_screen.close_settings_if_open():
+				pass
+			else:
+				set_game_paused(false)
 		else:
-			set_game_paused(not pause_screen.visible)
+			set_game_paused(true)
 
 
 func initialize_players() -> void:
@@ -82,6 +95,11 @@ func initialize_players() -> void:
 	player.run_restarted.connect(_on_player_restarted_run)
 	player.run_finished.connect(_on_player_finished_run)
 	player.died.connect(_on_player_died)
+	player.powerup_consumed.connect(_on_player_used_powerup)
+	player.screen_shake = screen_shake
+	player.hit_stop = hit_stop
+	player.transition_wipe = transition_wipe
+	player.camera = camera
 	time_container.track_player(player)
 	
 	card_container.map_player_signals(player_nodes)
@@ -97,16 +115,11 @@ func update_players():
 		player.reset()
 
 
-func freeze_frame(timescale: float, duration: float) -> void:
-	Engine.time_scale = timescale
-	await get_tree().create_timer(duration, true, false, true).timeout
-	Engine.time_scale = 1.0
-
-
 func set_game_paused(value: bool) -> void:
+	is_game_paused = value
 	for player in player_container.get_children():
 		player.is_paused = value
-	pause_screen.visible = value 
+	pause_screen.set_pause_active(value)
 	game_paused.emit(value)
 
 
@@ -129,18 +142,24 @@ func _on_player_finished_run(player: Player) -> void:
 func _on_player_died(_player: Player) -> void:
 	if GameSession.game_mode != GameSession.GameModes.ARCADE:
 		return
-	
 	var result := ArcadeDirector.on_player_died()
 	if result == ArcadeDirector.RunResult.GAME_OVER:
 		_show_arcade_game_over()
+
+
+func _on_player_used_powerup(_type: String) -> void:
+	if screen_shake != null:
+		screen_shake.shake(ScreenShake.Event.POWERUP)
 
 
 func _show_arcade_game_over() -> void:
 	race_finished = true
 	for p in player_container.get_children():
 		p.is_paused = true
-	# TODO: show 3-letter tag entry + arcade leaderboard
-	#       ArcadeDirector.get_run_summary() contains the run data to display.
+	if arcade_rank_hud != null:
+		arcade_rank_hud.reset()
+	arcade_game_over_screen.show_run_summary(ArcadeDirector.get_run_summary())
+	arcade_game_over_screen.visible = true
 
 
 func _on_player_finished_practice_run(_player: Player) -> void:
@@ -150,8 +169,7 @@ func _on_player_finished_practice_run(_player: Player) -> void:
 	var stats = {
 		"level_name": level_name,
 		"time": total_time,
-		"restarts": 1,
-		"crowns_dropped": 0
+		"restarts": 1
 	}
 	end_screen.update_stats(stats)
 	
@@ -190,7 +208,22 @@ func _on_next_button_pressed() -> void:
 
 
 func _on_arcade_level_finished() -> void:
-	level_name = ArcadeDirector.on_level_finished()
+	var finished_level = level_name
+	var clear_time = time_container.total_time
+	SignalBus.new_time_submission.emit(finished_level, clear_time)
+	level_name = ArcadeDirector.on_level_finished(clear_time)
+	
+	# Let the +bonus popup and score roll play out over the finished level
+	# before advancing — reset_ui() would otherwise kill them same-frame.
+	var popup_delay := 1.3
+	if arcade_rank_hud != null:
+		popup_delay = arcade_rank_hud.bonus_popup_lifetime + 0.2
+	for p in player_container.get_children():
+		p.is_paused = true
+	await get_tree().create_timer(popup_delay).timeout
+	for p in player_container.get_children():
+		p.is_paused = false
+	
 	if ArcadeDirector.has_run_to_submit():
 		_show_arcade_game_over()
 		return

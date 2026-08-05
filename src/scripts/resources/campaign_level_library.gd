@@ -14,29 +14,24 @@ static func _load_levels() -> void:
 	if _loaded:
 		return
 	_loaded = true
-	
-	var dir := DirAccess.open(LEVEL_DATA_PATH)
-	if not dir:
-		push_error("CampaignLevelLibrary: failed to open %s" % LEVEL_DATA_PATH)
+
+	var files: PackedStringArray = ResourceLoader.list_directory(LEVEL_DATA_PATH)
+	if files.is_empty():
+		push_error("CampaignLevelLibrary: failed to list %s" % LEVEL_DATA_PATH)
 		return
-	
-	dir.list_dir_begin()
-	var file_name := dir.get_next()
-	while file_name != "":
-		if dir.current_is_dir() or not file_name.ends_with(".tres"):
-			file_name = dir.get_next()
+
+	for file_name in files:
+		if file_name.ends_with("/") or not file_name.ends_with(".tres"):
 			continue
 		if file_name.begins_with("_"):
-			file_name = dir.get_next()
 			continue
-		
+
 		var resource_path := LEVEL_DATA_PATH.path_join(file_name)
 		var resource := ResourceLoader.load(resource_path)
 		if resource is CampaignLevelData:
 			_levels[resource.level_id] = resource
 		else:
 			push_warning("CampaignLevelLibrary: skipping non-level resource %s" % resource_path)
-		file_name = dir.get_next()
 
 
 static func get_level(level_id: String) -> CampaignLevelData:
