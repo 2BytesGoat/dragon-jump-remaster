@@ -136,8 +136,8 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 - [ ] src/scenes/effects/hit_stop.tscn
 - [ ] src/scenes/effects/screen_shake.gd
 - [ ] src/scenes/effects/screen_shake.tscn
-- [ ] src/scenes/effects/transition_wipe.gd
-- [ ] src/scenes/effects/transition_wipe.tscn
+- [x] src/scenes/effects/transition_wipe.gd — documented in [[technical/effects]]
+- [x] src/scenes/effects/transition_wipe.tscn — documented in [[technical/effects]]
 
 ## Powerups
 

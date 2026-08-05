@@ -84,6 +84,7 @@ var is_paused: bool = false
 var is_dead: bool = false
 var wants_to_jump: bool = false
 var needs_to_release: bool = false
+var has_jumped: bool = false
 var modifiers: Dictionary = {}
 var powerups: Array = []
 var starting_position: Vector2 = Vector2.ZERO : set = _on_starting_position_changed
@@ -135,6 +136,9 @@ func _physics_process(delta: float) -> void:
 	_update_facing_direction()
 	
 	move_and_slide()
+	
+	if is_on_floor():
+		has_jumped = false
 
 
 func set_controller(controller: PlayerCharacterController) -> void:
@@ -216,6 +220,7 @@ func reset() -> void:
 		started_walking = false
 	wants_to_jump = false
 	needs_to_release = false
+	has_jumped = false
 	show_afterimage = false
 	modifiers = {}
 	last_agent_input = false

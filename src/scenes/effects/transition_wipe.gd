@@ -34,8 +34,8 @@ func cover(duration: float = -1.0) -> void:
 	_tween.parallel().tween_callback(cover_midpoint.emit).set_delay(dur * 0.7)
 	await _tween.finished
 	is_covered = true
-	covered.emit()
 	_active = false
+	covered.emit()
 
 
 func reveal(duration: float = -1.0) -> void:
@@ -54,8 +54,8 @@ func reveal(duration: float = -1.0) -> void:
 	_tween.tween_method(_set_progress, 0.0, 1.0, dur)
 	_tween.parallel().tween_callback(reveal_midpoint.emit).set_delay(dur * 0.3)
 	await _tween.finished
-	_on_reveal_finished()
 	_active = false
+	_on_reveal_finished()
 
 
 func _on_reveal_finished() -> void:

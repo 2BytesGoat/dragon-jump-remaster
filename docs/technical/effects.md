@@ -92,6 +92,27 @@ search_terms: [particle-effects, smoke-effects, jump-effects, background-particl
   - Optimization hints involve using animation completion signals
 
 
+### `transition_wipe.gd`
+- Key properties and their purposes:
+  - `_tween`: The active cover/reveal tween; killed and rebuilt on each call
+  - `is_covered`: Whether the wipe currently covers the screen
+  - `_active`: Guard flag preventing overlapping cover/reveal runs (reentrancy protection)
+- Main methods and their functionality:
+  - `cover(duration)`: Tweens the shader `progress` 0→1 to cover the screen. Sets `_active`, clears `_active` **before** emitting `covered` so callers awaiting the signal can immediately call `reveal()` without being dropped.
+  - `reveal(duration)`: Tweens the shader `progress` 0→1 with `reveal = true` to uncover the screen. Clears `_active` **before** `_on_reveal_finished()` for the same reentrancy reason.
+  - `_on_reveal_finished()`: Resets shader parameters, hides the node, emits `revealed`
+  - `_set_progress(value)` / `_set_reveal(value)`: Set shader parameters on the material
+  - `_kill_tween()`: Kills any in-flight tween before starting a new one
+- Signals and connections:
+  - `covered` / `revealed`: Emitted when the wipe finishes covering/revealing
+  - `cover_midpoint` / `reveal_midpoint`: Emitted partway through the animation (used by the player death sequence to time events)
+- Integration points with other systems:
+  - Used by the player death sequence (`player.gd`) to cover the screen, reset, then reveal
+  - Relies on `transition_wipe.gdshader` for the diamond-band wipe visual
+- RAG metadata: reentrancy, ordering, tween lifecycle
+  - `_active` must be cleared before emitting completion signals, otherwise an awaiting caller that synchronously invokes the opposite operation gets dropped
+
+
 ## Scene Components (`*.tscn`)
 ### `background_particles.tscn`
 - Scene hierarchy and organization:

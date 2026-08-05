@@ -13,6 +13,7 @@ func _ready() -> void:
 
 func enter(msg := {}) -> void:
 	was_on_wall = false
+	owner.has_jumped = true
 	timer.start(owner.jump_time_to_peak)
 	owner.velocity.y = owner.jump_velocity
 	owner.play_animation(self.name)

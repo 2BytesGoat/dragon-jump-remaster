@@ -131,3 +131,14 @@ This document captures high-level decisions as the project evolves.
 | 10 | Workshop | **Launch feature (EA).** In-game level editor using symbol-based format. Steam Workshop for sharing/downloading. | This is the product. Ships day 1 of EA. |
 | 11 | Roguelike mode | **Shelved.** | Daily/weekly challenges give the same "fresh run every day" retention without building a second game. |
 | 12 | Multiplayer | **Shelved.** | Scope black hole. Playtesters didn't ask for it. |
+
+---
+
+## 2026-08-05 — Forgiving air jump ("fake coyote time")
+
+**Context:** Recent state-machine bugfixing (walking off a ledge or leaving a wall no longer allowed a jump mid-air) removed a forgiveness behavior players relied on.
+
+- **Decided to reintroduce it as "one free jump per airtime."** A new `has_jumped` flag on `Player` is set by `JumpState.enter()` and cleared by `Player._physics_process` when grounded. `FallState` grants a free `Jump` while `has_jumped` is false, consuming nothing.
+- **Powerups are the only source of *extra* air jumps.** The free jump branch runs before the powerup branch, so a free jump never burns a powerup. Fall → free jump → powerup jump works as expected.
+- **No free double jump:** every real jump (ground, wall, powerup, dash, bounce) sets `has_jumped`, so after using a jump in an arc only powerups can jump again.
+- **Landing-frame tap:** pressing jump right as you land fires the free jump instead of a buffered ground jump. Both produce the same jump, so no gameplay difference.

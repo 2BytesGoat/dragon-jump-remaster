@@ -31,6 +31,7 @@ The Player system represents the main character in the game, handling movement, 
 | `jump_time_to_peak` | float | Actual time to reach jump peak (affected by speed modifier) |
 | `state_machine` | StateMachine | Reference to the state machine managing player states |
 | `active_controller` | PlayerCharacterController | Currently active controller |
+| `has_jumped` | bool | True once the player has used a jump during the current airtime; grants one free air jump per arc |
 | `flippable_container` | Node2D | Container for sprite that handles flipping |
 | `animation_player` | AnimationPlayer | Handles player animations |
 | `grappling_hook` | Node2D | Reference to grappling hook system |
@@ -74,6 +75,10 @@ The Player system represents the main character in the game, handling movement, 
 - Integrates with `Powerup` system via collision detection
 - Works with `SaveManager` for saving player state
 - Uses `Utils` for scene instantiation
+
+### Forgiving Air Jump
+
+The player gets **one free jump per airtime**. `has_jumped` is set by `JumpState.enter()` and cleared in `Player._physics_process` after `move_and_slide()` when grounded (and on `reset()`). `FallState` lets the player transition to `Jump` for free while `has_jumped` is false, so walking off a ledge or leaving a wall without jumping still allows a jump — consuming nothing. Once `has_jumped` is true, only the powerup branch in `FallState` grants further air jumps (burning a powerup). This gives fall → free jump → powerup jump sequences without ever wasting a powerup.
 
 ## Scene Components (`*.tscn`)
 
