@@ -110,7 +110,7 @@ Updated: 2026-08-05
 - [x] Need final call on whether `RuntimeSecrets` / `EnvironmentVariables` are folded into `SaveManager` or kept for AI mode only
 - [ ] Need final call on gamepad support for V1.0
 - [ ] Daily/weekly challenge backend: SilentWolf vs. lightweight custom service
-- [ ] Steam Workshop technical approach: Godot Workshop plugin vs. custom Steamworks wrapper
+- [x] Steam Workshop technical approach — Godot Steam integration already exists and has been tested; integration is a known-quantity task (2026-08-05)
 - [ ] Existing inactive Steam page: refresh in place vs. new app
 
 ---

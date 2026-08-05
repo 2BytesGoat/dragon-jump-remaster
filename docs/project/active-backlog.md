@@ -186,7 +186,6 @@ This backlog is ordered by priority. The rule is: **ship the reproducible arcade
 - Preferred scene transition style — needed for #77
 - Bounce-pad / menu music sound sources — needed for #78–79
 - Daily/weekly challenge backend: SilentWolf vs. lightweight custom service — needed for #98–99
-- Steam Workshop technical approach: Godot Workshop plugin vs. custom Steamworks wrapper — needed for #84
 - Existing inactive Steam page: refresh in place vs. new app — needed for Phase 1 (#91)
 
 ## Research & experiments

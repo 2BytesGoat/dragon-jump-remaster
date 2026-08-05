@@ -101,7 +101,10 @@ Each milestone has a target date and the sprints that feed it. Update dates here
 
 ## Open Questions
 
-- Whether the Oct game jam affects EA build timeline (jam month = low level-production capacity).
 - Whether the daily/weekly challenge backend is SilentWolf or a lightweight custom service.
-- Steam Workshop technical approach (Godot Workshop integration plugin vs. custom Steamworks wrapper).
 - Whether the existing inactive Steam page needs a full refresh or a new app.
+
+## Resolved
+
+- **Oct game jam (2026-10-17/18):** Set in stone, minimal dev involvement — the arcade pipeline must be working. Acts as a forcing function for the Aug 31 pipeline deadline, not a blocker on the EA build.
+- **Steam Workshop integration:** The Godot Steam integration already exists and has been tested by the dev. Workshop integration is a known-quantity task (integrate + wrap), not an R&D risk. Dev docs to be added separately.
