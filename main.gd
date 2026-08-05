@@ -12,7 +12,7 @@ extends Node
 @export var arcade_game_over_screen: MarginContainer
 @export var time_container: MarginContainer
 @export var transition_wipe: TransitionWipe
-@export var arcade_rank_hud: CanvasLayer
+@export var arcade_rank_hud: ArcadeRankHud
 
 @onready var player_scene = preload("res://src/scenes/player/player.tscn")
 @onready var camera_scene = preload("res://src/scenes/camera_2d.tscn")
@@ -148,7 +148,8 @@ func _on_player_died(_player: Player) -> void:
 
 
 func _on_player_used_powerup(_type: String) -> void:
-	screen_shake.shake(ScreenShake.Event.POWERUP)
+	if screen_shake != null:
+		screen_shake.shake(ScreenShake.Event.POWERUP)
 
 
 func _show_arcade_game_over() -> void:
@@ -214,9 +215,12 @@ func _on_arcade_level_finished() -> void:
 	
 	# Let the +bonus popup and score roll play out over the finished level
 	# before advancing — reset_ui() would otherwise kill them same-frame.
+	var popup_delay := 1.3
+	if arcade_rank_hud != null:
+		popup_delay = arcade_rank_hud.bonus_popup_lifetime + 0.2
 	for p in player_container.get_children():
 		p.is_paused = true
-	await get_tree().create_timer(1.3).timeout
+	await get_tree().create_timer(popup_delay).timeout
 	for p in player_container.get_children():
 		p.is_paused = false
 	

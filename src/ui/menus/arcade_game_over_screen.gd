@@ -230,11 +230,10 @@ func _render_leaderboard() -> void:
 		child.queue_free()
 
 	var entries := SaveManager.get_arcade_leaderboard()
-	var new_tag := get_entered_tag()
-	var new_score := int(_summary.get("score", 0))
+	var new_run_id := String(_summary.get("run_id", ""))
 	for i in range(entries.size()):
 		var entry := entries[i]
-		var is_new = entry.get("tag", "") == new_tag and int(entry.get("score", 0)) == new_score
+		var is_new = not new_run_id.is_empty() and entry.get("run_id", "") == new_run_id
 		var row := HBoxContainer.new()
 		var rank := Label.new()
 		rank.text = "%02d" % (i + 1)

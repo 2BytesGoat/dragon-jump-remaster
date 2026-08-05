@@ -1,3 +1,4 @@
+class_name ArcadeRankHud
 extends CanvasLayer
 
 ## ArcadeRankHud
@@ -71,6 +72,7 @@ var _current_band: String = ""
 var _medal_fill: float = 1.0
 var _heartbeat_elapsed: float = 0.0
 var _heartbeat_crossed: bool = false
+var _flash_timer: SceneTreeTimer = null
 
 
 func _ready() -> void:
@@ -158,8 +160,6 @@ func reset() -> void:
 
 
 func _on_level_rank_awarded(_level_id: String, rank: String, multiplier: float, bonus: int) -> void:
-	if bonus <= 0:
-		return
 	_show_bonus_popup(bonus, rank)
 	_schedule_multiplier_pop(multiplier, rank)
 	# _play_clear_sfx(rank)  # SFX disabled for now — see game_juice_plan.md
@@ -322,12 +322,14 @@ func _heartbeat_interval() -> float:
 
 func _flash_fill(color: Color) -> void:
 	medal_bar_fill.color = color.lightened(0.35)
-	var timer := get_tree().create_timer(0.12)
-	timer.timeout.connect(func() -> void:
-		if _medal_fill > 0.0:
-			medal_bar_fill.color = color
-	)
+	_flash_timer = get_tree().create_timer(0.12)
+	_flash_timer.timeout.connect(_on_flash_timer_timeout.bind(color))
 	_pulse_bar_scale()
+
+
+func _on_flash_timer_timeout(color: Color) -> void:
+	if _medal_fill > 0.0:
+		medal_bar_fill.color = color
 
 
 func _pulse_bar_scale() -> void:
@@ -344,10 +346,10 @@ func _update_medal_bar(time: float, delta: float) -> void:
 	if not time_container.race_started:
 		_stop_medal_bar_pulse()
 		return
-	var times := _level_times
-	var bronze: float = times[0]
-	var silver: float = times[1] if times.size() >= 3 else times[0]
-	var gold: float = times[-1]
+	var thresholds := _get_medal_thresholds()
+	var bronze: float = thresholds[0]
+	var silver: float = thresholds[1]
+	var gold: float = thresholds[2]
 	var fill: float
 	var color: Color
 	if time >= bronze:
@@ -384,10 +386,10 @@ func _stop_medal_bar_pulse() -> void:
 
 
 func _band_for_time(time: float) -> String:
-	var times := _level_times
-	var bronze: float = times[0]
-	var silver: float = times[1] if times.size() >= 3 else times[0]
-	var gold: float = times[-1]
+	var thresholds := _get_medal_thresholds()
+	var bronze: float = thresholds[0]
+	var silver: float = thresholds[1]
+	var gold: float = thresholds[2]
 	if time >= bronze:
 		return ""
 	if time >= silver:
@@ -395,6 +397,16 @@ func _band_for_time(time: float) -> String:
 	if time >= gold:
 		return "SILVER"
 	return "GOLD"
+
+
+func _get_medal_thresholds() -> Array[float]:
+	var times := _level_times
+	if times.is_empty():
+		return [INF, INF, INF]
+	var bronze: float = times[0]
+	var gold: float = times[-1]
+	var silver: float = times[1] if times.size() >= 3 else gold
+	return [bronze, silver, gold]
 
 
 func _rank_weight(band: String) -> int:

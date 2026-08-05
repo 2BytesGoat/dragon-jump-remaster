@@ -228,12 +228,13 @@ func get_unlocked_cosmetics() -> Array[String]:
 const ARCADE_LEADERBOARD_SIZE := 10
 
 
-func submit_arcade_run(tag: String, score: int, levels: int) -> void:
+func submit_arcade_run(tag: String, score: int, levels: int, run_id: String = "") -> void:
 	var entry := {
 		"tag": tag,
 		"score": score,
 		"levels": levels,
 		"date": Time.get_date_string_from_system(true),
+		"run_id": run_id if not run_id.is_empty() else str(Time.get_ticks_msec()),
 	}
 	current_data.arcade_top_runs.append(entry)
 	_trim_arcade_leaderboard()
@@ -247,7 +248,7 @@ func get_arcade_leaderboard() -> Array[Dictionary]:
 func get_arcade_high_score() -> int:
 	if current_data.arcade_top_runs.is_empty():
 		return 0
-	return current_data.arcade_top_runs[0]["score"]
+	return int(current_data.arcade_top_runs[0].get("score", 0))
 
 
 func _trim_arcade_leaderboard() -> void:
@@ -314,7 +315,7 @@ func _get_hmac_secret() -> String:
 	# real secrets.
 	if Engine.has_singleton("RuntimeSecrets"):
 		var secrets = Engine.get_singleton("RuntimeSecrets")
-		if secrets.is_set:
+		if secrets != null and secrets.is_set:
 			return secrets.HMAC_SECRET
 	return HMAC_SECRET_FALLBACK
 

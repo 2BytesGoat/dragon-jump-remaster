@@ -10,6 +10,7 @@ const _FALLBACK_DURATION := 0.2
 
 var _tween: Tween
 var is_covered: bool = false
+var _active: bool = false
 
 
 func _ready() -> void:
@@ -18,6 +19,9 @@ func _ready() -> void:
 
 
 func cover(duration: float = -1.0) -> void:
+	if _active:
+		return
+	_active = true
 	var dur := _FALLBACK_DURATION if duration < 0.0 else duration
 	_kill_tween()
 	visible = true
@@ -31,9 +35,13 @@ func cover(duration: float = -1.0) -> void:
 	await _tween.finished
 	is_covered = true
 	covered.emit()
+	_active = false
 
 
 func reveal(duration: float = -1.0) -> void:
+	if _active:
+		return
+	_active = true
 	var dur := _FALLBACK_DURATION if duration < 0.0 else duration
 	_kill_tween()
 	is_covered = false
@@ -47,6 +55,7 @@ func reveal(duration: float = -1.0) -> void:
 	_tween.parallel().tween_callback(reveal_midpoint.emit).set_delay(dur * 0.3)
 	await _tween.finished
 	_on_reveal_finished()
+	_active = false
 
 
 func _on_reveal_finished() -> void:

@@ -54,9 +54,10 @@ func on_level_finished(level_time: float) -> String:
 		gold = campaign_level.times[-1]
 		silver = campaign_level.times[1] if campaign_level.times.size() >= 3 else gold
 	var time_multiplier := calculate_time_multiplier(level_time, bronze, silver, gold, config)
-	var bonus := roundi(config.level_clear_score * time_multiplier * run_multiplier)
+	var streak_multiplier := run_multiplier
+	var bonus := roundi(config.level_clear_score * time_multiplier * streak_multiplier)
 	_streak_apply()
-	level_rank_awarded.emit(level_id, _rank_for_multiplier(time_multiplier), run_multiplier, bonus)
+	level_rank_awarded.emit(level_id, _rank_for_multiplier(time_multiplier, config), streak_multiplier, bonus)
 	if bonus > 0:
 		score += bonus
 		_level_bonuses.append({"level_id": level_id, "time": level_time, "multiplier": run_multiplier, "bonus": bonus})
@@ -107,27 +108,30 @@ static func calculate_time_multiplier(level_time: float, bronze: float, silver: 
 	return lerpf(gold_multiplier, max_multiplier, (gold - level_time) / maxf(gold, 0.0001))
 
 
-static func _rank_for_multiplier(multiplier: float) -> String:
-	if multiplier >= 3.0:
+static func _rank_for_multiplier(multiplier: float, arcade_config: ArcadeConfig) -> String:
+	if arcade_config == null:
+		return ""
+	if multiplier >= arcade_config.max_multiplier:
 		return "GOLD+"
-	if multiplier >= 2.0:
+	if multiplier >= arcade_config.gold_multiplier:
 		return "GOLD"
-	if multiplier >= 1.5:
+	if multiplier >= arcade_config.silver_multiplier:
 		return "SILVER"
-	if multiplier > 1.0:
+	if multiplier > arcade_config.bronze_multiplier:
 		return "BRONZE"
 	return ""
 
 
 var _run_ended: bool = false
 var _run_to_submit: bool = false
+var _pending_run_id: String = ""
 
 
 func submit_tag(tag: String) -> void:
 	player_tag = tag
 	_run_ended = false
 	if _run_to_submit and score > 0:
-		SaveManager.submit_arcade_run(tag, score, levels_reached)
+		SaveManager.submit_arcade_run(tag, score, levels_reached, _pending_run_id)
 	_run_to_submit = false
 
 
@@ -150,6 +154,7 @@ func get_run_summary() -> Dictionary:
 		"bonus_total": _sum_level_bonuses(),
 		"bonuses": _level_bonuses.duplicate(),
 		"best_streak": best_streak,
+		"run_id": _pending_run_id,
 	}
 
 
@@ -170,10 +175,12 @@ func _reset_run_state() -> void:
 	_level_bonuses = []
 	_run_ended = false
 	_run_to_submit = false
+	_pending_run_id = ""
 	lives_changed.emit(lives)
 
 
 func _end_run() -> void:
 	_run_ended = true
 	_run_to_submit = true
+	_pending_run_id = str(Time.get_ticks_msec())
 	run_ended.emit(get_run_summary())
