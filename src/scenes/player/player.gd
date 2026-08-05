@@ -43,6 +43,7 @@ var velocity_x_locked: bool = false
 # Controllers
 @onready var controller_container: Node = $ControllerContainer
 var active_controller: PlayerCharacterController = null
+var _current_controller_type: int = -1
 
 # Nodes
 @onready var flippable_container: Node2D = $Flippable
@@ -177,18 +178,27 @@ func _run_death_sequence() -> void:
 		screen_shake.shake(ScreenShake.Event.DEATH)
 	if hit_stop != null:
 		await hit_stop.trigger()
+	# The player node may be freed (e.g. scene change) during any await below.
+	if not is_instance_valid(self):
+		return
 	if transition_wipe != null:
 		transition_wipe.cover(wipe_duration)
 		await transition_wipe.cover_midpoint
+		if not is_instance_valid(self):
+			return
 		for i in range(len(powerups)):
 			drop_powerup()
 		await transition_wipe.covered
+		if not is_instance_valid(self):
+			return
 	if camera != null:
 		camera.pan_to(starting_position, 0.0)
 	reset()
 	if transition_wipe != null:
 		transition_wipe.reveal(wipe_duration)
 		await transition_wipe.reveal_midpoint
+		if not is_instance_valid(self):
+			return
 	died.emit(self)
 
 
@@ -257,6 +267,8 @@ func has_powerups() -> bool:
 func consume_powerup() -> String:
 	# TODO: find a better way to do this
 	var powerup = _pop_powerup()
+	if powerup == null:
+		return ""
 	TelemetrySystem.powerup_used(powerup.type)
 	powerup_consumed.emit(powerup.type)
 	return powerup.type
@@ -267,6 +279,8 @@ func drop_powerup() -> void:
 
 
 func _pop_powerup():
+	if powerups.is_empty():
+		return null
 	var powerup = powerups.pop_back()
 	powerup.consume()
 	used_powerup.emit(len(powerups))
@@ -304,8 +318,11 @@ func unlock_velocity_x() -> void:
 func _on_speed_modifier_changed(value) -> void:
 	speed_modifier = value
 	
-	jump_time_to_peak = default_jump_time_to_peak * (1 / speed_modifier)
-	jump_time_to_descent = default_jump_time_to_descent * (1 / speed_modifier)
+	# Guard against division by zero. A zero modifier would freeze jump timing;
+	# treat it as 1.0 (no modifier) for the duration/velocity math.
+	var safe_modifier := speed_modifier if speed_modifier > 0.0 else 1.0
+	jump_time_to_peak = default_jump_time_to_peak * (1.0 / safe_modifier)
+	jump_time_to_descent = default_jump_time_to_descent * (1.0 / safe_modifier)
 	
 	jump_velocity = ((-2.0 * jump_height) / jump_time_to_peak)         # Calculated jump velocity
 	jump_gravity  = (2.0 * jump_height) / (jump_time_to_peak ** 2)     # Calculated gravity for jump
@@ -363,6 +380,12 @@ func _on_show_after_image_changed(value: bool) -> void:
 
 func _on_player_controller_changed(new_controller_type: CONTROLLERS) -> void:
 	controller_type = new_controller_type
+	# Guard against double-calls (e.g. setter re-entry or repeated export set):
+	# if the type is unchanged, the existing controller is already correct and
+	# creating another would leak/orphan the previous one.
+	if _current_controller_type == new_controller_type:
+		return
+	_current_controller_type = new_controller_type
 	match controller_type:
 		CONTROLLERS.PLAYER_ONE:
 			set_controller(PlayerOneController.new(self))
@@ -376,8 +399,10 @@ func _on_starting_position_changed(new_position: Vector2) -> void:
 
 
 func _on_hurt_box_body_entered(body: Node2D) -> void:
-	# This is for spikes
-	if body is TileMapLayer and not is_dead:
+	# This is for spikes. Spikes live on the StaticLayer (collision layer 4, which
+	# the HurtBox masks). Restrict to that group so any other TileMapLayer that
+	# might overlap the hurtbox doesn't trigger a death.
+	if body.is_in_group("StaticLayer") and not is_dead:
 		die()
 
 
@@ -403,5 +428,8 @@ func _on_interact_box_area_exited(area: Area2D) -> void:
 
 func _on_interact_box_body_entered(body: Node2D) -> void:
 	if body.is_in_group("StaticLayer"):
-		starting_position = global_position
-		starting_facing_direction = facing_direction
+		# Only update the checkpoint when grounded. Without this, brushing a
+		# static tile (e.g. a wall) mid-jump moves the respawn point into the air.
+		if is_on_floor():
+			starting_position = global_position
+			starting_facing_direction = facing_direction
