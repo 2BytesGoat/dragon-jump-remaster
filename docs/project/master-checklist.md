@@ -16,7 +16,7 @@ Updated: 2026-08-05
 - [x] Create `docs/archive/refactor-phase-1.md`
 - [x] Create this master checklist
 
-**Status:** Complete. V1.0 = single-button arcade speedrun, symbol-based level editor kept, AI training hidden, multiplayer/crown/progress-bar modes removed.
+**Status:** Complete. V1.0 = editor-first speedrun platformer, EA Dec 2026 at $9.99, 1.0 Aug 2027 at $12.99 (see [[project/decisions]] 2026-08-05).
 
 ---
 
@@ -58,7 +58,6 @@ Updated: 2026-08-05
 
 > [!NOTE]
 > Phase 2 is actively in progress. See [[project/sprints/sprint-2026-08-17]] for live sprint status and [[project/active-backlog]] for the full task list.
-
 - [x] Lock arcade mode design: level-based with 3 lives, per-level checkpoints, full reset on game over (see [[design/arcade-mode]])
 - [ ] Implement title → level select → run → retry → game over → local high score loop
 - [ ] Wire audio, settings, transitions through approved autoloads
@@ -69,24 +68,39 @@ Updated: 2026-08-05
 
 ---
 
-## Phase 3 — Platform & Store Prep
+## Phase 3 — Early Access Build & Store Prep
 
 - [ ] Pin Godot version and export templates
 - [ ] Build export pipeline for Windows, Linux, macOS, Web
-- [ ] Set up Steam app and store page
+- [ ] Build the in-game level editor (symbol-based) — backlog #83
+- [ ] Steam Workshop integration — backlog #84
+- [ ] Reach 25–30 campaign levels across 5 worlds — backlog #86
+- [ ] Surface ML training mode as a visible feature — backlog #90
+- [ ] Set up Steam app and store page — backlog #91
 - [ ] Create capsule art, hero image/trailer, screenshots, tags, description
-- [ ] Set price at $4.99 with 10–20% launch-week discount
+- [ ] Set price at $9.99 for EA (12.99 at 1.0) with 20% launch discount at 1.0
 - [ ] Mirror release on itch.io with DRM-free build
 - [ ] Run closed beta / Steam Playtest
 
 ---
 
-## Phase 4 — Launch & Learn
+## Phase 4 — EA Launch & Learn (Dec 2026)
 
-- [ ] Ship free arcade demo first
-- [ ] Launch paid Steam/itch.io release
+- [ ] Launch Early Access at $9.99
+- [ ] Community management setup (bug reports, feedback, roadmap post)
 - [ ] Patch critical bugs/balance quickly
-- [ ] Document learnings for next project
+- [ ] Document learnings for 1.0
+
+---
+
+## Phase 5 — 1.0 Launch (Aug 2027)
+
+- [ ] 35–40 campaign levels with boss levels
+- [ ] World-based arcade mode with online leaderboards
+- [ ] Daily/weekly procedural challenges
+- [ ] Steam leaderboards for campaign levels
+- [ ] Full SFX, music, UI polish
+- [ ] Launch 1.0 at $12.99 with 20% launch discount
 
 ---
 
@@ -95,6 +109,9 @@ Updated: 2026-08-05
 - [x] Need final call on whether `LeaderboardManager` + `SilentWolf` stay for V1.0 or are deferred to post-launch
 - [x] Need final call on whether `RuntimeSecrets` / `EnvironmentVariables` are folded into `SaveManager` or kept for AI mode only
 - [ ] Need final call on gamepad support for V1.0
+- [ ] Daily/weekly challenge backend: SilentWolf vs. lightweight custom service
+- [ ] Steam Workshop technical approach: Godot Workshop plugin vs. custom Steamworks wrapper
+- [ ] Existing inactive Steam page: refresh in place vs. new app
 
 ---
 

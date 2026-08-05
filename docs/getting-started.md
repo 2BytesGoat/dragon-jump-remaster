@@ -16,11 +16,11 @@ New to the project? This guide will orient you in 5 minutes.
 
 ## What is Dragon Jump Remaster?
 
-An arcade-style single-button speedrun platformer with a hidden AI training mode. The goal is to ship a free arcade build first, then a paid Steam/itch.io release. Read [[design/product-identity]] for the full pitch.
+An editor-first single-button speedrun platformer with a visible ML training mode. Players build and share levels via Steam Workshop. The plan is Early Access (Dec 2026, $9.99) then 1.0 (Aug 2027, $12.99). Read [[design/product-identity]] for the full pitch.
 
 ## How does it play?
 
-One button. Auto-running dragon. Speedrun through 17 hand-crafted levels. Get medals (Bronze/Silver/Gold). See [[design/core-loop]] for the full gameplay loop.
+One button. Auto-running dragon. Speedrun through hand-crafted levels (25–30 at Early Access, 35–40 at 1.0). Get medals (Bronze/Silver/Gold). Build and share your own levels via Workshop. See [[design/core-loop]] for the full gameplay loop.
 
 ## How is the code organized?
 

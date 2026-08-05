@@ -106,3 +106,28 @@ This document captures high-level decisions as the project evolves.
 - **Decided to implement Tier 1 reward juice now** (see [[project/game-juice-plan]]): score count-up roll, floating "+N" popup on clear, rank-colored screen flash on clear, medal-bar pulse on band change, and placeholder SFX for clear/gold/death using the existing asset pool.
 - **Deferred Tier 2** (streak milestone celebrations, gold confetti, game-over screen juice) and **Tier 3** (menu button hover, best-streak stat, timer tension tick) — they stay in the juice plan doc, not the backlog, until Tier 1 is playtested.
 - **SFX sourcing is the open question:** real clear/gold/death sounds need a source decision before Tier 1 sound is final. Placeholders are `SoundBonus.wav` / `SoundSlide.wav`.
+
+---
+
+## 2026-08-05 — Editor-first pivot, Early Access, and commercial plan
+
+**Context:** Strategic review against the goal of $100k+ first-year revenue. Competing on handcrafted levels alone puts the game against Celeste / Super Meat Boy / VVVVVV. An editor-first identity puts it in a near-uncontested space (Mario Maker has no AI; Geometry Dash has no AI).
+
+**Also informed by:** the game's strength is the tight single-button speedrun loop; playtesting showed the top request is "more content"; the author can build levels fast (17 levels in ~2 weeks); a 2-year runway exists (Steam launch currently ~2 years out, can compress to ~12 months).
+
+### Decisions
+
+| # | Topic | Decision | Rationale |
+|---|---|---|---|
+| 1 | Product identity | **Editor-first.** The level editor + Steam Workshop is the main value proposition. The handcrafted campaign teaches mechanics and demonstrates what good levels look like. | Competing on handcrafted levels alone is a losing battle against legendary games. Editor + Workshop + ML is an uncontested niche. |
+| 2 | ML/AI mode | **Visible but not central.** Mentioned on the store page. Starter code and tutorials on an external blog/source. Not a separate AI-development product. | AI hype is a differentiator that gets coverage from ML YouTubers and workshop audiences. Building a full AI product is out of scope. |
+| 3 | Launch strategy | **Early Access.** EA in Dec 2026 at $9.99. 1.0 in Aug 2027 at $12.99. | Editor-first games benefit from a community content snowball. Two visibility bumps (EA + 1.0). Revenue starts in ~4 months instead of ~12. Editor gets battle-tested by real users before 1.0. |
+| 4 | EA content | **25–30 campaign levels + editor + Workshop + basic arcade + basic ML mode.** | Enough to teach all mechanics and show what's possible. The editor is the infinite content engine. |
+| 5 | 1.0 content | **35–40 campaign levels + world-based arcade + boss levels + daily/weekly challenges + full polish + ML tutorials.** | Substantial content bump justifies leaving EA and the price increase. |
+| 6 | Price | **$9.99 EA, $12.99 1.0.** 20% launch discount at 1.0. Frequent 30–40% sales post-launch. | EA discount from full price is standard convention. Higher base anchors value; sales bring it into impulse-buy range ($7.79–$9.09). Can lower permanently later; can't raise. |
+| 7 | Arcade mode | **World-based.** 5 worlds, each with 6–8 levels + 1 boss level. Pick a world → play all levels with 3 lives → score submitted to world leaderboard. "Gauntlet" mode unlocks after all worlds cleared. | Clear progression units. A world run is 5–10 minutes — perfect for "one more run." |
+| 8 | Daily/weekly challenges | **Procedurally generated from seeds.** Daily: one seed, leaderboard resets at midnight. Weekly: harder curated seed, runs Monday–Sunday. | Retention engine. "Wordle effect" — players come back daily. |
+| 9 | Leaderboard strategy | **Steam for campaign levels, SilentWolf for daily/weekly challenges and arcade.** | Steam leaderboards are permanent and prestigious. SilentWolf handles time-windowed queries without needing to clear leaderboards. |
+| 10 | Workshop | **Launch feature (EA).** In-game level editor using symbol-based format. Steam Workshop for sharing/downloading. | This is the product. Ships day 1 of EA. |
+| 11 | Roguelike mode | **Shelved.** | Daily/weekly challenges give the same "fresh run every day" retention without building a second game. |
+| 12 | Multiplayer | **Shelved.** | Scope black hole. Playtesters didn't ask for it. |

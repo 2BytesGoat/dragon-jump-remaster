@@ -11,7 +11,9 @@ search_terms: [leaderboard, scores, local-leaderboard, time-submission, player-r
 # Leaderboard System Documentation
 
 ## Overview
-The Leaderboard System displays performance rankings for each level. **Online leaderboards (`LeaderboardManager` + SilentWolf) are deferred to post-launch** (see [[technical/architecture]].) In V1.0 the system is a **local UI stub only**: `leaderboard.gd` renders a "Leaderboard disabled in V1.0." placeholder, and the local arcade run summary is tracked by `ArcadeDirector`.
+The Leaderboard System displays performance rankings for each level. **Online leaderboards (`LeaderboardManager` + SilentWolf) are deferred to the 1.0 build** (Phase 3; see [[technical/architecture]]). In EA the system is a **local UI stub only**: `leaderboard.gd` renders a "Leaderboard disabled in V1.0." placeholder, and the local arcade run summary is tracked by `ArcadeDirector`.
+
+> **1.0 leaderboard split (2026-08-05 decision, [[project/decisions]]):** campaign levels use Steam leaderboards (permanent, prestigious); daily/weekly challenges and world arcade use SilentWolf (time-windowed, no manual clearing).
 
 Key search terms and concepts for RAG retrieval: leaderboard, scores, local-leaderboard, time-submission, player-rankings
 System relationships and dependencies: This system is a presentation layer. It does not depend on a leaderboard manager in V1.0; `SaveManager` remains the source of truth for local best times.

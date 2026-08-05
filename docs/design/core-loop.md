@@ -15,6 +15,12 @@ search_terms: [core-loop, single-button, speedrun, auto-run, jump, reset, poweru
 
 Pick a level → run automatically → jump/reset to reach the exit → see time, medal, and rank → retry or unlock the next level.
 
+## Editor loop
+
+Open editor → place tiles with the symbol-based format → test the level → publish to Workshop → community plays and competes → iterate based on feedback.
+
+> The editor is the product's core value proposition (2026-08-05 decision, [[project/decisions]]). The campaign teaches what good levels look like; the editor is where players spend most of their time.
+
 ## Controls
 
 The game uses a **single-button** control scheme:

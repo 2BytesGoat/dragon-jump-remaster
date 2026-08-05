@@ -185,13 +185,17 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 - [x] `docs/design/vision-and-goals.md` — Long-term goals and project context
 - [x] `docs/design/core-loop.md` — Core gameplay loop and mechanics
 - [x] `docs/design/progression-and-meta.md` — Campaign progression and meta
-- [x] `docs/design/release-plan.md` — V1.0 scope and release plan
+- [x] `docs/design/release-plan.md` — EA (Dec 2026, $9.99) + 1.0 (Aug 2027, $12.99) plan
 - [x] `docs/design/ai-training-mode.md` — Hidden AI training mode design
 - [x] `docs/design/arcade-mode.md` — Arcade mode design reference
-- [x] `docs/project/decisions.md` — Decision log
+- [x] `docs/project/decisions.md` — Decision log (incl. 2026-08-05 editor-first EA pivot)
 - [x] `docs/project/current-sprint.md` — Current sprint focus
-- [x] `docs/project/active-backlog.md` — Active backlog
-- [x] `docs/future/shelved-features.md` — Features shelved for V1.0
+- [x] `docs/project/active-backlog.md` — Active backlog (Phase 0 pipeline → Phase 5 1.0 launch)
+- [x] `docs/project/sprints/sprint-2026-09-30.md` — EA Sprint 1: editor foundation + world reorg
+- [x] `docs/project/sprints/sprint-2026-10-31.md` — EA Sprint 2: Workshop + arcade + boss levels
+- [x] `docs/project/sprints/sprint-2026-11-30.md` — EA Sprint 3: EA build complete + store prep
+- [x] `docs/project/sprints/sprint-2026-12-15.md` — EA launch sprint (Dec 2026)
+- [x] `docs/future/shelved-features.md` — Features shelved for EA/1.0 (incl. roguelike, 2026-08-05)
 - [x] `docs/future/research-ideas.md` — Future AI/RL research directions
 - [x] `docs/project/game-juice-plan.md` — Game juice / reward-loop polish plan
 

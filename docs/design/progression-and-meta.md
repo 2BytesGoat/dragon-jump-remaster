@@ -13,11 +13,20 @@ search_terms: [progression, unlocks, medals, save, leaderboard, campaign, level-
 
 ## Campaign structure
 
-The game ships as a linear sequence of campaign levels, numbered `1-1`, `1-2`, ..., `1-16` (with `1-17` planned for the ML workshop competition).
+The game ships with 35–40 handcrafted levels across 5 themed worlds. Each world has 6–8 regular levels and 1 boss level. The EA build ships 25–30 of these; the remaining levels land by 1.0. (Current levels 1-1 through 1-17 are being reorganized into this world structure.)
 
-- Levels are unlocked sequentially.
+- Worlds unlock sequentially (beat world N to unlock world N+1).
+- Levels within a world unlock sequentially.
 - The player can replay any unlocked level at any time.
 - Each level tracks attempts, best time, and medal progress.
+- Boss levels test mastery of all mechanics from that world — longer, harder, no powerup pickups inside.
+
+## Arcade structure
+
+- Pick a world → play all its levels with 3 lives → score submitted to the world leaderboard.
+- Hidden extra lives behind `M` secret tiles.
+- "Gauntlet" mode unlocks after all worlds cleared (all worlds back-to-back, 5 lives).
+- World-based arcade with online leaderboards (SilentWolf) ships at 1.0; EA has a basic arcade with a local top-10.
 
 ## Save data
 
@@ -40,8 +49,9 @@ See `[[technical/save-system/index]]` and `[[technical/save-system/level-data]]`
 
 ## Leaderboards
 
-- Times can be submitted to online leaderboards post-launch (SilentWolf, deferred; see [[technical/architecture]]).
-- The leaderboard UI shows a "Leaderboard disabled in V1.0." placeholder; global scores are not fetched in V1.0.
+- Campaign levels: permanent per-level best times on Steam leaderboards (1.0).
+- Daily/weekly challenges and arcade: SilentWolf leaderboards (time-windowed, no manual clearing needed).
+- The EA leaderboard UI shows a "Leaderboards arriving at 1.0." placeholder until the 1.0 backend lands.
 
 See `[[technical/leaderboard]]`.
 
@@ -57,8 +67,10 @@ Medals encourage replay without blocking progression.
 
 ## V1.0 scope
 
-- 16 hand-authored campaign levels.
+- 35–40 handcrafted campaign levels across 5 worlds (25–30 at EA).
+- World-based arcade mode with boss levels and world leaderboards.
+- Daily/weekly procedural challenges.
 - Per-level save/leaderboard integration.
-- Sequential unlocks.
+- Sequential world unlocks.
 
-> **Post-V1.0 ideas** (shelved): ghost race mode, arcade limited-lives mode, additional levels. See `[[future/shelved-features]]`.
+> **Post-1.0 ideas** (shelved): ghost race mode, endless procedural mode, additional levels. See `[[future/shelved-features]]`.

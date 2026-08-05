@@ -49,7 +49,7 @@ Tunable values live in Godot Resource assets, not code:
 - Crown/tile-tag mode
 - Progress-bar mode
 - Duplicate/placeholder UI screens
-- Online leaderboards (`LeaderboardManager` + `SilentWolf`) — deferred to post-launch
+- Online leaderboards (`LeaderboardManager` + `SilentWolf`) — deferred to 1.0 build (Phase 3, 2027); EA ships with local leaderboards only
 - `MonetizationSystem` — removed; no IAP/ad backend planned for V1.0
 - `RuntimeSecrets` — build-time-only template (`runtime_secrets.gd.template`); copied to a gitignored `runtime_secrets.gd` and optionally registered as an autoload by the build pipeline when injecting the real HMAC secret
 

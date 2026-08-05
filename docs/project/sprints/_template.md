@@ -19,7 +19,7 @@ One sentence: what does "done" mean for this sprint?
 
 Which release milestone does this sprint feed? See [[design/release-plan]] § Release milestones.
 
-- Milestone: <e.g. Arcade build (Phase 3) / Steam V1.0 (Phase 4) / V1.1 (Phase 5)>
+- Milestone: <e.g. Arcade pipeline (Phase 0) / EA build (Phase 1) / EA launch (Phase 2) / 1.0 build (Phase 3) / 1.0 launch (Phase 5)>
 - Target date of milestone: <date or TBD>
 
 ## Capacity

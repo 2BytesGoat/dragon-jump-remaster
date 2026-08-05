@@ -11,7 +11,7 @@ related:
 
 # Arcade Mode Design — Dragon Jump Remaster
 
-> **Implementation is tracked in [[project/active-backlog]]** (Phase 3 — reproducible arcade pipeline, Phase 5 — post-pipeline game polish). This document is the design reference for how arcade mode should feel and behave.
+> **Implementation is tracked in [[project/active-backlog]]** (Phase 0 — reproducible arcade pipeline, Phase 3 — 1.0 build polish). This document is the design reference for how arcade mode should feel and behave.
 
 ## Goal
 

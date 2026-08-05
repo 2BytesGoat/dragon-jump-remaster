@@ -1,16 +1,16 @@
 # AI Training Mode — Dragon Jump Remaster
 
-**Status:** Hidden tinkerer feature. **Not** part of the player-facing V1.0 release.
+**Status:** Visible but not central (2026-08-05 decision, [[project/decisions]]). Mentioned on the store page; starter code and tutorials on an external blog. **Not** a separate AI-development product.
 
 ## Purpose
 
-A hidden mode that lets technically curious players (and the developer) train reinforcement-learning agents on Dragon Jump levels. It is a long-term value-add, not the main product.
+A mode that lets technically curious players (and the developer) train reinforcement-learning agents on Dragon Jump levels — including community-created Workshop levels. It is a differentiator (AI hype, ML YouTubers, workshop audiences), not the main product.
 
 ## Visibility Rules
 
-- Not shown in any menu.
-- Not mentioned in marketing, store pages, trailers, or press materials.
-- Accessible only through an undocumented input sequence or a launch flag.
+- **EA (Dec 2026):** basic, functional, visible — a menu entry that launches training on any level.
+- **1.0 (Aug 2027):** polished, with external starter code and tutorials (blog/external sources).
+- Never a separate product or an AI-development tool; the editor is the product.
 
 ## Technical Isolation
 
@@ -27,5 +27,4 @@ A hidden mode that lets technically curious players (and the developer) train re
 
 ## Future Decisions
 
-- Whether to expose a hidden "watch AI" screen after V1.0.
 - Whether to publish a separate educational repo with stripped-down systems.

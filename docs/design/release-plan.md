@@ -1,38 +1,67 @@
 # Release Plan — Dragon Jump Remaster
 
-**Version:** 1.0-locked (2026-07-24)  
-**Price target:** $4.99 USD, 10–20% launch-week discount  
+**Version:** 1.0 (target Aug 2027)
+**Price:** $9.99 Early Access, $12.99 full release, 20% launch-week discount
 **Engine:** Godot 4.x (version pinned during Phase 1)
 
-## V1.0 Scope Lock
+## Product Identity
 
-The first commercial release is a **single-player arcade speedrun platformer**.
+> Dragon Jump Remaster is an **editor-first speedrun platformer.** Players build, share, and compete on community levels via Steam Workshop. A handcrafted campaign teaches the mechanics. A visible ML training mode lets players train AI on any level.
+
+See [[design/product-identity]] and the 2026-08-05 decision in [[project/decisions]].
+
+## V1.0 Scope
 
 ### In V1.0
-- Single-button arcade speedrun loop
-- 10–20 handcrafted levels using the symbol-based level system
-- Local high score / best-time tracking (via SaveManager)
-- Title → level select / endless mode → run → death/retry → score screen
+- In-game level editor using the symbol-based level format
+- Steam Workshop integration for sharing / downloading levels
+- 35–40 handcrafted campaign levels across 5 worlds (6–8 levels + 1 boss level each)
+- World-based arcade mode (3 lives, boss levels, world leaderboards)
+- Daily and weekly procedurally generated challenges
+- Online leaderboards (Steam for campaign, SilentWolf for challenges/arcade)
+- ML training mode (visible, with external starter code and tutorials)
 - Windows, Linux, macOS, Web exports
-- Gamepad support (post-launch if time does not allow)
+- Gamepad support
 
 ### Out of V1.0
-- Multiplayer / networked play (deleted)
-- Crown / tile-tag mode (deleted)
-- Progress-bar mode (deleted)
-- AI training mode (kept hidden, not marketed)
-- Online leaderboards (post-launch)
-- Level editor UI for players (post-launch)
+- Multiplayer / networked play
+- Roguelike mode
+- Crown / tile-tag mode
+- Mobile port
+
+## Early Access (Dec 2026)
+
+| What | Details |
+|------|---------|
+| Price | $9.99 |
+| Campaign | 25–30 handcrafted levels |
+| Editor | Full in-game level editor |
+| Workshop | Level sharing and downloading |
+| Arcade | Basic mode with local leaderboard |
+| ML mode | Functional, basic, visible |
+| Polish | Placeholder SFX, pre-polish UI |
+
+## 1.0 Launch (Aug 2027)
+
+| What | Details |
+|------|---------|
+| Price | $12.99 (20% launch discount) |
+| Campaign | 35–40 levels across 5 worlds with boss levels |
+| Arcade | World-based with online leaderboards (SilentWolf) |
+| Challenges | Daily + weekly procedural challenges |
+| ML mode | Polished, with external starter code and tutorials |
+| Polish | Full SFX, music, UI overhaul |
 
 ## Phases
 
-| Phase | Goal | Duration | Deliverable |
-|---|---|---|---|
-| **0** | Scope lock + file audit | 1–2 weeks | Locked backlog, architecture doc updated |
-| **1** | Foundation hardening | 3–4 weeks | Clean base, no dead code, autoloads shrunk |
-| **2** | Arcade vertical slice | 2–3 weeks | Playable arcade build ready for testing |
-| **3** | Platform + store prep | 2–3 weeks | Steam/itch pages, export pipeline, beta |
-| **4** | Launch + learn | 1–2 weeks + ongoing | Arcade demo → paid launch → post-mortem |
+| Phase | When | Goal | Deliverable |
+|-------|------|------|-------------|
+| **0** | Now → 2026-08-31 | Arcade pipeline | Reproducible Godot → web → Emulation Station → Switch pipeline |
+| **1** | Sep → Nov 2026 | EA build | Editor + Workshop + 25–30 campaign levels + basic arcade + basic ML |
+| **2** | Dec 2026 | **EA launch** | Steam Early Access at $9.99 |
+| **3** | Jan → Jul 2027 | 1.0 build | Remaining campaign levels, world-based arcade, daily/weekly challenges, polish, ML tutorials |
+| **4** | Apr → Jul 2027 | Marketing | Steam page refresh, Next Fest demo, streamer outreach |
+| **5** | Aug 2027 | **1.0 launch** | Full release at $12.99 |
 
 ## Release milestones
 
@@ -40,9 +69,11 @@ Each milestone has a target date and the sprints that feed it. Update dates here
 
 | Milestone | Phase | Target date | Sprints | Status |
 |---|---|---|---|---|
-| Reproducible arcade pipeline | 3 | **2026-08-31** (hard deadline; September away, Oct game jam) | [[project/sprints/sprint-2026-08-17]] (Sprint 1) + [[project/sprints/sprint-2026-08-31]] (Sprint 2) | In progress — logic skeleton shipped, pipeline work starting |
-| Game polish (post-pipeline) | 5 | TBD (September/October, depends on capacity) | — | Deferred until after Aug 31 pipeline milestone |
-| Steam V1.0 launch (paid) | 4 | TBD (post-pipeline + post-September) | — | Not started |
+| Reproducible arcade pipeline | 0 | **2026-08-31** (hard deadline; September away, Oct game jam) | [[project/sprints/sprint-2026-08-17]] (Sprint 1) + [[project/sprints/sprint-2026-08-31]] (Sprint 2) | In progress — logic skeleton shipped, pipeline work starting |
+| EA build complete | 1 | **2026-11-30** | [[project/sprints/sprint-2026-09-30]] + [[project/sprints/sprint-2026-10-31]] + [[project/sprints/sprint-2026-11-30]] | Not started |
+| Early Access launch (paid) | 2 | **2026-12-15** | [[project/sprints/sprint-2026-12-15]] (EA launch sprint) | Not started |
+| 1.0 build complete | 3 | **2027-07-31** | TBD | Not started |
+| Steam V1.0 launch (paid) | 5 | **2027-08-31** | TBD | Not started |
 
 ### Aug 31 pipeline roadmap (2-sprint crunch)
 
@@ -51,24 +82,26 @@ Each milestone has a target date and the sprints that feed it. Update dates here
 | Sprint 1 | Aug 3 → Aug 17 | Minimal playable loop + CI verify | #52 exit bug, #53 stuck-at-end, #54 reuse end_screen, #67 CI web export, #68 ES research |
 | Sprint 2 | Aug 17 → Aug 31 | Emulation Station + docs + reproducibility | #69 ES install, #70 ES config, #71 boot flow test, #72 pipeline docs, #73 second-dev test |
 
-> **Primary goal:** Ship a documented Godot → web → Emulation Station → Switch pipeline that October jam participants can replicate. The game is the test case — it needs to be *playable enough*, not polished. Game polish (hearts, hidden areas, HUD, leaderboard, juice) is deferred to Phase 5.
+> **Primary goal:** Ship a documented Godot → web → Emulation Station → Switch pipeline that October jam participants can replicate. The game is the test case — it needs to be *playable enough*, not polished. Game polish (hearts, hidden areas, HUD, leaderboard, juice) is deferred to Phase 3.
 
 > Sprints live in `docs/project/sprints/`. See [[meta/process]] § Sprint workflow for the cadence and capacity-budget rules.
 
 ## Release Sequence
 
-1. **Free arcade build / demo** — ship first to validate feel, gather wishlists, and provide press/streamers a vertical slice.
-2. **Paid Steam + itch.io release** — launch after the arcade build proves the loop and generates wishlists.
+1. **Early Access (Dec 2026)** — $9.99. Editor + Workshop + 25–30 levels. Start building the community content snowball.
+2. **1.0 Launch (Aug 2027)** — $12.99. 35–40 levels + world-based arcade + daily/weekly challenges + full polish.
 
 ## Commercial Priorities
 
-- Trailer/GIF under 30 seconds showing the single-button loop.
-- Steam tags: Arcade, Platformer, Speedrun, Single-button, Retro, 2D.
-- Devlogs on itch.io and Steam community.
-- Local leaderboard for V1.0; online leaderboards later.
+- Steam tags: Level Editor, Platformer, Speedrun, Arcade, 2D, Artificial Intelligence
+- Trailer under 60 seconds showing: build a level → share it → play community levels → train AI
+- Devlogs on Steam community and external blog
+- ML starter code and tutorials on external blog (cross-promotion)
+- Steam Next Fest demo (first 2 worlds + editor)
 
 ## Open Questions
 
-- Exact Godot version pin (decided in Phase 1).
-- Launch discount percentage (10% vs 20%).
-- Whether Web demo ships before or alongside desktop arcade build.
+- Whether the Oct game jam affects EA build timeline (jam month = low level-production capacity).
+- Whether the daily/weekly challenge backend is SilentWolf or a lightweight custom service.
+- Steam Workshop technical approach (Godot Workshop integration plugin vs. custom Steamworks wrapper).
+- Whether the existing inactive Steam page needs a full refresh or a new app.

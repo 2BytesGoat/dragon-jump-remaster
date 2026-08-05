@@ -26,8 +26,8 @@ Full directory of every doc in the vault, organized by area.
 | See what's being worked on now | [[project/current-sprint]] (goal) → [[project/sprints/sprint-2026-08-17]] (full plan + status) |
 | Pick up a task | [[project/active-backlog]] |
 | Review past decisions | [[project/decisions]] |
-| Check if X is in V1.0 scope | [[future/shelved-features]] → [[future/research-ideas]] |
-| Plan post-V1.0 / polish work | [[project/game-juice-plan]] → [[future/shelved-features]] |
+| Check if X is in EA/1.0 scope | [[future/shelved-features]] → [[future/research-ideas]] |
+| Plan polish work | [[project/game-juice-plan]] → [[future/shelved-features]] |
 | Work on levels | [[technical/level-system/index]] → [[level-design/design-rules]] |
 | Change save/load | [[technical/save-system/index]] |
 | Add or modify UI | [[technical/ui/index]] |
@@ -47,9 +47,9 @@ Product identity, vision, core loop, progression, release plan, and AI training 
 - [[design/vision-and-goals]] — Long-term goals and project history
 - [[design/core-loop]] — Gameplay loop, controls, powerups, medals
 - [[design/progression-and-meta]] — Campaign structure, save data, medals
-- [[design/release-plan]] — V1.0 scope lock, phases, milestones
+- [[design/release-plan]] — EA (Dec 2026) + 1.0 (Aug 2027) phases and milestones
 - [[design/arcade-mode]] — Arcade build design (lives, scoring, game over)
-- [[design/ai-training-mode]] — Hidden AI tinkerer feature
+- [[design/ai-training-mode]] — ML training mode (visible, not central)
 
 ### `technical/` — Technical reference
 
@@ -72,7 +72,7 @@ Per-system documentation for every code system and scene.
 - [[technical/effects]] — Visual/audio effects (particles, smoke)
 - [[technical/powerups]] — Powerup collectibles and card UI
 - [[technical/signal-bus]] — Centralized event bus singleton
-- [[technical/leaderboard]] — Leaderboard UI (V1.0 placeholder; online deferred)
+- [[technical/leaderboard]] — Leaderboard UI (EA placeholder; Steam + SilentWolf at 1.0)
 - [[technical/rl-integration]] — Godot RL Agents addon integration
 - [[technical/training]] — RL training infrastructure
 - [[technical/utilities]] — Constants, SceneLoader, Utils static helpers
@@ -88,7 +88,7 @@ Per-system documentation for every code system and scene.
 #### Active workflow
 
 - [[project/current-sprint]] — Current sprint goal (epic-level entry point; links to the full sprint file)
-- [[project/active-backlog]] — Active task backlog (phases 1-6)
+- [[project/active-backlog]] — Active task backlog (Phase 0 pipeline → Phase 5 1.0 launch)
 - [[project/decisions]] — Decision log
 - [[project/game-juice-plan]] — Reward-loop polish plan with P0/P1/P2/P3 work items
 - [[project/master-checklist]] — Living refactor/release/commercialization checklist
@@ -98,6 +98,10 @@ Per-system documentation for every code system and scene.
 - [[project/sprints/sprint-2026-07-25]] — ML Workshop Competition (completed)
 - [[project/sprints/sprint-2026-08-17]] — Sprint 1: Minimal playable arcade loop **(active)**
 - [[project/sprints/sprint-2026-08-31]] — Sprint 2: Reproducible arcade pipeline
+- [[project/sprints/sprint-2026-09-30]] — EA Sprint 1: Editor foundation + world reorganization
+- [[project/sprints/sprint-2026-10-31]] — EA Sprint 2: Workshop + arcade + boss levels
+- [[project/sprints/sprint-2026-11-30]] — EA Sprint 3: EA build complete + store prep
+- [[project/sprints/sprint-2026-12-15]] — EA launch (Dec 2026, $9.99)
 
 #### Reference
 
@@ -107,11 +111,11 @@ Per-system documentation for every code system and scene.
 
 > Closed/historical project docs (refactor phases, repo review, level-scripts refactor) have moved to [[#`archive/` — Legacy content]].
 
-### `future/` — Future ideas (not in V1.0)
+### `future/` — Future ideas (not in EA/1.0)
 
-> **When to read this:** consult when asking "is X in V1.0 scope?" or planning post-ship / post-V1.0 work. Active polish work with concrete tasks lives in [[project/game-juice-plan]], not here.
+> **When to read this:** consult when asking "is X in EA/1.0 scope?" or planning post-1.0 work. Active polish work with concrete tasks lives in [[project/game-juice-plan]], not here.
 
-- [[future/shelved-features]] — Features cut from V1.0 scope (and a "Pulled forward" record of what got unshelved and shipped)
+- [[future/shelved-features]] — Features cut from scope (and a "Pulled forward" record of what got unshelved and shipped)
 - [[future/research-ideas]] — Future AI/RL research directions
 
 ### `meta/` — Documentation about documentation
