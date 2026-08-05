@@ -9,6 +9,10 @@ func enter(_msg := {}) -> void:
 
 
 func physics_update(_delta: float) -> void:
+	if not owner.is_on_floor():
+		state_machine.transition_to("Fall")
+		return
+
 	# Only flip when we hit a wall while grounded. Without the floor check this
 	# fires while airborne (e.g. after leaving JumpState), causing a mid-air turn.
 	if owner.is_on_floor() and owner.is_on_wall():
