@@ -2,13 +2,15 @@
 title: Current Sprint
 tags: [godot, game-engine, project-management, sprint]
 related:
-  - "[[project/decisions]]"
+  - "[[project/sprints/sprint-2026-08-17]]"
   - "[[project/active-backlog]]"
-  - "[[design/release-plan]]"
-search_terms: [sprint, current-sprint, tasks, focus, now]
+  - "[[project/decisions]]"
+search_terms: [sprint, current-sprint, tasks, focus, now, goal, epic]
 ---
 
 # Current Sprint
+
+> **Role of this file:** the goal-level entry point for the current sprint — epic-level only. Task status, deliverables, capacity, definition of done, and retrospective all live in the linked sprint file. Do not duplicate the task list here.
 
 ## Sprint goal
 
@@ -18,28 +20,11 @@ The game only needs to be *playable enough* to prove the pipeline works. Polish 
 
 ## Active sprint
 
-See [[project/sprints/sprint-2026-08-17]] for the full sprint plan and definition of done. See [[project/sprints/sprint-2026-08-31]] for Sprint 2 (the finish line).
-
-## Status
-
-- [ ] Fix arcade exit bug — mode-aware routing (#52)
-- [ ] Fix arcade "stuck at end" — wire `_show_arcade_game_over()` (#53)
-- [ ] Wire arcade game-over to reuse existing end_screen (#54)
-- [ ] Verify CI web export produces playable HTML5 build (#67)
-- [ ] Research: can ES on the modded Switch run an HTML5 web build at all? (#68) — research only, ~1.5h; the scraper (#82) is Sprint 2's job
-- [ ] No regression in practice mode
-
-> Capacity: ~10–15h (crunch mode — hard Aug 31 deadline, September away). Slack built in for CI surprises and ES research unknowns.
-
-## Milestone context
-
-- **Primary goal (Aug 31):** Reproducible Godot → web → Emulation Station → Switch pipeline for the Oct game jam. You're hosting the jam; others need to port their games using your pipeline.
-- **Game polish is deferred** to Phase 5 (September/October TBD) — hearts, hidden areas in 11 levels, HUD, top-10 leaderboard, victory screen, juice, transitions.
-- **Steam integration** is Phase 4, deferred until after the pipeline + post-September.
+[[project/sprints/sprint-2026-08-17]] — full plan, deliverables, status, definition of done, retrospective. See [[project/sprints/sprint-2026-08-31]] for Sprint 2 (the finish line).
 
 ## Previous sprint
 
-[[project/sprints/sprint-2026-07-25]] (ML workshop competition) is closed. See its retrospective. ~8 days of untracked polish work after that sprint (arcade 3-lives logic skeleton, secret areas, powerup cards, parallax, grass) has been reconciled into [[project/active-backlog]].
+[[project/sprints/sprint-2026-07-25]] (ML workshop competition) — closed. See its retrospective. ~8 days of untracked polish work after that sprint (arcade 3-lives logic skeleton, secret areas, powerup cards, parallax, grass) has been reconciled into [[project/active-backlog]].
 
 ## Where to find related planning
 
@@ -47,4 +32,4 @@ See [[project/sprints/sprint-2026-08-17]] for the full sprint plan and definitio
 - Release plan and milestones: [[design/release-plan]] § Release milestones
 - Arcade design reference: [[design/arcade-mode]]
 - Sprint workflow and template: [[meta/process]] § Sprint workflow, [[project/sprints/_template]]
-- Previous sprint: [[project/sprints/sprint-2026-07-25]] and [[project/decisions]]
+- Past decisions: [[project/decisions]]

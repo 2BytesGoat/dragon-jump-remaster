@@ -103,6 +103,6 @@ This document captures high-level decisions as the project evolves.
 
 **Context:** Playtest feedback and self-review: the game's *gameplay* juice (shake, hit stop, wipe, cards) is strong, but the *reward loop* has no dopamine — score swaps instantly, no SFX on clear/rank/death, no floating score popups, no clear flash.
 
-- **Decided to implement Tier 1 reward juice now** (see [[future/game-juice-plan]]): score count-up roll, floating "+N" popup on clear, rank-colored screen flash on clear, medal-bar pulse on band change, and placeholder SFX for clear/gold/death using the existing asset pool.
+- **Decided to implement Tier 1 reward juice now** (see [[project/game-juice-plan]]): score count-up roll, floating "+N" popup on clear, rank-colored screen flash on clear, medal-bar pulse on band change, and placeholder SFX for clear/gold/death using the existing asset pool.
 - **Deferred Tier 2** (streak milestone celebrations, gold confetti, game-over screen juice) and **Tier 3** (menu button hover, best-streak stat, timer tension tick) — they stay in the juice plan doc, not the backlog, until Tier 1 is playtested.
 - **SFX sourcing is the open question:** real clear/gold/death sounds need a source decision before Tier 1 sound is final. Placeholders are `SoundBonus.wav` / `SoundSlide.wav`.

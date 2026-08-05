@@ -105,7 +105,8 @@ This project runs **2-week sprints** that feed into release milestones. The cade
 3. Fill in the **Capacity** section honestly: estimate hours available this sprint given IRL load. A 1–2h sprint is valid.
 4. Pull 1–6 rows from [[project/active-backlog]] into **Deliverables** by their `#`. Estimate each in hours so the total fits the capacity budget. Leave the rest in the backlog.
 5. Write **Definition of done** as concrete checkboxes.
-6. Update [[project/current-sprint]] to link the new sprint file and reflect the new goal.
+6. Update [[project/current-sprint]] with the new sprint's goal (epic-level, 1-3 sentences) and a link to the new sprint file under **Active sprint**. Move the previous sprint file's link to **Previous sprint**. Do **not** copy the task list or status — those live only in the dated sprint file.
+7. Flip the `(active)` marker in [[index]] from the old sprint file to the new one.
 
 ### During the sprint
 

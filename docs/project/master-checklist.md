@@ -13,7 +13,7 @@ Updated: 2026-08-05
 - [x] Record approved decisions in `docs/project/decisions.md`
 - [x] Inventory autoloads and decide target roster
 - [x] Inventory half-finished subsystems and decide cut/hide/keep
-- [x] Create `docs/project/refactor-phase-1.md`
+- [x] Create `docs/archive/refactor-phase-1.md`
 - [x] Create this master checklist
 
 **Status:** Complete. V1.0 = single-button arcade speedrun, symbol-based level editor kept, AI training hidden, multiplayer/crown/progress-bar modes removed.
@@ -57,13 +57,13 @@ Updated: 2026-08-05
 ## Phase 2 — Arcade Vertical Slice
 
 > [!NOTE]
-> Phase 2 is actively in progress. See [[project/current-sprint]] and [[project/active-backlog]] for live status.
+> Phase 2 is actively in progress. See [[project/sprints/sprint-2026-08-17]] for live sprint status and [[project/active-backlog]] for the full task list.
 
 - [x] Lock arcade mode design: level-based with 3 lives, per-level checkpoints, full reset on game over (see [[design/arcade-mode]])
 - [ ] Implement title → level select → run → retry → game over → local high score loop
 - [ ] Wire audio, settings, transitions through approved autoloads
 - [x] Integrate hidden AI training mode via `SaveManager` only (see [[design/ai-training-mode]])
-- [ ] Add juice/polish (screenshake, SFX, clear visual language) — see [[future/game-juice-plan]]
+- [ ] Add juice/polish (screenshake, SFX, clear visual language) — see [[project/game-juice-plan]]
 - [ ] Internal playtest + iteration
 - [ ] Build playable arcade demo
 

@@ -16,6 +16,29 @@ Full directory of every doc in the vault, organized by area.
 
 > **New to the project?** Start with [[getting-started]] — a 5-minute orientation guide.
 
+## What do you want to do?
+
+| Task | Read these in order |
+|------|---------------------|
+| Understand the game | [[design/product-identity]] → [[design/core-loop]] |
+| See the big picture | [[design/vision-and-goals]] → [[design/release-plan]] |
+| Understand the codebase | [[technical/architecture]] → [[technical/main-system]] |
+| See what's being worked on now | [[project/current-sprint]] (goal) → [[project/sprints/sprint-2026-08-17]] (full plan + status) |
+| Pick up a task | [[project/active-backlog]] |
+| Review past decisions | [[project/decisions]] |
+| Check if X is in V1.0 scope | [[future/shelved-features]] → [[future/research-ideas]] |
+| Plan post-V1.0 / polish work | [[project/game-juice-plan]] → [[future/shelved-features]] |
+| Work on levels | [[technical/level-system/index]] → [[level-design/design-rules]] |
+| Change save/load | [[technical/save-system/index]] |
+| Add or modify UI | [[technical/ui/index]] |
+| Work on effects | [[technical/effects]] |
+| Work on powerups | [[technical/powerups]] |
+| Understand the event bus | [[technical/signal-bus]] |
+| Write or update docs | [[meta/process]] |
+| Find closed/historical work | [[archive/project-notes]] (legacy) · [[archive/repo-review]] · [[archive/refactor-phase-1]] · [[archive/refactor-phase-2]] · [[archive/level-scripts-refactor]] |
+
+---
+
 ## `design/` — Game Design Document
 
 Product identity, vision, core loop, progression, release plan, and AI training mode design.
@@ -62,32 +85,34 @@ Per-system documentation for every code system and scene.
 
 ### `project/` — Project management
 
-Sprints, backlog, decisions, code review, and refactor plans.
+#### Active workflow
 
-- [[project/current-sprint]] — Active sprint status
+- [[project/current-sprint]] — Current sprint goal (epic-level entry point; links to the full sprint file)
 - [[project/active-backlog]] — Active task backlog (phases 1-6)
 - [[project/decisions]] — Decision log
+- [[project/game-juice-plan]] — Reward-loop polish plan with P0/P1/P2/P3 work items
 - [[project/master-checklist]] — Living refactor/release/commercialization checklist
-- [[project/code-review]] — Code review issues and restructuring plan
+
+**Sprints:**
+- [[project/sprints/_template]] — Template for new sprint files
+- [[project/sprints/sprint-2026-07-25]] — ML Workshop Competition (completed)
+- [[project/sprints/sprint-2026-08-17]] — Sprint 1: Minimal playable arcade loop **(active)**
+- [[project/sprints/sprint-2026-08-31]] — Sprint 2: Reproducible arcade pipeline
+
+#### Reference
+
 - [[project/anti-piracy]] — Anti-piracy threat model and implementation plan
-- [[project/repo-review]] — 2026-08-02 repository audit notes
-- [[project/refactor-phase-1]] — Phase 1 refactor plan (complete)
-- [[project/refactor-phase-2]] — Phase 2 refactor plan (complete)
-- [[project/level-scripts-refactor]] — Level scene refactor summary
+- [[project/code-review]] — Code review issues and restructuring plan
 - [[project/secrets-note]] — GitHub secret requirements for HMAC save signing
-- **Sprints:**
-  - [[project/sprints/_template]] — Template for new sprint files
-  - [[project/sprints/sprint-2026-07-25]] — ML Workshop Competition (completed)
-  - [[project/sprints/sprint-2026-08-17]] — Sprint 1: Minimal playable arcade loop
-  - [[project/sprints/sprint-2026-08-31]] — Sprint 2: Reproducible arcade pipeline
+
+> Closed/historical project docs (refactor phases, repo review, level-scripts refactor) have moved to [[#`archive/` — Legacy content]].
 
 ### `future/` — Future ideas (not in V1.0)
 
-Shelved features, research ideas, and polish plans intentionally kept out of current scope.
+> **When to read this:** consult when asking "is X in V1.0 scope?" or planning post-ship / post-V1.0 work. Active polish work with concrete tasks lives in [[project/game-juice-plan]], not here.
 
-- [[future/shelved-features]] — Features cut from V1.0 scope
+- [[future/shelved-features]] — Features cut from V1.0 scope (and a "Pulled forward" record of what got unshelved and shipped)
 - [[future/research-ideas]] — Future AI/RL research directions
-- [[future/game-juice-plan]] — Game juice / reward-loop polish plan
 
 ### `meta/` — Documentation about documentation
 
@@ -97,7 +122,13 @@ Shelved features, research ideas, and polish plans intentionally kept out of cur
 
 ### `archive/` — Legacy content
 
+Historical and closed docs. Kept to avoid breaking old links; do not add new content here.
+
 - [[archive/project-notes]] — Legacy project notes (content split into `design/`, `project/`, `future/`)
+- [[archive/repo-review]] — 2026-08-02 repository audit notes
+- [[archive/refactor-phase-1]] — Phase 1 refactor plan (complete)
+- [[archive/refactor-phase-2]] — Phase 2 refactor plan (complete)
+- [[archive/level-scripts-refactor]] — Level scene refactor summary
 
 ---
 

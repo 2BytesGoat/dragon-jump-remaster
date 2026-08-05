@@ -193,7 +193,7 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 - [x] `docs/project/active-backlog.md` — Active backlog
 - [x] `docs/future/shelved-features.md` — Features shelved for V1.0
 - [x] `docs/future/research-ideas.md` — Future AI/RL research directions
-- [x] `docs/future/game-juice-plan.md` — Game juice / reward-loop polish plan
+- [x] `docs/project/game-juice-plan.md` — Game juice / reward-loop polish plan
 
 ## Archived
 

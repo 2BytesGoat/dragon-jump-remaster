@@ -53,9 +53,7 @@ Each milestone has a target date and the sprints that feed it. Update dates here
 
 > **Primary goal:** Ship a documented Godot → web → Emulation Station → Switch pipeline that October jam participants can replicate. The game is the test case — it needs to be *playable enough*, not polished. Game polish (hearts, hidden areas, HUD, leaderboard, juice) is deferred to Phase 5.
 
-> Sprints live in `docs/tracking/sprints/`. See [[meta/process]] § Sprint workflow for the cadence and capacity-budget rules.
-
-> Sprints live in `docs/tracking/sprints/`. See [[meta/process]] § Sprint workflow for the cadence and capacity-budget rules.
+> Sprints live in `docs/project/sprints/`. See [[meta/process]] § Sprint workflow for the cadence and capacity-budget rules.
 
 ## Release Sequence
 

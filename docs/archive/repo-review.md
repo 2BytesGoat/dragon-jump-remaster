@@ -162,7 +162,7 @@ severity. Each item lists the concrete location and a recommended action.
 
 ### 12. (Resolved on inspection) `docs/00_index.md` sprint link is valid
 - `[[project/sprints/sprint-2026-07-25]]` resolves —
-  `docs/tracking/sprints/sprint_2026_07_25.md` exists. No action needed.
+  `docs/project/sprints/sprint-2026-07-25.md` exists. No action needed.
 
 ---
 
