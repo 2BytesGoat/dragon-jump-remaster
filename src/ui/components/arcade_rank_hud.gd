@@ -36,16 +36,13 @@ const LIFE_ICON_SIZE := 12.0
 const LIFE_ICON_LOST_ALPHA := 0.25
 
 @export var multiplier_pop_delay: float = 0.3
-@export var bar_width: float = 180.0
-@export var bar_height: float = 14.0
-@export var bar_pulse_scale_x: float = 1.06
-@export var bar_pulse_scale_y: float = 1.3
+@export var bar_pulse_scale_x: float = 1.03
+@export var bar_pulse_scale_y: float = 1.15
 
 @onready var time_container: MarginContainer = %TimeContainer
 @onready var lives_box: HBoxContainer = %LivesBox
 @onready var band_label: Label = %BandLabel
-@onready var medal_bar: Panel = %MedalBar
-@onready var medal_bar_fill: ColorRect = %MedalBarFill
+@onready var medal_bar: TextureProgressBar = %MedalBar
 @onready var clear_sfx: AudioStreamPlayer = %ClearSFX
 @onready var gold_sfx: AudioStreamPlayer = %GoldSFX
 @onready var death_sfx: AudioStreamPlayer = %DeathSFX
@@ -68,6 +65,7 @@ var _medal_fill: float = 1.0
 var _heartbeat_elapsed: float = 0.0
 var _heartbeat_crossed: bool = false
 var _flash_timer: SceneTreeTimer = null
+var _base_medal_bar_scale: Vector2 = Vector2.ONE
 
 ## World position the level-clear popup should spawn above. Set by main.gd
 ## right before ArcadeDirector.on_level_finished() emits level_rank_awarded
@@ -76,8 +74,9 @@ var pending_popup_world_position: Vector2 = Vector2.ZERO
 
 
 func _ready() -> void:
-	_apply_bar_dimensions()
+	_base_medal_bar_scale = medal_bar.scale
 	_build_life_icons()
+	_reset_medal_bar_visuals()
 	ArcadeDirector.level_rank_awarded.connect(_on_level_rank_awarded)
 	ArcadeDirector.run_multiplier_changed.connect(_on_run_multiplier_changed)
 	ArcadeDirector.lives_changed.connect(_on_lives_changed)
@@ -90,18 +89,6 @@ func _exit_tree() -> void:
 		ArcadeDirector.run_multiplier_changed.disconnect(_on_run_multiplier_changed)
 	if ArcadeDirector.lives_changed.is_connected(_on_lives_changed):
 		ArcadeDirector.lives_changed.disconnect(_on_lives_changed)
-
-
-func _apply_bar_dimensions() -> void:
-	var half_w := bar_width / 2.0
-	medal_bar.offset_left = -half_w
-	medal_bar.offset_right = half_w
-	medal_bar.offset_bottom = medal_bar.offset_top + bar_height
-	medal_bar_fill.offset_bottom = bar_height
-	band_label.offset_left = -half_w
-	band_label.offset_right = half_w
-	band_label.offset_top = medal_bar.offset_top
-	band_label.offset_bottom = medal_bar.offset_bottom
 
 
 func _build_life_icons() -> void:
@@ -302,7 +289,7 @@ func _heartbeat_interval() -> float:
 
 
 func _flash_fill(color: Color) -> void:
-	medal_bar_fill.color = color.lightened(0.35)
+	medal_bar.tint_progress = color.lightened(0.35)
 	_flash_timer = get_tree().create_timer(0.12)
 	_flash_timer.timeout.connect(_on_flash_timer_timeout.bind(color))
 	_pulse_bar_scale()
@@ -310,17 +297,17 @@ func _flash_fill(color: Color) -> void:
 
 func _on_flash_timer_timeout(color: Color) -> void:
 	if _medal_fill > 0.0:
-		medal_bar_fill.color = color
+		medal_bar.tint_progress = color
 
 
 func _pulse_bar_scale() -> void:
 	if _bar_pulse_tween != null and _bar_pulse_tween.is_valid():
 		_bar_pulse_tween.kill()
 	medal_bar.pivot_offset = medal_bar.size / 2.0
-	medal_bar.scale = Vector2.ONE
+	medal_bar.scale = _base_medal_bar_scale
 	_bar_pulse_tween = create_tween()
-	_bar_pulse_tween.tween_property(medal_bar, "scale", Vector2(bar_pulse_scale_x, bar_pulse_scale_y), 0.12).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	_bar_pulse_tween.tween_property(medal_bar, "scale", Vector2.ONE, 0.15).set_trans(Tween.TRANS_SINE)
+	_bar_pulse_tween.tween_property(medal_bar, "scale", _base_medal_bar_scale * Vector2(bar_pulse_scale_x, bar_pulse_scale_y), 0.12).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_bar_pulse_tween.tween_property(medal_bar, "scale", _base_medal_bar_scale, 0.15).set_trans(Tween.TRANS_SINE)
 
 
 func _update_medal_bar(time: float, delta: float) -> void:
@@ -345,15 +332,10 @@ func _update_medal_bar(time: float, delta: float) -> void:
 	else:
 		fill = clampf((gold - time) / maxf(gold, 0.0001), 0.0, 1.0)
 		color = _rank_color("GOLD")
-	medal_bar_fill.color = color
+	medal_bar.tint_progress = color
 	_medal_fill = fill
-	var width := medal_bar.size.x * fill
-	medal_bar_fill.size.x = width
-	if fill <= 0.001 and medal_bar_fill.visible:
-		medal_bar_fill.visible = false
-	elif fill > 0.001 and not medal_bar_fill.visible:
-		medal_bar_fill.visible = true
-	if not medal_bar_fill.visible:
+	medal_bar.value = fill * medal_bar.max_value
+	if fill <= 0.001:
 		return
 	_pulse_medal_bar(MEDAL_BAR_PULSE_THRESHOLD, delta)
 
@@ -361,7 +343,7 @@ func _update_medal_bar(time: float, delta: float) -> void:
 func _stop_medal_bar_pulse() -> void:
 	if _bar_pulse_tween != null and _bar_pulse_tween.is_valid():
 		_bar_pulse_tween.kill()
-	medal_bar.scale = Vector2.ONE
+	medal_bar.scale = _base_medal_bar_scale
 	_heartbeat_elapsed = 0.0
 	_heartbeat_crossed = false
 
@@ -377,11 +359,11 @@ func _reset_medal_bar_visuals() -> void:
 	band_label.text = "GOLD"
 	band_label.add_theme_color_override("font_color", Color.WHITE)
 	band_label.modulate.a = 1.0
-	medal_bar_fill.visible = true
+	medal_bar.visible = true
 	_reset_tween = create_tween()
 	_reset_tween.set_parallel(true)
-	_reset_tween.tween_property(medal_bar_fill, "size:x", medal_bar.size.x, 0.2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	_reset_tween.tween_property(medal_bar_fill, "color", _rank_color("GOLD"), 0.2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	_reset_tween.tween_property(medal_bar, "value", medal_bar.max_value, 0.2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	_reset_tween.tween_property(medal_bar, "tint_progress", _rank_color("GOLD"), 0.2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	band_label.scale = Vector2(0.5, 0.5)
 	_band_tween = create_tween()
 	_band_tween.tween_property(band_label, "scale", Vector2(1.3, 1.3), 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
