@@ -29,6 +29,8 @@ func _rank_color(rank: String) -> Color:
 		return Color.WHITE
 	return Constants.MEDAL_CONFIG.medal_colors[MEDAL_INDEX[rank]]
 
+const STREAK_LOST_COLOR := Color(0.9, 0.2, 0.2)
+
 const MEDAL_BAR_PULSE_THRESHOLD := 0.5
 const MEDAL_BAR_HEARTBEAT_INTERVAL := 0.5
 const MEDAL_BAR_HEARTBEAT_MIN_INTERVAL := 0.12
@@ -154,6 +156,7 @@ func _set_score_text(value: int) -> void:
 func reset() -> void:
 	_refresh_lives(ArcadeDirector.lives)
 	_last_rendered_score = ArcadeDirector.score
+	multiplier_label.remove_theme_color_override("font_color")
 	score_label.text = "SCORE %08d" % ArcadeDirector.score
 
 
@@ -175,10 +178,11 @@ func _schedule_multiplier_pop(multiplier: float, rank: String) -> void:
 	)
 
 
-func _show_multiplier_pop(multiplier: float, rank: String) -> void:
+func _show_multiplier_pop(_multiplier: float, rank: String) -> void:
 	if _multiplier_tween != null and _multiplier_tween.is_valid():
 		_multiplier_tween.kill()
-	multiplier_label.text = "x%.2f" % multiplier
+	multiplier_label.text = "x%.2f" % ArcadeDirector.run_multiplier
+	multiplier_label.add_theme_color_override("font_color", _rank_color(rank))
 	multiplier_label.modulate.a = 1.0
 	multiplier_label.scale = Vector2(0.4, 0.4)
 	_multiplier_tween = create_tween()
@@ -197,17 +201,19 @@ func _on_run_multiplier_changed(multiplier: float) -> void:
 	if multiplier == 1.0:
 		_play_multiplier_death_reset()
 		return
-	if _multiplier_tween != null and _multiplier_tween.is_valid():
-		_multiplier_tween.kill()
-	multiplier_label.text = "x%.2f" % multiplier
-	multiplier_label.modulate.a = 1.0
-	multiplier_label.scale = Vector2.ONE
+	#if _multiplier_tween != null and _multiplier_tween.is_valid():
+	#	_multiplier_tween.kill()
+	#multiplier_label.text = "x%.2f" % multiplier
+	#multiplier_label.remove_theme_color_override("font_color")
+	#multiplier_label.modulate.a = 1.0
+	#multiplier_label.scale = Vector2.ONE
 
 
 func _play_multiplier_death_reset() -> void:
 	if _multiplier_tween != null and _multiplier_tween.is_valid():
 		_multiplier_tween.kill()
 	# death_sfx.play()  # SFX disabled for now — see game_juice_plan.md
+	multiplier_label.add_theme_color_override("font_color", STREAK_LOST_COLOR)
 	multiplier_label.modulate.a = 1.0
 	multiplier_label.scale = Vector2.ONE
 	_multiplier_tween = create_tween()
@@ -222,6 +228,7 @@ func _play_multiplier_death_reset() -> void:
 	_multiplier_tween.tween_callback(func() -> void:
 		multiplier_label.modulate.a = 1.0
 		multiplier_label.scale = Vector2.ONE
+		multiplier_label.remove_theme_color_override("font_color")
 	)
 
 

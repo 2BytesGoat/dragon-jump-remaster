@@ -37,6 +37,7 @@ static func find_hud() -> CanvasLayer:
 
 func play(text_value: String, color: Color, world_position: Vector2) -> void:
 	self.text = text_value
+	self_modulate = color
 	# size is 0 until layout runs, so force it from the text before centering.
 	reset_size()
 	var screen_position: Vector2 = get_viewport().get_canvas_transform() * (world_position + CONFIG.position_offset)
