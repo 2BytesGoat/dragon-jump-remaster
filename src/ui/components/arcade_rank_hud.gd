@@ -75,6 +75,7 @@ var pending_popup_world_position: Vector2 = Vector2.ZERO
 
 func _ready() -> void:
 	_base_medal_bar_scale = medal_bar.scale
+	medal_bar.pivot_offset = medal_bar.size / 2.0
 	_build_life_icons()
 	_reset_medal_bar_visuals()
 	ArcadeDirector.level_rank_awarded.connect(_on_level_rank_awarded)
@@ -303,7 +304,6 @@ func _on_flash_timer_timeout(color: Color) -> void:
 func _pulse_bar_scale() -> void:
 	if _bar_pulse_tween != null and _bar_pulse_tween.is_valid():
 		_bar_pulse_tween.kill()
-	medal_bar.pivot_offset = medal_bar.size / 2.0
 	medal_bar.scale = _base_medal_bar_scale
 	_bar_pulse_tween = create_tween()
 	_bar_pulse_tween.tween_property(medal_bar, "scale", _base_medal_bar_scale * Vector2(bar_pulse_scale_x, bar_pulse_scale_y), 0.12).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
