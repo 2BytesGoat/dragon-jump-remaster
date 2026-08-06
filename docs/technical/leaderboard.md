@@ -34,7 +34,7 @@ System relationships and dependencies: This system is a presentation layer. It d
   - `update_leaderboard(level_name: String)`: Shows the V1.0 placeholder (no-op in V1.0)
 - **Integration points with other systems**:
   - Consumed by `level_select.gd` and `end_screen.gd` via `%Leaderboard`
-  - Post-launch: expects a leaderboard manager + `SignalBus.leaderboard_scores_updated` signal
+  - Post-launch: expects a leaderboard manager wired to SignalBus (signal names are not yet defined in V1.0)
 - **RAG metadata**: Placeholder-driven UI; rendering path for real entries already scaffolded but unused in V1.0.
 
 ### `leaderboard_entry.gd`
@@ -54,7 +54,7 @@ System relationships and dependencies: This system is a presentation layer. It d
 ### `leaderboard.tscn`
 - **Scene hierarchy and organization**: MarginContainer containing EntryContainer, LeaderboardPlaceholderLabel, and ServerErrorLabel
 - **Key connections between elements**:
-  - Post-launch: expects to listen to `SignalBus.leaderboard_scores_updated`
+  - Post-launch: expects to listen to leaderboard-update signals (not yet defined in V1.0)
   - Uses preloaded scenes for individual entries and "others" labels
 - **Visual layout considerations**:
   - Uses MarginContainer for proper positioning
@@ -67,7 +67,7 @@ System relationships and dependencies: This system is a presentation layer. It d
 
 ## System Integration
 - How the system interacts with other components: In V1.0 the leaderboard is a self-contained UI stub invoked by `level_select.gd` and `end_screen.gd`
-- Signal-based communication patterns: No active signal usage in V1.0; `SignalBus.leaderboard_scores_updated` reserved for post-launch
+- Signal-based communication patterns: No active signal usage in V1.0; leaderboard signals are reserved for post-launch (not yet defined)
 - Data flow and control flow: Post-launch: Player data → SaveManager → LeaderboardManager → SilentWolf → cache → UI update
 - Cross-system relationships for RAG linking: Related to SaveManager (player data), UI components (menus), ArcadeDirector (local run summary)
 

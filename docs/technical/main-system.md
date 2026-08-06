@@ -38,7 +38,7 @@ The `main.gd` script manages the core gameplay loop by:
 | `level_music` | AudioStreamPlayer | Background music player |
 | `pause_screen` | MarginContainer | Pause screen UI element |
 | `end_screen` | MarginContainer | End game screen UI element |
-| `time_container` | MarginContainer | Time tracking UI element |
+| `time_container` | MarginContainer | Run timer UI element (lives inside `ArcadeRankHud`; see [[technical/ui/arcade-hud]]) |
 
 ### Key Methods
 
@@ -96,6 +96,8 @@ The main scene serves as the container for all game elements and manages their r
 Main (Node)
 ├── SubViewportContainer
 │   └── SubViewport
+│       ├── ScreenShake
+│       ├── HitStop
 │       ├── GPUParticles2D (Background particles)
 │       ├── Level (Level scene instance)
 │       ├── Camera2D (Camera instance)
@@ -104,7 +106,10 @@ Main (Node)
 │       │   ├── CardContainerContainer (Power-up cards)
 │       │   ├── PauseScreen (Pause UI)
 │       │   ├── EndScreen (End game UI)
-│       │   └── TimeContainer (Time tracking)
+│       │   ├── ArcadeGameOverScreen
+│       │   ├── ArcadeRankHud
+│       │   │   └── TimeContainer (Run timer + play-time accumulation)
+│       │   └── TransitionWipe
 │       └── AudioStreamPlayer (Music player)
 └── CRTScreenEffect (Visual effect)
 ```
@@ -112,7 +117,7 @@ Main (Node)
 ### Key Connections
 
 The scene handles various signal connections:
-- `game_paused` → TimeContainer
+- `game_paused` → `ArcadeRankHud/TimeContainer`
 - `level_size_updated` → GPUParticles2D and Camera2D
 - UI button presses to corresponding handler methods
 
@@ -132,8 +137,8 @@ The scene handles various signal connections:
 - Handles scene transitions
 
 ### With SignalBus
-- Uses signals for game progression events
-- Listens to player restart/finish events
+- Emits `new_run_attempt` and `new_time_submission` for save/progress tracking
+- Player lifecycle signals (`run_started`, `run_restarted`, `run_finished`, `died`) are consumed directly from the player node
 
 ## Game Flow
 

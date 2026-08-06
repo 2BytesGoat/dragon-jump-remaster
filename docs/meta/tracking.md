@@ -117,9 +117,9 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 - [ ] src/ui/menus/stats_screen.tscn
 - [ ] src/ui/menus/arcade_game_over_screen.gd
 - [ ] src/ui/menus/arcade_game_over_screen.tscn
-- [ ] src/ui/components/arcade_rank_hud.gd
-- [ ] src/ui/components/arcade_rank_hud.tscn
-- [ ] src/ui/components/single_time_container.gd
+- [x] src/ui/components/arcade_rank_hud.gd — documented in [[technical/ui/arcade-hud]]
+- [x] src/ui/components/arcade_rank_hud.tscn — documented in [[technical/ui/arcade-hud]]
+- [x] src/ui/components/single_time_container.gd — documented in [[technical/ui/arcade-hud]]
 - [ ] src/ui/components/time_container.tscn
 
 ## Effects

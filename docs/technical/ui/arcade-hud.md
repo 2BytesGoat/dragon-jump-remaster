@@ -1,89 +1,50 @@
-# Arcade HUD integration draft
+# Arcade HUD and Run Timer
 
-## What changed and why
+## Live HUD (`arcade_rank_hud.tscn`)
 
-The current HUD (`TimeContainer`) is a single small timer at the top center. The power-up cards are rendered by `CardContainerContainer`, which spreads panels across the whole screen using a `VBoxContainer`. That layout works for a mouse-driven RTS but is hard to read quickly and is not controller friendly.
+`ArcadeRankHud` is the on-screen HUD during gameplay (main.tscn:58), a `CanvasLayer` containing the lives counter, the run timer, the medal/rank bar, bonus popups, score, and death/clear SFX. It is **not** the `ArcadeHud` described below — that was a design draft and was never built.
 
-This draft introduces `ArcadeHud`:
-- a bold top bar with **level badge**, **big centered timer**, and **lives counter**;
-- a bottom power-up bar with three fixed 40×40 slots;
-- a small script that mirrors the existing `TimeContainer` + `CardContainerContainer` API so integration is minimal.
+- Script: `src/ui/components/arcade_rank_hud.gd` (score roll, rank bands, medals, popups)
+- Scene: `src/ui/components/arcade_rank_hud.tscn`
+- Node path in `main.tscn`: `SubViewportContainer/SubViewport/CanvasLayer/ArcadeRankHud`
 
-## Files added
+### `ArcadeHud` design draft
+There was previously a design draft proposing a new `ArcadeHud` (bigger timer, lives counter, fixed power-up slots). **It was never implemented** — the draft file was rewritten into this doc, and the live HUD is `ArcadeRankHud` above. Do not mistake any past references to "`ArcadeHud` draft" for current code; it is backlog work (see `docs/project/active-backlog.md`).
 
-- `src/ui/components/arcade_hud.tscn` — the new HUD scene.
-- `src/ui/components/arcade_hud.gd` — HUD logic.
+## Run Timer (`single_time_container.gd`)
 
-## Suggested wiring in `main.tscn`
+The run timer is a `MarginContainer` (`TimeContainer`) nested inside `ArcadeRankHud`, with script `single_time_container.gd` attached (arcade_rank_hud.tscn:28-39). `main.gd` references it via `time_container` (main.tscn:57). `docs/technical/ui/index.md` lists `src/ui/components/single_time_container.gd`; there is also a stale, unused `src/ui/components/time_container.tscn` draft.
 
-1. Add an `ArcadeHud` instance under `SubViewportContainer/SubViewport/CanvasLayer`.
-2. Keep `PauseScreen` and `EndScreen` as they are; only hide or remove `TimeContainer` and `CardContainerContainer` when you are ready to switch.
+### What it does
 
-Example node path after integration:
+- **Display timer** (`total_time`): counts up while the race is active (first jump → finish), shown in `TimeLabel`. This is the clear time shown to the player and used for ranks/best times.
+- **Session accumulator** (`session_elapsed`): accumulates the same active-run time but **survives `reset()`** (deaths and restarts). It is flushed to `SignalBus.play_time_elapsed`, which `SaveManager` adds to the total/daily/weekly "time played" retention counters. So time on failed runs and restarts is recorded even though it never appears on the timer.
+- **Race gating**: time accumulates only when `race_started && !race_paused`. Paused time and pre-first-jump reading time are excluded. The `game_paused` signal (main.tscn:187) drives the pause gate.
+
+### Signals consumed (from `Player`)
+
+| Signal | Handler effect |
+|--------|----------------|
+| `run_started` | Starts the race (and the accumulator) |
+| `run_restarted` | Flushes accumulated time to the bus, then resets the display timer |
+| `run_finished` | Stops the race and flushes remaining time |
+
+### Flush points for `SignalBus.play_time_elapsed`
+
+- Every ~10 s of active play (see `FLUSH_INTERVAL_SEC`)
+- On `run_restarted` (covers death respawn + manual restart)
+- On `run_finished`
+- On `_exit_tree` (covers level exit / game quit, bounding data loss to a few seconds)
+
+### Flow
 
 ```
-SubViewportContainer/SubViewport/CanvasLayer
-├── ArcadeHud        <-- new
-├── PauseScreen
-├── EndScreen
+Player signals ──> single_time_container.gd ──> SignalBus.play_time_elapsed ──> SaveManager._on_time_elapsed ──> GameData total/daily/weekly_time_played_seconds
 ```
 
-If you want to try it side-by-side first, set `TimeContainer.visible = false` and `CardContainerContainer.visible = false` instead of deleting them.
+## See Also
 
-## Suggested wiring in `main.gd`
-
-Add an export for the new HUD and remove / deprecate the old ones:
-
-```gdscript
-@export var arcade_hud: MarginContainer
-# @export var time_container: MarginContainer   # can be removed later
-# @export var card_container: VBoxContainer     # can be removed later
-```
-
-In `_ready`:
-
-```gdscript
-arcade_hud.set_level_name(level_name)
-arcade_hud.set_lives(3)   # or however many lives you use
-```
-
-In `initialize_players`:
-
-```gdscript
-arcade_hud.track_player(player)
-# time_container.track_player(player)   # remove
-# card_container.map_player_signals(player_nodes)  # remove
-```
-
-To drive the timer, add a `_process` to `main.gd`:
-
-```gdscript
-func _process(delta: float) -> void:
-	if not race_finished:
-		arcade_hud.update_time(delta)
-```
-
-`ArcadeHud.reset()` is already wired to player restart signals, so `reset_ui` can be simplified to:
-
-```gdscript
-func reset_ui():
-	set_game_paused(false)
-	arcade_hud.reset()
-	race_finished = false
-	end_screen.visible = false
-```
-
-## Controller / arcade considerations
-
-- All text uses large font sizes (20–24 px) for cabinet screens.
-- The power-up slots are fixed left-to-right slots, making it easy to show a selection highlight or button prompt later.
-- The top bar spans the full width so it is readable at a glance.
-- If you add a selected-slot indicator, add a `TextureRect` or `Panel` highlight under `PowerupContainer` and animate its `position` based on the active slot index.
-
-## Next steps / optional polish
-
-1. Apply your existing `level_select_theme.tres` to `ArcadeHud` so fonts and colors match the rest of the game.
-2. Style the `Panel` nodes with `StyleBoxFlat` fills (dark background + bright border) for an arcade bezel look.
-3. Add a `HIGH SCORE` / `BEST` label next to the timer if you want classic arcade flavor.
-4. If you support two players locally, duplicate the bottom bar or stack two rows.
-5. Replace the placeholder `Panel` slots with your existing `card_scene.tscn` sizing so the power-up icons feel consistent.
+- [[technical/save-system/index]] — retention counters and `_on_time_elapsed`
+- [[technical/signal-bus]] — `play_time_elapsed` signal
+- [[technical/player-system]] — player lifecycle signals
+- [[technical/main-system]] — timer wiring in `main.gd` / `main.tscn`

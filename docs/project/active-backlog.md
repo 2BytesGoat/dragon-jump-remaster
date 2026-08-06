@@ -95,7 +95,7 @@ This backlog is ordered by priority. The rule is: **ship the reproducible arcade
 | 105 | ML starter code and tutorials (external blog) | Cross-promotion with the ML audience. | Medium |
 | 55 | Arcade victory screen — clearing level 1-17 | "YOU DID IT!", final score, lives remaining, top-10 leaderboard | Medium |
 | 56 | Heart pickup scene + scoring + pickup animation | `heart_pickup.tscn` + `.gd`; +1 life if <3, +500pts if full; auto-spawn in secret islands in arcade mode | Medium |
-| 57 | Arcade HUD — integrate `arcade_hud.tscn` | Lives, score, level badge; draft exists at [[technical/ui/arcade-hud]] | Medium |
+| 57 | Arcade HUD — integrate `arcade_hud.tscn` | Lives, score, level badge; planned (not built) — see [[technical/ui/arcade-hud]] | Medium |
 | 58 | Local arcade top-10 leaderboard | Extend `GameData` with `arcade_top_runs: Array`; persist via SaveManager; display on game-over/victory screens | Medium |
 | 74 | Inter-level score tracking + game juice | Ensure `ArcadeDirector.score` persists across level transitions; level-finish transition animation, score popup, screen shake | Medium |
 | 75 | Hidden areas in remaining 11 levels | Levels 1-4, 1-5, 1-6, 1-7, 1-10, 1-11, 1-12, 1-13, 1-14, 1-15, 1-16 need M-tiles (level design, small chunks) | Medium |

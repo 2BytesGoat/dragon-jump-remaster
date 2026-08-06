@@ -15,7 +15,7 @@ The approved V1.0 autoload roster is eight autoloads: seven core singletons plus
 | `GameSession` | Ephemeral session state: current level, current seed, speed modifier, run flags. |
 | `ArcadeDirector` | Arcade mode setup, life tracking, run progression, and run summary for the local arcade leaderboard. |
 | `TelemetrySystem` | Lightweight analytics abstraction; events log locally in debug builds. |
-| `SignalBus` *(helper)* | Cross-scene signals only (`new_run_attempt`, `new_time_submission`). |
+| `SignalBus` *(helper)* | Cross-scene signals only (`new_run_attempt`, `new_time_submission`, `play_time_elapsed`). Player lifecycle signals live on `Player`. |
 
 | Static Class | Responsibility |
 |---|---|

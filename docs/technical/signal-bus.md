@@ -28,15 +28,14 @@ The SignalBus singleton acts as an event bus that allows various systems to emit
 
 ### Signals and Connections
 
+> [!NOTE]
+> Player lifecycle signals (`run_started`, `run_restarted`, `run_finished`, `died`) **do not live on SignalBus** — they are emitted by the `Player` node itself and consumed via direct connections (e.g. `main.gd`, `single_time_container.gd`). SignalBus carries only cross-scene signals.
+
 | Signal | Parameters | Description |
 |--------|------------|-------------|
-| `player_started_run(player)` | player: Node | Emitted when a player begins a new run |
-| `player_restarted_run(player)` | player: Node | Emitted when a player restarts a run |
-| `player_finished_run(player)` | player: Node | Emitted when a player completes a run |
-| `new_run_attempt(level_name)` | level_name: String | Emitted when a new run attempt begins for a specific level |
-| `new_time_submission(level_name, time)` | level_name: String, time: float | Emitted when a new time is submitted for a level |
-| `new_leaderboard_submission(player_name: String, level_name:String, time:float)` | player_name: String, level_name: String, time: float | Emitted when a new leaderboard entry is created |
-| `leaderboard_scores_updated(leaderboad_name)` | leaderboad_name: String | Emitted when leaderboard scores are updated |
+| `new_run_attempt(level_name)` | level_name: String | Emitted when a new run attempt begins for a specific level (also on manual restart) |
+| `new_time_submission(level_name, time)` | level_name: String, time: float | Emitted when a new time is submitted for a level (only on run finish) |
+| `play_time_elapsed(seconds)` | seconds: float | Emitted when active play time accumulates (flushed on restart/finish/exit and periodically); drives retention "time played" counters |
 
 ## System Integration
 
@@ -76,14 +75,14 @@ Uses the singleton pattern to ensure there's only one instance of the signal bus
 
 ### Key Code Examples
 ```gdscript
-# Emitting a signal from player system
-SignalBus.emit_signal("player_started_run", self)
+# Emitting a signal from a level start
+SignalBus.new_run_attempt.emit(level_name)
 
-# Connecting to a signal in save system
-SignalBus.connect("new_time_submission", self, "_on_new_time_submission")
+# Connecting to a signal in the save system
+SignalBus.new_time_submission.connect(_on_new_time_submission)
 
-# Signal connection with parameters
-SignalBus.connect("player_finished_run", self, "_on_player_finished_run", [player])
+# Listening to player lifecycle signals directly on the player node
+player.run_finished.connect(_on_player_run_finished)
 ```
 
 ### Performance Considerations

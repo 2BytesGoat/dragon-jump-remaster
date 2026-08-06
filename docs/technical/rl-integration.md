@@ -25,13 +25,10 @@ search_terms: [rl-integration, reinforcement-learning, python-server, tcp-socket
 - Main methods and their functionality:
   - None (signals only)
 - Signals and connections:
-  - `player_started_run(player)`: Emitted when a player starts a run
-  - `player_restarted_run(player)`: Emitted when a player restarts a run
-  - `player_finished_run(player)`: Emitted when a player finishes a run
   - `new_run_attempt(level_name)`: Emitted for new run attempts
   - `new_time_submission(level_name, time)`: Emitted when a new time is submitted
-  - `new_leaderboard_submission(player_name: String, level_name:String, time:float)`: Emitted when a new leaderboard score is submitted
-  - `leaderboard_scores_updated(leaderboad_name)`: Emitted when leaderboard scores are updated
+  - `play_time_elapsed(seconds)`: Emitted when active play time accumulates
+  - Player lifecycle signals (`run_started`, `run_restarted`, `run_finished`, `died`) are emitted by the `Player` node, not SignalBus (see [[technical/player-system]])
 - Integration points with other systems:
   - Used by multiple systems for communication
   - Connected to various game events and player actions

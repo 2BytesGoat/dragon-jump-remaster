@@ -2,14 +2,22 @@ extends MarginContainer
 
 @onready var time_label = $TimeLabel
 
+const FLUSH_INTERVAL_SEC := 10.0
+
 var total_time := 0.0
 var delta_time := 0.0
 var race_paused := false
 var race_started := false
+var session_elapsed := 0.0
+var _last_flush := 0.0
 
 
 func _ready() -> void:
 	reset()
+
+
+func _exit_tree() -> void:
+	_flush_session_time()
 
 
 func track_player(player: Player) -> void:
@@ -34,6 +42,18 @@ func _process(delta: float) -> void:
 	
 	total_time += delta
 	time_label.text = Utils.format_time(total_time)
+	
+	session_elapsed += delta
+	if session_elapsed - _last_flush >= FLUSH_INTERVAL_SEC:
+		_flush_session_time()
+
+
+func _flush_session_time() -> void:
+	var since_last_flush := session_elapsed - _last_flush
+	if since_last_flush <= 0.0:
+		return
+	_last_flush = session_elapsed
+	SignalBus.play_time_elapsed.emit(since_last_flush)
 
 
 func reset() -> void:
@@ -42,6 +62,7 @@ func reset() -> void:
 	race_started = false
 	race_paused = false
 	time_label.text = "00:00.00"
+	_flush_session_time()
 
 
 func _on_player_run_started(_player: Player):
@@ -50,12 +71,14 @@ func _on_player_run_started(_player: Player):
 
 
 func _on_player_run_restarted(_player: Player):
+	_flush_session_time()
 	reset()
 
 
 func _on_player_run_finished(_player: Player) -> void:
 	race_started = false
 	race_paused = true
+	_flush_session_time()
 
 
 func _on_main_game_paused(is_paused: bool) -> void:

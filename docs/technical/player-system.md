@@ -61,17 +61,22 @@ The Player system represents the main character in the game, handling movement, 
 
 ### Signals and Connections
 
-| Signal | Emitted When | Purpose |
-|--------|--------------|---------|
-| `picked_powerup` | When player collects a power-up | Notifies systems of power-up collection |
-| `used_powerup` | When player uses a power-up | Notifies systems of power-up usage |
-| `has_resetted` | After player reset | Notifies systems of player reset |
+| Signal | Parameters | Emitted When | Purpose |
+|--------|-----------|--------------|---------|
+| `picked_powerup` | powerup_name: String, id: int, pickup_global_position: Vector2 | When player collects a power-up | Notifies systems of power-up collection |
+| `used_powerup` | id: int | When player uses a power-up | Notifies systems of power-up usage |
+| `powerup_consumed` | type: String | When a power-up is consumed | Notifies card/card-container UI |
+| `has_resetted` | — | After player reset | Notifies systems of player reset (level object reset, AI controller, observer) |
+| `run_started` | player: Player | On the player's first input after a spawn | Starts the run timer |
+| `run_restarted` | player: Player | Every time the player resets (death respawn, manual restart) | Resets the run timer and emits `new_run_attempt` via main |
+| `run_finished` | player: Player | When the player exits the level | Stops the timer; drives end screen / arcade progression |
+| `died` | player: Player | At the end of the death sequence | Drives arcade game-over handling |
 
 ### Integration Points with Other Systems
 
 - Connects to `StateMachine` for state management
 - Interacts with `Level` system through `level_reference`
-- Communicates with `SignalBus` for game events
+- Communicates cross-scene via `SignalBus` (attempts, time submissions) and local player signals consumed by `main.gd` / HUD
 - Integrates with `Powerup` system via collision detection
 - Works with `SaveManager` for saving player state
 - Uses `Utils` for scene instantiation
@@ -129,7 +134,7 @@ The player scene uses a layered approach:
 ### Signal-based Communication Patterns
 
 The Player system communicates through:
-1. **SignalBus** - For global events like player finished run, player restarted run
+1. **Direct player signals** (`run_started`, `run_restarted`, `run_finished`, `died`, `picked_powerup`, `has_resetted`) — consumed by `main.gd`, the HUD timer, and the AI controller
 2. **Area2D collision** - For power-up collection and interaction detection
 3. **State machine transitions** - For internal state changes and communication with states
 

@@ -47,6 +47,10 @@ System relationships and dependencies: This system integrates with player system
   - Connected to game completion events
 - **RAG metadata**: Visual design patterns include simple panel layout with labeled statistics
 
+### `single_time_container.gd` / `arcade_rank_hud.tscn`
+- **Purpose**: Run timer + play-time accumulation, embedded in the arcade HUD (`TimeContainer`).
+- Documented in [[technical/ui/arcade-hud]]. See that doc for the player-signal flow and flush points; `src/ui/components/time_container.tscn` is a stale, unused draft.
+
 ### `progress_bar.gd` *(removed)*
 Progress-bar mode was cut for V1.0 (see [[technical/architecture]]). No such file exists in the repo.
 
@@ -75,9 +79,13 @@ Progress-bar mode was cut for V1.0 (see [[technical/architecture]]). No such fil
 ### `progress_bar.tscn` *(removed)*
 No such file exists in the repo.
 
+### `arcade_rank_hud.tscn` / `time_container.tscn`
+- **Purpose**: `arcade_rank_hud.tscn` is the live gameplay HUD (lives, timer, rank bar, score). Its nested `TimeContainer` runs `single_time_container.gd` — see the Script Components section above.
+- `time_container.tscn` is a **stale, unused** draft scene; the live timer is inside `arcade_rank_hud.tscn` (main.tscn:57).
+
 ## System Integration
 - How the system interacts with other components: UI components connect to various game systems through signals and data passing, providing visual feedback for player actions and game events
-- Signal-based communication patterns: Uses SignalBus for communication between different systems, connects to player events for crown handling
+- Signal-based communication patterns: UI components consume player lifecycle signals (`run_started`, `run_restarted`, `run_finished`) directly and use SignalBus for cross-scene events (e.g. `play_time_elapsed` for the retention timer)
 - Data flow and control flow: Game data → Player system → UI components → Displayed to user
 - Cross-system relationships for RAG linking: Related to player system (player events), save system (player data), leaderboard system (score display), main system (game flow)
 

@@ -4,6 +4,16 @@ This document captures high-level decisions as the project evolves.
 
 ---
 
+## 2026-08-06 — Retention time counts all active play
+
+**Context:** The stats screen's "time played" counters (total/daily/weekly) were only incremented on level finish, so time spent on failed runs and restarts was lost, understating real play time.
+
+- **Decided that "time played" counts all active run time**, including deaths and restarts, not just completed runs. The run timer now accumulates a session total that survives restarts and is flushed to `SignalBus.play_time_elapsed`, which SaveManager adds to the retention counters.
+- **Active time only:** pre-first-jump reading time and paused time are excluded, matching how clear times are measured.
+- **Best-time/leaderboard semantics unchanged:** `new_time_submission` no longer feeds the retention counters (it only handles best time, progress, and unlocks), avoiding double counting.
+
+---
+
 ## 2026-07-17 — Product identity and early scope
 
 - **Refined product identity** to:
