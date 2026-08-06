@@ -321,7 +321,7 @@ func get_flowfield_value(object_global_position: Vector2) -> float:
 	return _flow_field[cell_coords.x][cell_coords.y]
 
 
-func reset_objects() -> void:
+func reset_objects(_player: Player = null) -> void:
 	for obj_type in objects_map:
 		for obj in objects_map[obj_type]:
 			if obj.has_method("reset"):

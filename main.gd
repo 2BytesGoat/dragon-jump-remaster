@@ -127,6 +127,8 @@ func _on_player_restarted_run(_player: Player):
 	if race_finished:
 		return
 	reset_ui()
+	if arcade_rank_hud != null:
+		arcade_rank_hud.reset_medal_bar()
 	SignalBus.new_run_attempt.emit(level_name)
 	TelemetrySystem.run_restarted(level_name)
 
@@ -233,7 +235,6 @@ func _on_arcade_level_finished(finish_position: Vector2) -> void:
 	
 	var level_data := CampaignLevelLibrary.get_level(level_name)
 	update_level(level_data)
-	reset_ui()
 
 
 func _progress_to_next_level() -> void:
@@ -244,4 +245,3 @@ func _progress_to_next_level() -> void:
 	
 	var level_data := CampaignLevelLibrary.get_level(level_name)
 	update_level(level_data)
-	reset_ui()

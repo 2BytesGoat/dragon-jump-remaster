@@ -58,7 +58,7 @@ var is_done: bool = false
 signal picked_powerup(powerup_name: String, id: int, pickup_global_position: Vector2)
 signal used_powerup(id: int)
 signal powerup_consumed(type: String)
-signal has_resetted
+signal has_resetted(player: Player)
 signal run_started(player: Player)
 signal run_restarted(player: Player)
 signal run_finished(player: Player)
@@ -231,7 +231,7 @@ func reset() -> void:
 	velocity = Vector2.ZERO
 	global_position = starting_position
 	state_machine.transition_to(initial_state.name)
-	has_resetted.emit()
+	has_resetted.emit(self)
 
 	_update_facing_direction()
 	animation_player.play("Spawn")

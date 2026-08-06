@@ -58,6 +58,7 @@ var _multiplier_tween: Tween = null
 var _band_tween: Tween = null
 var _bar_pulse_tween: Tween = null
 var _score_tween: Tween = null
+var _reset_tween: Tween = null
 var _multiplier_pop_timer: SceneTreeTimer = null
 var _last_rendered_score: int = -1
 var _current_level_id: String = ""
@@ -166,6 +167,10 @@ func reset() -> void:
 	_refresh_lives(ArcadeDirector.lives)
 	_last_rendered_score = ArcadeDirector.score
 	score_label.text = "SCORE %08d" % ArcadeDirector.score
+
+
+func reset_medal_bar() -> void:
+	_reset_medal_bar_visuals()
 
 
 func _on_level_rank_awarded(_level_id: String, rank: String, multiplier: float, bonus: int) -> void:
@@ -359,6 +364,28 @@ func _stop_medal_bar_pulse() -> void:
 	medal_bar.scale = Vector2.ONE
 	_heartbeat_elapsed = 0.0
 	_heartbeat_crossed = false
+
+
+func _reset_medal_bar_visuals() -> void:
+	_stop_medal_bar_pulse()
+	if _band_tween != null and _band_tween.is_valid():
+		_band_tween.kill()
+	if _reset_tween != null and _reset_tween.is_valid():
+		_reset_tween.kill()
+	_medal_fill = 1.0
+	_current_band = "GOLD"
+	band_label.text = "GOLD"
+	band_label.add_theme_color_override("font_color", Color.WHITE)
+	band_label.modulate.a = 1.0
+	medal_bar_fill.visible = true
+	_reset_tween = create_tween()
+	_reset_tween.set_parallel(true)
+	_reset_tween.tween_property(medal_bar_fill, "size:x", medal_bar.size.x, 0.2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	_reset_tween.tween_property(medal_bar_fill, "color", _rank_color("GOLD"), 0.2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	band_label.scale = Vector2(0.5, 0.5)
+	_band_tween = create_tween()
+	_band_tween.tween_property(band_label, "scale", Vector2(1.3, 1.3), 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_band_tween.tween_property(band_label, "scale", Vector2.ONE, 0.12).set_trans(Tween.TRANS_SINE)
 
 
 func _band_for_time(time: float) -> String:
