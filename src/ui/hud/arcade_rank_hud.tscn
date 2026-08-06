@@ -1,7 +1,6 @@
-[gd_scene format=3 uid="uid://bj6o5ba2gxaxy"]
+[gd_scene format=3 uid="uid://brluo13ccn1u1"]
 
-[ext_resource type="Theme" path="res://src/ui/components/themes/level_select_theme.tres" id="1_theme"]
-[ext_resource type="Script" path="res://src/ui/components/arcade_rank_hud.gd" id="2_script"]
+[ext_resource type="Script" uid="uid://ciq7tn4th2qcx" path="res://src/ui/hud/arcade_rank_hud.gd" id="2_script"]
 [ext_resource type="Script" uid="uid://u12281ncqv4x" path="res://src/ui/components/single_time_container.gd" id="10_ycdy4"]
 [ext_resource type="AudioStream" uid="uid://35l4xnse0nlc" path="res://assets/sfx/SoundBonus.wav" id="11_sfx_bonus"]
 [ext_resource type="AudioStream" uid="uid://bo175m0kiuwev" path="res://assets/sfx/heavenly.ogg" id="12_sfx_gold"]
@@ -17,7 +16,6 @@ offset_left = 8.0
 offset_top = 8.0
 offset_right = 80.0
 offset_bottom = 24.0
-theme_override_constants/separation = 2
 
 [node name="TimeContainer" type="MarginContainer" parent="." unique_id=1338096448]
 unique_name_in_owner = true
@@ -28,14 +26,11 @@ offset_left = -90.0
 offset_right = 90.0
 offset_bottom = 26.0
 grow_horizontal = 2
-theme = ExtResource("1_theme")
-theme_override_constants/margin_top = 4
 script = ExtResource("10_ycdy4")
 
 [node name="TimeLabel" type="Label" parent="TimeContainer" unique_id=1415804941]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
 text = "00:00.00"
 horizontal_alignment = 1
 
@@ -52,7 +47,6 @@ grow_horizontal = 2
 scale = Vector2(1.1, 1.1)
 pivot_offset = Vector2(90, 7)
 mouse_filter = 2
-theme = ExtResource("1_theme")
 step = 2.5
 value = 100.0
 texture_progress = ExtResource("15_bar_fill")
@@ -68,11 +62,6 @@ offset_top = 23.0
 offset_right = 90.0
 offset_bottom = 39.0
 grow_horizontal = 2
-theme = ExtResource("1_theme")
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.6)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 12
 text = "GOLD"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -105,13 +94,11 @@ offset_top = 4.0
 offset_right = -8.0
 offset_bottom = 32.0
 grow_horizontal = 0
-theme_override_constants/separation = 2
 alignment = 2
 
 [node name="ScoreLabel" type="Label" parent="ScoreVBox" unique_id=889982808]
 unique_name_in_owner = true
 layout_mode = 2
-theme = ExtResource("1_theme")
 text = "SCORE 00000000"
 horizontal_alignment = 2
 vertical_alignment = 1
@@ -119,7 +106,6 @@ vertical_alignment = 1
 [node name="MultiplierLabel" type="Label" parent="ScoreVBox" unique_id=1793750243]
 unique_name_in_owner = true
 layout_mode = 2
-theme = ExtResource("1_theme")
 text = "x1.00"
 horizontal_alignment = 2
 vertical_alignment = 1

@@ -6,7 +6,7 @@ const MAX_SUPPORTED_ENTRIES = 9
 @onready var server_error_label = %ServerErrorLabel
 
 @onready var leaderboard_entry_scene = preload("res://src/ui/components/leaderboard_entry.tscn")
-@onready var leaderboard_others_scene = preload("res://src/ui/menus/others_label.tscn")
+@onready var leaderboard_others_scene = preload("res://src/ui/components/others_label.tscn")
 
 
 func _ready() -> void:

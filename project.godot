@@ -43,6 +43,7 @@ window/stretch/mode="canvas_items"
 [gui]
 
 theme/default_font_multichannel_signed_distance_field=true
+theme/custom="res://src/ui/themes/default_theme.tres"
 
 [input]
 

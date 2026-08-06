@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://dy48oppkgt4rs"]
+
+[ext_resource type="Script" uid="uid://bram7wxts3aio" path="res://src/ui/hud/bonus_popup.gd" id="1_bonus_popup"]
+
+[node name="BonusPopup" type="Label" unique_id=302418970]
+text = "123"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("1_bonus_popup")

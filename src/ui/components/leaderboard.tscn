@@ -5,7 +5,6 @@
 
 [node name="Leaderboard" type="MarginContainer" unique_id=1142452174]
 size_flags_horizontal = 3
-theme_override_constants/margin_top = 8
 script = ExtResource("1_0ftxs")
 
 [node name="Panel" type="Panel" parent="." unique_id=1847717227]
@@ -35,15 +34,10 @@ horizontal_alignment = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer" unique_id=385201935]
 layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
 
 [node name="EntryContainer" type="VBoxContainer" parent="Panel/MarginContainer/MarginContainer" unique_id=1001909479]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/separation = 6
 
 [node name="LeaderboardEntry" parent="Panel/MarginContainer/MarginContainer/EntryContainer" unique_id=1557528422 instance=ExtResource("2_ox6fj")]
 layout_mode = 2

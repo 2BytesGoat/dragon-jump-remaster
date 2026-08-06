@@ -1,0 +1,118 @@
+[gd_scene format=3 uid="uid://dws2c5qkd8x6q"]
+
+[ext_resource type="PackedScene" uid="uid://bnxudkobrdgtb" path="res://src/ui/components/menu_button.tscn" id="3_a1b2c"]
+[ext_resource type="Script" uid="uid://bjl3ty5wb0xun" path="res://src/ui/screens/settings_menu.gd" id="4_a1b2c"]
+
+[node name="SettingsMenu" type="MarginContainer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -175.0
+offset_top = -120.0
+offset_right = 175.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("4_a1b2c")
+
+[node name="Panel" type="Panel" parent="."]
+custom_minimum_size = Vector2(350, 240)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -151.0
+offset_top = -92.0
+offset_right = 151.0
+offset_bottom = 92.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "SOUND SETTINGS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="Panel/MarginContainer/VBoxContainer"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+
+[node name="MasterVolumeRow" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MasterLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/MasterVolumeRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(80, 0)
+text = "MASTER"
+vertical_alignment = 1
+
+[node name="MasterSlider" type="HSlider" parent="Panel/MarginContainer/VBoxContainer/MasterVolumeRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.1
+value = 1.0
+
+[node name="MusicVolumeRow" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MusicLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/MusicVolumeRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(80, 0)
+text = "MUSIC"
+vertical_alignment = 1
+
+[node name="MusicSlider" type="HSlider" parent="Panel/MarginContainer/VBoxContainer/MusicVolumeRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.1
+value = 1.0
+
+[node name="SFXVolumeRow" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="SFXLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/SFXVolumeRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(80, 0)
+text = "SFX"
+vertical_alignment = 1
+
+[node name="SFXSlider" type="HSlider" parent="Panel/MarginContainer/VBoxContainer/SFXVolumeRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.1
+value = 1.0
+
+[node name="HSeparator2" type="HSeparator" parent="Panel/MarginContainer/VBoxContainer"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+
+[node name="CloseButton" parent="Panel/MarginContainer/VBoxContainer" instance=ExtResource("3_a1b2c")]
+custom_minimum_size = Vector2(145, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "CLOSE"
+
+[connection signal="value_changed" from="Panel/MarginContainer/VBoxContainer/MasterVolumeRow/MasterSlider" to="." method="_on_master_slider_value_changed"]
+[connection signal="value_changed" from="Panel/MarginContainer/VBoxContainer/MusicVolumeRow/MusicSlider" to="." method="_on_music_slider_value_changed"]
+[connection signal="value_changed" from="Panel/MarginContainer/VBoxContainer/SFXVolumeRow/SFXSlider" to="." method="_on_sfx_slider_value_changed"]
+[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/CloseButton" to="." method="_on_close_button_pressed"]

@@ -1,0 +1,178 @@
+[gd_scene format=3 uid="uid://c3d4e5f68aaab"]
+
+[ext_resource type="Script" uid="uid://b2c3d4e5f6789" path="res://src/ui/screens/stats_screen.gd" id="3_abc12"]
+[ext_resource type="PackedScene" uid="uid://bnxudkobrdgtb" path="res://src/ui/components/menu_button.tscn" id="4_abc12"]
+
+[node name="StatsScreen" type="MarginContainer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_abc12")
+
+[node name="Panel" type="Panel" parent="."]
+custom_minimum_size = Vector2(380, 260)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "PLAYER STATS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="Panel/MarginContainer/VBoxContainer"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+
+[node name="TotalAttemptsContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/TotalAttemptsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Total Attempts:"
+vertical_alignment = 1
+
+[node name="TotalAttemptsLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/TotalAttemptsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="TotalTimeContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/TotalTimeContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Total Time:"
+vertical_alignment = 1
+
+[node name="TotalTimeLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/TotalTimeContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "00:00.000"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="DailyAttemptsContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/DailyAttemptsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Daily Attempts:"
+vertical_alignment = 1
+
+[node name="DailyAttemptsLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/DailyAttemptsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="DailyTimeContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/DailyTimeContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Daily Time:"
+vertical_alignment = 1
+
+[node name="DailyTimeLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/DailyTimeContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "00:00.000"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="WeeklyAttemptsContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/WeeklyAttemptsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Weekly Attempts:"
+vertical_alignment = 1
+
+[node name="WeeklyAttemptsLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/WeeklyAttemptsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="WeeklyTimeContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/WeeklyTimeContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Weekly Time:"
+vertical_alignment = 1
+
+[node name="WeeklyTimeLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/WeeklyTimeContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "00:00.000"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="CosmeticsContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/CosmeticsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Unlocked Cosmetics:"
+vertical_alignment = 1
+
+[node name="CosmeticsLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/CosmeticsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "None"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="HSeparator2" type="HSeparator" parent="Panel/MarginContainer/VBoxContainer"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="BackButton" parent="Panel/MarginContainer/VBoxContainer" instance=ExtResource("4_abc12")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(176, 28)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+text = "BACK"
+
+[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]

@@ -93,18 +93,6 @@ func draw(type: String, exists: bool = false, from_position: Vector2 = Vector2.Z
 func shift_by(offsets: Array):
 	if is_dissolving:
 		return
-	
-	var margin_names := [
-		"margin_left",
-		"margin_top",
-		"margin_right",
-		"margin_bottom"
-		]
-	
-	for i in range(4):
-		var current = container.get_theme_constant(margin_names[i])
-		var new_value = current + offsets[i]
-		container.add_theme_constant_override(margin_names[i], new_value)
 
 
 func play_draw_new_animation(pickup_position: Vector2 = Vector2.ZERO):
