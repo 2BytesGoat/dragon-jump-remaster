@@ -1,66 +1,20 @@
-[gd_resource type="Theme" format=3]
+[gd_resource type="Theme" format=3 uid="uid://w2eess571ok6"]
 
 [ext_resource type="FontFile" uid="uid://cmbpqj0hto83m" path="res://assets/fonts/Awesome 9.ttf" id="1_font"]
-[ext_resource type="Texture2D" uid="uid://mvxvmtl8bdjc" path="res://assets/sprites/ui/silver_button_normal-export.png" id="2_btn_normal"]
-[ext_resource type="Texture2D" uid="uid://cwlrtagoomvfw" path="res://assets/sprites/ui/silver_button_pressed-export.png" id="3_btn_pressed"]
-[ext_resource type="Texture2D" uid="uid://cdtwn0djgq0ah" path="res://assets/sprites/ui/silver_button_focus-export-export.png" id="4_btn_focus"]
-[ext_resource type="Texture2D" uid="uid://dolawuug5bvhc" path="res://assets/sprites/ui/silver_panel-export.png" id="5_panel"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxButtonNormal"]
-texture = ExtResource("2_btn_normal")
-texture_margin_left = 8.0
-texture_margin_top = 8.0
-texture_margin_right = 8.0
-texture_margin_bottom = 8.0
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jecqt"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxButtonHover"]
-texture = ExtResource("2_btn_normal")
-texture_margin_left = 8.0
-texture_margin_top = 8.0
-texture_margin_right = 8.0
-texture_margin_bottom = 8.0
-modulate_color = Color(0.7, 0.9, 0.7, 1)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxButtonPressed"]
-texture = ExtResource("3_btn_pressed")
-texture_margin_left = 8.0
-texture_margin_top = 8.0
-texture_margin_right = 8.0
-texture_margin_bottom = 8.0
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxButtonFocus"]
-texture = ExtResource("4_btn_focus")
-texture_margin_left = 8.0
-texture_margin_top = 8.0
-texture_margin_right = 8.0
-texture_margin_bottom = 8.0
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxButtonDisabled"]
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxPanel"]
-texture = ExtResource("5_panel")
-texture_margin_left = 16.0
-texture_margin_top = 16.0
-texture_margin_right = 16.0
-texture_margin_bottom = 16.0
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5okp8"]
 
 [resource]
 default_font = ExtResource("1_font")
 default_font_size = 8
-
-Button/fonts/font = ExtResource("1_font")
-Button/font_sizes/font_size = 8
 Button/colors/font_color = Color(0.875, 0.875, 0.875, 1)
-Button/styles/normal = SubResource("StyleBoxButtonNormal")
-Button/styles/hover = SubResource("StyleBoxButtonHover")
-Button/styles/pressed = SubResource("StyleBoxButtonPressed")
-Button/styles/focus = SubResource("StyleBoxButtonFocus")
-Button/styles/disabled = SubResource("StyleBoxButtonDisabled")
-
-Label/fonts/font = ExtResource("1_font")
+Button/font_sizes/font_size = 16
+Button/fonts/font = ExtResource("1_font")
+Button/styles/normal = SubResource("StyleBoxEmpty_jecqt")
 Label/font_sizes/font_size = 8
-
-LineEdit/fonts/font = ExtResource("1_font")
+Label/fonts/font = ExtResource("1_font")
 LineEdit/font_sizes/font_size = 8
-
-Panel/styles/panel = SubResource("StyleBoxPanel")
+LineEdit/fonts/font = ExtResource("1_font")
+Panel/styles/panel = SubResource("StyleBoxEmpty_5okp8")

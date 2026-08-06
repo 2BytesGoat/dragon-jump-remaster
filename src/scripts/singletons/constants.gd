@@ -7,6 +7,10 @@ extends RefCounted
 
 const DEFAULT_PLAYER_NAME := "UNK"
 
+## Social links shown in the main menu footer. Replace with real URLs before launch.
+const DISCORD_URL := "https://discord.gg/your-invite"
+const WEBSITE_URL := "https://your-website.example"
+
 const PHYSICS_PARAMS := preload("res://resources/physics_params.tres")
 const MEDAL_CONFIG := preload("res://resources/medal_config.tres")
 const POWERUP_PALETTE := preload("res://resources/powerup_palette.tres")

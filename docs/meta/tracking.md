@@ -97,6 +97,11 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 
 - [x] src/ui/menus/main_menu.gd — documented in [[technical/ui/index]]
 - [x] src/ui/menus/main_menu.tscn — documented in [[technical/ui/index]]
+- [x] src/ui/screens/custom_levels_menu.gd — documented in [[technical/ui/index]]
+- [x] src/ui/screens/custom_levels_menu.tscn — documented in [[technical/ui/index]]
+- [x] src/ui/screens/credits_screen.gd — documented in [[technical/ui/index]]
+- [x] src/ui/screens/credits_screen.tscn — documented in [[technical/ui/index]]
+- [x] src/scripts/resources/custom_level_store.gd — documented in [[technical/ui/index]]
 - [x] src/ui/menus/end_screen.gd — documented in [[technical/ui/index]]
 - [x] src/ui/menus/end_screen.tscn — documented in [[technical/ui/index]]
 - [ ] src/ui/menus/level_select.gd
@@ -165,6 +170,7 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 - [x] src/scripts/singletons/telemetry_system.gd — Local analytics abstraction; V1.0 autoload
 - [x] src/scripts/singletons/audio_manager.gd — V1.0 autoload
 - [x] src/scripts/singletons/game_session.gd — V1.0 autoload
+- [x] src/scripts/resources/custom_level_store.gd — documented in [[technical/ui/index]]
 - [x] src/scripts/singletons/settings.gd — V1.0 autoload
 - [ ] src/scripts/components/states/state.gd
 - [ ] src/scripts/components/states/state_machine.gd

@@ -44,7 +44,7 @@ The `main.gd` script manages the core gameplay loop by:
 
 #### `_ready()`
 Initializes the game by:
-- Loading level data via the `SceneLoader` autoload
+- Loading level data via the `SceneLoader` autoload; if `GameSession.custom_level_code` is set, loads the level directly from the code string instead of a campaign resource (custom levels, see [[technical/ui/index]] § custom_levels_menu)
 - Setting up the player with appropriate starting position and speed modifier
 - Connecting signal handlers for player events
 - Initializing UI states

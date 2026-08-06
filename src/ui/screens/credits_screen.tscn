@@ -1,0 +1,72 @@
+[gd_scene load_steps=2 format=3 uid="uid://84ifx1rccrud9"]
+
+[ext_resource type="Script" uid="uid://cfcpvu7mulo5v" path="res://src/ui/screens/credits_screen.gd" id="1_credits"]
+
+[node name="CreditsScreen" type="Control"]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1_credits")
+
+[node name="Background" type="ColorRect" parent="."]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.88)
+mouse_filter = 0
+
+[node name="CrawlContainer" type="Control" parent="."]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+rotation_degrees = 30.0
+pivot_offset = Vector2(320, 180)
+
+[node name="CrawlText" type="RichTextLabel" parent="CrawlContainer"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 60.0
+offset_top = 0.0
+offset_right = 580.0
+offset_bottom = 600.0
+mouse_filter = 2
+theme_override_font_sizes/normal_font_size = 8
+text = "[center]DRAGON JUMP REMASTER[/center]
+
+[center]A tiny arcade speedrunner[/center]
+
+[center][color=#888888]DEVELOPER[/color][/center]
+[center]2BytesGoat[/center]
+
+[center][color=#888888]MUSIC[/color][/center]
+[center]JDSherbert - Streetlights[/center]
+
+[center][color=#888888]FONT[/color][/center]
+[center]Awesome 9[/center]
+
+[center][color=#888888]THANKS FOR PLAYING[/color][/center]"
+
+[node name="HintLabel" type="Label" parent="."]
+unique_name_in_owner = true
+anchors_preset = 10
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0
+offset_top = -24.0
+offset_right = 0.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 0
+horizontal_alignment = 1
+text = "PRESS ANY KEY TO CLOSE"

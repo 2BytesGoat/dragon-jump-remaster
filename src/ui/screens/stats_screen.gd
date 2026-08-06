@@ -28,4 +28,4 @@ func _update_stats() -> void:
 
 
 func _on_back_button_pressed() -> void:
-	SceneLoader.go_to("res://src/ui/screens/main_menu.tscn")
+	SceneLoader.go_to("res://src/ui/menus/main_menu.tscn")

@@ -17,8 +17,14 @@ func _ready() -> void:
 
 
 func update_stats(stats: Dictionary) -> void:
-	var level_index = CampaignLevelLibrary.get_all_level_ids().find(stats["level_name"])
 	var campaign_level := CampaignLevelLibrary.get_level(stats["level_name"])
+	if campaign_level == null:
+		level_name_label.text = stats["level_name"]
+		current_time_label.text = Utils.format_time(stats["time"])
+		best_time_label.text = Utils.format_time(stats["time"])
+		new_best_label.visible = false
+		return
+	var level_index = CampaignLevelLibrary.get_all_level_ids().find(stats["level_name"])
 	var level_name = campaign_level.display_name
 	level_name_label.text = "%03d - %s" % [level_index, level_name]
 	

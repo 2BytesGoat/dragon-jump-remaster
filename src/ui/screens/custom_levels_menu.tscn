@@ -1,0 +1,172 @@
+[gd_scene load_steps=4 format=3 uid="uid://vngj9mwc9oizz"]
+
+[ext_resource type="Script" uid="uid://c1g6e7qst534m" path="res://src/ui/screens/custom_levels_menu.gd" id="1_custom"]
+[ext_resource type="PackedScene" uid="uid://bid71r6mq0gpi" path="res://src/ui/menus/main_menu.tscn" id="2_mainmenu"]
+[ext_resource type="PackedScene" uid="uid://b5etxdni2oe0j" path="res://main.tscn" id="3_main"]
+
+[node name="CustomLevelsMenu" type="Control"]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_custom")
+main_menu_scene = ExtResource("2_mainmenu")
+single_player_scene = ExtResource("3_main")
+
+[node name="Background" type="ColorRect" parent="."]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.03, 0.04, 0.08, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="CenterContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(360, 300)
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/Panel"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBox" type="VBoxContainer" parent="CenterContainer/Panel/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/Panel/MarginContainer/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "CUSTOM LEVELS"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CenterContainer/Panel/MarginContainer/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LevelList" type="VBoxContainer" parent="CenterContainer/Panel/MarginContainer/VBox/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="EmptyLabel" type="Label" parent="CenterContainer/Panel/MarginContainer/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "NO IMPORTED LEVELS YET"
+horizontal_alignment = 1
+modulate = Color(0.6, 0.6, 0.6, 1)
+
+[node name="ImportPanel" type="Panel" parent="."]
+unique_name_in_owner = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -100.0
+offset_right = 150.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="ImportPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBox" type="VBoxContainer" parent="ImportPanel/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ImportTitle" type="Label" parent="ImportPanel/MarginContainer/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "IMPORT LEVEL"
+horizontal_alignment = 1
+
+[node name="ImportNameEdit" type="LineEdit" parent="ImportPanel/MarginContainer/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "LEVEL NAME"
+
+[node name="ImportCodeEdit" type="LineEdit" parent="ImportPanel/MarginContainer/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "PASTE LEVEL CODE HERE"
+
+[node name="ImportFeedbackLabel" type="Label" parent="ImportPanel/MarginContainer/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = ""
+horizontal_alignment = 1
+
+[node name="Buttons" type="HBoxContainer" parent="ImportPanel/MarginContainer/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ImportConfirmButton" type="Button" parent="ImportPanel/MarginContainer/VBox/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "IMPORT"
+
+[node name="ImportCancelButton" type="Button" parent="ImportPanel/MarginContainer/VBox/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "CANCEL"
+
+[node name="BottomRow" type="HBoxContainer" parent="CenterContainer/Panel/MarginContainer/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="PlayButton" type="Button" parent="CenterContainer/Panel/MarginContainer/VBox/BottomRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "PLAY"
+
+[node name="DeleteButton" type="Button" parent="CenterContainer/Panel/MarginContainer/VBox/BottomRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "DELETE"
+
+[node name="ImportButton" type="Button" parent="CenterContainer/Panel/MarginContainer/VBox/BottomRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "IMPORT"
+
+[node name="BackButton" type="Button" parent="CenterContainer/Panel/MarginContainer/VBox/BottomRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "BACK"
+
+[connection signal="pressed" from="CenterContainer/Panel/MarginContainer/VBox/BottomRow/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="CenterContainer/Panel/MarginContainer/VBox/BottomRow/DeleteButton" to="." method="_on_delete_button_pressed"]
+[connection signal="pressed" from="CenterContainer/Panel/MarginContainer/VBox/BottomRow/ImportButton" to="." method="_on_import_button_pressed"]
+[connection signal="pressed" from="CenterContainer/Panel/MarginContainer/VBox/BottomRow/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="ImportPanel/MarginContainer/VBox/Buttons/ImportConfirmButton" to="." method="_on_import_confirm_pressed"]
+[connection signal="pressed" from="ImportPanel/MarginContainer/VBox/Buttons/ImportCancelButton" to="." method="_on_import_cancel_pressed"]

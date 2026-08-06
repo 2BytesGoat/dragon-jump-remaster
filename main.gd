@@ -17,7 +17,7 @@ extends Node
 @onready var player_scene = preload("res://src/scenes/player/player.tscn")
 @onready var camera_scene = preload("res://src/scenes/camera_2d.tscn")
 @onready var portal_scene = preload("res://src/scenes/level/tiles/portal.tscn")
-var level_scene_path = "res://src/ui/screens/level_select.tscn"
+var level_scene_path = "res://src/ui/menus/level_select.tscn"
 
 var race_finished: bool = false
 var is_game_paused: bool = false
@@ -39,8 +39,11 @@ func _ready():
 	level_name = GameSession.level_name if GameSession.level_name else level_name
 	player_speed_modifier = GameSession.speed_modifier if GameSession.speed_modifier != 1.0 else player_speed_modifier
 	
-	var level_data := CampaignLevelLibrary.get_level(level_name)
-	level.load_level(level_data)
+	if GameSession.custom_level_code != "":
+		level.set_level(GameSession.custom_level_code)
+	else:
+		var level_data := CampaignLevelLibrary.get_level(level_name)
+		level.load_level(level_data)
 	initialize_players()
 	
 	pause_screen.set_pause_active(false)
