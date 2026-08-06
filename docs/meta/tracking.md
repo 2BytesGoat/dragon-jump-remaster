@@ -52,6 +52,7 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 - [ ] src/scenes/player/states/bounce_state.gd
 - [ ] src/scenes/player/states/grapple_state.gd
 - [ ] src/scenes/player/states/die_state.gd
+- [ ] src/scenes/player/states/celebrate_state.gd
 - [ ] src/scenes/player/sensors/raycast_sensor.tscn
 
 ## Level Component

@@ -105,7 +105,7 @@ The Player scene is organized as follows:
 5. **HurtBox** (Area2D) - Collision area for damage sources
 6. **ControllerContainer** (Node) - Container for controllers
 7. **StateMachine** (Node) - Manages player states with child nodes:
-   - **Idle**, **Move**, **Fall**, **Jump**, **Walled**, **DoubleJump**, **Stomp**, **Dash**, **Grapple**, **Bounce**
+   - **Idle**, **Move**, **Fall**, **Jump**, **Walled**, **DoubleJump**, **Stomp**, **Dash**, **Grapple**, **Bounce**, **Die**, **Celebrate**
 8. **AnimationPlayer** (AnimationPlayer) - Handles player animations
 9. **StateLabel** (Label) - Debug label showing current state
 

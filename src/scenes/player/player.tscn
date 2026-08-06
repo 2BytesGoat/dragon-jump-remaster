@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cw8cw6fpq5n63"]
 
 [ext_resource type="Script" uid="uid://c306bigp8honi" path="res://src/scenes/player/player.gd" id="1_uug8f"]
-[ext_resource type="Texture2D" uid="uid://cbu38jscfl0o" path="res://assets/sprites/player/player_v2.png" id="3_4r4qr"]
+[ext_resource type="Texture2D" uid="uid://d2kcrysq5lr7d" path="res://assets/sprites/player/player_v3.png" id="2_oub3j"]
 [ext_resource type="Script" uid="uid://td15gffk6sym" path="res://src/scripts/components/states/state_machine.gd" id="3_7p4af"]
 [ext_resource type="Texture2D" uid="uid://dqb15x3l5qeot" path="res://assets/sprites/player/AfterImage.png" id="3_tj7fb"]
 [ext_resource type="Script" uid="uid://dx2ry6r7fymd8" path="res://src/scenes/player/states/idle_state.gd" id="4_3m013"]
@@ -18,6 +18,7 @@
 [ext_resource type="Script" uid="uid://bkoh6pdkvl2wc" path="res://src/scenes/player/states/grapple_state.gd" id="13_824xm"]
 [ext_resource type="Script" uid="uid://dl2u2x131lawy" path="res://src/scenes/player/states/bounce_state.gd" id="18_oub3j"]
 [ext_resource type="Script" uid="uid://b5bjehiya4ap6" path="res://src/scenes/player/states/die_state.gd" id="19_die"]
+[ext_resource type="Script" uid="uid://f210iis62u8h" path="res://src/scenes/player/states/celebrate_state.gd" id="20_celebrate"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_i6xdb"]
 particles_animation = true
@@ -37,6 +38,22 @@ size = Vector2(13, 15)
 [sub_resource type="Curve" id="Curve_4r4qr"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.12641083, 0), 0.0, 0.0, 0, 0, Vector2(0.5011286, 1), 0.0, 0.0, 0, 0]
 point_count = 3
+
+[sub_resource type="Animation" id="Animation_xeaj8"]
+resource_name = "Celebrate"
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Flippable/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [21, 22, 23, 24, 25, 26, 27, 28, 29]
+}
 
 [sub_resource type="Animation" id="Animation_wnjjo"]
 resource_name = "Dash"
@@ -472,6 +489,7 @@ tracks/2/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_i6xdb"]
 _data = {
+&"Celebrate": SubResource("Animation_xeaj8"),
 &"Dash": SubResource("Animation_wnjjo"),
 &"Die": SubResource("Animation_die"),
 &"DoubleJump": SubResource("Animation_qtero"),
@@ -499,9 +517,9 @@ texture_filter = 1
 self_modulate = Color(1.0789914, 1.0789914, 1.0789914, 1)
 texture_filter = 1
 position = Vector2(1, -8)
-texture = ExtResource("3_4r4qr")
+texture = ExtResource("2_oub3j")
 offset = Vector2(-1, 0)
-hframes = 21
+hframes = 30
 
 [node name="HatContainer" type="Node2D" parent="Flippable" unique_id=2082777664]
 position = Vector2(-2, -11)
@@ -620,6 +638,9 @@ one_shot = true
 
 [node name="Die" type="Node" parent="StateMachine" unique_id=124273206]
 script = ExtResource("19_die")
+
+[node name="Celebrate" type="Node" parent="StateMachine" unique_id=124273207]
+script = ExtResource("20_celebrate")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1214060380]
 libraries/ = SubResource("AnimationLibrary_i6xdb")

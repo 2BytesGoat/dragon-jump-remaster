@@ -422,7 +422,7 @@ func _on_interact_box_area_entered(area: Area2D) -> void:
 	elif area.is_in_group("Exit"):
 		is_done = true
 		show_afterimage = false
-		animation_player.play("Idle")
+		state_machine.transition_to("Celebrate")
 		run_finished.emit(self)
 
 
