@@ -4,6 +4,30 @@ This document captures high-level decisions as the project evolves.
 
 ---
 
+## 2026-08-06 — Run timer owns its clock (no HUD-owned timing)
+
+**Context:** The run timer lived inside the `ArcadeRankHud` scene (`single_time_container.gd`), and `main.gd` reached across scenes to call `track_player()` on it. The `time_container` export was never wired in `main.tscn`, producing a Nil crash — a symptom of the timer being gameplay state stranded in a UI scene.
+
+- **Decided the clock is a dedicated `RunTimer` component** (`src/scripts/components/run_timer.gd`, `class_name RunTimer`) at the **Main root** of `main.tscn`. It owns `total_time`, race gating, player-signal wiring, and session-time flushing to `SignalBus.play_time_elapsed`. It is the single source of truth for run time.
+- **The HUD timer is display-only:** `single_time_container.gd` became `src/ui/components/time_display.gd` (`class_name TimeDisplay`) — a label fed by `RunTimer.time_changed` → `set_time()`. No clock state, no player references, no signals in the UI.
+- **Dependency direction is now `main → HUD`:** `main.gd` wires the player to the timer (`run_timer.track_player()`), hands the timer to the HUD (`arcade_rank_hud.run_timer = run_timer`), and the HUD only *reads* `run_timer.total_time` / `race_started` for medal-pace visuals.
+- **Fixed a latent bug:** practice-mode finish submitted main's own `total_time`, which was never set (always `0.0`); it now submits `run_timer.total_time`.
+- **Deleted the stale draft** `src/ui/components/arcade_rank_hud.tscn` (referenced a removed script).
+
+---
+
+## 2026-08-06 — Main menu start-flow animation
+
+**Context:** The revamped main menu (`src/ui/menus/main_menu.tscn`) needed a title-screen moment before the button column, matching the arcade-mode "Pulsing PRESS JUMP TO START" pillar ([[design/arcade-mode]]).
+
+- **Decided the title screen shows a blinking "Press JUMP to Start" label** next to a `PlayerMock` (the real player sprite, idle frame) that, on `player_one_jump` input, switches to the jump frame and arcs off-screen along the **real jump physics** (jump gravity to peak, then fall gravity — same constants as `PhysicsParams`), fading out as it leaves the bottom of the screen.
+- **The jump plays the same SFX as the in-game jump** (`swoosh.ogg` on the SFX bus, `-12 dB`), via a local `JumpSFX` `AudioStreamPlayer` — one-shots live in scenes, per the AudioManager convention.
+- **After the mock leaves the screen**, the start container hides, the selection container fades in, and focus moves to the Play button.
+- **The mock is freed from container layout** (`top_level = true`) during the arc so the tween can move it freely; the arc is computed analytically per frame (no per-frame velocity accumulation in a lambda).
+- **Play button wired to the game scene:** `_on_play_button_pressed()` calls `ArcadeDirector.start_arcade_run()` then `SceneLoader.go_to("res://main.tscn")`, mirroring the old menu's play flow. Practice/Create/Quit remain unwired for now.
+
+---
+
 ## 2026-08-06 — Reusable BonusPopup component
 
 **Context:** The "+bonus" level-clear popup was a single Label hard-coded inside `ArcadeRankHud`, animated in place. Future secret-area bonuses (backlog item #56) would need the same popup in multiple places simultaneously.

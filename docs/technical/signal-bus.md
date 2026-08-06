@@ -29,7 +29,7 @@ The SignalBus singleton acts as an event bus that allows various systems to emit
 ### Signals and Connections
 
 > [!NOTE]
-> Player lifecycle signals (`run_started`, `run_restarted`, `run_finished`, `died`) **do not live on SignalBus** — they are emitted by the `Player` node itself and consumed via direct connections (e.g. `main.gd`, `single_time_container.gd`). SignalBus carries only cross-scene signals.
+> Player lifecycle signals (`run_started`, `run_restarted`, `run_finished`, `died`) **do not live on SignalBus** — they are emitted by the `Player` node itself and consumed via direct connections (e.g. `main.gd`, `run_timer.gd`). SignalBus carries only cross-scene signals.
 
 | Signal | Parameters | Description |
 |--------|------------|-------------|

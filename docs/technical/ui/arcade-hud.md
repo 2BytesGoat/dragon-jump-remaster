@@ -4,8 +4,8 @@
 
 `ArcadeRankHud` is the on-screen HUD during gameplay (main.tscn:58), a `CanvasLayer` containing the lives counter, the run timer, the medal/rank bar, bonus popups, score, and death/clear SFX. It is **not** the `ArcadeHud` described below — that was a design draft and was never built.
 
-- Script: `src/ui/components/arcade_rank_hud.gd` (score roll, rank bands, medals, popups)
-- Scene: `src/ui/components/arcade_rank_hud.tscn`
+- Script: `src/ui/hud/arcade_rank_hud.gd` (score roll, rank bands, medals, popups)
+- Scene: `src/ui/hud/arcade_rank_hud.tscn`
 - Node path in `main.tscn`: `SubViewportContainer/SubViewport/CanvasLayer/ArcadeRankHud`
 
 ### Bonus popups (`bonus_popup.tscn`)
@@ -21,15 +21,20 @@ The "+bonus" popup shown at level clear is a **reusable, one-shot component**, n
 ### `ArcadeHud` design draft
 There was previously a design draft proposing a new `ArcadeHud` (bigger timer, lives counter, fixed power-up slots). **It was never implemented** — the draft file was rewritten into this doc, and the live HUD is `ArcadeRankHud` above. Do not mistake any past references to "`ArcadeHud` draft" for current code; it is backlog work (see `docs/project/active-backlog.md`).
 
-## Run Timer (`single_time_container.gd`)
+## Run Timer (`run_timer.gd` + `time_display.gd`)
 
-The run timer is a `MarginContainer` (`TimeContainer`) nested inside `ArcadeRankHud`, with script `single_time_container.gd` attached (arcade_rank_hud.tscn:28-39). `main.gd` references it via `time_container` (main.tscn:57). `docs/technical/ui/index.md` lists `src/ui/components/single_time_container.gd`; there is also a stale, unused `src/ui/components/time_container.tscn` draft.
+The run clock is split into two parts:
 
-### What it does
+- **`RunTimer`** (`src/scripts/components/run_timer.gd`, `class_name RunTimer`) — a plain `Node` at the **main scene root** (`main.tscn` → `Main/RunTimer`, exported to `main.gd` as `run_timer`). It owns all timer state and logic. **This is the single source of truth for run time.**
+- **`TimeDisplay`** (`src/ui/components/time_display.gd`, `class_name TimeDisplay`) — the `TimeContainer` MarginContainer inside `ArcadeRankHud` (arcade_rank_hud.tscn). It is **display-only**: it renders whatever time it is told via `set_time()` and holds no clock state. `main.tscn` connects `RunTimer.time_changed` → `TimeDisplay.set_time`.
 
-- **Display timer** (`total_time`): counts up while the race is active (first jump → finish), shown in `TimeLabel`. This is the clear time shown to the player and used for ranks/best times.
+`main.gd` wires everything: it connects player lifecycle signals to the timer via `run_timer.track_player(player)` (initialize_players) and hands the timer to the HUD with `arcade_rank_hud.run_timer = run_timer`. `ArcadeRankHud` reads `run_timer.total_time` / `run_timer.race_started` for medal-pace and rank-band visuals.
+
+### What the timer does
+
+- **Display timer** (`total_time`): counts up while the race is active (first jump → finish). `time_changed` fires each accumulated frame so the HUD label stays in sync.
 - **Session accumulator** (`session_elapsed`): accumulates the same active-run time but **survives `reset()`** (deaths and restarts). It is flushed to `SignalBus.play_time_elapsed`, which `SaveManager` adds to the total/daily/weekly "time played" retention counters. So time on failed runs and restarts is recorded even though it never appears on the timer.
-- **Race gating**: time accumulates only when `race_started && !race_paused`. Paused time and pre-first-jump reading time are excluded. The `game_paused` signal (main.tscn:187) drives the pause gate.
+- **Race gating**: time accumulates only when `race_started && !race_paused`. Paused time and pre-first-jump reading time are excluded. The `game_paused` signal (main.tscn) drives the pause gate via `_on_main_game_paused`.
 
 ### Signals consumed (from `Player`)
 
@@ -44,12 +49,13 @@ The run timer is a `MarginContainer` (`TimeContainer`) nested inside `ArcadeRank
 - Every ~10 s of active play (see `FLUSH_INTERVAL_SEC`)
 - On `run_restarted` (covers death respawn + manual restart)
 - On `run_finished`
-- On `_exit_tree` (covers level exit / game quit, bounding data loss to a few seconds)
+- On `reset()` (covers run resets that don't pass through `run_restarted`)
 
 ### Flow
 
 ```
-Player signals ──> single_time_container.gd ──> SignalBus.play_time_elapsed ──> SaveManager._on_time_elapsed ──> GameData total/daily/weekly_time_played_seconds
+Player signals ──> RunTimer ──┬─> time_changed ──> TimeDisplay (HUD label)
+                              └─> SignalBus.play_time_elapsed ──> SaveManager._on_time_elapsed ──> GameData total/daily/weekly_time_played_seconds
 ```
 
 ## See Also

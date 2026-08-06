@@ -302,7 +302,7 @@
 
 - [ ] Line 3: `level_select_theme.tres` — remove (theme being deleted)
 - [ ] Line 4: `arcade_rank_hud.gd` path → `res://src/ui/hud/arcade_rank_hud.gd`
-- [ ] Line 5: `single_time_container.gd` path — stays at `res://src/ui/components/single_time_container.gd` (no change)
+- [ ] Line 5: `single_time_container.gd` → `time_display.gd` path — was `res://src/ui/components/single_time_container.gd`, now `res://src/ui/components/time_display.gd`
 
 ### `src/scenes/powerups/card_scene.tscn`
 

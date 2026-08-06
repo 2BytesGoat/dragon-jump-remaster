@@ -1,23 +1,32 @@
-extends MarginContainer
+class_name RunTimer
+extends Node
 
-@onready var time_label = $TimeLabel
+## RunTimer
+## Gameplay run clock owned by main.gd, independent of any UI scene.
+## Tracks the active run (first jump -> finish), emits time_changed for
+## display, and accumulates session play time for SaveManager retention.
 
 const FLUSH_INTERVAL_SEC := 10.0
 
+signal time_changed(total_time: float)
+
 var total_time := 0.0
-var delta_time := 0.0
 var race_paused := false
 var race_started := false
 var session_elapsed := 0.0
 var _last_flush := 0.0
 
 
-func _ready() -> void:
-	reset()
+func _process(delta: float) -> void:
+	if not(not race_paused and race_started):
+		return
 
+	total_time += delta
+	time_changed.emit(total_time)
 
-func _exit_tree() -> void:
-	_flush_session_time()
+	session_elapsed += delta
+	if session_elapsed - _last_flush >= FLUSH_INTERVAL_SEC:
+		_flush_session_time()
 
 
 func track_player(player: Player) -> void:
@@ -36,18 +45,6 @@ func _disconnect_player_signals(player: Player) -> void:
 		player.run_finished.disconnect(_on_player_run_finished)
 
 
-func _process(delta: float) -> void:
-	if not(not race_paused and race_started):
-		return
-	
-	total_time += delta
-	time_label.text = Utils.format_time(total_time)
-	
-	session_elapsed += delta
-	if session_elapsed - _last_flush >= FLUSH_INTERVAL_SEC:
-		_flush_session_time()
-
-
 func _flush_session_time() -> void:
 	var since_last_flush := session_elapsed - _last_flush
 	if since_last_flush <= 0.0:
@@ -58,10 +55,9 @@ func _flush_session_time() -> void:
 
 func reset() -> void:
 	total_time = 0.0
-	delta_time = 0.0
 	race_started = false
 	race_paused = false
-	time_label.text = "00:00.00"
+	time_changed.emit(total_time)
 	_flush_session_time()
 
 

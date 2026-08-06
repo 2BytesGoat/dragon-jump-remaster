@@ -39,7 +39,7 @@ const LIFE_ICON_LOST_ALPHA := 0.25
 @export var bar_pulse_scale_x: float = 1.03
 @export var bar_pulse_scale_y: float = 1.15
 
-@onready var time_container: MarginContainer = %TimeContainer
+var run_timer: RunTimer = null
 @onready var lives_box: HBoxContainer = %LivesBox
 @onready var band_label: Label = %BandLabel
 @onready var medal_bar: TextureProgressBar = %MedalBar
@@ -226,6 +226,8 @@ func _play_multiplier_death_reset() -> void:
 
 
 func _update_medal_pace(delta: float) -> void:
+	if run_timer == null:
+		return
 	var level_id := GameSession.level_name
 	if level_id != _current_level_id:
 		_current_level_id = level_id
@@ -238,9 +240,9 @@ func _update_medal_pace(delta: float) -> void:
 		medal_bar.visible = false
 		return
 	medal_bar.visible = true
-	var time = time_container.total_time
+	var time = run_timer.total_time
 	_update_medal_bar(time, delta)
-	if not time_container.race_started:
+	if not run_timer.race_started:
 		return
 	var band := _band_for_time(time)
 	if band == _current_band:
@@ -263,7 +265,7 @@ func _pulse_medal_bar(pulse_from_percent: float, delta: float) -> bool:
 		_heartbeat_elapsed = 0.0
 		_heartbeat_crossed = false
 		return false
-	var band := _band_for_time(time_container.total_time)
+	var band := _band_for_time(run_timer.total_time)
 	var color: Color = _rank_color(band)
 	if not _heartbeat_crossed:
 		_heartbeat_crossed = true
@@ -306,7 +308,7 @@ func _pulse_bar_scale() -> void:
 
 
 func _update_medal_bar(time: float, delta: float) -> void:
-	if not time_container.race_started:
+	if not run_timer.race_started:
 		_stop_medal_bar_pulse()
 		return
 	var thresholds := _get_medal_thresholds()

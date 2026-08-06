@@ -19,23 +19,23 @@ System relationships and dependencies: This system integrates with player system
 ## Script Components (`*.gd`)
 
 ### `main_menu.gd`
-- **Purpose**: Main menu screen that provides access to different game modes and settings
+- **Purpose**: Main menu screen that provides access to different game modes and settings. Shows a title screen with a blinking "Press JUMP to Start" prompt and a `PlayerMock` that jumps off-screen on jump input before revealing the selection buttons.
 - **Key properties**:
-  - `tag_screen`: Reference to the player tag input screen
-  - `settings_menu`: Reference to the sound settings modal
-  - `credits_screen`: Reference to the rolling credits overlay
+  - `start_container` / `selection_container`: The two stacked menu states (title prompt vs. button column), toggled by the start sequence
+  - `player_mock`: `TextureRect` showing the player sprite via an `AtlasTexture` (duplicated at runtime so frames can be swapped by region)
+  - `press_key_label`: The blinking "Press JUMP to Start" label
+  - `jump_sfx`: `AudioStreamPlayer` on the SFX bus playing `swoosh.ogg` (same sound as the in-game jump effect)
 - **Layout** (compact arcade style): primary column of PLAY / PRACTICE / CREATE, then a footer row of small buttons: SETTINGS / CREDITS / DISCORD / WEB / QUIT
 - **Main methods**:
-  - `_ready()`: Initializes menu state based on command line arguments
-  - `_on_play_button_pressed()`: Handles play button press, starts an arcade run
-  - `_on_practice_button_pressed()`: Sets practice mode and navigates to level select
-  - `_on_create_button_pressed()`: Navigates to the custom levels menu
-  - `_on_credits_button_pressed()`: Shows the rolling credits overlay
-  - `_on_discord_button_pressed()` / `_on_website_button_pressed()`: Open social links via `OS.shell_open()` (URLs in `Constants.DISCORD_URL` / `Constants.WEBSITE_URL`)
-  - `_on_quit_button_pressed()`: Exits the game
-  - `_on_confirm_button_pressed()`: Processes player tag input and navigates to level select
-  - `_on_skip_button_pressed()`: Skips player tag input and goes directly to level select
+  - `_ready()`: Shows the start container, hides the selection container, duplicates the mock's atlas texture, and starts the label blink tween
+  - `_unhandled_input()`: On `player_one_jump` (space / joypad A), starts the jump sequence
+  - `_set_player_frame(coords)`: Swaps the mock's atlas region to the given sprite-sheet coordinates (`IDLE_COORDS` / `JUMP_COORDS` / `FALL_COORDS`)
+  - `_start_jump_sequence()`: Kills the blink, plays the jump SFX, switches the mock to the jump frame, and tweens it along the real jump arc (jump gravity to peak, then fall gravity) while drifting horizontally at the player's move speed, until it leaves the screen, fading it out near the bottom
+  - `_jump_arc_step(t)`: Integrates the arc analytically; switches the mock to the fall frame once past the peak and moves it horizontally at `PhysicsParams.max_speed`
+  - `_on_jump_sequence_finished()`: Hides the start container and fades the selection container in (`FADE_IN_DURATION`), then focuses the Play button (only runs once the mock's bottom edge is `EXIT_MARGIN` px past the bottom of the screen)
+  - `_on_play_button_pressed()`: Starts an arcade run via `ArcadeDirector.start_arcade_run()` and navigates to `res://main.tscn` via `SceneLoader`
 - **Integration points with other systems**:
+  - Jump arc constants come from `Constants.PHYSICS_PARAMS` (the same resource `Player` reads in `player.gd`), not re-declared locally
   - Connects to the `SceneLoader` autoload for scene navigation
   - Uses SaveManager to check player name
   - Uses Constants for default player name and social URLs
@@ -74,8 +74,8 @@ System relationships and dependencies: This system integrates with player system
   - Connected to game completion events
 - **RAG metadata**: Visual design patterns include simple panel layout with labeled statistics
 
-### `single_time_container.gd` / `arcade_rank_hud.tscn`
-- **Purpose**: Run timer + play-time accumulation, embedded in the arcade HUD (`TimeContainer`).
+### `run_timer.gd` / `time_display.gd` / `arcade_rank_hud.tscn`
+- **Purpose**: The run clock (`RunTimer`, `src/scripts/components/run_timer.gd`) lives at the main scene root and is the single source of truth for run time. `TimeDisplay` (`src/ui/components/time_display.gd`) is the display-only timer label inside the HUD (`TimeContainer`), fed by `RunTimer.time_changed`.
 - Documented in [[technical/ui/arcade-hud]]. See that doc for the player-signal flow and flush points; `src/ui/components/time_container.tscn` is a stale, unused draft.
 
 ### `bonus_popup.gd` / `bonus_popup.tscn` / `bonus_popup_config.tres`
@@ -87,11 +87,11 @@ Progress-bar mode was cut for V1.0 (see [[technical/architecture]]). No such fil
 
 ## Scene Components (`*.tscn`)
 ### `main_menu.tscn`
-- **Scene hierarchy and organization**: MarginContainer containing logo, primary button column (PLAY / PRACTICE / CREATE), footer row (SETTINGS / CREDITS / DISCORD / WEB / QUIT), tag screen, settings modal, and credits overlay
+- **Scene hierarchy and organization**: MarginContainer containing logo, a start container (PlayerMock + blinking "Press JUMP to Start" label), the primary button column (PLAY / PRACTICE / CREATE), footer row (SETTINGS / CREDITS / DISCORD / WEB / QUIT), and a `JumpSFX` `AudioStreamPlayer` on the SFX bus
 - **Key connections between elements**:
+  - `PlayerMock` is a `TextureRect` on an `AtlasTexture` of `player_v3.png`; the script swaps the atlas region between idle / jump / fall coordinates on jump input
+  - `StartContainer`, `SelectionContainer`, `PlayerMock`, `PressKeyLabel`, and `PlayButton` are unique-name nodes referenced by `main_menu.gd`
   - Connects to button press signals for navigation
-  - Links to tag_screen for player name input
-  - Links to settings_menu and credits_screen as overlays
   - Uses the `SceneLoader` autoload for scene transitions
 - **Visual layout considerations**: 
   - Uses MarginContainer for proper positioning
@@ -112,8 +112,8 @@ Progress-bar mode was cut for V1.0 (see [[technical/architecture]]). No such fil
 No such file exists in the repo.
 
 ### `arcade_rank_hud.tscn` / `time_container.tscn`
-- **Purpose**: `arcade_rank_hud.tscn` is the live gameplay HUD (lives, timer, rank bar, score). Its nested `TimeContainer` runs `single_time_container.gd` — see the Script Components section above.
-- `time_container.tscn` is a **stale, unused** draft scene; the live timer is inside `arcade_rank_hud.tscn` (main.tscn:57).
+- **Purpose**: `arcade_rank_hud.tscn` (in `src/ui/hud/`) is the live gameplay HUD (lives, timer label, rank bar, score). Its nested `TimeContainer` runs `time_display.gd` (display-only); the clock itself is `RunTimer` at the main root — see the Script Components section above.
+- `time_container.tscn` is a **stale, unused** draft scene; the live timer is inside `arcade_rank_hud.tscn`.
 
 ## System Integration
 - How the system interacts with other components: UI components connect to various game systems through signals and data passing, providing visual feedback for player actions and game events

@@ -10,9 +10,10 @@ extends Node
 @export var pause_screen: MarginContainer
 @export var end_screen: MarginContainer
 @export var arcade_game_over_screen: MarginContainer
-@export var time_container: MarginContainer
+@export var time_container: TimeDisplay
 @export var transition_wipe: TransitionWipe
 @export var arcade_rank_hud: ArcadeRankHud
+@export var run_timer: RunTimer
 
 @onready var player_scene = preload("res://src/scenes/player/player.tscn")
 @onready var camera_scene = preload("res://src/scenes/camera_2d.tscn")
@@ -22,9 +23,6 @@ var level_scene_path = "res://src/ui/menus/level_select.tscn"
 var race_finished: bool = false
 var is_game_paused: bool = false
 var first_pickup: bool = true
-var total_time: float = 0.0
-var delta_time: float = 0.0
-var update_interval: float = 0.2
 
 var level_name = "tmp"
 var player_speed_modifier = 1.0 
@@ -45,6 +43,7 @@ func _ready():
 		var level_data := CampaignLevelLibrary.get_level(level_name)
 		level.load_level(level_data)
 	initialize_players()
+	arcade_rank_hud.run_timer = run_timer
 	
 	pause_screen.set_pause_active(false)
 	end_screen.visible = false
@@ -62,6 +61,7 @@ func update_level(level_data: CampaignLevelData):
 func reset_ui():
 	set_game_paused(false)
 	time_container.reset()
+	run_timer.reset()
 	race_finished = false
 	end_screen.visible = false
 	arcade_game_over_screen.visible = false
@@ -103,7 +103,7 @@ func initialize_players() -> void:
 	player.hit_stop = hit_stop
 	player.transition_wipe = transition_wipe
 	player.camera = camera
-	time_container.track_player(player)
+	run_timer.track_player(player)
 	
 	card_container.map_player_signals(player_nodes)
 
@@ -168,12 +168,12 @@ func _show_arcade_game_over() -> void:
 
 
 func _on_player_finished_practice_run(_player: Player) -> void:
-	SignalBus.new_time_submission.emit(level_name, total_time)
-	TelemetrySystem.level_finished(level_name, total_time)
+	SignalBus.new_time_submission.emit(level_name, run_timer.total_time)
+	TelemetrySystem.level_finished(level_name, run_timer.total_time)
 	
 	var stats = {
 		"level_name": level_name,
-		"time": total_time,
+		"time": run_timer.total_time,
 		"restarts": 1
 	}
 	end_screen.update_stats(stats)
@@ -214,7 +214,7 @@ func _on_next_button_pressed() -> void:
 
 func _on_arcade_level_finished(finish_position: Vector2) -> void:
 	var finished_level = level_name
-	var clear_time = time_container.total_time
+	var clear_time = run_timer.total_time
 	SignalBus.new_time_submission.emit(finished_level, clear_time)
 	# The bonus popup spawns above the player at the exit. Set the position
 	# before on_level_finished() because its level_rank_awarded emit is

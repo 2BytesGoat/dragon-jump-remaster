@@ -123,9 +123,10 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 - [ ] src/ui/menus/stats_screen.tscn
 - [ ] src/ui/menus/arcade_game_over_screen.gd
 - [ ] src/ui/menus/arcade_game_over_screen.tscn
-- [x] src/ui/components/arcade_rank_hud.gd — documented in [[technical/ui/arcade-hud]]
-- [x] src/ui/components/arcade_rank_hud.tscn — documented in [[technical/ui/arcade-hud]]
-- [x] src/ui/components/single_time_container.gd — documented in [[technical/ui/arcade-hud]]
+- [x] src/ui/hud/arcade_rank_hud.gd — documented in [[technical/ui/arcade-hud]]
+- [x] src/ui/hud/arcade_rank_hud.tscn — documented in [[technical/ui/arcade-hud]]
+- [x] src/ui/components/time_display.gd — documented in [[technical/ui/arcade-hud]]
+- [x] src/scripts/components/run_timer.gd — documented in [[technical/ui/arcade-hud]]
 - [x] src/ui/components/bonus_popup.gd — documented in [[technical/ui/arcade-hud]]
 - [x] src/ui/components/bonus_popup.tscn — documented in [[technical/ui/arcade-hud]]
 - [ ] src/ui/components/time_container.tscn

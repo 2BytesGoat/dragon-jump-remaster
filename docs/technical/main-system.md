@@ -38,7 +38,8 @@ The `main.gd` script manages the core gameplay loop by:
 | `level_music` | AudioStreamPlayer | Background music player |
 | `pause_screen` | MarginContainer | Pause screen UI element |
 | `end_screen` | MarginContainer | End game screen UI element |
-| `time_container` | MarginContainer | Run timer UI element (lives inside `ArcadeRankHud`; see [[technical/ui/arcade-hud]]) |
+| `run_timer` | RunTimer | Run clock (single source of truth for run time; lives at the Main root) |
+| `time_container` | TimeDisplay | Run timer UI label (display-only, lives inside `ArcadeRankHud`; see [[technical/ui/arcade-hud]]) |
 
 ### Key Methods
 
@@ -54,6 +55,7 @@ Creates and configures the player instance with:
 - Proper positioning and controller type
 - Camera linking to the player
 - Signal connections for reset handling
+- `run_timer.track_player()` to wire the run clock to player lifecycle signals
 
 #### `update_players()`
 Resets all players to their initial state with:
@@ -94,6 +96,7 @@ The main scene serves as the container for all game elements and manages their r
 
 ```
 Main (Node)
+├── RunTimer (Run clock: total_time + play-time accumulation)
 ├── SubViewportContainer
 │   └── SubViewport
 │       ├── ScreenShake
@@ -108,7 +111,7 @@ Main (Node)
 │       │   ├── EndScreen (End game UI)
 │       │   ├── ArcadeGameOverScreen
 │       │   ├── ArcadeRankHud
-│       │   │   └── TimeContainer (Run timer + play-time accumulation)
+│       │   │   └── TimeContainer (Run timer label — display only)
 │       │   └── TransitionWipe
 │       └── AudioStreamPlayer (Music player)
 └── CRTScreenEffect (Visual effect)
@@ -117,7 +120,8 @@ Main (Node)
 ### Key Connections
 
 The scene handles various signal connections:
-- `game_paused` → `ArcadeRankHud/TimeContainer`
+- `game_paused` → `RunTimer` (pause gate for the clock)
+- `RunTimer.time_changed` → `ArcadeRankHud/TimeContainer.set_time` (drives the HUD label)
 - `level_size_updated` → GPUParticles2D and Camera2D
 - UI button presses to corresponding handler methods
 
@@ -133,12 +137,12 @@ The scene handles various signal connections:
 
 ### With UI System
 - Controls visibility of pause and end screens
-- Manages time tracking display
+- Pushes run time into the HUD: `run_timer.track_player()` wires player signals, `arcade_rank_hud.run_timer` gives the HUD read access, and the `time_changed` connection drives the label
 - Handles scene transitions
 
 ### With SignalBus
 - Emits `new_run_attempt` and `new_time_submission` for save/progress tracking
-- Player lifecycle signals (`run_started`, `run_restarted`, `run_finished`, `died`) are consumed directly from the player node
+- Player lifecycle signals (`run_started`, `run_restarted`, `run_finished`, `died`) are consumed directly from the player node (e.g. by `main.gd` and `RunTimer`)
 
 ## Game Flow
 

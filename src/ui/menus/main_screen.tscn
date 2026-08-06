@@ -1,0 +1,282 @@
+[gd_scene format=3 uid="uid://duvl2j4r4ygfe"]
+
+[ext_resource type="Theme" uid="uid://w2eess571ok6" path="res://src/ui/themes/default_theme.tres" id="1_gcvw4"]
+[ext_resource type="Script" uid="uid://dtb7qopwmmjs8" path="res://src/ui/menus/main_screen.gd" id="2_ubacl"]
+[ext_resource type="PackedScene" uid="uid://p3lou48biwtg" path="res://src/scenes/effects/background_particles.tscn" id="3_qqh6h"]
+[ext_resource type="PackedScene" uid="uid://0c7hrkqyixn1" path="res://src/ui/menus/main_menu.tscn" id="4_suuo2"]
+[ext_resource type="Script" uid="uid://dm5bkd7chuhi4" path="res://src/ui/components/speed_slider_label.gd" id="7_n1ukh"]
+[ext_resource type="PackedScene" uid="uid://coq21sivcbueg" path="res://src/ui/components/level_button.tscn" id="8_nff1g"]
+[ext_resource type="PackedScene" uid="uid://bvm718ddfisd7" path="res://src/scenes/level/level.tscn" id="9_gc2ho"]
+[ext_resource type="Script" uid="uid://etwvvclap1my" path="res://src/scenes/level_select_camera_2d.gd" id="10_vsfkg"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_rs8ex"]
+viewport_path = NodePath("PracticeMenu/SubViewport")
+
+[node name="MainScreen" type="Control" unique_id=1832555998]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_gcvw4")
+script = ExtResource("2_ubacl")
+
+[node name="GPUParticles2D" parent="." unique_id=248882165 instance=ExtResource("3_qqh6h")]
+position = Vector2(321, 0)
+
+[node name="MainMenu" parent="." unique_id=602409232 instance=ExtResource("4_suuo2")]
+layout_mode = 1
+
+[node name="PracticeMenu" type="MarginContainer" parent="." unique_id=872478613]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PracticeMenu" unique_id=602141689]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="LevelListContainer" type="MarginContainer" parent="PracticeMenu/HBoxContainer" unique_id=1860723718]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PracticeMenu/HBoxContainer/LevelListContainer" unique_id=1310548194]
+layout_mode = 2
+
+[node name="PlayerSpeedHeader" type="Label" parent="PracticeMenu/HBoxContainer/LevelListContainer/VBoxContainer" unique_id=676089758]
+layout_mode = 2
+text = "Player Speed:"
+vertical_alignment = 1
+uppercase = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PracticeMenu/HBoxContainer/LevelListContainer/VBoxContainer" unique_id=1180353225]
+layout_mode = 2
+
+[node name="SpeedSlider" type="HSlider" parent="PracticeMenu/HBoxContainer/LevelListContainer/VBoxContainer/HBoxContainer" unique_id=785010572]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.0
+max_value = 1.0
+step = 0.5
+value = 1.0
+tick_count = 3
+ticks_on_borders = true
+ticks_position = 3
+
+[node name="SpeedSliderLabel" type="Label" parent="PracticeMenu/HBoxContainer/LevelListContainer/VBoxContainer/HBoxContainer" unique_id=9475100]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "Fast"
+uppercase = true
+script = ExtResource("7_n1ukh")
+
+[node name="Label3" type="Label" parent="PracticeMenu/HBoxContainer/LevelListContainer/VBoxContainer" unique_id=1573656705]
+layout_mode = 2
+text = "Select Level:"
+vertical_alignment = 1
+uppercase = true
+
+[node name="MarginContainer2" type="MarginContainer" parent="PracticeMenu/HBoxContainer/LevelListContainer/VBoxContainer" unique_id=1363961925]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LevelButtons" type="ScrollContainer" parent="PracticeMenu/HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2" unique_id=28353260]
+layout_mode = 2
+follow_focus = true
+
+[node name="MarginContainer" type="MarginContainer" parent="PracticeMenu/HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons" unique_id=1594450645]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="LevelButtonContainer" type="VBoxContainer" parent="PracticeMenu/HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer" unique_id=249815874]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LevelButton" parent="PracticeMenu/HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=1940968341 instance=ExtResource("8_nff1g")]
+layout_mode = 2
+
+[node name="LevelButton2" parent="PracticeMenu/HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=1431445611 instance=ExtResource("8_nff1g")]
+layout_mode = 2
+
+[node name="LevelButton3" parent="PracticeMenu/HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=224110923 instance=ExtResource("8_nff1g")]
+layout_mode = 2
+
+[node name="LevelButton4" parent="PracticeMenu/HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=1162914771 instance=ExtResource("8_nff1g")]
+layout_mode = 2
+
+[node name="LevelButton5" parent="PracticeMenu/HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=776237503 instance=ExtResource("8_nff1g")]
+layout_mode = 2
+
+[node name="LevelButton6" parent="PracticeMenu/HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=80113721 instance=ExtResource("8_nff1g")]
+layout_mode = 2
+
+[node name="LevelButton7" parent="PracticeMenu/HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=396922298 instance=ExtResource("8_nff1g")]
+layout_mode = 2
+
+[node name="LevelButton8" parent="PracticeMenu/HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=586703936 instance=ExtResource("8_nff1g")]
+layout_mode = 2
+
+[node name="LevelButton9" parent="PracticeMenu/HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=874768185 instance=ExtResource("8_nff1g")]
+layout_mode = 2
+
+[node name="LevelButton10" parent="PracticeMenu/HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=1665108636 instance=ExtResource("8_nff1g")]
+layout_mode = 2
+
+[node name="LevelButton11" parent="PracticeMenu/HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=1328085061 instance=ExtResource("8_nff1g")]
+layout_mode = 2
+
+[node name="LevelButton12" parent="PracticeMenu/HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=2035723914 instance=ExtResource("8_nff1g")]
+layout_mode = 2
+
+[node name="LevelButton13" parent="PracticeMenu/HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=1839406941 instance=ExtResource("8_nff1g")]
+layout_mode = 2
+
+[node name="LevelButton14" parent="PracticeMenu/HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=1636238844 instance=ExtResource("8_nff1g")]
+layout_mode = 2
+
+[node name="LevelButton15" parent="PracticeMenu/HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=1445088424 instance=ExtResource("8_nff1g")]
+layout_mode = 2
+
+[node name="LevelButton16" parent="PracticeMenu/HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=135023163 instance=ExtResource("8_nff1g")]
+layout_mode = 2
+
+[node name="LevelButton17" parent="PracticeMenu/HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=2002704505 instance=ExtResource("8_nff1g")]
+layout_mode = 2
+
+[node name="LevelButton18" parent="PracticeMenu/HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=1808116657 instance=ExtResource("8_nff1g")]
+layout_mode = 2
+
+[node name="LevelPreviewContainer" type="MarginContainer" parent="PracticeMenu/HBoxContainer" unique_id=159010029]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="PracticeMenu/HBoxContainer/LevelPreviewContainer" unique_id=801627109]
+layout_mode = 2
+
+[node name="SelectedLevelLabel" type="Label" parent="PracticeMenu/HBoxContainer/LevelPreviewContainer/VBoxContainer2" unique_id=392634547]
+unique_name_in_owner = true
+layout_mode = 2
+text = "LEVEL 1-1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PracticeMenu/HBoxContainer/LevelPreviewContainer/VBoxContainer2" unique_id=834112803]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PracticeMenu/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer" unique_id=19683615]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_right = 24
+
+[node name="TextureRect" type="TextureRect" parent="PracticeMenu/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer" unique_id=1884255433]
+layout_mode = 2
+size_flags_horizontal = 4
+texture = SubResource("ViewportTexture_rs8ex")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="MarginContainer2" type="MarginContainer" parent="PracticeMenu/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer" unique_id=58754127]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PracticeMenu/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer2" unique_id=253074914]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PracticeMenu/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=2112566476]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "MASTERY:"
+vertical_alignment = 1
+uppercase = true
+
+[node name="MedalContainer" type="HBoxContainer" parent="PracticeMenu/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=705963954]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="LevelProgressBar" type="ProgressBar" parent="PracticeMenu/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MedalContainer" unique_id=1426413268]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.1
+value = 0.4
+
+[node name="LevelProgressMedalLabel" type="Label" parent="PracticeMenu/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MedalContainer" unique_id=63680545]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+text = "BRONZE"
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="AttemptsContainer" type="HBoxContainer" parent="PracticeMenu/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=538682725]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="PracticeMenu/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/AttemptsContainer" unique_id=298356318]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Attempts:"
+vertical_alignment = 1
+uppercase = true
+
+[node name="LevelAttemptsLabel" type="Label" parent="PracticeMenu/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/AttemptsContainer" unique_id=1303008379]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="HighscoreContainer" type="HBoxContainer" parent="PracticeMenu/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=1391701897]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="PracticeMenu/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/HighscoreContainer" unique_id=1063276517]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Your Best:"
+vertical_alignment = 1
+uppercase = true
+
+[node name="YourBestTimeLabel" type="Label" parent="PracticeMenu/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/HighscoreContainer" unique_id=497536502]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "00:00.000"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="SubViewport" type="SubViewport" parent="PracticeMenu" unique_id=2097881776]
+transparent_bg = true
+canvas_item_default_texture_filter = 0
+size = Vector2i(320, 240)
+
+[node name="Level" parent="PracticeMenu/SubViewport" unique_id=962454612 instance=ExtResource("9_gc2ho")]
+unique_name_in_owner = true
+
+[node name="Camera2D" type="Camera2D" parent="PracticeMenu/SubViewport" unique_id=1326003362]
+offset = Vector2(156, 120)
+script = ExtResource("10_vsfkg")
+
+[connection signal="value_changed" from="PracticeMenu/HBoxContainer/LevelListContainer/VBoxContainer/HBoxContainer/SpeedSlider" to="PracticeMenu/HBoxContainer/LevelListContainer/VBoxContainer/HBoxContainer/SpeedSliderLabel" method="_on_speed_slider_value_changed"]
+[connection signal="level_size_updated" from="PracticeMenu/SubViewport/Level" to="PracticeMenu/SubViewport/Camera2D" method="_on_level_level_size_updated"]
