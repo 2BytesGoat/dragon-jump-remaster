@@ -30,6 +30,7 @@ var _fall_gravity := 0.0
 var _start_y := 0.0
 var _start_x := 0.0
 var _fade_start_y := 0.0
+var _transitioning := false
 
 
 func _ready() -> void:
@@ -123,5 +124,8 @@ func _on_selection_faded_in() -> void:
 
 
 func _on_play_button_pressed() -> void:
+	if _transitioning:
+		return
 	ArcadeDirector.start_arcade_run()
 	SceneLoader.go_to("res://main.tscn")
+	_transitioning = true
