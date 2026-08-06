@@ -1,11 +1,8 @@
 [gd_scene format=3 uid="uid://dqxbwfhfhx0ng"]
 
-[ext_resource type="Script" uid="uid://dfndbwlllo6cu" path="res://src/ui/screens/level_select.gd" id="1_36voa"]
 [ext_resource type="PackedScene" uid="uid://bvm718ddfisd7" path="res://src/scenes/level/level.tscn" id="1_40k0a"]
-[ext_resource type="PackedScene" uid="uid://b5etxdni2oe0j" path="res://main.tscn" id="3_26flc"]
 [ext_resource type="PackedScene" uid="uid://coq21sivcbueg" path="res://src/ui/components/level_button.tscn" id="3_x42vb"]
-[ext_resource type="PackedScene" uid="uid://bid71r6mq0gpi" path="res://src/ui/menus/main_menu.tscn" id="4_atnpk"]
-[ext_resource type="Script" uid="uid://cwt3nxjuhojym" path="res://src/ui/components/speed_slider_label.gd" id="5_atnpk"]
+[ext_resource type="Script" uid="uid://dm5bkd7chuhi4" path="res://src/ui/components/speed_slider_label.gd" id="5_atnpk"]
 [ext_resource type="PackedScene" uid="uid://p3lou48biwtg" path="res://src/scenes/effects/background_particles.tscn" id="5_kt8od"]
 [ext_resource type="PackedScene" uid="uid://bnxudkobrdgtb" path="res://src/ui/components/menu_button.tscn" id="8_auso1"]
 [ext_resource type="PackedScene" uid="uid://ciagv840u6luw" path="res://src/ui/components/leaderboard.tscn" id="9_x8351"]
@@ -16,13 +13,13 @@
 [sub_resource type="ViewportTexture" id="ViewportTexture_40k0a"]
 viewport_path = NodePath("SubViewport")
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_kt8od"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_auso1"]
 viewport_path = NodePath("../SubViewportContainer/SubViewport")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_inow4"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5k7ll"]
 resource_local_to_scene = true
 shader = ExtResource("12_81j85")
-shader_parameter/tex = SubResource("ViewportTexture_kt8od")
+shader_parameter/tex = SubResource("ViewportTexture_auso1")
 shader_parameter/mask_type = 2
 shader_parameter/curve = 0.0400000019
 shader_parameter/sharpness = 0.7550000121125
@@ -39,9 +36,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_36voa")
-single_player_scene = ExtResource("3_26flc")
-main_menu_scene = ExtResource("4_atnpk")
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=275291851]
 texture_filter = 1
@@ -413,7 +407,7 @@ script = ExtResource("10_5k7ll")
 
 [node name="CRTScreenEffect" parent="." unique_id=1412518820 instance=ExtResource("12_0v27s")]
 visible = false
-material = SubResource("ShaderMaterial_inow4")
+material = SubResource("ShaderMaterial_5k7ll")
 layout_mode = 2
 
 [connection signal="value_changed" from="SubViewportContainer/SubViewport/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/SpeedSlider" to="SubViewportContainer/SubViewport/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/SpeedSliderLabel" method="_on_speed_slider_value_changed"]

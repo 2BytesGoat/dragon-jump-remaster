@@ -1,0 +1,201 @@
+[gd_scene format=3 uid="uid://cvrvrstrrg21b"]
+
+[ext_resource type="Theme" uid="uid://w2eess571ok6" path="res://src/ui/themes/default_theme.tres" id="1_hcfgv"]
+[ext_resource type="Texture2D" uid="uid://ctojsl0e08r07" path="res://assets/logos/Logo2.png" id="1_wuc7m"]
+[ext_resource type="Script" uid="uid://dnbholpht6pld" path="res://src/ui/menus/main_menu_old.gd" id="1_xaiw4"]
+[ext_resource type="PackedScene" uid="uid://dtqsfm2jla0rs" path="res://src/ui/screens/tag_screen.tscn" id="2_jmap8"]
+[ext_resource type="PackedScene" uid="uid://bnxudkobrdgtb" path="res://src/ui/components/menu_button.tscn" id="2_xaiw4"]
+[ext_resource type="Script" uid="uid://bp178g0kdlegl" path="res://src/ui/screens/tag_screen.gd" id="6_y3puo"]
+[ext_resource type="Shader" uid="uid://b87hi538ipc5q" path="res://assets/shaders/screen_crt.gdshader" id="7_csvuu"]
+[ext_resource type="PackedScene" uid="uid://fcxn3r6i8mg5" path="res://src/ui/components/crt_screen_effect.tscn" id="7_ltlti"]
+[ext_resource type="PackedScene" uid="uid://dws2c5qkd8x6q" path="res://src/ui/screens/settings_menu.tscn" id="10_abc12"]
+[ext_resource type="PackedScene" uid="uid://c68g8lfbs5ub5" path="res://src/ui/screens/credits_screen.tscn" id="11_credits"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_4nxri"]
+viewport_path = NodePath("../SubViewportContainer/SubViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t6cie"]
+resource_local_to_scene = true
+shader = ExtResource("7_csvuu")
+shader_parameter/tex = SubResource("ViewportTexture_4nxri")
+shader_parameter/mask_type = 2
+shader_parameter/curve = 0.0400000019
+shader_parameter/sharpness = 0.7550000121125
+shader_parameter/color_offset = 0.0
+shader_parameter/mask_brightness = 0.750000035625
+shader_parameter/scanline_brightness = 1.0
+shader_parameter/min_scanline_thickness = 0.5
+shader_parameter/aspect = 0.75
+shader_parameter/wobble_strength = 0.250000011875
+
+[node name="MainMenu" type="Control" unique_id=1832555998 node_paths=PackedStringArray("tag_screen", "settings_menu", "credits_screen")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_hcfgv")
+script = ExtResource("1_xaiw4")
+tag_screen = NodePath("SubViewportContainer/SubViewport/TagScreen")
+settings_menu = NodePath("SubViewportContainer/SubViewport/SettingsMenu")
+credits_screen = NodePath("SubViewportContainer/SubViewport/CreditsScreen")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=1628232823]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=1731082921]
+handle_input_locally = false
+canvas_item_default_texture_filter = 0
+size = Vector2i(640, 360)
+render_target_update_mode = 4
+
+[node name="MenuSelectionScreen" type="MarginContainer" parent="SubViewportContainer/SubViewport" unique_id=1300745067]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 48
+theme_override_constants/margin_top = 48
+theme_override_constants/margin_right = 48
+theme_override_constants/margin_bottom = 48
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer/SubViewport/MenuSelectionScreen" unique_id=1360826384]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="SubViewportContainer/SubViewport/MenuSelectionScreen/VBoxContainer" unique_id=873343702]
+custom_minimum_size = Vector2(225, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+texture = ExtResource("1_wuc7m")
+expand_mode = 5
+
+[node name="HSeparator" type="HSeparator" parent="SubViewportContainer/SubViewport/MenuSelectionScreen/VBoxContainer" unique_id=617021690]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="SubViewportContainer/SubViewport/MenuSelectionScreen/VBoxContainer" unique_id=217826035]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+alignment = 1
+
+[node name="Panel" type="Panel" parent="SubViewportContainer/SubViewport/MenuSelectionScreen/VBoxContainer/VBoxContainer2" unique_id=525283876]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer/SubViewport/MenuSelectionScreen/VBoxContainer/VBoxContainer2/Panel" unique_id=1293342526]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+
+[node name="PlayButton" parent="SubViewportContainer/SubViewport/MenuSelectionScreen/VBoxContainer/VBoxContainer2/Panel/VBoxContainer" unique_id=1896212048 instance=ExtResource("2_xaiw4")]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "PLAY"
+
+[node name="PracticeButton" parent="SubViewportContainer/SubViewport/MenuSelectionScreen/VBoxContainer/VBoxContainer2/Panel/VBoxContainer" unique_id=2468351 instance=ExtResource("2_xaiw4")]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "PRACTICE"
+
+[node name="PracticeButton2" parent="SubViewportContainer/SubViewport/MenuSelectionScreen/VBoxContainer/VBoxContainer2/Panel/VBoxContainer" unique_id=1924805688 instance=ExtResource("2_xaiw4")]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "CREATE"
+
+[node name="HSeparator" type="HSeparator" parent="SubViewportContainer/SubViewport/MenuSelectionScreen/VBoxContainer/VBoxContainer2/Panel/VBoxContainer" unique_id=168710561]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+
+[node name="Footer" type="HBoxContainer" parent="SubViewportContainer/SubViewport/MenuSelectionScreen/VBoxContainer/VBoxContainer2/Panel/VBoxContainer" unique_id=1896212052]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="SettingsButton" parent="SubViewportContainer/SubViewport/MenuSelectionScreen/VBoxContainer/VBoxContainer2/Panel/VBoxContainer/Footer" unique_id=1897499001 instance=ExtResource("2_xaiw4")]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 8
+text = "SETTINGS"
+
+[node name="CreditsButton" parent="SubViewportContainer/SubViewport/MenuSelectionScreen/VBoxContainer/VBoxContainer2/Panel/VBoxContainer/Footer" unique_id=1897499002 instance=ExtResource("2_xaiw4")]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 8
+text = "CREDITS"
+
+[node name="DiscordButton" parent="SubViewportContainer/SubViewport/MenuSelectionScreen/VBoxContainer/VBoxContainer2/Panel/VBoxContainer/Footer" unique_id=1897499003 instance=ExtResource("2_xaiw4")]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 8
+text = "DISCORD"
+
+[node name="WebsiteButton" parent="SubViewportContainer/SubViewport/MenuSelectionScreen/VBoxContainer/VBoxContainer2/Panel/VBoxContainer/Footer" unique_id=1897499004 instance=ExtResource("2_xaiw4")]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 8
+text = "WEB"
+
+[node name="QuitButton" parent="SubViewportContainer/SubViewport/MenuSelectionScreen/VBoxContainer/VBoxContainer2/Panel/VBoxContainer/Footer" unique_id=606978826 instance=ExtResource("2_xaiw4")]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 8
+text = "QUIT"
+
+[node name="TagScreen" parent="SubViewportContainer/SubViewport" unique_id=1783688133 instance=ExtResource("2_jmap8")]
+visible = false
+offset_left = -175.0
+offset_top = -100.0
+offset_right = 175.0
+offset_bottom = 100.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("6_y3puo")
+
+[node name="TagLineEdit" parent="SubViewportContainer/SubViewport/TagScreen/Panel/MarginContainer/VBoxContainer" index="2"]
+placeholder_text = "UNK"
+
+[node name="SettingsMenu" parent="SubViewportContainer/SubViewport" unique_id=1896212051 instance=ExtResource("10_abc12")]
+visible = false
+
+[node name="CreditsScreen" parent="SubViewportContainer/SubViewport" unique_id=1896212053 instance=ExtResource("11_credits")]
+visible = false
+layout_mode = 3
+
+[node name="CRTScreenEffect" parent="." unique_id=1412518820 instance=ExtResource("7_ltlti")]
+visible = false
+material = SubResource("ShaderMaterial_t6cie")
+layout_mode = 0
+
+[connection signal="pressed" from="SubViewportContainer/SubViewport/MenuSelectionScreen/VBoxContainer/VBoxContainer2/Panel/VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="SubViewportContainer/SubViewport/MenuSelectionScreen/VBoxContainer/VBoxContainer2/Panel/VBoxContainer/PracticeButton" to="." method="_on_practice_button_pressed"]
+[connection signal="pressed" from="SubViewportContainer/SubViewport/MenuSelectionScreen/VBoxContainer/VBoxContainer2/Panel/VBoxContainer/PracticeButton2" to="." method="_on_create_button_pressed"]
+[connection signal="pressed" from="SubViewportContainer/SubViewport/MenuSelectionScreen/VBoxContainer/VBoxContainer2/Panel/VBoxContainer/Footer/SettingsButton" to="." method="_on_sound_button_pressed"]
+[connection signal="pressed" from="SubViewportContainer/SubViewport/MenuSelectionScreen/VBoxContainer/VBoxContainer2/Panel/VBoxContainer/Footer/CreditsButton" to="." method="_on_credits_button_pressed"]
+[connection signal="pressed" from="SubViewportContainer/SubViewport/MenuSelectionScreen/VBoxContainer/VBoxContainer2/Panel/VBoxContainer/Footer/DiscordButton" to="." method="_on_discord_button_pressed"]
+[connection signal="pressed" from="SubViewportContainer/SubViewport/MenuSelectionScreen/VBoxContainer/VBoxContainer2/Panel/VBoxContainer/Footer/WebsiteButton" to="." method="_on_website_button_pressed"]
+[connection signal="pressed" from="SubViewportContainer/SubViewport/MenuSelectionScreen/VBoxContainer/VBoxContainer2/Panel/VBoxContainer/Footer/QuitButton" to="." method="_on_quit_button_pressed"]
+[connection signal="pressed" from="SubViewportContainer/SubViewport/TagScreen/Panel/MarginContainer/VBoxContainer/HBoxContainer/ConfirmButton" to="." method="_on_confirm_button_pressed"]
+[connection signal="pressed" from="SubViewportContainer/SubViewport/TagScreen/Panel/MarginContainer/VBoxContainer/HBoxContainer/SkipButton" to="." method="_on_skip_button_pressed"]
+
+[editable path="SubViewportContainer/SubViewport/TagScreen"]
