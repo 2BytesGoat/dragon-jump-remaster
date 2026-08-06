@@ -4,6 +4,17 @@ This document captures high-level decisions as the project evolves.
 
 ---
 
+## 2026-08-06 — Reusable BonusPopup component
+
+**Context:** The "+bonus" level-clear popup was a single Label hard-coded inside `ArcadeRankHud`, animated in place. Future secret-area bonuses (backlog item #56) would need the same popup in multiple places simultaneously.
+
+- **Decided the bonus popup is a reusable, one-shot component** (`BonusPopup`, `src/ui/components/bonus_popup.gd/.tscn`) that spawns above a world position and frees itself — not a single recycled label. Concurrent bonuses stack because each spawn is independent.
+- **Tuning lives in one shared place:** `resources/bonus_popup_config.tres` (drift / pop-in / fade-out / lifetime / position-offset), matching the "tunable values live in Resource assets" convention.
+- **Scoring stays with the caller:** `ArcadeDirector` was not touched (only `level_rank_awarded`-independent scoring); the HUD owns the rank→color mapping, and `main.gd` feeds the player's finish position in via `pending_popup_world_position` (relies on `on_level_finished()` emitting synchronously).
+- **The HUD root is in the `"GameplayHud"` group** so world-side callers can spawn via `BonusPopup.find_hud()` without a hard scene reference.
+
+---
+
 ## 2026-08-06 — Retention time counts all active play
 
 **Context:** The stats screen's "time played" counters (total/daily/weekly) were only incremented on level finish, so time spent on failed runs and restarts was lost, understating real play time.

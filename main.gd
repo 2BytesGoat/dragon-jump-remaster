@@ -136,7 +136,7 @@ func _on_player_finished_run(player: Player) -> void:
 		GameSession.GameModes.PRACTICE:
 			_on_player_finished_practice_run(player)
 		GameSession.GameModes.ARCADE:
-			_on_arcade_level_finished()
+			_on_arcade_level_finished(player.global_position)
 
 
 func _on_player_died(_player: Player) -> void:
@@ -207,17 +207,20 @@ func _on_next_button_pressed() -> void:
 	_progress_to_next_level()
 
 
-func _on_arcade_level_finished() -> void:
+func _on_arcade_level_finished(finish_position: Vector2) -> void:
 	var finished_level = level_name
 	var clear_time = time_container.total_time
 	SignalBus.new_time_submission.emit(finished_level, clear_time)
+	# The bonus popup spawns above the player at the exit. Set the position
+	# before on_level_finished() because its level_rank_awarded emit is
+	# synchronous and the HUD reads it immediately.
+	if arcade_rank_hud != null:
+		arcade_rank_hud.pending_popup_world_position = finish_position
 	level_name = ArcadeDirector.on_level_finished(clear_time)
 	
 	# Let the +bonus popup and score roll play out over the finished level
 	# before advancing — reset_ui() would otherwise kill them same-frame.
-	var popup_delay := 1.3
-	if arcade_rank_hud != null:
-		popup_delay = arcade_rank_hud.bonus_popup_lifetime + 0.2
+	var popup_delay := BonusPopup.CONFIG.lifetime + 0.2
 	for p in player_container.get_children():
 		p.is_paused = true
 	await get_tree().create_timer(popup_delay).timeout

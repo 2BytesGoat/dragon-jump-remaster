@@ -35,11 +35,6 @@ const MEDAL_BAR_HEARTBEAT_MIN_INTERVAL := 0.12
 const LIFE_ICON_SIZE := 12.0
 const LIFE_ICON_LOST_ALPHA := 0.25
 
-const BONUS_POPUP_DRIFT := 24.0
-const BONUS_POPUP_POP_IN_TIME := 0.15
-const BONUS_POPUP_FADE_OUT_TIME := 0.3
-
-@export var bonus_popup_lifetime: float = 1.1
 @export var multiplier_pop_delay: float = 0.3
 
 @onready var time_container: MarginContainer = %TimeContainer
@@ -47,7 +42,6 @@ const BONUS_POPUP_FADE_OUT_TIME := 0.3
 @onready var band_label: Label = %BandLabel
 @onready var medal_bar: Panel = %MedalBar
 @onready var medal_bar_fill: ColorRect = %MedalBarFill
-@onready var bonus_popup: Label = %BonusPopup
 @onready var clear_sfx: AudioStreamPlayer = %ClearSFX
 @onready var gold_sfx: AudioStreamPlayer = %GoldSFX
 @onready var death_sfx: AudioStreamPlayer = %DeathSFX
@@ -60,10 +54,6 @@ var _multiplier_tween: Tween = null
 var _band_tween: Tween = null
 var _bar_pulse_tween: Tween = null
 var _score_tween: Tween = null
-var _popup_tween: Tween = null
-var _popup_base_offset_top: float = 0.0
-var _popup_base_offset_bottom: float = 0.0
-var _popup_base_captured: bool = false
 var _multiplier_pop_timer: SceneTreeTimer = null
 var _last_rendered_score: int = -1
 var _current_level_id: String = ""
@@ -73,6 +63,11 @@ var _medal_fill: float = 1.0
 var _heartbeat_elapsed: float = 0.0
 var _heartbeat_crossed: bool = false
 var _flash_timer: SceneTreeTimer = null
+
+## World position the level-clear popup should spawn above. Set by main.gd
+## right before ArcadeDirector.on_level_finished() emits level_rank_awarded
+## (that emit is synchronous, so this is always up to date when consumed).
+var pending_popup_world_position: Vector2 = Vector2.ZERO
 
 
 func _ready() -> void:
@@ -151,16 +146,13 @@ func _set_score_text(value: int) -> void:
 
 
 func reset() -> void:
-	if _popup_tween != null and _popup_tween.is_valid():
-		_popup_tween.kill()
-	bonus_popup.visible = false
 	_refresh_lives(ArcadeDirector.lives)
 	_last_rendered_score = ArcadeDirector.score
 	score_label.text = "SCORE %08d" % ArcadeDirector.score
 
 
 func _on_level_rank_awarded(_level_id: String, rank: String, multiplier: float, bonus: int) -> void:
-	_show_bonus_popup(bonus, rank)
+	BonusPopup.spawn(self, "+%d" % bonus, _rank_color(rank), pending_popup_world_position)
 	_schedule_multiplier_pop(multiplier, rank)
 	# _play_clear_sfx(rank)  # SFX disabled for now — see game_juice_plan.md
 
@@ -183,39 +175,6 @@ func _show_multiplier_pop(multiplier: float, rank: String) -> void:
 	_multiplier_tween = create_tween()
 	_multiplier_tween.tween_property(multiplier_label, "scale", Vector2(1.15, 1.15), 0.18).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	_multiplier_tween.tween_property(multiplier_label, "scale", Vector2(1.0, 1.0), 0.12).set_trans(Tween.TRANS_SINE)
-
-
-func _show_bonus_popup(bonus: int, rank: String) -> void:
-	if _popup_tween != null and _popup_tween.is_valid():
-		_popup_tween.kill()
-	if not _popup_base_captured:
-		_popup_base_offset_top = bonus_popup.offset_top
-		_popup_base_offset_bottom = bonus_popup.offset_bottom
-		_popup_base_captured = true
-	bonus_popup.offset_top = _popup_base_offset_top
-	bonus_popup.offset_bottom = _popup_base_offset_bottom
-	bonus_popup.text = "+%d" % bonus
-	bonus_popup.add_theme_color_override("font_color", _rank_color(rank))
-	bonus_popup.modulate.a = 0.0
-	bonus_popup.scale = Vector2(0.4, 0.4)
-	bonus_popup.visible = true
-	var drift_time := maxf(0.1, bonus_popup_lifetime - BONUS_POPUP_POP_IN_TIME - BONUS_POPUP_FADE_OUT_TIME)
-	var target_offset_top := _popup_base_offset_top - BONUS_POPUP_DRIFT
-	_popup_tween = create_tween().set_parallel(true)
-	_popup_tween.tween_property(bonus_popup, "modulate:a", 1.0, 0.1)
-	_popup_tween.tween_property(bonus_popup, "scale", Vector2(1.25, 1.25), 0.18).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	_popup_tween.set_parallel(false)
-	_popup_tween.tween_property(bonus_popup, "scale", Vector2.ONE, 0.12).set_trans(Tween.TRANS_SINE)
-	_popup_tween.parallel().tween_property(bonus_popup, "offset_top", target_offset_top, drift_time).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	_popup_tween.parallel().tween_property(bonus_popup, "offset_bottom", target_offset_top + bonus_popup.size.y, drift_time).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	_popup_tween.tween_property(bonus_popup, "modulate:a", 0.0, BONUS_POPUP_FADE_OUT_TIME)
-	_popup_tween.tween_callback(_reset_bonus_popup)
-
-
-func _reset_bonus_popup() -> void:
-	bonus_popup.visible = false
-	bonus_popup.offset_top = _popup_base_offset_top
-	bonus_popup.offset_bottom = _popup_base_offset_bottom
 
 
 func _play_clear_sfx(rank: String) -> void:

@@ -1,0 +1,6 @@
+[gd_resource type="Resource" script_class="BonusPopupConfig" format=3 uid="uid://d4i0s5fphxysw"]
+
+[ext_resource type="Script" uid="uid://dau84lr0cjdg" path="res://src/scripts/resources/bonus_popup_config.gd" id="1_bonus_popup_config"]
+
+[resource]
+script = ExtResource("1_bonus_popup_config")

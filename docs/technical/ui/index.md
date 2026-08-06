@@ -51,6 +51,10 @@ System relationships and dependencies: This system integrates with player system
 - **Purpose**: Run timer + play-time accumulation, embedded in the arcade HUD (`TimeContainer`).
 - Documented in [[technical/ui/arcade-hud]]. See that doc for the player-signal flow and flush points; `src/ui/components/time_container.tscn` is a stale, unused draft.
 
+### `bonus_popup.gd` / `bonus_popup.tscn` / `bonus_popup_config.tres`
+- **Purpose**: Reusable one-shot "+bonus" popup that animates above a world position and frees itself. Spawned by `ArcadeRankHud` at level clear and by `BonusPopup.spawn()` from anywhere; timing tuned via `resources/bonus_popup_config.tres`.
+- Documented in [[technical/ui/arcade-hud]].
+
 ### `progress_bar.gd` *(removed)*
 Progress-bar mode was cut for V1.0 (see [[technical/architecture]]). No such file exists in the repo.
 

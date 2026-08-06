@@ -121,6 +121,8 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 - [x] src/ui/components/arcade_rank_hud.gd — documented in [[technical/ui/arcade-hud]]
 - [x] src/ui/components/arcade_rank_hud.tscn — documented in [[technical/ui/arcade-hud]]
 - [x] src/ui/components/single_time_container.gd — documented in [[technical/ui/arcade-hud]]
+- [x] src/ui/components/bonus_popup.gd — documented in [[technical/ui/arcade-hud]]
+- [x] src/ui/components/bonus_popup.tscn — documented in [[technical/ui/arcade-hud]]
 - [ ] src/ui/components/time_container.tscn
 
 ## Effects
@@ -169,6 +171,7 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 - [ ] src/scripts/components/patterns/command.gd
 - [ ] src/scripts/resources/arcade_config.gd
 - [ ] src/scripts/resources/audio_bus_config.gd
+- [ ] src/scripts/resources/bonus_popup_config.gd — documented in [[technical/ui/arcade-hud]]
 - [ ] src/scripts/resources/campaign_level_library.gd
 - [ ] src/scripts/resources/level_code_parser.gd
 - [ ] src/scripts/resources/medal_config.gd
