@@ -36,6 +36,10 @@ const LIFE_ICON_SIZE := 12.0
 const LIFE_ICON_LOST_ALPHA := 0.25
 
 @export var multiplier_pop_delay: float = 0.3
+@export var bar_width: float = 180.0
+@export var bar_height: float = 14.0
+@export var bar_pulse_scale_x: float = 1.06
+@export var bar_pulse_scale_y: float = 1.3
 
 @onready var time_container: MarginContainer = %TimeContainer
 @onready var lives_box: HBoxContainer = %LivesBox
@@ -71,6 +75,7 @@ var pending_popup_world_position: Vector2 = Vector2.ZERO
 
 
 func _ready() -> void:
+	_apply_bar_dimensions()
 	_build_life_icons()
 	ArcadeDirector.level_rank_awarded.connect(_on_level_rank_awarded)
 	ArcadeDirector.run_multiplier_changed.connect(_on_run_multiplier_changed)
@@ -84,6 +89,18 @@ func _exit_tree() -> void:
 		ArcadeDirector.run_multiplier_changed.disconnect(_on_run_multiplier_changed)
 	if ArcadeDirector.lives_changed.is_connected(_on_lives_changed):
 		ArcadeDirector.lives_changed.disconnect(_on_lives_changed)
+
+
+func _apply_bar_dimensions() -> void:
+	var half_w := bar_width / 2.0
+	medal_bar.offset_left = -half_w
+	medal_bar.offset_right = half_w
+	medal_bar.offset_bottom = medal_bar.offset_top + bar_height
+	medal_bar_fill.offset_bottom = bar_height
+	band_label.offset_left = -half_w
+	band_label.offset_right = half_w
+	band_label.offset_top = medal_bar.offset_top
+	band_label.offset_bottom = medal_bar.offset_bottom
 
 
 func _build_life_icons() -> void:
@@ -242,7 +259,7 @@ func _update_medal_pace(delta: float) -> void:
 	var downgraded := _current_band != "" and _rank_weight(band) < _rank_weight(_current_band)
 	_current_band = band
 	band_label.text = MEDAL_TAGS.get(band, "---")
-	band_label.add_theme_color_override("font_color", _rank_color(band))
+	band_label.add_theme_color_override("font_color", Color.WHITE)
 	if downgraded:
 		band_label.scale = Vector2(0.5, 0.5)
 		band_label.modulate.a = 1.0
@@ -297,7 +314,7 @@ func _pulse_bar_scale() -> void:
 	medal_bar.pivot_offset = medal_bar.size / 2.0
 	medal_bar.scale = Vector2.ONE
 	_bar_pulse_tween = create_tween()
-	_bar_pulse_tween.tween_property(medal_bar, "scale", Vector2(1.06, 1.6), 0.12).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_bar_pulse_tween.tween_property(medal_bar, "scale", Vector2(bar_pulse_scale_x, bar_pulse_scale_y), 0.12).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	_bar_pulse_tween.tween_property(medal_bar, "scale", Vector2.ONE, 0.15).set_trans(Tween.TRANS_SINE)
 
 
