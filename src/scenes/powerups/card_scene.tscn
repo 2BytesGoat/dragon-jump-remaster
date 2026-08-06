@@ -63,9 +63,12 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -106.66669
-offset_right = 80.0
+offset_left = -2.0000014
+offset_top = -90.00003
+offset_right = 86.0
+offset_bottom = 16.666656
 grow_vertical = 0
+scale = Vector2(0.85, 0.85)
 theme_override_constants/margin_left = 8
 
 [node name="CardTexture" type="TextureRect" parent="MarginContainer" unique_id=1894720491]
