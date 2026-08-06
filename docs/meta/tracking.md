@@ -130,6 +130,8 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 - [x] src/ui/components/bonus_popup.gd — documented in [[technical/ui/arcade-hud]]
 - [x] src/ui/components/bonus_popup.tscn — documented in [[technical/ui/arcade-hud]]
 - [ ] src/ui/components/time_container.tscn
+- [x] src/ui/themes/default_theme.tres — documented in [[technical/ui/index]]
+- [x] src/ui/themes/gameplay_theme.tres — documented in [[technical/ui/arcade-hud]]
 
 ## Effects
 

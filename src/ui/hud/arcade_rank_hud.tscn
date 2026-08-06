@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://brluo13ccn1u1"]
 
+[ext_resource type="Theme" uid="uid://hax2p5a7h3e6" path="res://src/ui/themes/gameplay_theme.tres" id="2_5xjdt"]
 [ext_resource type="Script" uid="uid://b6vbx63crken4" path="res://src/ui/hud/arcade_rank_hud.gd" id="2_script"]
 [ext_resource type="Script" uid="uid://u12281ncqv4x" path="res://src/ui/components/time_display.gd" id="10_ycdy4"]
 [ext_resource type="AudioStream" uid="uid://35l4xnse0nlc" path="res://assets/sfx/SoundBonus.wav" id="11_sfx_bonus"]
@@ -15,6 +16,7 @@ anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 42.0
 grow_horizontal = 2
+theme = ExtResource("2_5xjdt")
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
@@ -33,6 +35,7 @@ size_flags_vertical = 4
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+theme_override_constants/separation = 2
 
 [node name="TimeContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1338096448]
 unique_name_in_owner = true
@@ -43,7 +46,7 @@ script = ExtResource("10_ycdy4")
 [node name="TimeLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/TimeContainer" unique_id=1415804941]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 14
 text = "00:00.00"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -73,7 +76,7 @@ offset_bottom = 9.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 1
 theme_override_constants/shadow_outline_size = 1
 text = "GOLD"
@@ -85,7 +88,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
-theme_override_constants/separation = -2
+theme_override_constants/separation = 4
 alignment = 2
 
 [node name="ScoreLabel" type="Label" parent="MarginContainer/HBoxContainer/ScoreVBox" unique_id=889982808]

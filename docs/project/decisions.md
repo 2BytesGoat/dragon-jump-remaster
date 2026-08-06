@@ -4,6 +4,17 @@ This document captures high-level decisions as the project evolves.
 
 ---
 
+## 2026-08-06 — Two-font UI system (menus vs. gameplay)
+
+**Context:** The whole game — menus *and* the live HUD — rendered in `Awesome 9`, a chunky decorative font that reads poorly at small sizes. During gameplay (timer, score, rank band) it was distracting and hurt legibility.
+
+- **Decided the game uses two fonts:** `Awesome 9` stays the global theme font (`project.godot` → `src/ui/themes/default_theme.tres`) for menus, and `PressStart2P-Regular.ttf` becomes the in-game font via a new `src/ui/themes/gameplay_theme.tres`.
+- **Scoped to the live HUD only:** the theme is applied to the `ArcadeRankHud` root node in `arcade_rank_hud.tscn` (plus its children and spawned bonus popups), so only real-time gameplay text uses PressStart2P. Pause, end, game-over, and powerup-card overlays keep `Awesome 9` like the menus.
+- **PressStart2P was already in `assets/fonts/`** (unused) and was the proposed "big chunky labels" font in the menu-revamp direction ([[design/arcade-mode]]); it keeps the retro identity while reading cleaner than Awesome 9 at HUD sizes.
+- **`TimeLabel` font size dropped 24 → 16** (`arcade_rank_hud.tscn`) since PressStart2P renders larger at the same size.
+
+---
+
 ## 2026-08-06 — Run timer owns its clock (no HUD-owned timing)
 
 **Context:** The run timer lived inside the `ArcadeRankHud` scene (`single_time_container.gd`), and `main.gd` reached across scenes to call `track_player()` on it. The `time_container` export was never wired in `main.tscn`, producing a Nil crash — a symptom of the timer being gameplay state stranded in a UI scene.

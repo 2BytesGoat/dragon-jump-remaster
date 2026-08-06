@@ -1,5 +1,9 @@
 # Arcade HUD and Run Timer
 
+## Fonts
+
+The live HUD (`ArcadeRankHud`) renders in `PressStart2P-Regular.ttf` via `src/ui/themes/gameplay_theme.tres`, applied to the HUD's root node in `arcade_rank_hud.tscn`. Menus and other in-game overlays (pause, end, game-over, powerup cards) keep `Awesome 9` (global theme, `default_theme.tres`). See [[project/decisions]] (two-font UI system) for the rationale.
+
 ## Live HUD (`arcade_rank_hud.tscn`)
 
 `ArcadeRankHud` is the on-screen HUD during gameplay (main.tscn:58), a `CanvasLayer` containing the lives counter, the run timer, the medal/rank bar, bonus popups, score, and death/clear SFX. It is **not** the `ArcadeHud` described below — that was a design draft and was never built.
