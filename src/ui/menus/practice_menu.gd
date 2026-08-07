@@ -67,6 +67,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func focus_first_level() -> void:
 	level_scroll.scroll_vertical = 0
+	await get_tree().process_frame
+	level_scroll.scroll_vertical = 0
 	var first_button := level_button_container.get_child(0)
 	if first_button is Button:
 		first_button.grab_focus()

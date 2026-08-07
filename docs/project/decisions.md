@@ -23,6 +23,14 @@ This document captures high-level decisions as the project evolves.
 
 ---
 
+## 2026-08-07 — Practice menu button highlight matches the book theme
+
+**Context:** The practice menu's book revamp (light parchment pages, dark brown text) left the level-button focus highlight as the global white fill/border (`default_theme.tres`), which clashed with the dark-brown text and washed out against the light pages.
+
+- **Decided `practice_theme.tres` overrides `Button/styles/focus` with a brown highlight** (same brown as `Label` text — `Color(0.29, 0.15, 0.17)` — as a 15%-alpha fill + 1px solid border). `Button/styles/hover` stays empty (inherited), so the focus highlight remains the single highlight path. Main menu and gameplay themes keep the white highlight.
+
+---
+
 ## 2026-08-07 — Practice menu: focus-driven selection and mouse start
 
 **Context:** The practice menu's preview updated on hover/focus, but `selected_level_name` was only set on click, so keyboard/controller navigation previewed a level while the run still launched the last clicked one. Mouse users had no way to start a run at all — only `player_one_jump` (space) triggered `_start_run()`.

@@ -1,37 +1,83 @@
 [gd_resource type="Theme" format=3 uid="uid://bwn751d5rabh2"]
 
+[ext_resource type="Texture2D" uid="uid://b4i2hl5k804rc" path="res://assets/grabber.png" id="2_21hnu"]
 [ext_resource type="FontFile" uid="uid://cmbpqj0hto83m" path="res://assets/fonts/Awesome 9.ttf" id="2_header_font"]
-[ext_resource type="Texture2D" uid="uid://b52lc70odatu8" path="res://assets/sprites/ui/silver_slider_empty.png" id="4_slider_track"]
+[ext_resource type="Texture2D" uid="uid://b7m15gvdtx0n2" path="res://assets/h_bar_bg.png" id="5_fbh6w"]
 [ext_resource type="Texture2D" uid="uid://jpf5n25mgody" path="res://assets/sprites/ui/silver_grabber_normal.png" id="5_grabber"]
 [ext_resource type="Texture2D" uid="uid://djyvvewcjr00k" path="res://assets/sprites/ui/silver_grabber_pressed.png" id="6_grabber_pressed"]
+[ext_resource type="Texture2D" uid="uid://vkr0f8tip0wv" path="res://assets/pbar_bg.png" id="6_u71yl"]
+[ext_resource type="Texture2D" uid="uid://r788h1ajc6bd" path="res://assets/v_scroll_fg.png" id="6_vuu4w"]
+[ext_resource type="Texture2D" uid="uid://d3ucycdoqn2yc" path="res://assets/pbar_fg.png" id="7_20l4y"]
+[ext_resource type="Texture2D" uid="uid://btolb5efxrcap" path="res://assets/v_scroll_bg.png" id="7_21hnu"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_focus"]
-bg_color = Color(1, 1, 1, 0.15)
+bg_color = Color(0.2901961, 0.15294118, 0.16862746, 0.15)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(1, 1, 1, 1)
+border_color = Color(0.2901961, 0.15294118, 0.16862746, 1)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_slider"]
-texture = ExtResource("4_slider_track")
-texture_margin_left = 6.0
-texture_margin_top = 6.0
-texture_margin_right = 6.0
-texture_margin_bottom = 6.0
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u71yl"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_21hnu"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fbh6w"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vuvqd"]
+texture = ExtResource("5_fbh6w")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7fj0r"]
+texture = ExtResource("6_u71yl")
+texture_margin_left = 4.0
+texture_margin_top = 4.0
+texture_margin_right = 4.0
+texture_margin_bottom = 4.0
+expand_margin_left = 2.0
+expand_margin_right = 2.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1eem0"]
+texture = ExtResource("7_20l4y")
+axis_stretch_horizontal = 2
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fbh6w"]
+texture = ExtResource("6_vuu4w")
+texture_margin_left = 2.0
+texture_margin_top = 2.0
+texture_margin_right = 2.0
+texture_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_usmvp"]
+texture = ExtResource("7_21hnu")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
 
 [resource]
 Button/font_sizes/font_size = 12
 Button/fonts/font = ExtResource("2_header_font")
+Button/styles/focus = SubResource("StyleBoxFlat_focus")
+HSlider/icons/grabber = ExtResource("2_21hnu")
+HSlider/icons/grabber_disabled = ExtResource("2_21hnu")
+HSlider/icons/grabber_highlight = ExtResource("2_21hnu")
 HSlider/icons/grabber_icon = ExtResource("5_grabber")
 HSlider/icons/grabber_icon_pressed = ExtResource("6_grabber_pressed")
-HSlider/styles/focus = SubResource("StyleBoxFlat_focus")
-HSlider/styles/slider = SubResource("StyleBoxTexture_slider")
-Label/colors/font_color = Color(1, 1, 1, 1)
-Label/colors/font_outline_color = Color(0.16862746, 0.19215687, 0.27058825, 1)
-Label/colors/font_shadow_color = Color(0.16862746, 0.19215687, 0.27058825, 0.78431374)
-Label/constants/outline_size = 0
-Label/constants/shadow_offset_x = 1
-Label/constants/shadow_offset_y = 1
+HSlider/styles/focus = SubResource("StyleBoxEmpty_u71yl")
+HSlider/styles/grabber_area = SubResource("StyleBoxEmpty_21hnu")
+HSlider/styles/grabber_area_highlight = SubResource("StyleBoxEmpty_fbh6w")
+HSlider/styles/slider = SubResource("StyleBoxTexture_vuvqd")
+Label/colors/font_color = Color(0.2901961, 0.15294118, 0.16862746, 1)
+Label/colors/font_outline_color = Color(0.2901961, 0.15294118, 0.16862746, 1)
+Label/constants/outline_size = 1
 Label/font_sizes/font_size = 16
 Label/fonts/font = ExtResource("2_header_font")
+ProgressBar/colors/font_color = Color(0.95, 0.95, 0.95, 1)
+ProgressBar/styles/background = SubResource("StyleBoxTexture_7fj0r")
+ProgressBar/styles/fill = SubResource("StyleBoxTexture_1eem0")
+VScrollBar/styles/grabber = SubResource("StyleBoxTexture_fbh6w")
+VScrollBar/styles/scroll = SubResource("StyleBoxTexture_usmvp")
