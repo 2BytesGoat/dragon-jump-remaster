@@ -43,7 +43,7 @@ func _ready() -> void:
 		button.name = level_name
 		level_button_container.add_child(button)
 		button.set_button_disabled(not SaveManager.has_level_data(level_name))
-		button.button_label = "%03d - %s" % [display_index, level_data.display_name]
+		button.button_label = "%s - %s" % [level_name, level_data.display_name.capitalize()]
 		button.pressed.connect(_on_level_button_clicked.bind(level_name))
 		
 		if cnt == 0:
@@ -74,8 +74,7 @@ func _on_level_button_clicked(level_name: String) -> void:
 	level_progress_bar.value = level_data.progress_percentage
 	level_progress_medal.text = _medal_config.medal_names[level_data.progress_milestone]
 	
-	var i = CampaignLevelLibrary.get_all_level_ids().find(level_name)
-	selected_level_label.text = "%03d - %s" % [i, campaign_level.display_name]
+	selected_level_label.text = "%s - %s" % [level_name, campaign_level.display_name.capitalize()]
 	
 	if leaderboard_container.visible:
 		_on_map_info_button_pressed()

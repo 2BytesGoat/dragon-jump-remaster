@@ -2,52 +2,127 @@
 
 [ext_resource type="Script" uid="uid://dm5bkd7chuhi4" path="res://src/ui/components/speed_slider_label.gd" id="1_1e5ff"]
 [ext_resource type="PackedScene" uid="uid://coq21sivcbueg" path="res://src/ui/components/level_button.tscn" id="2_ar1xx"]
+[ext_resource type="Texture2D" uid="uid://bh7xrdgjwjj21" path="res://assets/ui/UI_TabletBook_Spritesheet01a.png" id="2_xj0kg"]
 [ext_resource type="PackedScene" uid="uid://bvm718ddfisd7" path="res://src/scenes/level/level.tscn" id="3_xj0kg"]
 [ext_resource type="Script" uid="uid://etwvvclap1my" path="res://src/scenes/level_select_camera_2d.gd" id="4_4sl2a"]
+[ext_resource type="FontFile" uid="uid://s7ljtadq31a4" path="res://assets/fonts/PressStart2P-Regular.ttf" id="4_iy86c"]
 [ext_resource type="Script" uid="uid://ck17rvoje8kjt" path="res://src/ui/menus/practice_menu.gd" id="5_practice"]
+[ext_resource type="Theme" uid="uid://bwn751d5rabh2" path="res://src/ui/themes/practice_theme.tres" id="6_theme"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4sl2a"]
+atlas = ExtResource("2_xj0kg")
+region = Rect2(64, 64, 320, 224)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4sl2a"]
+texture = SubResource("AtlasTexture_4sl2a")
+texture_margin_left = 16.0
+texture_margin_top = 16.0
+texture_margin_right = 16.0
+texture_margin_bottom = 16.0
+axis_stretch_vertical = 2
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xj0kg"]
+atlas = ExtResource("2_xj0kg")
+region = Rect2(368, 304, 296, 208)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_iy86c"]
+texture = SubResource("AtlasTexture_xj0kg")
+texture_margin_left = 16.0
+texture_margin_top = 16.0
+texture_margin_right = 16.0
+texture_margin_bottom = 16.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iy86c"]
+atlas = ExtResource("2_xj0kg")
+region = Rect2(64, 608, 64, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_khj0t"]
+texture = SubResource("AtlasTexture_iy86c")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4sl2a"]
+bg_color = Color(0.9019608, 0.7882353, 0.6627451, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7xfnp"]
+bg_color = Color(0.03137255, 0.043137256, 0.08235294, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_rs8ex"]
 viewport_path = NodePath("SubViewport")
 
 [node name="PracticeMenu" type="MarginContainer" unique_id=460918565]
-visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 24
-theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 24
+theme = ExtResource("6_theme")
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
 script = ExtResource("5_practice")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=208693933]
+[node name="MenuBackground" type="Panel" parent="." unique_id=255490376]
 layout_mode = 2
-theme_override_constants/separation = 16
+theme_override_styles/panel = SubResource("StyleBoxTexture_4sl2a")
 
-[node name="LevelListContainer" type="MarginContainer" parent="HBoxContainer" unique_id=2086084273]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=336841391]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 12
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=208693933]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="LevelListContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer" unique_id=2086084273]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 1.5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LevelListContainer" unique_id=1345860860]
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/LevelListContainer" unique_id=1235007431]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_iy86c")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/LevelListContainer" unique_id=1014684627]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer" unique_id=1345860860]
 layout_mode = 2
 
-[node name="PlayerSpeedHeader" type="Label" parent="HBoxContainer/LevelListContainer/VBoxContainer" unique_id=945428507]
+[node name="PlayerSpeedHeader" type="Label" parent="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer/VBoxContainer" unique_id=945428507]
 layout_mode = 2
-text = "Player Speed:"
+theme_type_variation = &"HeaderLabel"
+text = "Player Speed"
 vertical_alignment = 1
 uppercase = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/LevelListContainer/VBoxContainer" unique_id=4885648]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer/VBoxContainer" unique_id=4885648]
 layout_mode = 2
 
-[node name="SpeedSlider" type="HSlider" parent="HBoxContainer/LevelListContainer/VBoxContainer/HBoxContainer" unique_id=1618738283]
+[node name="SpeedSlider" type="HSlider" parent="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1618738283]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
-size_flags_horizontal = 6
+size_flags_horizontal = 3
 size_flags_vertical = 4
 size_flags_stretch_ratio = 0.0
 max_value = 1.0
@@ -57,193 +132,309 @@ tick_count = 3
 ticks_on_borders = true
 ticks_position = 3
 
-[node name="SpeedSliderLabel" type="Label" parent="HBoxContainer/LevelListContainer/VBoxContainer/HBoxContainer" unique_id=39441717]
+[node name="SpeedSliderLabel" type="Label" parent="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=39441717]
 layout_mode = 2
 size_flags_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("4_iy86c")
+theme_override_font_sizes/font_size = 8
 text = "Fast"
 uppercase = true
 script = ExtResource("1_1e5ff")
 
-[node name="Label3" type="Label" parent="HBoxContainer/LevelListContainer/VBoxContainer" unique_id=2116302657]
+[node name="Label3" type="Label" parent="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer/VBoxContainer" unique_id=2116302657]
 layout_mode = 2
-text = "Select Level:"
+theme_type_variation = &"HeaderLabel"
+text = "Select Level"
 vertical_alignment = 1
 uppercase = true
 
-[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer/LevelListContainer/VBoxContainer" unique_id=1825043278]
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer/VBoxContainer" unique_id=1825043278]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="LevelButtons" type="ScrollContainer" parent="HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2" unique_id=2037041515]
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer/VBoxContainer/MarginContainer2" unique_id=455764287]
+self_modulate = Color(0.8666667, 0.61960787, 0.4117647, 1)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_khj0t")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer/VBoxContainer/MarginContainer2" unique_id=988099334]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer" unique_id=2082325268]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4sl2a")
+
+[node name="LevelButtons" type="ScrollContainer" parent="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer" unique_id=2037041515]
+unique_name_in_owner = true
 layout_mode = 2
 follow_focus = true
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons" unique_id=988099334]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer/LevelButtons" unique_id=1225423259]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 3
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 4
 
-[node name="LevelButtonContainer" type="VBoxContainer" parent="HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer" unique_id=313330165]
+[node name="LevelButtonContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer/LevelButtons/MarginContainer" unique_id=313330165]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="LevelButton" parent="HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=1940968341 instance=ExtResource("2_ar1xx")]
+[node name="LevelButton" parent="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=1940968341 instance=ExtResource("2_ar1xx")]
 layout_mode = 2
 
-[node name="LevelButton2" parent="HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=1322801071 instance=ExtResource("2_ar1xx")]
+[node name="LevelButton2" parent="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=1322801071 instance=ExtResource("2_ar1xx")]
 layout_mode = 2
 
-[node name="LevelButton3" parent="HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=929754595 instance=ExtResource("2_ar1xx")]
+[node name="LevelButton3" parent="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=929754595 instance=ExtResource("2_ar1xx")]
 layout_mode = 2
 
-[node name="LevelButton4" parent="HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=712827234 instance=ExtResource("2_ar1xx")]
+[node name="LevelButton4" parent="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=712827234 instance=ExtResource("2_ar1xx")]
 layout_mode = 2
 
-[node name="LevelButton5" parent="HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=1813948105 instance=ExtResource("2_ar1xx")]
+[node name="LevelButton5" parent="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=1813948105 instance=ExtResource("2_ar1xx")]
 layout_mode = 2
 
-[node name="LevelButton6" parent="HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=1497928129 instance=ExtResource("2_ar1xx")]
+[node name="LevelButton6" parent="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=1497928129 instance=ExtResource("2_ar1xx")]
 layout_mode = 2
 
-[node name="LevelButton7" parent="HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=1597747730 instance=ExtResource("2_ar1xx")]
+[node name="LevelButton7" parent="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=1597747730 instance=ExtResource("2_ar1xx")]
 layout_mode = 2
 
-[node name="LevelButton8" parent="HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=184104472 instance=ExtResource("2_ar1xx")]
+[node name="LevelButton8" parent="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=184104472 instance=ExtResource("2_ar1xx")]
 layout_mode = 2
 
-[node name="LevelButton9" parent="HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=1026911106 instance=ExtResource("2_ar1xx")]
+[node name="LevelButton9" parent="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=1026911106 instance=ExtResource("2_ar1xx")]
 layout_mode = 2
 
-[node name="LevelButton10" parent="HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=1144577964 instance=ExtResource("2_ar1xx")]
+[node name="LevelButton10" parent="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=1144577964 instance=ExtResource("2_ar1xx")]
 layout_mode = 2
 
-[node name="LevelButton11" parent="HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=331531055 instance=ExtResource("2_ar1xx")]
+[node name="LevelButton11" parent="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=331531055 instance=ExtResource("2_ar1xx")]
 layout_mode = 2
 
-[node name="LevelButton12" parent="HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=1603172398 instance=ExtResource("2_ar1xx")]
+[node name="LevelButton12" parent="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=1603172398 instance=ExtResource("2_ar1xx")]
 layout_mode = 2
 
-[node name="LevelButton13" parent="HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=2056558092 instance=ExtResource("2_ar1xx")]
+[node name="LevelButton13" parent="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=2056558092 instance=ExtResource("2_ar1xx")]
 layout_mode = 2
 
-[node name="LevelButton14" parent="HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=1451251737 instance=ExtResource("2_ar1xx")]
+[node name="LevelButton14" parent="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=1451251737 instance=ExtResource("2_ar1xx")]
 layout_mode = 2
 
-[node name="LevelButton15" parent="HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=297818231 instance=ExtResource("2_ar1xx")]
+[node name="LevelButton15" parent="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=297818231 instance=ExtResource("2_ar1xx")]
 layout_mode = 2
 
-[node name="LevelButton16" parent="HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=810185992 instance=ExtResource("2_ar1xx")]
+[node name="LevelButton16" parent="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=810185992 instance=ExtResource("2_ar1xx")]
 layout_mode = 2
 
-[node name="LevelButton17" parent="HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=369714052 instance=ExtResource("2_ar1xx")]
+[node name="LevelButton17" parent="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=369714052 instance=ExtResource("2_ar1xx")]
 layout_mode = 2
 
-[node name="LevelButton18" parent="HBoxContainer/LevelListContainer/VBoxContainer/MarginContainer2/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=1732843343 instance=ExtResource("2_ar1xx")]
+[node name="LevelButton18" parent="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer/LevelButtons/MarginContainer/LevelButtonContainer" unique_id=1732843343 instance=ExtResource("2_ar1xx")]
 layout_mode = 2
 
-[node name="LevelPreviewContainer" type="MarginContainer" parent="HBoxContainer" unique_id=461931448]
+[node name="LevelPreviewContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer" unique_id=461931448]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer/LevelPreviewContainer" unique_id=2092240406]
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/LevelPreviewContainer" unique_id=1388105413]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_iy86c")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/LevelPreviewContainer" unique_id=396181375]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/MarginContainer" unique_id=2092240406]
 layout_mode = 2
 
-[node name="SelectedLevelLabel" type="Label" parent="HBoxContainer/LevelPreviewContainer/VBoxContainer2" unique_id=1736553183]
+[node name="SelectedLevelLabel" type="Label" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/MarginContainer/VBoxContainer2" unique_id=1736553183]
 unique_name_in_owner = true
 layout_mode = 2
+theme_type_variation = &"HeaderLabel"
 text = "LEVEL 1-1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LevelPreviewContainer/VBoxContainer2" unique_id=1140532938]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/MarginContainer/VBoxContainer2" unique_id=1140532938]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_vertical = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer" unique_id=1931760571]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/MarginContainer/VBoxContainer2/VBoxContainer" unique_id=1931760571]
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_right = 24
 
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer" unique_id=563472583]
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/MarginContainer/VBoxContainer2/VBoxContainer/MarginContainer" unique_id=1882379066]
+self_modulate = Color(0.8666667, 0.61960787, 0.4117647, 1)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_khj0t")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/MarginContainer/VBoxContainer2/VBoxContainer/MarginContainer" unique_id=1458765334]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/MarginContainer/VBoxContainer2/VBoxContainer/MarginContainer/MarginContainer" unique_id=376619527]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7xfnp")
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/MarginContainer/VBoxContainer2/VBoxContainer/MarginContainer/MarginContainer" unique_id=563472583]
 layout_mode = 2
 size_flags_horizontal = 4
 texture = SubResource("ViewportTexture_rs8ex")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer" unique_id=363287247]
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/MarginContainer/VBoxContainer2/VBoxContainer" unique_id=363287247]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer2" unique_id=1147430296]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/MarginContainer/VBoxContainer2/VBoxContainer/MarginContainer2" unique_id=1147430296]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=800356674]
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/MarginContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=800356674]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "MASTERY:"
+theme_type_variation = &"HeaderLabel"
+text = "MASTERY"
 vertical_alignment = 1
 uppercase = true
 
-[node name="MedalContainer" type="HBoxContainer" parent="HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=1242450649]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/MarginContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=1137672825]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/MarginContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MarginContainer" unique_id=710884985]
+self_modulate = Color(0.8666667, 0.61960787, 0.4117647, 1)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_khj0t")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/MarginContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MarginContainer" unique_id=1593067930]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/MarginContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MarginContainer/MarginContainer" unique_id=503254708]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4sl2a")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/MarginContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MarginContainer/MarginContainer" unique_id=336293993]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/MarginContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MarginContainer/MarginContainer/MarginContainer" unique_id=1714740134]
+layout_mode = 2
+
+[node name="MedalContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/MarginContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MarginContainer/MarginContainer/MarginContainer/VBoxContainer" unique_id=1242450649]
 layout_mode = 2
 size_flags_vertical = 0
 
-[node name="LevelProgressBar" type="ProgressBar" parent="HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MedalContainer" unique_id=1808976563]
+[node name="LevelProgressBar" type="ProgressBar" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/MarginContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MarginContainer/MarginContainer/MarginContainer/VBoxContainer/MedalContainer" unique_id=1808976563]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 4
 max_value = 1.0
 step = 0.1
 value = 0.4
 
-[node name="LevelProgressMedalLabel" type="Label" parent="HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MedalContainer" unique_id=647936843]
+[node name="LevelProgressMedalLabel" type="Label" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/MarginContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MarginContainer/MarginContainer/MarginContainer/VBoxContainer/MedalContainer" unique_id=647936843]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(48, 0)
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("4_iy86c")
+theme_override_font_sizes/font_size = 8
 text = "BRONZE"
 horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
-[node name="AttemptsContainer" type="HBoxContainer" parent="HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=914473701]
+[node name="AttemptsContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/MarginContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MarginContainer/MarginContainer/MarginContainer/VBoxContainer" unique_id=914473701]
 layout_mode = 2
 size_flags_vertical = 0
 
-[node name="Label" type="Label" parent="HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/AttemptsContainer" unique_id=805768729]
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/MarginContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MarginContainer/MarginContainer/MarginContainer/VBoxContainer/AttemptsContainer" unique_id=805768729]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_type_variation = &"HeaderLabel"
 text = "Attempts:"
 vertical_alignment = 1
 uppercase = true
 
-[node name="LevelAttemptsLabel" type="Label" parent="HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/AttemptsContainer" unique_id=1676571356]
+[node name="LevelAttemptsLabel" type="Label" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/MarginContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MarginContainer/MarginContainer/MarginContainer/VBoxContainer/AttemptsContainer" unique_id=1676571356]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("4_iy86c")
+theme_override_font_sizes/font_size = 8
 text = "0"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="HighscoreContainer" type="HBoxContainer" parent="HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=521047915]
+[node name="HighscoreContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/MarginContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MarginContainer/MarginContainer/MarginContainer/VBoxContainer" unique_id=521047915]
 layout_mode = 2
 size_flags_vertical = 0
 
-[node name="Label" type="Label" parent="HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/HighscoreContainer" unique_id=1509459476]
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/MarginContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MarginContainer/MarginContainer/MarginContainer/VBoxContainer/HighscoreContainer" unique_id=1509459476]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_type_variation = &"HeaderLabel"
 text = "Your Best:"
 vertical_alignment = 1
 uppercase = true
 
-[node name="YourBestTimeLabel" type="Label" parent="HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/HighscoreContainer" unique_id=77722985]
+[node name="YourBestTimeLabel" type="Label" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/MarginContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MarginContainer/MarginContainer/MarginContainer/VBoxContainer/HighscoreContainer" unique_id=77722985]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-text = "00:00.000"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("4_iy86c")
+theme_override_font_sizes/font_size = 8
+text = "00:00.00"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="WorldscoreContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/MarginContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MarginContainer/MarginContainer/MarginContainer/VBoxContainer" unique_id=1021555336]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/MarginContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MarginContainer/MarginContainer/MarginContainer/VBoxContainer/WorldscoreContainer" unique_id=1716712294]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"HeaderLabel"
+text = "World Best:"
+vertical_alignment = 1
+uppercase = true
+
+[node name="YourBestTimeLabel" type="Label" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/MarginContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MarginContainer/MarginContainer/MarginContainer/VBoxContainer/WorldscoreContainer" unique_id=1233156195]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("4_iy86c")
+theme_override_font_sizes/font_size = 8
+text = "00:00.00"
 horizontal_alignment = 2
 vertical_alignment = 1
 
@@ -259,5 +450,5 @@ unique_name_in_owner = true
 offset = Vector2(156, 120)
 script = ExtResource("4_4sl2a")
 
-[connection signal="value_changed" from="HBoxContainer/LevelListContainer/VBoxContainer/HBoxContainer/SpeedSlider" to="HBoxContainer/LevelListContainer/VBoxContainer/HBoxContainer/SpeedSliderLabel" method="_on_speed_slider_value_changed"]
+[connection signal="value_changed" from="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer/VBoxContainer/HBoxContainer/SpeedSlider" to="MarginContainer/HBoxContainer/LevelListContainer/MarginContainer/VBoxContainer/HBoxContainer/SpeedSliderLabel" method="_on_speed_slider_value_changed"]
 [connection signal="level_size_updated" from="SubViewport/Level" to="SubViewport/Camera2D" method="_on_level_level_size_updated"]

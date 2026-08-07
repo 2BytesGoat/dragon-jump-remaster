@@ -136,6 +136,7 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 - [ ] src/ui/components/time_container.tscn
 - [x] src/ui/themes/default_theme.tres — documented in [[technical/ui/index]]
 - [x] src/ui/themes/gameplay_theme.tres — documented in [[technical/ui/arcade-hud]]
+- [x] src/ui/themes/practice_theme.tres — documented in [[technical/ui/index]]
 
 ## Effects
 

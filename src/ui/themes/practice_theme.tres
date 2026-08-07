@@ -1,0 +1,37 @@
+[gd_resource type="Theme" format=3 uid="uid://bwn751d5rabh2"]
+
+[ext_resource type="FontFile" uid="uid://cmbpqj0hto83m" path="res://assets/fonts/Awesome 9.ttf" id="2_header_font"]
+[ext_resource type="Texture2D" uid="uid://b52lc70odatu8" path="res://assets/sprites/ui/silver_slider_empty.png" id="4_slider_track"]
+[ext_resource type="Texture2D" uid="uid://jpf5n25mgody" path="res://assets/sprites/ui/silver_grabber_normal.png" id="5_grabber"]
+[ext_resource type="Texture2D" uid="uid://djyvvewcjr00k" path="res://assets/sprites/ui/silver_grabber_pressed.png" id="6_grabber_pressed"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_focus"]
+bg_color = Color(1, 1, 1, 0.15)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_slider"]
+texture = ExtResource("4_slider_track")
+texture_margin_left = 6.0
+texture_margin_top = 6.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+
+[resource]
+Button/font_sizes/font_size = 12
+Button/fonts/font = ExtResource("2_header_font")
+HSlider/icons/grabber_icon = ExtResource("5_grabber")
+HSlider/icons/grabber_icon_pressed = ExtResource("6_grabber_pressed")
+HSlider/styles/focus = SubResource("StyleBoxFlat_focus")
+HSlider/styles/slider = SubResource("StyleBoxTexture_slider")
+Label/colors/font_color = Color(1, 1, 1, 1)
+Label/colors/font_outline_color = Color(0.16862746, 0.19215687, 0.27058825, 1)
+Label/colors/font_shadow_color = Color(0.16862746, 0.19215687, 0.27058825, 0.78431374)
+Label/constants/outline_size = 0
+Label/constants/shadow_offset_x = 1
+Label/constants/shadow_offset_y = 1
+Label/font_sizes/font_size = 16
+Label/fonts/font = ExtResource("2_header_font")

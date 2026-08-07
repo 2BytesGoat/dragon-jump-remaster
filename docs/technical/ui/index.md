@@ -50,7 +50,7 @@ System relationships and dependencies: This system integrates with player system
 - **Purpose**: Level picker for practice runs. Replaces the old `level_select` flow: browse campaign levels, preview the selected level in a `SubViewport`, tune player speed, and start a run by pressing JUMP (no confirmation screen). Lives inside `main_screen.tscn` as a full-rect sibling of `MainMenu`; the standalone `practice_menu.tscn` is the same subtree with the script attached.
 - **Note**: The preview `ViewportTexture` uses a root-relative `viewport_path` (`NodePath("SubViewport")`), resolved from `PracticeMenu` itself — do not prefix with `PracticeMenu/` (that path is only valid when the subtree was embedded in `main_screen.tscn`, and breaks the standalone scene).
 - **Key properties**:
-  - `level_button_container`: `VBoxContainer` rebuilt at runtime from `CampaignLevelLibrary` (hidden levels skipped, unplayed levels disabled, labels formatted `%03d - name`)
+  - `level_button_container`: `VBoxContainer` rebuilt at runtime from `CampaignLevelLibrary` (hidden levels skipped, unplayed levels disabled, labels formatted `level_id - Name`, e.g. `1-1 - Your Turn`)
   - `level_node`: the `Level` instance inside the preview `SubViewport`, loaded on selection/hover
   - `speed_slider`: player speed multiplier (0.75–1.0, mapped `0.75 + value * 0.25`)
   - `selected_level_name`: the currently selected campaign level id
@@ -60,7 +60,7 @@ System relationships and dependencies: This system integrates with player system
   - `_on_level_button_clicked(level_name)`: Sets `selected_level_name`, updates the display, and starts the run — mouse clicks and keyboard accept both launch the run directly
   - `_on_level_button_hovered(level_name)`: Sets `selected_level_name` and updates the preview and stats on hover or focus (via `_update_level_display`). Mouse hover grabs focus, so mouse and controller/keyboard navigation share the same focus-driven path; the focused level is always the run target
   - `_update_level_display(level_name)`: Loads the level preview and updates best time / attempts / progress bar / medal / selected label from `SaveManager`
-  - `focus_first_level()`: Focuses the first level button (called by the host when the menu is shown)
+  - `focus_first_level()`: Resets the level list scroll to the top and focuses the first level button (called by the host when the menu is shown)
 - **Signals**: `closed` — emitted on `ui_cancel` so the host can return to the main menu
 - **Integration points**: `CampaignLevelLibrary` (level list), `SaveManager` (per-level stats), `GameSession` (run start), `SceneLoader` (navigation), `TelemetrySystem` (menu telemetry)
 
@@ -100,7 +100,7 @@ System relationships and dependencies: This system integrates with player system
 - **Key properties**:
   - None specific to the component
 - **Main methods**:
-  - `show_stats(stats: Dictionary)`: Displays player statistics in UI labels
+  - `show_stats(stats: Dictionary)`: Displays player statistics in UI labels, with the level title formatted `level_id - Name` (e.g. `1-1 - Your Turn`) from `CampaignLevelLibrary.display_name.capitalize()`
 - **Integration points with other systems**:
   - Updates UI labels with data from game stats
   - Connected to game completion events
@@ -113,9 +113,13 @@ System relationships and dependencies: This system integrates with player system
 ### `bonus_popup.gd` / `bonus_popup.tscn` / `bonus_popup_config.tres`
 - **Purpose**: Reusable one-shot "+bonus" popup that animates above a world position and frees itself. Spawned by `ArcadeRankHud` at level clear and by `BonusPopup.spawn()` from anywhere; timing tuned via `resources/bonus_popup_config.tres`.
 
-### `default_theme.tres` / `gameplay_theme.tres`
-- **Purpose**: The two UI themes. `default_theme.tres` is the global theme (`project.godot` → `gui/theme/custom`) for all menus; `gameplay_theme.tres` (`PressStart2P`) is applied to the live HUD, bonus popups, and powerup cards (see [[technical/ui/arcade-hud]]).
-- **Button highlight is focus-driven, not hover-driven**: both themes set `Button/styles/hover` to an empty `StyleBoxEmpty` (killing Godot's default gray hover shading) and `Button/styles/focus` to a `StyleBoxFlat` highlight (semi-transparent white fill + 1px white border). The focused button is the highlighted one — mouse hover still grabs focus (see `level_button.gd`), so mouse and keyboard/controller navigation share the same focus highlight.
+### `default_theme.tres` / `gameplay_theme.tres` / `practice_theme.tres`
+- **Purpose**: The three UI themes. `default_theme.tres` is the global theme (`project.godot` → `gui/theme/custom`) for all menus; `gameplay_theme.tres` (`PressStart2P`) is applied to the live HUD, bonus popups, and powerup cards (see [[technical/ui/arcade-hud]]).
+- **`practice_theme.tres`** is a derived theme for the practice menu ([[technical/ui/index]] — see `practice_menu.tscn`). It sets `base_theme` to `default_theme.tres` so it inherits everything, then overrides:
+  - **Body text** (`Label` default) → `PressStart2P-Regular.ttf` at size 10, so list items, stat values, and level buttons render in the "other" font
+  - **Headers** (`Label` type variation `"HeaderLabel"`) → `Awesome 9.ttf` at size 18, applied via `theme_type_variation = &"HeaderLabel"` on section/stat labels (Player Speed:, Select Level:, MASTERY:, the level title, Attempts:, Your Best:, World Best:)
+  - **`HSlider` skins** → silver track (`silver_slider_empty.png` as the `slider` stylebox) and silver grabber (`silver_grabber_normal.png` / `silver_grabber_pressed.png` as `grabber_icon` / `grabber_icon_pressed`), plus a white-outline focus box matching the Button focus style. These only affect sliders under the practice menu — settings-menu sliders keep the unstyled global theme.
+- **Button highlight is focus-driven, not hover-driven**: both base themes set `Button/styles/hover` to an empty `StyleBoxEmpty` (killing Godot's default gray hover shading) and `Button/styles/focus` to a `StyleBoxFlat` highlight (semi-transparent white fill + 1px white border). The focused button is the highlighted one — mouse hover still grabs focus (see `level_button.gd`), so mouse and keyboard/controller navigation share the same focus highlight. `practice_theme.tres` inherits this via `base_theme`.
 - Documented in [[technical/ui/arcade-hud]].
 
 ### `progress_bar.gd` *(removed)*

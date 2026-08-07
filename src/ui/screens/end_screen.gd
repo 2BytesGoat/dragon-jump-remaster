@@ -24,9 +24,8 @@ func update_stats(stats: Dictionary) -> void:
 		best_time_label.text = Utils.format_time(stats["time"])
 		new_best_label.visible = false
 		return
-	var level_index = CampaignLevelLibrary.get_all_level_ids().find(stats["level_name"])
 	var level_name = campaign_level.display_name
-	level_name_label.text = "%03d - %s" % [level_index, level_name]
+	level_name_label.text = "%s - %s" % [stats["level_name"], level_name.capitalize()]
 	
 	current_time_label.text = Utils.format_time(stats["time"])
 	

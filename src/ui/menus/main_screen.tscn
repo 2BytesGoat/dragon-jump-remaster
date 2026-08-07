@@ -24,6 +24,7 @@ position = Vector2(321, 0)
 layout_mode = 1
 
 [node name="PracticeMenu" parent="." unique_id=460918565 instance=ExtResource("5_0253g")]
+visible = false
 layout_mode = 1
 
 [node name="CreditsScreen" parent="." unique_id=180405132 instance=ExtResource("9_7530n")]

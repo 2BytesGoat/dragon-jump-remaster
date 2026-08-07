@@ -4,6 +4,16 @@ This document captures high-level decisions as the project evolves.
 
 ---
 
+## 2026-08-07 — Practice menu theme: Awesome 9 headers, PressStart2P body, silver slider skins
+
+**Context:** The practice menu used the global menu theme (Awesome 9 only). The revamp needs visual hierarchy — section headers and stat labels in the display font (Awesome 9), everything else (values, level buttons, list items) in the body font (PressStart2P) — plus a skinned slider instead of Godot's default.
+
+- **Decided the practice menu gets a derived theme (`practice_theme.tres`) with `base_theme = default_theme.tres`.** It inherits all global styles and only overrides what the menu needs; future `default_theme` changes propagate automatically.
+- **Headers are a theme type variation, not per-node overrides.** `practice_theme.tres` defines `Label` type variation `"HeaderLabel"` (Awesome 9, size 18); the seven section/stat labels in `practice_menu.tscn` set `theme_type_variation = &"HeaderLabel"`. Plain `Label` falls through to PressStart2P at size 10.
+- **Slider skins are theme-level.** `HSlider` styles (silver track stylebox, silver grabber icons, focus box) live in `practice_theme.tres`, so `HSlider` gets the silver skin anywhere under the practice menu without per-node overrides. Settings-menu sliders intentionally keep the unstyled global theme.
+
+---
+
 ## 2026-08-07 — Button highlight is focus-driven, not hover-driven
 
 **Context:** Mouse-hovering a level button in the practice menu showed Godot's default gray hover shading, while keyboard/controller focus showed nothing — inconsistent feedback for the same action (both paths grab focus and update the preview).

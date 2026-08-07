@@ -9,6 +9,7 @@ signal closed
 const GAME_SCENE_PATH := "res://main.tscn"
 
 @onready var level_button_container = %LevelButtonContainer
+@onready var level_scroll: ScrollContainer = %LevelButtons
 @onready var level_node = %Level
 @onready var selected_level_label = %SelectedLevelLabel
 @onready var speed_slider = %SpeedSlider
@@ -42,7 +43,7 @@ func _ready() -> void:
 		button.name = level_name
 		level_button_container.add_child(button)
 		button.set_button_disabled(not SaveManager.has_level_data(level_name))
-		button.button_label = "%03d - %s" % [display_index, level_data.display_name]
+		button.button_label = "%s - %s" % [level_name, level_data.display_name.capitalize()]
 		button.pressed.connect(_on_level_button_clicked.bind(level_name))
 		button.hovered.connect(_on_level_button_hovered)
 
@@ -65,6 +66,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func focus_first_level() -> void:
+	level_scroll.scroll_vertical = 0
 	var first_button := level_button_container.get_child(0)
 	if first_button is Button:
 		first_button.grab_focus()
@@ -94,8 +96,7 @@ func _update_level_display(level_name: String) -> void:
 	level_progress_bar.value = level_data.progress_percentage
 	level_progress_medal.text = _medal_config.medal_names[level_data.progress_milestone]
 
-	var i = CampaignLevelLibrary.get_all_level_ids().find(level_name)
-	selected_level_label.text = "%03d - %s" % [i, campaign_level.display_name]
+	selected_level_label.text = "%s - %s" % [level_name, campaign_level.display_name.capitalize()]
 
 
 func _start_run() -> void:
