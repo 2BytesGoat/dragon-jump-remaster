@@ -1,14 +1,14 @@
 [gd_resource type="Theme" format=3 uid="uid://bwn751d5rabh2"]
 
-[ext_resource type="Texture2D" uid="uid://b4i2hl5k804rc" path="res://assets/grabber.png" id="2_21hnu"]
+[ext_resource type="Texture2D" uid="uid://bytr34g6pcbqd" path="res://assets/ui/bars/grabber.png" id="2_21hnu"]
 [ext_resource type="FontFile" uid="uid://cmbpqj0hto83m" path="res://assets/fonts/Awesome 9.ttf" id="2_header_font"]
-[ext_resource type="Texture2D" uid="uid://b7m15gvdtx0n2" path="res://assets/h_bar_bg.png" id="5_fbh6w"]
-[ext_resource type="Texture2D" uid="uid://jpf5n25mgody" path="res://assets/sprites/ui/silver_grabber_normal.png" id="5_grabber"]
-[ext_resource type="Texture2D" uid="uid://djyvvewcjr00k" path="res://assets/sprites/ui/silver_grabber_pressed.png" id="6_grabber_pressed"]
-[ext_resource type="Texture2D" uid="uid://vkr0f8tip0wv" path="res://assets/pbar_bg.png" id="6_u71yl"]
-[ext_resource type="Texture2D" uid="uid://r788h1ajc6bd" path="res://assets/v_scroll_fg.png" id="6_vuu4w"]
-[ext_resource type="Texture2D" uid="uid://d3ucycdoqn2yc" path="res://assets/pbar_fg.png" id="7_20l4y"]
-[ext_resource type="Texture2D" uid="uid://btolb5efxrcap" path="res://assets/v_scroll_bg.png" id="7_21hnu"]
+[ext_resource type="Texture2D" uid="uid://b2n5b8sf8uefu" path="res://assets/ui/bars/h_bar_bg.png" id="5_fbh6w"]
+[ext_resource type="Texture2D" uid="uid://csaj0ch0aojr2" path="res://assets/ui/bars/silver_grabber_normal.png" id="5_grabber"]
+[ext_resource type="Texture2D" uid="uid://2fkif1cqwgon" path="res://assets/ui/bars/silver_grabber_pressed.png" id="6_grabber_pressed"]
+[ext_resource type="Texture2D" uid="uid://bojohplp4tink" path="res://assets/ui/bars/pbar_bg.png" id="6_u71yl"]
+[ext_resource type="Texture2D" uid="uid://4np5vpta8wsa" path="res://assets/ui/bars/pbar_fg.png" id="7_20l4y"]
+[ext_resource type="Texture2D" uid="uid://cq7tlo06l8n2m" path="res://assets/ui/bars/v_scroll_bg.png" id="7_21hnu"]
+[ext_resource type="Texture2D" uid="uid://b5qrw46bpuvfr" path="res://assets/ui/bars/v_scroll_fg.png" id="8_fbh6w"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_focus"]
 bg_color = Color(0.2901961, 0.15294118, 0.16862746, 0.15)
@@ -33,19 +33,19 @@ texture_margin_bottom = 8.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7fj0r"]
 texture = ExtResource("6_u71yl")
-texture_margin_left = 4.0
-texture_margin_top = 4.0
-texture_margin_right = 4.0
-texture_margin_bottom = 4.0
-expand_margin_left = 2.0
-expand_margin_right = 2.0
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+expand_margin_left = 4.0
+expand_margin_right = 4.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1eem0"]
 texture = ExtResource("7_20l4y")
 axis_stretch_horizontal = 2
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fbh6w"]
-texture = ExtResource("6_vuu4w")
+texture = ExtResource("8_fbh6w")
 texture_margin_left = 2.0
 texture_margin_top = 2.0
 texture_margin_right = 2.0

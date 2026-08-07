@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://do0djxxwxh7ii"
-path="res://.godot/imported/medal_bar_fill.png-1326e8a12cdb23ce75e40389b1a6b9af.ctex"
+uid="uid://cq7tlo06l8n2m"
+path="res://.godot/imported/v_scroll_bg.png-1a76e884ffebc88e8ca2850211b5299e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/ui/medal_bar_fill.png"
-dest_files=["res://.godot/imported/medal_bar_fill.png-1326e8a12cdb23ce75e40389b1a6b9af.ctex"]
+source_file="res://assets/ui/bars/v_scroll_bg.png"
+dest_files=["res://.godot/imported/v_scroll_bg.png-1a76e884ffebc88e8ca2850211b5299e.ctex"]
 
 [params]
 

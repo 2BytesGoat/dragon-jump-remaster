@@ -2,13 +2,12 @@
 
 [ext_resource type="Script" uid="uid://dm5bkd7chuhi4" path="res://src/ui/components/speed_slider_label.gd" id="1_1e5ff"]
 [ext_resource type="PackedScene" uid="uid://coq21sivcbueg" path="res://src/ui/components/level_button.tscn" id="2_ar1xx"]
-[ext_resource type="Texture2D" uid="uid://d1iidib555vf6" path="res://assets/ui/book/7.png" id="3_7xfnp"]
+[ext_resource type="Texture2D" uid="uid://2qmk37jgbjig" path="res://assets/ui/book/7.png" id="3_7xfnp"]
 [ext_resource type="PackedScene" uid="uid://bvm718ddfisd7" path="res://src/scenes/level/level.tscn" id="3_xj0kg"]
 [ext_resource type="Script" uid="uid://etwvvclap1my" path="res://src/scenes/level_select_camera_2d.gd" id="4_4sl2a"]
-[ext_resource type="FontFile" uid="uid://s7ljtadq31a4" path="res://assets/fonts/PressStart2P-Regular.ttf" id="4_iy86c"]
-[ext_resource type="Texture2D" uid="uid://drls4q0srfed2" path="res://assets/ui/book/1.png" id="4_tocm5"]
+[ext_resource type="Texture2D" uid="uid://eqrs1o0gl021" path="res://assets/ui/book/1.png" id="4_tocm5"]
 [ext_resource type="Script" uid="uid://ck17rvoje8kjt" path="res://src/ui/menus/practice_menu.gd" id="5_practice"]
-[ext_resource type="Texture2D" uid="uid://cxuq33tj1e72f" path="res://assets/frame_container.png" id="6_khj0t"]
+[ext_resource type="Texture2D" uid="uid://b5f0xwolxifu5" path="res://assets/ui/containers/frame_container.png" id="6_khj0t"]
 [ext_resource type="Theme" uid="uid://bwn751d5rabh2" path="res://src/ui/themes/practice_theme.tres" id="6_theme"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4sl2a"]
@@ -75,7 +74,7 @@ theme_override_constants/separation = 2
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/margin_left = 28
-theme_override_constants/margin_top = 32
+theme_override_constants/margin_top = 34
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 45
 
@@ -108,8 +107,6 @@ ticks_position = 3
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/outline_size = 0
-theme_override_fonts/font = ExtResource("4_iy86c")
-theme_override_font_sizes/font_size = 8
 text = "Fast"
 uppercase = true
 script = ExtResource("1_1e5ff")
@@ -242,13 +239,8 @@ size_flags_vertical = 3
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_right = 16
-
-[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer" unique_id=1882379066]
-self_modulate = Color(0.8666667, 0.61960787, 0.4117647, 1)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_khj0t")
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_right = 32
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer" unique_id=1458765334]
 layout_mode = 2
@@ -266,6 +258,10 @@ layout_mode = 2
 texture = SubResource("ViewportTexture_rs8ex")
 expand_mode = 3
 stretch_mode = 5
+
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer" unique_id=1882379066]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_khj0t")
 
 [node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer" unique_id=363287247]
 layout_mode = 2
@@ -330,10 +326,8 @@ custom_minimum_size = Vector2(48, 0)
 layout_mode = 2
 size_flags_horizontal = 10
 theme_override_constants/outline_size = 0
-theme_override_fonts/font = ExtResource("4_iy86c")
-theme_override_font_sizes/font_size = 8
 text = "BRONZE"
-horizontal_alignment = 1
+horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
@@ -344,8 +338,6 @@ size_flags_vertical = 0
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MarginContainer/MarginContainer/MarginContainer/VBoxContainer/AttemptsContainer" unique_id=805768729]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_type_variation = &"HeaderLabel"
-theme_override_constants/outline_size = 0
 text = "Attempts:"
 vertical_alignment = 1
 uppercase = true
@@ -355,8 +347,6 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/outline_size = 0
-theme_override_fonts/font = ExtResource("4_iy86c")
-theme_override_font_sizes/font_size = 8
 text = "0"
 horizontal_alignment = 2
 vertical_alignment = 1
@@ -368,8 +358,6 @@ size_flags_vertical = 0
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MarginContainer/MarginContainer/MarginContainer/VBoxContainer/HighscoreContainer" unique_id=1509459476]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_type_variation = &"HeaderLabel"
-theme_override_constants/outline_size = 0
 text = "Your Best:"
 vertical_alignment = 1
 uppercase = true
@@ -379,8 +367,6 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/outline_size = 0
-theme_override_fonts/font = ExtResource("4_iy86c")
-theme_override_font_sizes/font_size = 8
 text = "00:00.00"
 horizontal_alignment = 2
 vertical_alignment = 1
@@ -392,8 +378,6 @@ size_flags_vertical = 0
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MarginContainer/MarginContainer/MarginContainer/VBoxContainer/WorldscoreContainer" unique_id=1716712294]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_type_variation = &"HeaderLabel"
-theme_override_constants/outline_size = 0
 text = "World Best:"
 vertical_alignment = 1
 uppercase = true
@@ -402,8 +386,6 @@ uppercase = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/outline_size = 0
-theme_override_fonts/font = ExtResource("4_iy86c")
-theme_override_font_sizes/font_size = 8
 text = "00:00.00"
 horizontal_alignment = 2
 vertical_alignment = 1
