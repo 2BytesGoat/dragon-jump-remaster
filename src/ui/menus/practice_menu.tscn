@@ -7,7 +7,7 @@
 [ext_resource type="Script" uid="uid://ck17rvoje8kjt" path="res://src/ui/menus/practice_menu.gd" id="5_practice"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_rs8ex"]
-viewport_path = NodePath("PracticeMenu/SubViewport")
+viewport_path = NodePath("SubViewport")
 
 [node name="PracticeMenu" type="MarginContainer" unique_id=460918565]
 visible = false

@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://b6arc4d3d0v01"]
 
 [ext_resource type="PackedScene" uid="uid://bnxudkobrdgtb" path="res://src/ui/components/menu_button.tscn" id="2_okcpe"]
-[ext_resource type="Script" uid="uid://b0t5wmna8w361" path="res://src/ui/screens/arcade_game_over_screen.gd" id="3_ogos"]
+[ext_resource type="Script" uid="uid://j5tjx5p6hq1i" path="res://src/ui/screens/arcade_game_over_screen.gd" id="3_ogos"]
 
 [node name="ArcadeGameOverScreen" type="MarginContainer"]
 anchors_preset = 8

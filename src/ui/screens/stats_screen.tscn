@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c3d4e5f68aaab"]
 
-[ext_resource type="Script" uid="uid://b2c3d4e5f6789" path="res://src/ui/screens/stats_screen.gd" id="3_abc12"]
+[ext_resource type="Script" uid="uid://cxlo424nsu0yw" path="res://src/ui/screens/stats_screen.gd" id="3_abc12"]
 [ext_resource type="PackedScene" uid="uid://bnxudkobrdgtb" path="res://src/ui/components/menu_button.tscn" id="4_abc12"]
 
 [node name="StatsScreen" type="MarginContainer"]

@@ -48,6 +48,7 @@ System relationships and dependencies: This system integrates with player system
 
 ### `practice_menu.gd` / `practice_menu.tscn`
 - **Purpose**: Level picker for practice runs. Replaces the old `level_select` flow: browse campaign levels, preview the selected level in a `SubViewport`, tune player speed, and start a run by pressing JUMP (no confirmation screen). Lives inside `main_screen.tscn` as a full-rect sibling of `MainMenu`; the standalone `practice_menu.tscn` is the same subtree with the script attached.
+- **Note**: The preview `ViewportTexture` uses a root-relative `viewport_path` (`NodePath("SubViewport")`), resolved from `PracticeMenu` itself — do not prefix with `PracticeMenu/` (that path is only valid when the subtree was embedded in `main_screen.tscn`, and breaks the standalone scene).
 - **Key properties**:
   - `level_button_container`: `VBoxContainer` rebuilt at runtime from `CampaignLevelLibrary` (hidden levels skipped, unplayed levels disabled, labels formatted `%03d - name`)
   - `level_node`: the `Level` instance inside the preview `SubViewport`, loaded on selection/hover
