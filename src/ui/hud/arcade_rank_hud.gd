@@ -8,14 +8,6 @@ extends MarginContainer
 ## - Level timer with live medal-pace tint: starts GOLD, downgrades through
 ##   SILVER/BRONZE as time crosses each threshold.
 
-const MEDAL_TAGS := {
-	"GOLD+": "GOLD+",
-	"GOLD": "GOLD",
-	"SILVER": "SILVER",
-	"BRONZE": "BRONZE",
-	"": "NO BONUS",
-}
-
 const MEDAL_INDEX := {
 	"BRONZE": 0,
 	"SILVER": 1,
@@ -43,7 +35,8 @@ const LIFE_ICON_LOST_ALPHA := 0.25
 
 var run_timer: RunTimer = null
 @onready var lives_box: HBoxContainer = %LivesBox
-@onready var band_label: Label = %BandLabel
+@onready var medal_icon: TextureRect = %MedalIcon
+@onready var no_bonus_label: Label = %NoBonusLabel
 @onready var medal_bar: TextureProgressBar = %MedalBar
 @onready var clear_sfx: AudioStreamPlayer = %ClearSFX
 @onready var gold_sfx: AudioStreamPlayer = %GoldSFX
@@ -55,6 +48,7 @@ var run_timer: RunTimer = null
 var _life_icons: Array[TextureRect] = []
 var _multiplier_tween: Tween = null
 var _band_tween: Tween = null
+var _no_bonus_tween: Tween = null
 var _bar_pulse_tween: Tween = null
 var _score_tween: Tween = null
 var _reset_tween: Tween = null
@@ -67,7 +61,7 @@ var _medal_fill: float = 1.0
 var _heartbeat_elapsed: float = 0.0
 var _heartbeat_crossed: bool = false
 var _flash_timer: SceneTreeTimer = null
-var _base_medal_bar_scale: Vector2 = Vector2(1.2, 1.2)
+var _base_medal_bar_scale: Vector2 = Vector2(1.0, 1.0)
 
 ## World position the level-clear popup should spawn above. Set by main.gd
 ## right before ArcadeDirector.on_level_finished() emits level_rank_awarded
@@ -254,19 +248,37 @@ func _update_medal_pace(delta: float) -> void:
 	if not run_timer.race_started:
 		return
 	var band := _band_for_time(time)
+	medal_bar.visible = band != ""
+	no_bonus_label.visible = band == ""
 	if band == _current_band:
 		return
 	var downgraded := _current_band != "" and _rank_weight(band) < _rank_weight(_current_band)
 	_current_band = band
-	band_label.text = MEDAL_TAGS.get(band, "---")
+	medal_icon.visible = band != ""
+	if band != "":
+		medal_icon.modulate = _rank_color(band)
 	if downgraded:
-		band_label.scale = Vector2(0.5, 0.5)
-		band_label.modulate.a = 1.0
-		if _band_tween != null and _band_tween.is_valid():
-			_band_tween.kill()
-		_band_tween = create_tween()
-		_band_tween.tween_property(band_label, "scale", Vector2(1.4, 1.4), 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-		_band_tween.tween_property(band_label, "scale", Vector2.ONE, 0.1).set_trans(Tween.TRANS_SINE)
+		if band == "":
+			_pulse_no_bonus_label()
+		else:
+			medal_icon.scale = Vector2.ONE
+			medal_icon.modulate.a = 1.0
+			if _band_tween != null and _band_tween.is_valid():
+				_band_tween.kill()
+			_band_tween = create_tween()
+			_band_tween.tween_property(medal_icon, "scale", Vector2(1.15, 1.15), 0.12).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+			_band_tween.tween_property(medal_icon, "scale", Vector2.ONE, 0.12).set_trans(Tween.TRANS_SINE)
+
+
+func _pulse_no_bonus_label() -> void:
+	no_bonus_label.pivot_offset = no_bonus_label.size / 2.0
+	no_bonus_label.scale = Vector2(0.5, 0.5)
+	no_bonus_label.modulate.a = 1.0
+	if _no_bonus_tween != null and _no_bonus_tween.is_valid():
+		_no_bonus_tween.kill()
+	_no_bonus_tween = create_tween()
+	_no_bonus_tween.tween_property(no_bonus_label, "scale", Vector2(1.15, 1.15), 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_no_bonus_tween.tween_property(no_bonus_label, "scale", Vector2.ONE, 0.12).set_trans(Tween.TRANS_SINE)
 
 
 func _pulse_medal_bar(pulse_from_percent: float, delta: float) -> bool:
@@ -362,17 +374,20 @@ func _reset_medal_bar_visuals() -> void:
 		_reset_tween.kill()
 	_medal_fill = 1.0
 	_current_band = "GOLD"
-	band_label.text = "GOLD"
-	band_label.modulate.a = 1.0
+	medal_icon.visible = true
+	medal_icon.modulate = _rank_color("GOLD")
+	medal_icon.modulate.a = 1.0
+	no_bonus_label.visible = false
+	no_bonus_label.scale = Vector2.ONE
 	medal_bar.visible = true
 	_reset_tween = create_tween()
 	_reset_tween.set_parallel(true)
 	_reset_tween.tween_property(medal_bar, "value", medal_bar.max_value, 0.2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	_reset_tween.tween_property(medal_bar, "tint_progress", _rank_color("GOLD"), 0.2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	band_label.scale = Vector2(0.5, 0.5)
+	medal_icon.scale = Vector2(0.5, 0.5)
 	_band_tween = create_tween()
-	_band_tween.tween_property(band_label, "scale", Vector2(1.3, 1.3), 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	_band_tween.tween_property(band_label, "scale", Vector2.ONE, 0.12).set_trans(Tween.TRANS_SINE)
+	_band_tween.tween_property(medal_icon, "scale", Vector2(1.3, 1.3), 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_band_tween.tween_property(medal_icon, "scale", Vector2.ONE, 0.12).set_trans(Tween.TRANS_SINE)
 
 
 func _band_for_time(time: float) -> String:

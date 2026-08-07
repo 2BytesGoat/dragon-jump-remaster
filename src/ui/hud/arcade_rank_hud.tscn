@@ -7,6 +7,11 @@
 [ext_resource type="AudioStream" uid="uid://bo175m0kiuwev" path="res://assets/sfx/heavenly.ogg" id="12_sfx_gold"]
 [ext_resource type="AudioStream" uid="uid://djubut3dgdmkp" path="res://assets/sfx/SoundSlide.wav" id="13_sfx_death"]
 [ext_resource type="Texture2D" uid="uid://cc7505t565cpq" path="res://assets/sprites/ui/medal_bar_fill.png" id="15_bar_fill"]
+[ext_resource type="Texture2D" uid="uid://i3pclkax207x" path="res://assets/sprites/ui/medals.png" id="16_medals"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_medal"]
+atlas = ExtResource("16_medals")
+region = Rect2(16, 0, 16, 16)
 
 [node name="ArcadeRankHud" type="MarginContainer" unique_id=1126031086]
 anchors_preset = 10
@@ -33,6 +38,7 @@ size_flags_vertical = 4
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 2
+alignment = 1
 
 [node name="TimeContainer" type="MarginContainer" parent="HBoxContainer/VBoxContainer" unique_id=1338096448]
 unique_name_in_owner = true
@@ -43,41 +49,47 @@ script = ExtResource("10_ycdy4")
 [node name="TimeLabel" type="Label" parent="HBoxContainer/VBoxContainer/TimeContainer" unique_id=1415804941]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 16
 text = "00:00.00"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MedalBar" type="TextureProgressBar" parent="HBoxContainer/VBoxContainer" unique_id=991122001]
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer" unique_id=2051864868]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+alignment = 1
+
+[node name="MedalIcon" type="TextureRect" parent="HBoxContainer/VBoxContainer/HBoxContainer" unique_id=862910358]
+unique_name_in_owner = true
+modulate = Color(0.996, 0.843, 0, 1)
+z_index = 1
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+mouse_filter = 2
+texture = SubResource("AtlasTexture_medal")
+stretch_mode = 4
+
+[node name="MedalBar" type="TextureProgressBar" parent="HBoxContainer/VBoxContainer/HBoxContainer" unique_id=991122001]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
-size_flags_vertical = 3
+size_flags_vertical = 6
 mouse_filter = 2
 step = 2.5
 value = 100.0
 texture_progress = ExtResource("15_bar_fill")
 tint_progress = Color(0.996, 0.843, 0, 1)
 
-[node name="BandLabel" type="Label" parent="HBoxContainer/VBoxContainer/MedalBar" unique_id=862910358]
+[node name="NoBonusLabel" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer" unique_id=991122008]
 unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -90.0
-offset_top = -10.0
-offset_right = 90.0
-offset_bottom = 9.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 1
-theme_override_constants/outline_size = 2
-theme_override_constants/shadow_outline_size = 1
-text = "GOLD"
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme_override_font_sizes/font_size = 8
+text = "- NO BONUS -"
 horizontal_alignment = 1
 vertical_alignment = 1
 
