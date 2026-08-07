@@ -1,5 +1,5 @@
 class_name ArcadeRankHud
-extends CanvasLayer
+extends MarginContainer
 
 ## ArcadeRankHud
 ## Neon White-style feedback for the arcade score system:
@@ -67,7 +67,7 @@ var _medal_fill: float = 1.0
 var _heartbeat_elapsed: float = 0.0
 var _heartbeat_crossed: bool = false
 var _flash_timer: SceneTreeTimer = null
-var _base_medal_bar_scale: Vector2 = Vector2.ONE
+var _base_medal_bar_scale: Vector2 = Vector2(1.2, 1.2)
 
 ## World position the level-clear popup should spawn above. Set by main.gd
 ## right before ArcadeDirector.on_level_finished() emits level_rank_awarded
@@ -76,7 +76,7 @@ var pending_popup_world_position: Vector2 = Vector2.ZERO
 
 
 func _ready() -> void:
-	_base_medal_bar_scale = medal_bar.scale
+	medal_bar.scale = _base_medal_bar_scale
 	medal_bar.pivot_offset = medal_bar.size / 2.0
 	_build_life_icons()
 	_reset_medal_bar_visuals()
@@ -165,7 +165,9 @@ func reset_medal_bar() -> void:
 
 
 func _on_level_rank_awarded(_level_id: String, rank: String, multiplier: float, bonus: int) -> void:
-	BonusPopup.spawn(self, "+%d" % bonus, _rank_color(rank), pending_popup_world_position)
+	var hud := BonusPopup.find_hud()
+	if hud != null:
+		BonusPopup.spawn(hud, "+%d" % bonus, _rank_color(rank), pending_popup_world_position)
 	_schedule_multiplier_pop(multiplier, rank)
 	# _play_clear_sfx(rank)  # SFX disabled for now — see game_juice_plan.md
 

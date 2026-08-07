@@ -8,42 +8,39 @@
 [ext_resource type="AudioStream" uid="uid://djubut3dgdmkp" path="res://assets/sfx/SoundSlide.wav" id="13_sfx_death"]
 [ext_resource type="Texture2D" uid="uid://cc7505t565cpq" path="res://assets/sprites/ui/medal_bar_fill.png" id="15_bar_fill"]
 
-[node name="ArcadeRankHud" type="CanvasLayer" unique_id=1227228912 groups=["GameplayHud"]]
-script = ExtResource("2_script")
-
-[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1126031086]
+[node name="ArcadeRankHud" type="MarginContainer" unique_id=1126031086]
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 42.0
+offset_bottom = 46.0
 grow_horizontal = 2
 theme = ExtResource("2_5xjdt")
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
+script = ExtResource("2_script")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=120004099]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=120004099]
 layout_mode = 2
 
-[node name="LivesBox" type="HBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=1227228913]
+[node name="LivesBox" type="HBoxContainer" parent="HBoxContainer" unique_id=1227228913]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=546290205]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=546290205]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 4
 theme_override_constants/separation = 2
 
-[node name="TimeContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1338096448]
+[node name="TimeContainer" type="MarginContainer" parent="HBoxContainer/VBoxContainer" unique_id=1338096448]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 script = ExtResource("10_ycdy4")
 
-[node name="TimeLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/TimeContainer" unique_id=1415804941]
+[node name="TimeLabel" type="Label" parent="HBoxContainer/VBoxContainer/TimeContainer" unique_id=1415804941]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
@@ -51,17 +48,18 @@ text = "00:00.00"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MedalBar" type="TextureProgressBar" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=991122001]
+[node name="MedalBar" type="TextureProgressBar" parent="HBoxContainer/VBoxContainer" unique_id=991122001]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
+size_flags_vertical = 3
 mouse_filter = 2
 step = 2.5
 value = 100.0
 texture_progress = ExtResource("15_bar_fill")
 tint_progress = Color(0.996, 0.843, 0, 1)
 
-[node name="BandLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/MedalBar" unique_id=862910358]
+[node name="BandLabel" type="Label" parent="HBoxContainer/VBoxContainer/MedalBar" unique_id=862910358]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
@@ -70,20 +68,21 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -90.0
-offset_top = -9.5
+offset_top = -10.0
 offset_right = 90.0
-offset_bottom = 9.5
+offset_bottom = 9.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 2
 theme_override_constants/shadow_outline_size = 1
 text = "GOLD"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ScoreVBox" type="VBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=524472576]
+[node name="ScoreVBox" type="VBoxContainer" parent="HBoxContainer" unique_id=524472576]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -91,14 +90,14 @@ size_flags_vertical = 4
 theme_override_constants/separation = 4
 alignment = 2
 
-[node name="ScoreLabel" type="Label" parent="MarginContainer/HBoxContainer/ScoreVBox" unique_id=889982808]
+[node name="ScoreLabel" type="Label" parent="HBoxContainer/ScoreVBox" unique_id=889982808]
 unique_name_in_owner = true
 layout_mode = 2
 text = "SCORE 00000000"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="MultiplierLabel" type="Label" parent="MarginContainer/HBoxContainer/ScoreVBox" unique_id=1793750243]
+[node name="MultiplierLabel" type="Label" parent="HBoxContainer/ScoreVBox" unique_id=1793750243]
 unique_name_in_owner = true
 layout_mode = 2
 text = "x1.00"

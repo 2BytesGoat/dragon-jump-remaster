@@ -6,7 +6,7 @@ The live HUD (`ArcadeRankHud`) renders in `PressStart2P-Regular.ttf` via `src/ui
 
 ## Live HUD (`arcade_rank_hud.tscn`)
 
-`ArcadeRankHud` is the on-screen HUD during gameplay (main.tscn:58), a `CanvasLayer` containing the lives counter, the run timer, the medal/rank bar, bonus popups, score, and death/clear SFX. It is **not** the `ArcadeHud` described below — that was a design draft and was never built.
+`ArcadeRankHud` is the on-screen HUD during gameplay (main.tscn:58), a `MarginContainer` inside the gameplay `CanvasLayer`, containing the lives counter, the run timer, the medal/rank bar, score, and death/clear SFX. Bonus popups are spawned as children of that same `CanvasLayer` (which is in the `"GameplayHud"` group), not of the HUD container. It is **not** the `ArcadeHud` described below — that was a design draft and was never built.
 
 - Script: `src/ui/hud/arcade_rank_hud.gd` (score roll, rank bands, medals, popups)
 - Scene: `src/ui/hud/arcade_rank_hud.tscn`
@@ -16,10 +16,10 @@ The live HUD (`ArcadeRankHud`) renders in `PressStart2P-Regular.ttf` via `src/ui
 
 The "+bonus" popup shown at level clear is a **reusable, one-shot component**, not a static HUD child:
 
-- Component: `src/ui/components/bonus_popup.gd` + `bonus_popup.tscn` (`class_name BonusPopup`)
+- Component: `src/ui/hud/bonus_popup.gd` + `bonus_popup.tscn` (`class_name BonusPopup`)
 - Tuning: `resources/bonus_popup_config.tres` (`drift`, `pop_in_time`, `fade_out_time`, `lifetime`, `position_offset`) — the single shared source of truth for every spawned popup.
-- `BonusPopup.spawn(parent, text, color, world_position)` instantiates a popup, parents it under the gameplay HUD `CanvasLayer`, animates it (pop in → drift up → fade out) **above the given world position** (mapped to screen via `get_canvas_transform()`), then frees itself. Concurrent bonuses stack because each spawn is independent.
-- The HUD root is in the `"GameplayHud"` group, so world-side callers (future secret-area bonuses) can spawn via `BonusPopup.find_hud()` without a hard reference.
+- `BonusPopup.spawn(parent, text, color, world_position)` instantiates a popup, parents it under the gameplay HUD `CanvasLayer` (main.tscn's `CanvasLayer` node), animates it (pop in → drift up → fade out) **above the given world position** (mapped to screen via `get_canvas_transform()`), then frees itself. Concurrent bonuses stack because each spawn is independent. The HUD container itself must not be the parent — container layout would overwrite the popup's position.
+- The gameplay `CanvasLayer` is in the `"GameplayHud"` group (main.tscn), so world-side callers (future secret-area bonuses) can spawn via `BonusPopup.find_hud()` without a hard reference.
 - `ArcadeRankHud` spawns it on `level_rank_awarded`; `main.gd` sets `pending_popup_world_position` to the player's finish position just before `ArcadeDirector.on_level_finished()` (whose `level_rank_awarded` emit is synchronous), so the popup appears above the player at the exit.
 
 ### `ArcadeHud` design draft

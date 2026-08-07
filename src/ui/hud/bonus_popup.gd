@@ -6,7 +6,8 @@ extends Label
 ## then frees itself, so concurrent bonuses stack cleanly.
 ##
 ## Renders in the gameplay HUD CanvasLayer (same SubViewport as the player), so
-## world positions map to screen coordinates via get_canvas_transform().
+## world positions map to screen coordinates via get_canvas_transform(). The
+## CanvasLayer itself is in the "GameplayHud" group (see main.tscn).
 
 const BONUS_POPUP_SCENE := preload("res://src/ui/hud/bonus_popup.tscn")
 const CONFIG := preload("res://resources/bonus_popup_config.tres")
@@ -27,7 +28,8 @@ static func spawn(parent: Node, text: String, color: Color, world_position: Vect
 
 
 ## Finds the CanvasLayer that hosts gameplay HUD elements, so world-side
-## callers (secrets, pickups) can spawn popups without a hard reference.
+## callers (secrets, pickups) can spawn popups without a hard reference. The
+## CanvasLayer is in the "GameplayHud" group (main.tscn).
 static func find_hud() -> CanvasLayer:
 	var tree := Engine.get_main_loop()
 	if tree is SceneTree:
