@@ -9,7 +9,7 @@
 [ext_resource type="Shader" uid="uid://b87hi538ipc5q" path="res://assets/shaders/screen_crt.gdshader" id="7_csvuu"]
 [ext_resource type="PackedScene" uid="uid://fcxn3r6i8mg5" path="res://src/ui/components/crt_screen_effect.tscn" id="7_ltlti"]
 [ext_resource type="PackedScene" uid="uid://dws2c5qkd8x6q" path="res://src/ui/screens/settings_menu.tscn" id="10_abc12"]
-[ext_resource type="PackedScene" uid="uid://c68g8lfbs5ub5" path="res://src/ui/screens/credits_screen.tscn" id="11_credits"]
+[ext_resource type="PackedScene" uid="uid://c68g8lfbs5ub5" path="res://src/ui/menus/credits_screen.tscn" id="11_credits"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_4nxri"]
 viewport_path = NodePath("../SubViewportContainer/SubViewport")

@@ -34,6 +34,8 @@ System relationships and dependencies: This system integrates with player system
   - `_jump_arc_step(t)`: Integrates the arc analytically; switches the mock to the fall frame once past the peak and moves it horizontally at `PhysicsParams.max_speed`
   - `_on_jump_sequence_finished()`: Hides the start container and fades the selection container in (`FADE_IN_DURATION`), then focuses the Play button (only runs once the mock's bottom edge is `EXIT_MARGIN` px past the bottom of the screen)
   - `_on_play_button_pressed()`: Starts an arcade run via `ArcadeDirector.start_arcade_run()` and navigates to `res://main.tscn` via `SceneLoader`
+  - `_on_credits_button_pressed()`: Emits `credits_requested` so the host (`main_screen.gd`) can show the credits overlay
+  - `focus_credits_button()`: Restores keyboard focus to the credits button after the overlay closes
 - **Integration points with other systems**:
   - Jump arc constants come from `Constants.PHYSICS_PARAMS` (the same resource `Player` reads in `player.gd`), not re-declared locally
   - Connects to the `SceneLoader` autoload for scene navigation
@@ -53,11 +55,12 @@ System relationships and dependencies: This system integrates with player system
 - **Integration points**: `CustomLevelStore` (persistence), `LevelCodeParser` (validation), `GameSession` (custom run), `SceneLoader`
 
 ### `credits_screen.gd` / `credits_screen.tscn`
-- **Purpose**: Full-screen overlay with a Star Wars-style rolling text crawl. Closes on `ui_accept` / `ui_cancel` / mouse click.
+- **Purpose**: Full-screen overlay with a Star Wars-style rolling text crawl. Closes on any key / joypad button / mouse click, or automatically once the crawl has fully scrolled past the top of the screen (after a short `END_HOLD_DURATION` hold).
 - **Main methods**:
   - `reset_crawl()`: Restarts the crawl from below the screen
-  - `close()`: Hides the overlay
-- **Integration points**: Embedded in `main_menu.tscn` as `SubViewport/SubViewport/CreditsScreen`; toggled by `main_menu.gd`
+  - `close()`: Fades the overlay out (`FADE_DURATION`), hides it, then emits `closed`
+- **Signals**: `closed` — emitted after the fade-out completes, so the host can restore focus to the menu
+- **Integration points**: Embedded in `main_screen.tscn` as a full-rect sibling of `MainMenu`; shown/hidden by `main_screen.gd` (fade-in on `credits_requested`, focus restored on `closed`). Its `_unhandled_input` ignores input while hidden so it never swallows the title-screen jump key.
 
 ### `custom_level_store.gd`
 - **Purpose**: Static helper (not an autoload) that persists player-imported custom levels to `user://custom_levels.json` as `{ id: { "name", "code" } }`.

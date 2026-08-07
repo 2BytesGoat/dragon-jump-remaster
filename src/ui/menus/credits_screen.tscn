@@ -1,0 +1,83 @@
+[gd_scene format=3 uid="uid://c68g8lfbs5ub5"]
+
+[ext_resource type="Script" uid="uid://cfcpvu7mulo5v" path="res://src/ui/menus/credits_screen.gd" id="1_credits"]
+
+[node name="CreditsScreen" type="MarginContainer" unique_id=180405132]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+script = ExtResource("1_credits")
+
+[node name="Background" type="ColorRect" parent="." unique_id=842228429]
+unique_name_in_owner = true
+layout_mode = 2
+color = Color(0, 0, 0, 0.88)
+
+[node name="Control" type="Control" parent="." unique_id=1686982968]
+layout_mode = 2
+
+[node name="CrawlText" type="RichTextLabel" parent="Control" unique_id=52451922]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 624.0
+offset_bottom = 592.0
+mouse_filter = 2
+theme_override_font_sizes/normal_font_size = 16
+bbcode_enabled = true
+text = "DRAGON JUMP
+The tiny arcade speedrunner
+
+
+[color=#888888]DEVELOPER[/color]
+Giani Statie
+
+
+[color=#888888]ART[/color]
+Ansimuz - Stomper (Original art)
+Nico Bartels - Custom Artwork
+Sam Vieten - Metroidvania Tileset
+unTied Games - Cave Backgrounds
+	unTied Games - Skill Icons
+BDragon1727 - Effects
+
+
+[color=#888888]MUSIC[/color]
+JDSherbert - Streetlights
+
+
+[color=#888888]FONTS[/color]
+Somepx - Awesome 9
+CodeMan38 - Press Start 2P
+
+
+[color=#888888]SPECIAL THANKS[/color]
+Ana Statie
+Nico Bartels
+Adrian Popoviciu
+Rares Nistor
+Dan Vidrasan
+and all the playtesters
+
+
+
+[color=#888888]THANKS FOR PLAYING![/color]"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+
+[node name="HintLabel" type="Label" parent="." unique_id=1924629557]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_font_sizes/font_size = 10
+text = "PRESS ANY KEY TO CLOSE"
+horizontal_alignment = 1

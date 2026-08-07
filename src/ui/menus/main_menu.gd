@@ -14,11 +14,14 @@ const IDLE_COORDS = Vector2(320, 0)
 const JUMP_COORDS = Vector2(448, 0)
 const FALL_COORDS = Vector2(416, 0)
 
+signal credits_requested
+
 @onready var start_container = %StartContainer
 @onready var selection_container = %SelectionContainer
 @onready var player_mock: TextureRect = %PlayerMock
 @onready var press_key_label: Label = %PressKeyLabel
 @onready var play_button: Button = %PlayButton
+@onready var credits_button: Button = %CreditsButton
 @onready var jump_sfx: AudioStreamPlayer = $JumpSFX
 
 var _started := false
@@ -129,3 +132,11 @@ func _on_play_button_pressed() -> void:
 	ArcadeDirector.start_arcade_run()
 	SceneLoader.go_to("res://main.tscn")
 	_transitioning = true
+
+
+func _on_credits_button_pressed() -> void:
+	credits_requested.emit()
+
+
+func focus_credits_button() -> void:
+	credits_button.grab_focus()

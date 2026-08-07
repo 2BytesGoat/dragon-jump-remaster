@@ -1,11 +1,12 @@
 [gd_scene format=3 uid="uid://duvl2j4r4ygfe"]
 
 [ext_resource type="Theme" uid="uid://w2eess571ok6" path="res://src/ui/themes/default_theme.tres" id="1_gcvw4"]
-[ext_resource type="Script" uid="uid://dtb7qopwmmjs8" path="res://src/ui/menus/main_screen.gd" id="2_ubacl"]
+[ext_resource type="Script" uid="uid://dyhosqg7o51f5" path="res://src/ui/menus/main_screen.gd" id="2_ubacl"]
 [ext_resource type="PackedScene" uid="uid://p3lou48biwtg" path="res://src/scenes/effects/background_particles.tscn" id="3_qqh6h"]
 [ext_resource type="PackedScene" uid="uid://0c7hrkqyixn1" path="res://src/ui/menus/main_menu.tscn" id="4_suuo2"]
 [ext_resource type="Script" uid="uid://dm5bkd7chuhi4" path="res://src/ui/components/speed_slider_label.gd" id="7_n1ukh"]
 [ext_resource type="PackedScene" uid="uid://coq21sivcbueg" path="res://src/ui/components/level_button.tscn" id="8_nff1g"]
+[ext_resource type="PackedScene" uid="uid://c68g8lfbs5ub5" path="res://src/ui/menus/credits_screen.tscn" id="9_7530n"]
 [ext_resource type="PackedScene" uid="uid://bvm718ddfisd7" path="res://src/scenes/level/level.tscn" id="9_gc2ho"]
 [ext_resource type="Script" uid="uid://etwvvclap1my" path="res://src/scenes/level_select_camera_2d.gd" id="10_vsfkg"]
 
@@ -277,6 +278,10 @@ unique_name_in_owner = true
 [node name="Camera2D" type="Camera2D" parent="PracticeMenu/SubViewport" unique_id=1326003362]
 offset = Vector2(156, 120)
 script = ExtResource("10_vsfkg")
+
+[node name="CreditsScreen" parent="." unique_id=180405132 instance=ExtResource("9_7530n")]
+visible = false
+layout_mode = 1
 
 [connection signal="value_changed" from="PracticeMenu/HBoxContainer/LevelListContainer/VBoxContainer/HBoxContainer/SpeedSlider" to="PracticeMenu/HBoxContainer/LevelListContainer/VBoxContainer/HBoxContainer/SpeedSliderLabel" method="_on_speed_slider_value_changed"]
 [connection signal="level_size_updated" from="PracticeMenu/SubViewport/Level" to="PracticeMenu/SubViewport/Camera2D" method="_on_level_level_size_updated"]
