@@ -1,5 +1,7 @@
 extends Button
 
+signal hovered(level_name: String)
+
 @onready var label = %Label
 @onready var medal_icon = %MedalIcon
 var button_label: String = "tmp" : set = _on_button_label_changed
@@ -22,3 +24,12 @@ func _on_button_label_changed(new_label: String) -> void:
 
 func _on_pressed() -> void:
 	grab_focus()
+
+func _on_mouse_entered() -> void:
+	grab_focus()
+
+func _on_mouse_exited() -> void:
+	pass
+
+func _on_focus_entered() -> void:
+	hovered.emit(self.name)

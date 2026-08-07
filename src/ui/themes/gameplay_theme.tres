@@ -6,6 +6,16 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5okp8"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hover"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_focus"]
+bg_color = Color(1, 1, 1, 0.15)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+
 [resource]
 default_font = ExtResource("1_font")
 default_font_size = 8
@@ -13,6 +23,8 @@ Button/colors/font_color = Color(0.875, 0.875, 0.875, 1)
 Button/font_sizes/font_size = 10
 Button/fonts/font = ExtResource("1_font")
 Button/styles/normal = SubResource("StyleBoxEmpty_jecqt")
+Button/styles/hover = SubResource("StyleBoxEmpty_hover")
+Button/styles/focus = SubResource("StyleBoxFlat_focus")
 Label/font_sizes/font_size = 8
 Label/fonts/font = ExtResource("1_font")
 Panel/styles/panel = SubResource("StyleBoxEmpty_5okp8")

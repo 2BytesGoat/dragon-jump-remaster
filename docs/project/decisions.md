@@ -4,6 +4,25 @@ This document captures high-level decisions as the project evolves.
 
 ---
 
+## 2026-08-07 — Button highlight is focus-driven, not hover-driven
+
+**Context:** Mouse-hovering a level button in the practice menu showed Godot's default gray hover shading, while keyboard/controller focus showed nothing — inconsistent feedback for the same action (both paths grab focus and update the preview).
+
+- **Decided the button highlight lives on `focus`, not `hover`.** Both themes (`default_theme.tres`, `gameplay_theme.tres`) set `Button/styles/hover` to an empty `StyleBoxEmpty` and `Button/styles/focus` to a `StyleBoxFlat` highlight (semi-transparent white fill + 1px white border). Godot draws `hover` over `focus`, so emptying hover is required for the focus highlight to show on mouse hover.
+- **Mouse hover still grabs focus** (see `level_button.gd`), so mouse and keyboard/controller navigation share the same focus highlight — the focused button is always the highlighted one.
+
+---
+
+## 2026-08-07 — Practice menu: focus-driven selection and mouse start
+
+**Context:** The practice menu's preview updated on hover/focus, but `selected_level_name` was only set on click, so keyboard/controller navigation previewed a level while the run still launched the last clicked one. Mouse users had no way to start a run at all — only `player_one_jump` (space) triggered `_start_run()`.
+
+- **Decided focus/hover is the single source of truth for the run target.** `_on_level_button_hovered` (fired by `focus_entered` on both mouse hover and keyboard/controller navigation) now sets `selected_level_name` before updating the display. The focused level is always the level that will be played.
+- **Decided clicking a level starts the run directly** — mouse parity with the JUMP action, no start button. `_on_level_button_clicked` sets selection, updates the display, then calls `_start_run()`.
+- **Opening the menu no longer auto-starts a run:** `_ready()` sets `selected_level_name` and updates the display for the first level directly instead of calling `_on_level_button_clicked`.
+
+---
+
 ## 2026-08-07 — Title screen shows once per session
 
 **Context:** Returning to the main screen (e.g. exiting a practice run) replayed the "Press JUMP to Start" title sequence, forcing the player to press JUMP again before reaching the menu buttons.

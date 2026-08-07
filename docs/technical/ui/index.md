@@ -55,10 +55,11 @@ System relationships and dependencies: This system integrates with player system
   - `speed_slider`: player speed multiplier (0.75–1.0, mapped `0.75 + value * 0.25`)
   - `selected_level_name`: the currently selected campaign level id
 - **Main methods**:
-  - `_ready()`: Emits `TelemetrySystem.menu_opened("practice")`, rebuilds the level button list, selects and focuses the first level
+  - `_ready()`: Emits `TelemetrySystem.menu_opened("practice")`, rebuilds the level button list, selects and focuses the first level (without starting a run)
   - `_unhandled_input()`: While visible, `player_one_jump` starts the run (`GameSession.start_run` + `SceneLoader.go_to("res://main.tscn")`) and `ui_cancel` emits `closed`
-  - `_on_level_button_clicked(level_name)`: Loads the level preview and updates best time / attempts / progress bar / medal / selected label from `SaveManager`
-  - `_on_level_button_hovered(level_name)`: Loads the level preview on hover
+  - `_on_level_button_clicked(level_name)`: Sets `selected_level_name`, updates the display, and starts the run — mouse clicks and keyboard accept both launch the run directly
+  - `_on_level_button_hovered(level_name)`: Sets `selected_level_name` and updates the preview and stats on hover or focus (via `_update_level_display`). Mouse hover grabs focus, so mouse and controller/keyboard navigation share the same focus-driven path; the focused level is always the run target
+  - `_update_level_display(level_name)`: Loads the level preview and updates best time / attempts / progress bar / medal / selected label from `SaveManager`
   - `focus_first_level()`: Focuses the first level button (called by the host when the menu is shown)
 - **Signals**: `closed` — emitted on `ui_cancel` so the host can return to the main menu
 - **Integration points**: `CampaignLevelLibrary` (level list), `SaveManager` (per-level stats), `GameSession` (run start), `SceneLoader` (navigation), `TelemetrySystem` (menu telemetry)
@@ -111,6 +112,10 @@ System relationships and dependencies: This system integrates with player system
 
 ### `bonus_popup.gd` / `bonus_popup.tscn` / `bonus_popup_config.tres`
 - **Purpose**: Reusable one-shot "+bonus" popup that animates above a world position and frees itself. Spawned by `ArcadeRankHud` at level clear and by `BonusPopup.spawn()` from anywhere; timing tuned via `resources/bonus_popup_config.tres`.
+
+### `default_theme.tres` / `gameplay_theme.tres`
+- **Purpose**: The two UI themes. `default_theme.tres` is the global theme (`project.godot` → `gui/theme/custom`) for all menus; `gameplay_theme.tres` (`PressStart2P`) is applied to the live HUD, bonus popups, and powerup cards (see [[technical/ui/arcade-hud]]).
+- **Button highlight is focus-driven, not hover-driven**: both themes set `Button/styles/hover` to an empty `StyleBoxEmpty` (killing Godot's default gray hover shading) and `Button/styles/focus` to a `StyleBoxFlat` highlight (semi-transparent white fill + 1px white border). The focused button is the highlighted one — mouse hover still grabs focus (see `level_button.gd`), so mouse and keyboard/controller navigation share the same focus highlight.
 - Documented in [[technical/ui/arcade-hud]].
 
 ### `progress_bar.gd` *(removed)*

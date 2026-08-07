@@ -44,9 +44,11 @@ func _ready() -> void:
 		button.set_button_disabled(not SaveManager.has_level_data(level_name))
 		button.button_label = "%03d - %s" % [display_index, level_data.display_name]
 		button.pressed.connect(_on_level_button_clicked.bind(level_name))
+		button.hovered.connect(_on_level_button_hovered)
 
 		if display_index == 0:
-			_on_level_button_clicked(level_name)
+			selected_level_name = level_name
+			_update_level_display(level_name)
 			button.grab_focus()
 		display_index += 1
 
@@ -69,14 +71,19 @@ func focus_first_level() -> void:
 
 
 func _on_level_button_hovered(level_name: String) -> void:
-	var campaign_level := CampaignLevelLibrary.get_level(level_name)
-	level_node.load_level(campaign_level)
+	selected_level_name = level_name
+	_update_level_display(level_name)
 
 
 func _on_level_button_clicked(level_name: String) -> void:
+	selected_level_name = level_name
+	_update_level_display(level_name)
+	_start_run()
+
+
+func _update_level_display(level_name: String) -> void:
 	var campaign_level := CampaignLevelLibrary.get_level(level_name)
 	level_node.load_level(campaign_level)
-	selected_level_name = level_name
 
 	var level_data: LevelData = SaveManager.get_level_data(level_name)
 	var your_best_time = "Not Done Yet" if level_data.best_time == INF else Utils.format_time(level_data.best_time)
