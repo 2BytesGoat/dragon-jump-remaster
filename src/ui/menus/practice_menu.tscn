@@ -7,8 +7,12 @@
 [ext_resource type="Script" uid="uid://etwvvclap1my" path="res://src/scenes/level_select_camera_2d.gd" id="4_4sl2a"]
 [ext_resource type="Texture2D" uid="uid://eqrs1o0gl021" path="res://assets/ui/book/1.png" id="4_tocm5"]
 [ext_resource type="Script" uid="uid://ck17rvoje8kjt" path="res://src/ui/menus/practice_menu.gd" id="5_practice"]
-[ext_resource type="Texture2D" uid="uid://b5f0xwolxifu5" path="res://assets/ui/containers/frame_container.png" id="6_khj0t"]
+[ext_resource type="Texture2D" uid="uid://wgeqav5mlpca" path="res://assets/ui/containers/page_container.png" id="6_khj0t"]
 [ext_resource type="Theme" uid="uid://bwn751d5rabh2" path="res://src/ui/themes/practice_theme.tres" id="6_theme"]
+[ext_resource type="Texture2D" uid="uid://oaxj8utued2l" path="res://assets/ui/containers/page_container_2.png" id="8_7xfnp"]
+[ext_resource type="Texture2D" uid="uid://bojohplp4tink" path="res://assets/ui/bars/pbar_bg.png" id="9_xohi3"]
+[ext_resource type="Texture2D" uid="uid://cqimaaa11col4" path="res://assets/ui/bars/pbar_over.png" id="10_pmgpx"]
+[ext_resource type="Texture2D" uid="uid://4np5vpta8wsa" path="res://assets/ui/bars/pbar_fg.png" id="11_i0d8y"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4sl2a"]
 texture = ExtResource("3_7xfnp")
@@ -24,8 +28,16 @@ texture_margin_top = 16.0
 texture_margin_right = 16.0
 texture_margin_bottom = 16.0
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tocm5"]
+texture = ExtResource("8_7xfnp")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7xfnp"]
 bg_color = Color(0.03137255, 0.043137256, 0.08235294, 1)
+border_blend = true
 corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
@@ -121,9 +133,7 @@ uppercase = true
 [node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/HBoxContainer/LevelSelectContainer/VBoxContainer" unique_id=1825043278]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/margin_left = -3
-theme_override_constants/margin_right = -2
-theme_override_constants/margin_bottom = 2
+theme_override_constants/margin_bottom = 4
 
 [node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/LevelSelectContainer/VBoxContainer/MarginContainer2" unique_id=455764287]
 layout_mode = 2
@@ -133,10 +143,10 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_khj0t")
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/margin_left = 7
-theme_override_constants/margin_top = 7
-theme_override_constants/margin_right = 2
-theme_override_constants/margin_bottom = 7
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 9
+theme_override_constants/margin_right = 1
+theme_override_constants/margin_bottom = 8
 
 [node name="LevelButtons" type="ScrollContainer" parent="MarginContainer/HBoxContainer/LevelSelectContainer/VBoxContainer/MarginContainer2/MarginContainer" unique_id=2037041515]
 unique_name_in_owner = true
@@ -147,9 +157,9 @@ follow_focus = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/margin_left = 1
-theme_override_constants/margin_top = 3
+theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = -3
-theme_override_constants/margin_bottom = 3
+theme_override_constants/margin_bottom = 5
 
 [node name="LevelButtonContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/LevelSelectContainer/VBoxContainer/MarginContainer2/MarginContainer/LevelButtons/MarginContainer" unique_id=313330165]
 unique_name_in_owner = true
@@ -225,7 +235,7 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"HeaderLabel"
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 20
 text = "LEVEL 1-1"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -239,15 +249,19 @@ size_flags_vertical = 3
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/margin_left = 32
-theme_override_constants/margin_right = 32
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_right = 24
+
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer" unique_id=2099117896]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_tocm5")
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer" unique_id=1458765334]
 layout_mode = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
+theme_override_constants/margin_left = 9
+theme_override_constants/margin_top = 9
+theme_override_constants/margin_right = 9
+theme_override_constants/margin_bottom = 9
 
 [node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer/MarginContainer" unique_id=376619527]
 layout_mode = 2
@@ -258,10 +272,6 @@ layout_mode = 2
 texture = SubResource("ViewportTexture_rs8ex")
 expand_mode = 3
 stretch_mode = 5
-
-[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer" unique_id=1882379066]
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_khj0t")
 
 [node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer" unique_id=363287247]
 layout_mode = 2
@@ -281,8 +291,7 @@ uppercase = true
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=1137672825]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/margin_left = -3
-theme_override_constants/margin_right = -2
+theme_override_constants/margin_bottom = 4
 
 [node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MarginContainer" unique_id=710884985]
 layout_mode = 2
@@ -298,9 +307,9 @@ theme_override_constants/margin_bottom = 4
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MarginContainer/MarginContainer" unique_id=336293993]
 layout_mode = 2
 theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 6
+theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 6
+theme_override_constants/margin_bottom = 8
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MarginContainer/MarginContainer/MarginContainer" unique_id=1714740134]
 layout_mode = 2
@@ -309,16 +318,16 @@ layout_mode = 2
 layout_mode = 2
 size_flags_vertical = 0
 
-[node name="LevelProgressBar" type="ProgressBar" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MarginContainer/MarginContainer/MarginContainer/VBoxContainer/MedalContainer" unique_id=1808976563]
+[node name="LevelProgressBar" type="TextureProgressBar" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MarginContainer/MarginContainer/MarginContainer/VBoxContainer/MedalContainer" unique_id=803397570]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 12)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 4
 size_flags_vertical = 4
 max_value = 1.0
 step = 0.1
-value = 1.0
-show_percentage = false
+texture_under = ExtResource("9_xohi3")
+texture_over = ExtResource("10_pmgpx")
+texture_progress = ExtResource("11_i0d8y")
 
 [node name="LevelProgressMedalLabel" type="Label" parent="MarginContainer/HBoxContainer/LevelPreviewContainer/VBoxContainer2/VBoxContainer/MarginContainer2/VBoxContainer/MarginContainer/MarginContainer/MarginContainer/VBoxContainer/MedalContainer" unique_id=647936843]
 unique_name_in_owner = true
