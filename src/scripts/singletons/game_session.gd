@@ -12,6 +12,7 @@ var speed_modifier: float = 1.0
 var run_seed: int = 0
 var game_mode: GameModes = GameModes.PRACTICE
 var custom_level_code: String = ""
+var menu_started: bool = false
 
 
 func set_game_mode(mode: GameModes) -> void:
@@ -37,3 +38,4 @@ func clear() -> void:
 	custom_level_code = ""
 	speed_modifier = 1.0
 	run_seed = 0
+	menu_started = false

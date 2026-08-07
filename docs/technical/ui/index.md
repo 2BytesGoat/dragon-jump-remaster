@@ -27,15 +27,17 @@ System relationships and dependencies: This system integrates with player system
   - `jump_sfx`: `AudioStreamPlayer` on the SFX bus playing `swoosh.ogg` (same sound as the in-game jump effect)
 - **Layout** (compact arcade style): primary column of PLAY / PRACTICE / CREATE, then a footer row of small buttons: SETTINGS / CREDITS / DISCORD / WEB / QUIT
 - **Main methods**:
-  - `_ready()`: Shows the start container, hides the selection container, duplicates the mock's atlas texture, and starts the label blink tween
-  - `_unhandled_input()`: On `player_one_jump` (space / joypad A), starts the jump sequence
+  - `_ready()`: Shows the start container, hides the selection container, duplicates the mock's atlas texture, and starts the label blink tween. If `GameSession.menu_started` is already true (the player pressed JUMP earlier this session), it skips the title sequence and shows the selection container directly
+  - `_unhandled_input()`: On `player_one_jump` (space / joypad A), sets `GameSession.menu_started = true` and starts the jump sequence
   - `_set_player_frame(coords)`: Swaps the mock's atlas region to the given sprite-sheet coordinates (`IDLE_COORDS` / `JUMP_COORDS` / `FALL_COORDS`)
   - `_start_jump_sequence()`: Kills the blink, plays the jump SFX, switches the mock to the jump frame, and tweens it along the real jump arc (jump gravity to peak, then fall gravity) while drifting horizontally at the player's move speed, until it leaves the screen, fading it out near the bottom
   - `_jump_arc_step(t)`: Integrates the arc analytically; switches the mock to the fall frame once past the peak and moves it horizontally at `PhysicsParams.max_speed`
   - `_on_jump_sequence_finished()`: Hides the start container and fades the selection container in (`FADE_IN_DURATION`), then focuses the Play button (only runs once the mock's bottom edge is `EXIT_MARGIN` px past the bottom of the screen)
   - `_on_play_button_pressed()`: Starts an arcade run via `ArcadeDirector.start_arcade_run()` and navigates to `res://main.tscn` via `SceneLoader`
   - `_on_credits_button_pressed()`: Emits `credits_requested` so the host (`main_screen.gd`) can show the credits overlay
+  - `_on_practice_button_pressed()`: Emits `practice_requested` so the host (`main_screen.gd`) can show the practice menu
   - `focus_credits_button()`: Restores keyboard focus to the credits button after the overlay closes
+  - `focus_practice_button()`: Restores keyboard focus to the practice button after the practice menu closes
 - **Integration points with other systems**:
   - Jump arc constants come from `Constants.PHYSICS_PARAMS` (the same resource `Player` reads in `player.gd`), not re-declared locally
   - Connects to the `SceneLoader` autoload for scene navigation
@@ -43,6 +45,22 @@ System relationships and dependencies: This system integrates with player system
   - Uses Constants for default player name and social URLs
   - Uses Utils for player name validation
 - **RAG metadata**: Performance considerations include efficient scene transitions, optimization hints involve preloading scenes and validating input early
+
+### `practice_menu.gd` / `practice_menu.tscn`
+- **Purpose**: Level picker for practice runs. Replaces the old `level_select` flow: browse campaign levels, preview the selected level in a `SubViewport`, tune player speed, and start a run by pressing JUMP (no confirmation screen). Lives inside `main_screen.tscn` as a full-rect sibling of `MainMenu`; the standalone `practice_menu.tscn` is the same subtree with the script attached.
+- **Key properties**:
+  - `level_button_container`: `VBoxContainer` rebuilt at runtime from `CampaignLevelLibrary` (hidden levels skipped, unplayed levels disabled, labels formatted `%03d - name`)
+  - `level_node`: the `Level` instance inside the preview `SubViewport`, loaded on selection/hover
+  - `speed_slider`: player speed multiplier (0.75–1.0, mapped `0.75 + value * 0.25`)
+  - `selected_level_name`: the currently selected campaign level id
+- **Main methods**:
+  - `_ready()`: Emits `TelemetrySystem.menu_opened("practice")`, rebuilds the level button list, selects and focuses the first level
+  - `_unhandled_input()`: While visible, `player_one_jump` starts the run (`GameSession.start_run` + `SceneLoader.go_to("res://main.tscn")`) and `ui_cancel` emits `closed`
+  - `_on_level_button_clicked(level_name)`: Loads the level preview and updates best time / attempts / progress bar / medal / selected label from `SaveManager`
+  - `_on_level_button_hovered(level_name)`: Loads the level preview on hover
+  - `focus_first_level()`: Focuses the first level button (called by the host when the menu is shown)
+- **Signals**: `closed` — emitted on `ui_cancel` so the host can return to the main menu
+- **Integration points**: `CampaignLevelLibrary` (level list), `SaveManager` (per-level stats), `GameSession` (run start), `SceneLoader` (navigation), `TelemetrySystem` (menu telemetry)
 
 ### `custom_levels_menu.gd` / `custom_levels_menu.tscn`
 - **Purpose**: Browse imported custom levels, import new ones by pasting a level code (name + code via `LevelCodeParser` validation), play them, or delete them. Levels persist via `CustomLevelStore` (`user://custom_levels.json`).
@@ -61,6 +79,15 @@ System relationships and dependencies: This system integrates with player system
   - `close()`: Fades the overlay out (`FADE_DURATION`), hides it, then emits `closed`
 - **Signals**: `closed` — emitted after the fade-out completes, so the host can restore focus to the menu
 - **Integration points**: Embedded in `main_screen.tscn` as a full-rect sibling of `MainMenu`; shown/hidden by `main_screen.gd` (fade-in on `credits_requested`, focus restored on `closed`). Its `_unhandled_input` ignores input while hidden so it never swallows the title-screen jump key.
+
+### `main_screen.gd` / `main_screen.tscn`
+- **Purpose**: Root of the main menu. Hosts `MainMenu`, `PracticeMenu`, and the `CreditsScreen` overlay, toggling between them.
+- **Main methods**:
+  - `_ready()`: Connects `main_menu.credits_requested` / `main_menu.practice_requested` and `credits_screen.closed` / `practice_menu.closed`
+  - `_on_practice_requested()`: Hides the main menu, shows the practice menu, and focuses its first level
+  - `_on_practice_closed()`: Hides the practice menu, shows the main menu, and restores focus to the practice button
+  - `_on_credits_requested()` / `_on_credits_closed()`: Fade the credits overlay in/out (see `credits_screen.gd`)
+- **Integration points**: `main_menu.gd` (signals), `practice_menu.gd` (signals), `credits_screen.gd` (signals)
 
 ### `custom_level_store.gd`
 - **Purpose**: Static helper (not an autoload) that persists player-imported custom levels to `user://custom_levels.json` as `{ id: { "name", "code" } }`.

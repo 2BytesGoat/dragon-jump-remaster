@@ -97,6 +97,10 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 
 - [x] src/ui/menus/main_menu.gd — documented in [[technical/ui/index]]
 - [x] src/ui/menus/main_menu.tscn — documented in [[technical/ui/index]]
+- [x] src/ui/menus/main_screen.gd — documented in [[technical/ui/index]]
+- [x] src/ui/menus/main_screen.tscn — documented in [[technical/ui/index]]
+- [x] src/ui/menus/practice_menu.gd — documented in [[technical/ui/index]]
+- [x] src/ui/menus/practice_menu.tscn — documented in [[technical/ui/index]]
 - [x] src/ui/screens/custom_levels_menu.gd — documented in [[technical/ui/index]]
 - [x] src/ui/screens/custom_levels_menu.tscn — documented in [[technical/ui/index]]
 - [x] src/ui/screens/credits_screen.gd — documented in [[technical/ui/index]]

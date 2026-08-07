@@ -87,6 +87,7 @@ layout_mode = 2
 text = "PLAY"
 
 [node name="PracticeButton" parent="VBoxContainer/SelectionContainer/VBoxContainer" unique_id=1319238658 instance=ExtResource("2_xaiw4")]
+unique_name_in_owner = true
 layout_mode = 2
 text = "PRACTICE"
 
@@ -135,4 +136,5 @@ volume_db = -12.0
 bus = &"SFX"
 
 [connection signal="pressed" from="VBoxContainer/SelectionContainer/VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/SelectionContainer/VBoxContainer/PracticeButton" to="." method="_on_practice_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/SelectionContainer/VBoxContainer/CreditsButton" to="." method="_on_credits_button_pressed"]

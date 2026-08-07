@@ -4,6 +4,26 @@ This document captures high-level decisions as the project evolves.
 
 ---
 
+## 2026-08-07 — Title screen shows once per session
+
+**Context:** Returning to the main screen (e.g. exiting a practice run) replayed the "Press JUMP to Start" title sequence, forcing the player to press JUMP again before reaching the menu buttons.
+
+- **Decided the title sequence plays once per app session.** `GameSession.menu_started` is set on the first `player_one_jump` press; `main_menu.gd` skips the title sequence and shows the selection container directly when it is already true.
+- **The flag lives in `GameSession`** (ephemeral session state) and is reset by `GameSession.clear()`, so a fresh app launch replays the title.
+
+---
+
+## 2026-08-07 — Practice menu replaces level select
+
+**Context:** The old `level_select` flow (a separate scene with leaderboard toggles and START/BACK buttons) is being retired. The revamped main screen already embedded a practice-menu subtree; it needed the level-select behavior (level list, preview, stats, speed slider) without the leaderboard.
+
+- **Decided the practice menu is a full-rect sibling of `MainMenu` inside `main_screen.tscn`**, driven by a new `practice_menu.gd` (adapted from `level_select.gd`, minus leaderboard and START/BACK buttons). The standalone `src/ui/menus/practice_menu.tscn` is the same subtree with the script attached.
+- **JUMP starts the run directly** — no confirmation screen. `player_one_jump` calls `GameSession.start_run(level, 0.75 + slider * 0.25)` then `SceneLoader.go_to("res://main.tscn")`; `ui_cancel` emits `closed` back to the main menu.
+- **Main menu PRACTICE button is now wired** (`practice_requested` signal → `main_screen.gd` shows the practice menu and focuses its first level).
+- **`main.gd` exit path now returns to `main_screen.tscn`** instead of `level_select.tscn`. `level_select.gd/.tscn` remain in the repo until removed.
+
+---
+
 ## 2026-08-06 — Two-font UI system (menus vs. gameplay)
 
 **Context:** The whole game — menus *and* the live HUD — rendered in `Awesome 9`, a chunky decorative font that reads poorly at small sizes. During gameplay (timer, score, rank band) it was distracting and hurt legibility.

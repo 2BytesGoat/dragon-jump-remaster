@@ -18,7 +18,7 @@ extends Node
 @onready var player_scene = preload("res://src/scenes/player/player.tscn")
 @onready var camera_scene = preload("res://src/scenes/camera_2d.tscn")
 @onready var portal_scene = preload("res://src/scenes/level/tiles/portal.tscn")
-var level_scene_path = "res://src/ui/menus/level_select.tscn"
+var level_scene_path = "res://src/ui/menus/main_screen.tscn"
 
 var race_finished: bool = false
 var is_game_paused: bool = false

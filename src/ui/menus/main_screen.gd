@@ -7,12 +7,27 @@ extends Control
 const FADE_IN_DURATION := 0.5
 
 @onready var main_menu: MarginContainer = $MainMenu
+@onready var practice_menu: MarginContainer = $PracticeMenu
 @onready var credits_screen: MarginContainer = %CreditsScreen
 
 
 func _ready() -> void:
 	main_menu.credits_requested.connect(_on_credits_requested)
+	main_menu.practice_requested.connect(_on_practice_requested)
 	credits_screen.closed.connect(_on_credits_closed)
+	practice_menu.closed.connect(_on_practice_closed)
+
+
+func _on_practice_requested() -> void:
+	main_menu.visible = false
+	practice_menu.visible = true
+	practice_menu.focus_first_level()
+
+
+func _on_practice_closed() -> void:
+	practice_menu.visible = false
+	main_menu.visible = true
+	main_menu.focus_practice_button()
 
 
 func _on_credits_requested() -> void:

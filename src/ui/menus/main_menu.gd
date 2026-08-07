@@ -15,16 +15,17 @@ const JUMP_COORDS = Vector2(448, 0)
 const FALL_COORDS = Vector2(416, 0)
 
 signal credits_requested
+signal practice_requested
 
 @onready var start_container = %StartContainer
 @onready var selection_container = %SelectionContainer
 @onready var player_mock: TextureRect = %PlayerMock
 @onready var press_key_label: Label = %PressKeyLabel
 @onready var play_button: Button = %PlayButton
+@onready var practice_button: Button = %PracticeButton
 @onready var credits_button: Button = %CreditsButton
 @onready var jump_sfx: AudioStreamPlayer = $JumpSFX
 
-var _started := false
 var _blink_tween: Tween
 var _player_atlas: AtlasTexture
 var _jump_velocity := 0.0
@@ -39,17 +40,31 @@ var _transitioning := false
 func _ready() -> void:
 	start_container.visible = true
 	selection_container.visible = false
+	if GameSession.menu_started:
+		_skip_title_sequence()
+		return
 	_player_atlas = player_mock.texture.duplicate()
 	player_mock.texture = _player_atlas
 	_set_player_frame(IDLE_COORDS)
 	_start_blink()
 
 
+func _skip_title_sequence() -> void:
+	start_container.visible = false
+	selection_container.visible = true
+	call_deferred("_focus_play_button")
+
+
+func _focus_play_button() -> void:
+	play_button.grab_focus()
+
+
 func _unhandled_input(event: InputEvent) -> void:
-	if _started:
+	if GameSession.menu_started:
 		return
 	if event.is_action_pressed("player_one_jump"):
 		get_viewport().set_input_as_handled()
+		GameSession.menu_started = true
 		_start_jump_sequence()
 
 
@@ -65,7 +80,6 @@ func _set_player_frame(coords: Vector2) -> void:
 
 
 func _start_jump_sequence() -> void:
-	_started = true
 	if _blink_tween != null and _blink_tween.is_valid():
 		_blink_tween.kill()
 	press_key_label.modulate.a = 1.0
@@ -138,5 +152,13 @@ func _on_credits_button_pressed() -> void:
 	credits_requested.emit()
 
 
+func _on_practice_button_pressed() -> void:
+	practice_requested.emit()
+
+
 func focus_credits_button() -> void:
 	credits_button.grab_focus()
+
+
+func focus_practice_button() -> void:
+	practice_button.grab_focus()
