@@ -12,7 +12,6 @@ const SETTINGS_VERSION := 1
 @export var sfx_volume: float = 1.0
 @export var fullscreen: bool = false
 @export var crt_enabled: bool = true
-@export var scanlines_enabled: bool = true
 
 
 func migrate() -> void:

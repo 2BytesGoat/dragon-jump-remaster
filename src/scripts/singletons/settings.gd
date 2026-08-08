@@ -5,7 +5,6 @@ extends Node
 ## Persisted independently from progress data via SettingsData.
 
 signal crt_toggled(enabled: bool)
-signal scanlines_toggled(enabled: bool)
 
 const SETTINGS_PATH := "user://settings.res"
 const SETTINGS_VERSION := 1
@@ -30,7 +29,6 @@ var music_volume: float = 1.0 : set = set_music_volume
 var sfx_volume: float = 1.0 : set = set_sfx_volume
 var fullscreen: bool = false : set = set_fullscreen
 var crt_enabled: bool = true : set = set_crt_enabled
-var scanlines_enabled: bool = true : set = set_scanlines_enabled
 
 
 func load_settings() -> void:
@@ -90,7 +88,6 @@ func _sync_from_data() -> void:
 	sfx_volume = _settings_data.sfx_volume
 	fullscreen = _settings_data.fullscreen
 	crt_enabled = _settings_data.crt_enabled
-	scanlines_enabled = _settings_data.scanlines_enabled
 
 
 func _sync_to_data() -> void:
@@ -99,7 +96,6 @@ func _sync_to_data() -> void:
 	_settings_data.sfx_volume = sfx_volume
 	_settings_data.fullscreen = fullscreen
 	_settings_data.crt_enabled = crt_enabled
-	_settings_data.scanlines_enabled = scanlines_enabled
 
 
 func set_master_volume(value: float) -> void:
@@ -128,11 +124,6 @@ func set_fullscreen(value: bool) -> void:
 func set_crt_enabled(value: bool) -> void:
 	crt_enabled = value
 	crt_toggled.emit(value)
-
-
-func set_scanlines_enabled(value: bool) -> void:
-	scanlines_enabled = value
-	scanlines_toggled.emit(value)
 
 
 func _apply_settings() -> void:

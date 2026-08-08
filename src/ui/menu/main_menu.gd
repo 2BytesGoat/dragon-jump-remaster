@@ -25,6 +25,8 @@ signal title_sequence_finished
 @onready var play_button: Button = %PlayButton
 @onready var practice_button: Button = %PracticeButton
 @onready var credits_button: Button = %CreditsButton
+@onready var settings_button: TextureButton = %SettingsButton
+@onready var settings_menu: MarginContainer = $SettingsMenu
 @onready var jump_sfx: AudioStreamPlayer = $JumpSFX
 
 var _blink_tween: Tween
@@ -164,6 +166,38 @@ func _on_practice_button_pressed() -> void:
 
 func _on_quit_button_pressed() -> void:
 	get_tree().quit()
+
+
+func _on_settings_button_pressed() -> void:
+	settings_menu.visible = true
+	_set_selection_focusable(false)
+	var close_button := settings_menu.find_child("CloseButton", true, false)
+	if close_button is Button:
+		close_button.grab_focus()
+
+
+func _on_settings_menu_close_me() -> void:
+	_set_selection_focusable(true)
+	settings_menu.visible = false
+	settings_button.grab_focus()
+
+
+func _set_selection_focusable(enabled: bool) -> void:
+	for child in selection_container.find_children("*", "Control", true, false):
+		if child.focus_mode != Control.FOCUS_NONE:
+			child.focus_mode = Control.FOCUS_ALL if enabled else Control.FOCUS_NONE
+
+
+func _on_github_button_pressed() -> void:
+	OS.shell_open(Constants.GITHUB_URL)
+
+
+func _on_discord_button_pressed() -> void:
+	OS.shell_open(Constants.DISCORD_URL)
+
+
+func _on_steam_button_pressed() -> void:
+	OS.shell_open(Constants.STEAM_URL)
 
 
 func focus_credits_button() -> void:

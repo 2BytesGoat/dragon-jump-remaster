@@ -4,6 +4,22 @@ This document captures high-level decisions as the project evolves.
 
 ---
 
+## 2026-08-08 — Slider focus highlight via grabber_area_highlight, not focus stylebox
+
+**Context:** The settings sliders (Master / Music / SFX) showed no visible focus highlight when navigated with the keyboard/controller. An initial attempt set `HSlider/styles/focus` to a `StyleBoxFlat`, which did nothing — Godot's `Slider` never draws a `focus` stylebox in its `NOTIFICATION_DRAW` (only Buttons do). When a slider is focused or hovered it instead swaps the grabber to `grabber_highlight` and draws `grabber_area_highlight` over the filled track.
+
+- **Decided to drive the slider highlight through `grabber_area_highlight` and `grabber_highlight`** in `practice_theme.tres`. `grabber_area_highlight` is a translucent brown fill + 1px brown border (same palette as the button focus style), drawn over the filled portion of the track; `grabber_highlight` is set to `silver_grabber_pressed.png` so the grabber stays silver when focused instead of flipping to the dark `grabber.png`. `HSlider/styles/focus` stays an empty stylebox. Applies to every slider using the theme (settings, pause, game-over, and practice — the practice `SpeedSlider` highlights on hover since it is non-focusable).
+
+---
+
+## 2026-08-08 — Main menu settings overlay is focus-modal
+
+**Context:** The settings overlay in `main_menu.tscn` grabbed focus onto its `CloseButton` when opened, but the underlying menu buttons (PLAY / PRACTICE / CREDITS / QUIT / footer) stayed focusable. Arrow-key navigation could fall through the settings controls to a button behind it, and activating it with Space/Enter ran the action while settings was open (e.g. starting an arcade run). Mouse clicks were already blocked by the overlay's full-rect `Panel`; the leak was focus-only.
+
+- **Decided the settings overlay disables focus on the selection container while open.** `main_menu.gd` adds `_set_selection_focusable(enabled)`, which walks `selection_container` and sets `focus_mode` to `FOCUS_NONE` (disabled) / `FOCUS_ALL` (restored) on every focusable control. It runs in `_on_settings_button_pressed()` before grabbing the `CloseButton`, and in `_on_settings_menu_close_me()` before restoring focus to the settings button. The up/down re-grab fallback in `_unhandled_input` is naturally inert while settings is open (Play is not focusable), so keyboard/controller input stays captured by the settings controls.
+
+---
+
 ## 2026-08-08 — CRT effect via hint_screen_texture, SubViewport removed from main scenes
 
 **Context:** The CRT effect used a `ViewportTexture` sampling a 640×360 `SubViewport`, which meant the entire game rendered at low resolution and was then upscaled — blurring everything. The `CompositorEffect` API was considered but requires Forward+/Mobile renderers, which would break WebGL exports.
@@ -13,7 +29,7 @@ This document captures high-level decisions as the project evolves.
 - **The CRT widget (`crt_effect.tscn`) is now a `CanvasLayer`** (layer 128) containing the `ColorRect` with the shader material. No `ViewportTexture` sub-resource needed — `hint_screen_texture` auto-populates.
 - **`practice_menu.tscn` keeps its own `SubViewport`** (320×240) for the level preview thumbnail — untouched.
 - **`gl_compatibility` renderer unchanged** — WebGL export still works.
-- **CRT/scanline toggles live in Settings:** `SettingsData.crt_enabled` and `SettingsData.scanlines_enabled` (both default true), with `crt_toggled` / `scanlines_toggled` signals and `CheckBox`es in the settings menu UI. **The `crt_effect` widget is self-managed:** `crt_effect.gd` (attached to the widget root) reads `Settings` on `_ready` and connects to both signals itself, so any scene embedding `crt_effect.tscn` (gameplay `main.tscn` and menu `main_screen.tscn`) applies the toggles automatically — no per-scene wiring. Scanlines-off bypasses the scanline math but keeps the phosphor mask, curve, and wobble.
+- **CRT toggle lives in Settings:** `SettingsData.crt_enabled` (default true), with a `crt_toggled` signal and a `CheckBox` in the settings menu UI. **The `crt_effect` widget is self-managed:** `crt_effect.gd` (attached to the widget root) reads `Settings` on `_ready` and connects to the `crt_toggled` signal itself, so any scene embedding `crt_effect.tscn` (gameplay `main.tscn` and menu `main_screen.tscn`) applies the toggle automatically — no per-scene wiring. The scanline toggle (`scanlines_enabled` setting / `scanlines_toggled` signal / settings-menu `Scanlines` checkbox) was later removed; the shader's scanlines always render while CRT is enabled.
 - **`card_scene.gd` simplified:** `_find_gameplay_sub_viewport()` removed; `_to_card_local()` now uses `get_viewport().get_canvas_transform()` directly.
 
 ---

@@ -108,8 +108,10 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 - [ ] src/ui/widgets/level_button.gd
 - [ ] src/ui/widgets/level_button.tscn
 - [ ] src/ui/widgets/speed_slider_label.gd
+- [ ] src/ui/widgets/menu_button_base.gd
 - [ ] src/ui/widgets/menu_button.gd
 - [ ] src/ui/widgets/menu_button.tscn
+- [ ] src/ui/widgets/texture_menu_button.gd
 - [ ] src/ui/widgets/others_label.tscn
 - [ ] src/ui/gameplay/pause.gd
 - [ ] src/ui/gameplay/pause.tscn

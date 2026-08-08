@@ -25,7 +25,7 @@ System relationships and dependencies: This system integrates with player system
   - `player_mock`: `TextureRect` showing the player sprite via an `AtlasTexture` (duplicated at runtime so frames can be swapped by region)
   - `press_key_label`: The blinking "Press JUMP to Start" label
   - `jump_sfx`: `AudioStreamPlayer` on the SFX bus playing `swoosh.ogg` (same sound as the in-game jump effect)
-- **Layout** (compact arcade style): primary column of PLAY / PRACTICE / CREATE, then a footer row of small buttons: SETTINGS / CREDITS / DISCORD / WEB / QUIT
+- **Layout** (compact arcade style): primary column of PLAY / PRACTICE / CREATE, then a footer row of small buttons: GITHUB / DISCORD / STEAM / SETTINGS, then CREDITS / QUIT
 - **Main methods**:
   - `_ready()`: Shows the start container, hides the selection container, duplicates the mock's atlas texture, and starts the label blink tween. If `GameSession.menu_started` is already true (the player pressed JUMP earlier this session), it skips the title sequence and shows the selection container directly
   - `_unhandled_input()`: On `player_one_jump` (space / joypad A), calls `GameSession.start_menu()` (sets `menu_started` and emits the `menu_started_changed` signal) and starts the jump sequence. Once the menu is started, if the selection container is visible and no control has focus (e.g. the cursor left a button, which releases focus), pressing `ui_up` / `ui_down` re-grabs focus on the Play button so arrow-key navigation keeps working
@@ -37,6 +37,10 @@ System relationships and dependencies: This system integrates with player system
   - `_on_credits_button_pressed()`: Emits `credits_requested` so the host (`main_screen.gd`) can show the credits overlay
   - `_on_practice_button_pressed()`: Emits `practice_requested` so the host (`main_screen.gd`) can show the practice menu
   - `_on_quit_button_pressed()`: Quits the game via `get_tree().quit()`
+  - `_on_settings_button_pressed()`: Shows the `SettingsMenu` overlay, disables focus on every selection-container control via `_set_selection_focusable(false)`, and focuses its `CloseButton`
+  - `_on_settings_menu_close_me()`: Restores focusability via `_set_selection_focusable(true)`, hides the `SettingsMenu` overlay, and restores focus to the settings button
+  - `_set_selection_focusable(enabled)`: Recursively walks `selection_container` and sets `focus_mode` to `FOCUS_ALL` (enabled) or `FOCUS_NONE` (disabled) on every focusable control, making the settings overlay focus-modal so keyboard/controller navigation cannot escape to PLAY / PRACTICE / CREDITS / QUIT / footer buttons while it is open
+  - `_on_github_button_pressed()` / `_on_discord_button_pressed()` / `_on_steam_button_pressed()`: Open the social URLs via `OS.shell_open(Constants.GITHUB_URL / DISCORD_URL / STEAM_URL)` (placeholder URLs until launch)
   - `focus_credits_button()`: Restores keyboard focus to the credits button after the overlay closes
   - `focus_practice_button()`: Restores keyboard focus to the practice button after the practice menu closes
 - **Integration points with other systems**:
@@ -46,6 +50,25 @@ System relationships and dependencies: This system integrates with player system
   - Uses Constants for default player name and social URLs
   - Uses Utils for player name validation
 - **RAG metadata**: Performance considerations include efficient scene transitions, optimization hints involve preloading scenes and validating input early
+
+### `menu_button_base.gd`
+- **Purpose**: Shared highlight behavior for all menu buttons. Extends `BaseButton` (the common parent of `Button` and `TextureButton`) so both text and icon buttons inherit the same pop-scale feedback. Subclasses only need to `extends MenuButtonBase` — the base connects its own signals in `_ready()`.
+- **Key properties**: `_hover_tween` — the active scale tween, killed and restarted on each state change
+- **Main methods**:
+  - `_ready()`: Connects `button_down` / `button_up` / `focus_entered` / `focus_exited` / `mouse_entered` / `mouse_exited` to the handlers below, so subclasses need no scene wiring
+  - `_on_mouse_entered()`: Grabs focus (unless pressed or disabled), so mouse hover and keyboard/controller focus share the same highlight path
+  - `_on_mouse_exited()`: Releases focus
+  - `_on_focus_entered()` / `_on_focus_exited()`: Pop the scale to 1.2 / 1.0
+  - `_on_button_down()` / `_on_button_up()`: Pop the scale to 1.0 / 1.1
+  - `_pop_scale(target)`: Tweens `scale` to `target` over 0.1 s with `TRANS_BACK` / `EASE_OUT`, pivoting around the button center
+- **Subclasses**: `CustomMenuButton` (`menu_button.gd`, extends `Button`) and `TextureMenuButton` (`texture_menu_button.gd`, extends `TextureButton`)
+
+### `menu_button.gd`
+- **Purpose**: Standard text menu button (`Button`). All highlight / pop-scale behavior is inherited from `MenuButtonBase`; the script only declares `class_name CustomMenuButton`.
+
+### `texture_menu_button.gd`
+- **Purpose**: Icon menu button (`TextureButton`) used for the main-menu footer social/settings buttons. All highlight / pop-scale behavior is inherited from `MenuButtonBase`; the script only declares `class_name TextureMenuButton`.
+- **Arrow indicator**: While focused, `_draw()` renders a small filled down-triangle (`ARROW_WIDTH` × `ARROW_HEIGHT`, soft white) centered above the icon's top edge. `_on_focus_entered()` / `_on_focus_exited()` override the base handlers (calling `super()` first) to toggle `_arrow_visible` and `queue_redraw()`. Because `MenuButtonBase` routes mouse hover through focus, the arrow appears on both hover and keyboard/controller focus, and pops in scale with the icon.
 
 ### `practice_menu.gd` / `practice_menu.tscn`
 - **Purpose**: Level picker for practice runs. Replaces the old `level_select` flow: browse campaign levels, preview the selected level in a `SubViewport`, tune player speed, and start a run by pressing JUMP (no confirmation screen). Lives inside `main_screen.tscn` as a full-rect sibling of `MainMenu`; the standalone `practice_menu.tscn` is the same subtree with the script attached.
@@ -107,7 +130,7 @@ System relationships and dependencies: This system integrates with player system
 - **`practice_theme.tres`** is a derived theme for the practice menu ([[technical/ui/index]] — see `practice_menu.tscn`). It sets `base_theme` to `default_theme.tres` so it inherits everything, then overrides:
   - **Body text** (`Label` default) → `PressStart2P-Regular.ttf` at size 10, so list items, stat values, and level buttons render in the "other" font
   - **Headers** (`Label` type variation `"HeaderLabel"`) → `Awesome 9.ttf` at size 18, applied via `theme_type_variation = &"HeaderLabel"` on section/stat labels (Player Speed:, Select Level:, MASTERY:, the level title, Attempts:, Your Best:, World Best:)
-  - **`HSlider` skins** → silver track (`silver_slider_empty.png` as the `slider` stylebox) and silver grabber (`silver_grabber_normal.png` / `silver_grabber_pressed.png` as `grabber_icon` / `grabber_icon_pressed`), plus a white-outline focus box matching the Button focus style. These only affect sliders under the practice menu — settings-menu sliders keep the unstyled global theme.
+  - **`HSlider` skins** → silver track (`silver_slider_empty.png` as the `slider` stylebox) and silver grabber (`silver_grabber_normal.png` / `silver_grabber_pressed.png` as `grabber_icon` / `grabber_icon_pressed`). Focus/hover highlight uses the two styleboxes Slider actually draws when focused: `grabber_area_highlight` (a translucent brown fill + 1px border matching the Button focus style, drawn over the filled track) and `grabber_highlight` (the pressed silver grabber, so the grabber stays silver instead of flipping to the dark `grabber.png`). `HSlider/styles/focus` is intentionally left empty — Godot's `Slider` never draws a `focus` stylebox. Since `settings.tscn`, `pause.tscn`, `game_over.tscn`, and `practice_menu.tscn` use this theme, their sliders all get the same highlight automatically.
 - **Button highlight is focus-driven, not hover-driven**: both base themes set `Button/styles/hover` to an empty `StyleBoxEmpty` (killing Godot's default gray hover shading) and `Button/styles/focus` to a `StyleBoxFlat` highlight (semi-transparent white fill + 1px white border). The focused button is the highlighted one — mouse hover still grabs focus (see `level_button.gd`), so mouse and keyboard/controller navigation share the same focus highlight. `practice_theme.tres` inherits this via `base_theme`, but overrides `Button/styles/focus` with a **brown** highlight (same brown as the book theme's `Label` text, 15%-alpha fill + 1px border) to match the light parchment pages; `Button/styles/hover` stays empty (inherited).
 - Documented in [[technical/ui/arcade-hud]].
 
@@ -116,12 +139,14 @@ Progress-bar mode was cut for V1.0 (see [[technical/architecture]]). No such fil
 
 ## Scene Components (`*.tscn`)
 ### `main_menu.tscn`
-- **Scene hierarchy and organization**: MarginContainer containing logo, a start container (PlayerMock + blinking "Press JUMP to Start" label), the primary button column (PLAY / PRACTICE / CREATE), footer row (SETTINGS / CREDITS / DISCORD / WEB / QUIT), and a `JumpSFX` `AudioStreamPlayer` on the SFX bus
+- **Scene hierarchy and organization**: MarginContainer containing logo, a start container (PlayerMock + blinking "Press JUMP to Start" label), the primary button column (PLAY / PRACTICE / CREATE), footer row (GITHUB / DISCORD / STEAM / SETTINGS), CREDITS / QUIT, a `SettingsMenu` overlay (instance of `settings.tscn`, hidden by default), and a `JumpSFX` `AudioStreamPlayer` on the SFX bus
 - **Key connections between elements**:
   - `PlayerMock` is a `TextureRect` on an `AtlasTexture` of `player_v3.png`; the script swaps the atlas region between idle / jump / fall coordinates on jump input
-  - `StartContainer`, `SelectionContainer`, `PlayerMock`, `PressKeyLabel`, and `PlayButton` are unique-name nodes referenced by `main_menu.gd`
+  - `StartContainer`, `SelectionContainer`, `PlayerMock`, `PressKeyLabel`, `PlayButton`, and `SettingsButton` are unique-name nodes referenced by `main_menu.gd`
   - Connects to button press signals for navigation
   - `QuitButton` connects `pressed` to `_on_quit_button_pressed()`, which quits the game
+  - `GithubButton` / `DiscordButton` / `SteamButton` connect `pressed` to their `_on_*_button_pressed()` handlers, which open the social URLs via `OS.shell_open`. All four footer buttons (`GithubButton` / `DiscordButton` / `SteamButton` / `SettingsButton`) run `texture_menu_button.gd` (`TextureMenuButton`), so they pop-scale on focus / hover / press like the text menu buttons
+  - `SettingsButton` connects `pressed` to `_on_settings_button_pressed()`, which shows the `SettingsMenu` overlay; the overlay's `close_me` signal connects to `_on_settings_menu_close_me()` to hide it and restore focus
   - Uses the `SceneLoader` autoload for scene transitions
 - **Visual layout considerations**: 
   - Uses MarginContainer for proper positioning

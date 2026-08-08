@@ -3,9 +3,14 @@
 [ext_resource type="Texture2D" uid="uid://ctojsl0e08r07" path="res://assets/logos/Logo2.png" id="1_wuc7m"]
 [ext_resource type="Script" uid="uid://l72nox7uj843" path="res://src/ui/menu/main_menu.gd" id="2_hcfgv"]
 [ext_resource type="PackedScene" uid="uid://bnxudkobrdgtb" path="res://src/ui/widgets/menu_button.tscn" id="2_xaiw4"]
-[ext_resource type="Texture2D" uid="uid://cwkemtynu1s2u" path="res://icon.png" id="4_vs67m"]
+[ext_resource type="Texture2D" uid="uid://co5wvuoqku1ke" path="res://assets/ui/icons/github.png" id="5_52atu"]
 [ext_resource type="Texture2D" uid="uid://d2kcrysq5lr7d" path="res://assets/sprites/player/player_v3.png" id="5_playerv3"]
+[ext_resource type="Texture2D" uid="uid://cgmtfbedo37kc" path="res://assets/ui/icons/11.png" id="6_4ty6e"]
+[ext_resource type="Texture2D" uid="uid://bxtiadl1t08hm" path="res://assets/ui/icons/discord.png" id="6_b3hne"]
 [ext_resource type="AudioStream" uid="uid://c77tp4o0gqjbv" path="res://assets/sfx/swoosh.ogg" id="6_sfx_jump"]
+[ext_resource type="Texture2D" uid="uid://dxx5qhb5hikm0" path="res://assets/ui/icons/steam.png" id="7_q32vd"]
+[ext_resource type="PackedScene" uid="uid://dws2c5qkd8x6q" path="res://src/ui/gameplay/settings.tscn" id="9_b3hne"]
+[ext_resource type="Script" uid="uid://ds7cn684ytdg3" path="res://src/ui/widgets/texture_menu_button.gd" id="10_tmb"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_y3puo"]
 atlas = ExtResource("5_playerv3")
@@ -113,23 +118,51 @@ text = "QUIT"
 layout_mode = 2
 size_flags_vertical = 8
 
-[node name="Discord" type="TextureRect" parent="VBoxContainer/SelectionContainer/FooterContainer" unique_id=1309885730]
+[node name="GithubButton" type="TextureButton" parent="VBoxContainer/SelectionContainer/FooterContainer" unique_id=1851276372]
+custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
-size_flags_horizontal = 8
-texture = ExtResource("4_vs67m")
-stretch_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+texture_normal = ExtResource("5_52atu")
+ignore_texture_size = true
+stretch_mode = 5
+script = ExtResource("10_tmb")
 
-[node name="Github" type="TextureRect" parent="VBoxContainer/SelectionContainer/FooterContainer" unique_id=226391806]
+[node name="DiscordButton" type="TextureButton" parent="VBoxContainer/SelectionContainer/FooterContainer" unique_id=1200816860]
+custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
-size_flags_horizontal = 8
-texture = ExtResource("4_vs67m")
-stretch_mode = 2
-flip_h = true
+size_flags_horizontal = 0
+size_flags_vertical = 4
+texture_normal = ExtResource("6_b3hne")
+ignore_texture_size = true
+stretch_mode = 5
+script = ExtResource("10_tmb")
 
-[node name="SettingsButton" type="TextureButton" parent="VBoxContainer/SelectionContainer/FooterContainer" unique_id=1200816860]
+[node name="SteamButton" type="TextureButton" parent="VBoxContainer/SelectionContainer/FooterContainer" unique_id=1459836198]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+texture_normal = ExtResource("7_q32vd")
+ignore_texture_size = true
+stretch_mode = 5
+script = ExtResource("10_tmb")
+
+[node name="SettingsButton" type="TextureButton" parent="VBoxContainer/SelectionContainer/FooterContainer" unique_id=557374631]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
 size_flags_horizontal = 10
-texture_normal = ExtResource("4_vs67m")
+texture_normal = ExtResource("6_4ty6e")
+stretch_mode = 0
+script = ExtResource("10_tmb")
+
+[node name="SettingsMenu" parent="." unique_id=435797117 instance=ExtResource("9_b3hne")]
+visible = false
+z_index = 1
+layout_mode = 2
+size_flags_vertical = 2
+theme_override_constants/margin_bottom = -32
 
 [node name="JumpSFX" type="AudioStreamPlayer" parent="." unique_id=1200816861]
 stream = ExtResource("6_sfx_jump")
@@ -140,3 +173,8 @@ bus = &"SFX"
 [connection signal="pressed" from="VBoxContainer/SelectionContainer/VBoxContainer/PracticeButton" to="." method="_on_practice_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/SelectionContainer/VBoxContainer/CreditsButton" to="." method="_on_credits_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/SelectionContainer/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/SelectionContainer/FooterContainer/GithubButton" to="." method="_on_github_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/SelectionContainer/FooterContainer/DiscordButton" to="." method="_on_discord_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/SelectionContainer/FooterContainer/SteamButton" to="." method="_on_steam_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/SelectionContainer/FooterContainer/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="close_me" from="SettingsMenu" to="." method="_on_settings_menu_close_me"]

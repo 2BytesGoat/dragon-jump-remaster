@@ -38,3 +38,4 @@ layout_mode = 1
 
 [node name="CRTScreenEffect" parent="." unique_id=1412518820 instance=ExtResource("7_mjl86")]
 follow_viewport_enabled = true
+script = null
