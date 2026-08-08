@@ -10,8 +10,8 @@ const MUSIC_VOLUME_DB := -15.0
 
 const GROOVY_BOOTY := preload("res://assets/music/Groovy booty.ogg")
 
-@onready var main_menu: MarginContainer = $MainMenu
-@onready var practice_menu: MarginContainer = $PracticeMenu
+@onready var main_menu: MarginContainer = %MainMenu
+@onready var practice_menu: MarginContainer = %PracticeMenu
 @onready var credits_screen: MarginContainer = %CreditsScreen
 
 var _transitioning := false

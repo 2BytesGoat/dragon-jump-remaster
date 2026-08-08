@@ -12,7 +12,7 @@ func run() -> bool:
 	add_child(main_menu)
 
 	var play_button := main_menu.get_node_or_null(
-		"SubViewportContainer/SubViewport/MenuSelectionScreen/VBoxContainer/VBoxContainer2/Panel/VBoxContainer/PlayButton"
+		"VBoxContainer/SelectionContainer/VBoxContainer/PlayButton"
 	)
 	var passed := main_menu.name == "MainMenu" and play_button != null
 	if not passed:

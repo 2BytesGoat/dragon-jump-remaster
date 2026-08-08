@@ -98,24 +98,22 @@ The main scene serves as the container for all game elements and manages their r
 ```
 Main (Node)
 ├── RunTimer (Run clock: total_time + play-time accumulation)
-├── SubViewportContainer
-│   └── SubViewport
-│       ├── ScreenShake
-│       ├── HitStop
-│       ├── GPUParticles2D (Background particles)
-│       ├── Level (Level scene instance)
-│       ├── Camera2D (Camera instance)
-│       ├── Players (Player container)
-│       ├── CanvasLayer
-│       │   ├── CardContainerContainer (Power-up cards)
-│       │   ├── PauseScreen (Pause UI)
-│       │   ├── EndScreen (End game UI)
-│       │   ├── ArcadeGameOverScreen
-│       │   ├── ArcadeRankHud
-│       │   │   └── TimeContainer (Run timer label — display only)
-│       │   └── TransitionWipe
-│       └── AudioStreamPlayer (Music player)
-└── CRTScreenEffect (Visual effect)
+├── ScreenShake
+├── HitStop
+├── GPUParticles2D (Background particles)
+├── Level (Level scene instance)
+├── Camera2D (Camera instance)
+├── Players (Player container)
+├── CanvasLayer
+│   ├── CardContainerContainer (Power-up cards)
+│   ├── PauseScreen (Pause UI)
+│   ├── EndScreen (End game UI)
+│   ├── ArcadeGameOverScreen
+│   ├── ArcadeRankHud
+│   │   └── TimeContainer (Run timer label — display only)
+│   └── TransitionWipe
+├── CRTScreenEffect (Visual effect — CanvasLayer at layer 128, self-managed CRT widget)
+└── AudioStreamPlayer (Music player)
 ```
 
 ### Key Connections

@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://p3lou48biwtg" path="res://src/scenes/effects/background_particles.tscn" id="3_qqh6h"]
 [ext_resource type="PackedScene" uid="uid://0c7hrkqyixn1" path="res://src/ui/menu/main_menu.tscn" id="4_suuo2"]
 [ext_resource type="PackedScene" uid="uid://cid5870qwa77a" path="res://src/ui/menu/practice_menu.tscn" id="5_0253g"]
+[ext_resource type="PackedScene" uid="uid://fcxn3r6i8mg5" path="res://src/ui/widgets/crt_effect.tscn" id="7_mjl86"]
 [ext_resource type="PackedScene" uid="uid://c68g8lfbs5ub5" path="res://src/ui/menu/credits.tscn" id="9_7530n"]
 
 [node name="MainScreen" type="Control" unique_id=1832555998]
@@ -21,12 +22,19 @@ script = ExtResource("2_ubacl")
 position = Vector2(321, 0)
 
 [node name="MainMenu" parent="." unique_id=602409232 instance=ExtResource("4_suuo2")]
+unique_name_in_owner = true
 layout_mode = 1
 
 [node name="PracticeMenu" parent="." unique_id=460918565 instance=ExtResource("5_0253g")]
+unique_name_in_owner = true
 visible = false
 layout_mode = 1
+offset_top = 0.0
+offset_bottom = 0.0
 
 [node name="CreditsScreen" parent="." unique_id=180405132 instance=ExtResource("9_7530n")]
 visible = false
 layout_mode = 1
+
+[node name="CRTScreenEffect" parent="." unique_id=1412518820 instance=ExtResource("7_mjl86")]
+follow_viewport_enabled = true

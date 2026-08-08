@@ -5,9 +5,9 @@ extends Label
 ## spawn(); it animates (pop in -> drift up -> fade out) above a world position
 ## then frees itself, so concurrent bonuses stack cleanly.
 ##
-## Renders in the gameplay HUD CanvasLayer (same SubViewport as the player), so
-## world positions map to screen coordinates via get_canvas_transform(). The
-## CanvasLayer itself is in the "GameplayHud" group (see main.tscn).
+## Renders in the gameplay HUD CanvasLayer, so world positions map to screen
+## coordinates via get_canvas_transform(). The CanvasLayer is in the
+## "GameplayHud" group (see main.tscn).
 
 const BONUS_POPUP_SCENE := preload("res://src/ui/gameplay/bonus_popup.tscn")
 const CONFIG := preload("res://resources/bonus_popup_config.tres")

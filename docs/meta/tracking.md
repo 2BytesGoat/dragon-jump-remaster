@@ -113,7 +113,8 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 - [ ] src/ui/widgets/others_label.tscn
 - [ ] src/ui/gameplay/pause.gd
 - [ ] src/ui/gameplay/pause.tscn
-- [ ] src/ui/widgets/crt_effect.tscn
+- [x] src/ui/widgets/crt_effect.gd — documented in [[technical/main-system]]
+- [x] src/ui/widgets/crt_effect.tscn — documented in [[technical/main-system]]
 - [ ] src/ui/gameplay/settings.gd
 - [ ] src/ui/gameplay/settings.tscn
 - [ ] src/ui/gameplay/game_over.gd

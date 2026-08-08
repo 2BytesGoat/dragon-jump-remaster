@@ -14,7 +14,7 @@ func _on_mouse_exited() -> void:
 
 
 func _on_focus_entered() -> void:
-	_pop_scale(1.1)
+	_pop_scale(1.2)
 
 
 func _on_focus_exited() -> void:

@@ -4,6 +4,20 @@ This document captures high-level decisions as the project evolves.
 
 ---
 
+## 2026-08-08 — CRT effect via hint_screen_texture, SubViewport removed from main scenes
+
+**Context:** The CRT effect used a `ViewportTexture` sampling a 640×360 `SubViewport`, which meant the entire game rendered at low resolution and was then upscaled — blurring everything. The `CompositorEffect` API was considered but requires Forward+/Mobile renderers, which would break WebGL exports.
+
+- **Decided to use `hint_screen_texture` in the CRT shader** instead of a `ViewportTexture`. The shader now samples the full-resolution screen via `uniform sampler2D screen_texture : hint_screen_texture`. Scanline density is controlled by a `scanline_height` uniform (how many screen pixels each scanline row spans); texture sampling stays at full resolution so the pixel art is not blurred.
+- **Decided to remove the `SubViewport`/`SubViewportContainer` from `main.tscn` and `main_screen.tscn`.** All children now live directly under the root node. The `CanvasLayer` (GameplayHud) is now a direct child of `Main`/`MainScreen`.
+- **The CRT widget (`crt_effect.tscn`) is now a `CanvasLayer`** (layer 128) containing the `ColorRect` with the shader material. No `ViewportTexture` sub-resource needed — `hint_screen_texture` auto-populates.
+- **`practice_menu.tscn` keeps its own `SubViewport`** (320×240) for the level preview thumbnail — untouched.
+- **`gl_compatibility` renderer unchanged** — WebGL export still works.
+- **CRT/scanline toggles live in Settings:** `SettingsData.crt_enabled` and `SettingsData.scanlines_enabled` (both default true), with `crt_toggled` / `scanlines_toggled` signals and `CheckBox`es in the settings menu UI. **The `crt_effect` widget is self-managed:** `crt_effect.gd` (attached to the widget root) reads `Settings` on `_ready` and connects to both signals itself, so any scene embedding `crt_effect.tscn` (gameplay `main.tscn` and menu `main_screen.tscn`) applies the toggles automatically — no per-scene wiring. Scanlines-off bypasses the scanline math but keeps the phosphor mask, curve, and wobble.
+- **`card_scene.gd` simplified:** `_find_gameplay_sub_viewport()` removed; `_to_card_local()` now uses `get_viewport().get_canvas_transform()` directly.
+
+---
+
 ## 2026-08-08 — Main menu: up/down re-focuses Play when nothing is focused
 
 **Context:** Moving the cursor over a menu button grabbed focus, but moving it off released focus (`menu_button.gd` `_on_mouse_exited` → `release_focus`). With no focused control, Godot's built-in up/down focus navigation had nothing to act on, so arrow keys stopped working until the cursor re-entered a button.

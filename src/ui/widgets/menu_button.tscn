@@ -3,8 +3,20 @@
 [ext_resource type="Script" uid="uid://yn68lcq8oefy" path="res://src/ui/widgets/menu_button.gd" id="2_3838x"]
 
 [node name="MenuButton" type="Button" unique_id=2468351]
-offset_right = 40.0
-offset_bottom = 40.0
+custom_minimum_size = Vector2(84, 16)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -27.0
+offset_top = -20.0
+offset_right = 27.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 text = "Button"
 script = ExtResource("2_3838x")
 
