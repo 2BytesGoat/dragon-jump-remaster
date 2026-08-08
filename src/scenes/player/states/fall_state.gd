@@ -20,6 +20,10 @@ func physics_update(delta: float) -> void:
 			state_machine.transition_to("Move")
 		return
 	
+	if owner.wants_to_jump and not owner.has_jumped:
+		state_machine.transition_to("Jump")
+		return
+	
 	if owner.wants_to_jump and owner.has_powerups():
 		# Don't burn a powerup if the jump button was pressed just before the
 		# player lands; let it become a normal ground jump instead.

@@ -11,6 +11,9 @@ shader_type canvas_item;
 	Else The scanlines won't properly resolve and you're get moiré patters.
 	*/
 uniform sampler2D tex: filter_linear;
+uniform sampler2D screen_texture : hint_screen_texture, filter_linear;
+uniform float scanline_height : hint_range(1.0, 8.0) = 3.0;
+uniform bool scanlines_enabled = true;
 
 
 /**
@@ -134,39 +137,32 @@ vec3 srgb_to_linear(vec3 col)
 // Get scanlines from coordinates (returns in linear color)
 vec3 scanlines(vec2 uv)
 {
-	// Set coordinates to match texture dimensions
-	uv *= vec2(textureSize(tex, 0));
+	vec2 full_size = vec2(textureSize(screen_texture, 0));
+	vec2 px = uv * full_size;
+	vec2 sl_px = px / scanline_height;
 
-	// Vertical coordinate scanline samples
-	int y = int(uv.y + 0.5) - 1;
+	int y = int(sl_px.y + 0.5) - 1;
 
-	float x = floor(uv.x);
+	float x = floor(px.x);
 
-	// Horizontal coordinates for the texture samples
 	float ax = x - 2.0;
 	float bx = x - 1.0;
 	float cx = x;
 	float dx = x + 1.0;
 	float ex = x + 2.0;
 
-	// Sample the texture at various points
-	vec3 upper_a = texelFetch(tex, ivec2(int(ax), y), 0).rgb;
-	vec3 upper_b = texelFetch(tex, ivec2(int(bx), y), 0).rgb;
-	vec3 upper_c = texelFetch(tex, ivec2(int(cx), y), 0).rgb;
-	vec3 upper_d = texelFetch(tex, ivec2(int(dx), y), 0).rgb;
-	vec3 upper_e = texelFetch(tex, ivec2(int(ex), y), 0).rgb;
+	vec3 upper_a = texelFetch(screen_texture, ivec2(int(ax), int(px.y)), 0).rgb;
+	vec3 upper_b = texelFetch(screen_texture, ivec2(int(bx), int(px.y)), 0).rgb;
+	vec3 upper_c = texelFetch(screen_texture, ivec2(int(cx), int(px.y)), 0).rgb;
+	vec3 upper_d = texelFetch(screen_texture, ivec2(int(dx), int(px.y)), 0).rgb;
+	vec3 upper_e = texelFetch(screen_texture, ivec2(int(ex), int(px.y)), 0).rgb;
 
-	// Adjust the vertical coordinate for the lower scanline
-	y += 1;
+	vec3 lower_a = texelFetch(screen_texture, ivec2(int(ax), int(px.y) + 1), 0).rgb;
+	vec3 lower_b = texelFetch(screen_texture, ivec2(int(bx), int(px.y) + 1), 0).rgb;
+	vec3 lower_c = texelFetch(screen_texture, ivec2(int(cx), int(px.y) + 1), 0).rgb;
+	vec3 lower_d = texelFetch(screen_texture, ivec2(int(dx), int(px.y) + 1), 0).rgb;
+	vec3 lower_e = texelFetch(screen_texture, ivec2(int(ex), int(px.y) + 1), 0).rgb;
 
-	// Sample the texture at various points
-	vec3 lower_a = texelFetch(tex, ivec2(int(ax), y), 0).rgb;
-	vec3 lower_b = texelFetch(tex, ivec2(int(bx), y), 0).rgb;
-	vec3 lower_c = texelFetch(tex, ivec2(int(cx), y), 0).rgb;
-	vec3 lower_d = texelFetch(tex, ivec2(int(dx), y), 0).rgb;
-	vec3 lower_e = texelFetch(tex, ivec2(int(ex), y), 0).rgb;
-
-	// Convert every sample to linear color
 	upper_a = srgb_to_linear(upper_a);
 	upper_b = srgb_to_linear(upper_b);
 	upper_c = srgb_to_linear(upper_c);
@@ -179,21 +175,16 @@ vec3 scanlines(vec2 uv)
 	lower_d = srgb_to_linear(lower_d);
 	lower_e = srgb_to_linear(lower_e);
 
-	// The x coordinates of electron beam offsets
-	vec3 beam = vec3(uv.x - 0.5);
+	vec3 beam = vec3(px.x - 0.5);
 	beam.r -= color_offset;
 	beam.b += color_offset;
 
-	// Calculate weights
 	vec3 weight_a = smoothstep(1, 0, (beam - ax) * sharpness);
 	vec3 weight_b = smoothstep(1, 0, (beam - bx) * sharpness);
 	vec3 weight_c = smoothstep(1, 0, abs(beam - cx) * sharpness);
 	vec3 weight_d = smoothstep(1, 0, (dx - beam) * sharpness);
 	vec3 weight_e = smoothstep(1, 0, (ex - beam) * sharpness);
-	
-	// This can be a fun place to raise each weight to some power
 
-	// Mix samples into the upper scanline color
 	vec3 upper_col = vec3(
 		upper_a * weight_a +
 		upper_b * weight_b +
@@ -202,7 +193,6 @@ vec3 scanlines(vec2 uv)
 		upper_e * weight_e
 	);
 
-	// Mix samples into the lower scanline color
 	vec3 lower_col = vec3(
 		lower_a * weight_a +
 		lower_b * weight_b +
@@ -213,22 +203,16 @@ vec3 scanlines(vec2 uv)
 
 	vec3 weight_scaler = vec3(1.0) / (weight_a + weight_b + weight_c + weight_d + weight_e);
 
-	// Normalize weight
 	upper_col *= weight_scaler;
 	lower_col *= weight_scaler;
-	
-	// Apply scanline brightness
+
 	upper_col *= scanline_brightness;
 	lower_col *= scanline_brightness;
-	
-	
-	// Scanline size (and roughly the apperent brightness of this line)
+
 	vec3 upper_thickness = mix(vec3(min_scanline_thickness), vec3(1.0), upper_col);
 	vec3 lower_thickness = mix(vec3(min_scanline_thickness), vec3(1.0), lower_col);
-	
-	// Vertical sawtooth wave used to generate scanlines
-	// Almost the same as fract(uv.y + 0.5), but prevents a rare visual bug
-	float sawtooth = (uv.y + 0.5) - float(y);
+
+	float sawtooth = (sl_px.y + 0.5) - float(y);
 
 	vec3 upper_line = vec3(sawtooth) / upper_thickness;
 	upper_line = smoothstep(1.0, 0.0, upper_line);
@@ -236,11 +220,9 @@ vec3 scanlines(vec2 uv)
 	vec3 lower_line = vec3(1.0 - sawtooth) / lower_thickness;
 	lower_line = smoothstep(1.0, 0.0, lower_line);
 
-	// Correct line brightness below min_scanline_thickness
 	upper_line *= upper_col / upper_thickness;
 	lower_line *= lower_col / lower_thickness;
 
-	// Combine the upper and lower scanlines
 	return upper_line + lower_line;
 }
 
@@ -322,13 +304,17 @@ vec3 mask(vec3 linear_color, vec2 fragcoord)
 void fragment()
 {
 	// Warp UV coordinates
-	vec2 warped_coords = warp(UV, aspect, curve);
+	vec2 warped_coords = warp(SCREEN_UV, aspect, curve);
 	
 	// Add wobble
 	warped_coords.x += wobble;
 
-	// Sample the scanlines
-	vec3 col = scanlines(warped_coords);
+	vec3 col;
+	if (scanlines_enabled) {
+		col = scanlines(warped_coords);
+	} else {
+		col = srgb_to_linear(texture(screen_texture, warped_coords).rgb);
+	}
 
 	// Apply phosphor mask
 	col = mask(col, FRAGCOORD.xy);

@@ -52,6 +52,7 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 - [ ] src/scenes/player/states/bounce_state.gd
 - [ ] src/scenes/player/states/grapple_state.gd
 - [ ] src/scenes/player/states/die_state.gd
+- [ ] src/scenes/player/states/celebrate_state.gd
 - [ ] src/scenes/player/sensors/raycast_sensor.tscn
 
 ## Level Component
@@ -82,10 +83,10 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 
 ## Leaderboard System
 
-- [x] src/ui/components/leaderboard.gd — documented in [[technical/leaderboard]]
-- [x] src/ui/components/leaderboard.tscn — documented in [[technical/leaderboard]]
-- [x] src/ui/components/leaderboard_entry.gd — documented in [[technical/leaderboard]]
-- [x] src/ui/components/leaderboard_entry.tscn — documented in [[technical/leaderboard]]
+- [x] src/ui/widgets/leaderboard.gd — documented in [[technical/leaderboard]]
+- [x] src/ui/widgets/leaderboard.tscn — documented in [[technical/leaderboard]]
+- [x] src/ui/widgets/leaderboard_entry.gd — documented in [[technical/leaderboard]]
+- [x] src/ui/widgets/leaderboard_entry.tscn — documented in [[technical/leaderboard]]
 
 ## RL Integration System
 
@@ -94,33 +95,41 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 
 ## UI Components
 
-- [x] src/ui/menus/main_menu.gd — documented in [[technical/ui/index]]
-- [x] src/ui/menus/main_menu.tscn — documented in [[technical/ui/index]]
-- [x] src/ui/menus/end_screen.gd — documented in [[technical/ui/index]]
-- [x] src/ui/menus/end_screen.tscn — documented in [[technical/ui/index]]
-- [ ] src/ui/menus/level_select.gd
-- [ ] src/ui/menus/level_select.tscn
-- [ ] src/ui/menus/level_button.gd
-- [ ] src/ui/menus/level_button.tscn
-- [ ] src/ui/menus/tag_screen.gd
-- [ ] src/ui/menus/tag_screen.tscn
-- [ ] src/ui/menus/speed_slider_label.gd
-- [ ] src/ui/menus/menu_button.gd
-- [ ] src/ui/menus/menu_button.tscn
-- [ ] src/ui/menus/others_label.tscn
-- [ ] src/ui/menus/pause_screen.gd
-- [ ] src/ui/menus/pause_screen.tscn
-- [ ] src/ui/menus/crt_screen_effect.tscn
-- [ ] src/ui/menus/settings_menu.gd
-- [ ] src/ui/menus/settings_menu.tscn
-- [ ] src/ui/menus/stats_screen.gd
-- [ ] src/ui/menus/stats_screen.tscn
-- [ ] src/ui/menus/arcade_game_over_screen.gd
-- [ ] src/ui/menus/arcade_game_over_screen.tscn
-- [ ] src/ui/components/arcade_rank_hud.gd
-- [ ] src/ui/components/arcade_rank_hud.tscn
-- [ ] src/ui/components/single_time_container.gd
-- [ ] src/ui/components/time_container.tscn
+- [x] src/ui/menu/main_menu.gd — documented in [[technical/ui/index]]
+- [x] src/ui/menu/main_menu.tscn — documented in [[technical/ui/index]]
+- [x] src/ui/menu/main_screen.gd — documented in [[technical/ui/index]]
+- [x] src/ui/menu/main_screen.tscn — documented in [[technical/ui/index]]
+- [x] src/ui/menu/practice_menu.gd — documented in [[technical/ui/index]]
+- [x] src/ui/menu/practice_menu.tscn — documented in [[technical/ui/index]]
+- [x] src/ui/menu/credits.gd — documented in [[technical/ui/index]]
+- [x] src/ui/menu/credits.tscn — documented in [[technical/ui/index]]
+- [x] src/ui/gameplay/end.gd — documented in [[technical/ui/index]]
+- [x] src/ui/gameplay/end.tscn — documented in [[technical/ui/index]]
+- [ ] src/ui/widgets/level_button.gd
+- [ ] src/ui/widgets/level_button.tscn
+- [ ] src/ui/widgets/speed_slider_label.gd
+- [ ] src/ui/widgets/menu_button_base.gd
+- [ ] src/ui/widgets/menu_button.gd
+- [ ] src/ui/widgets/menu_button.tscn
+- [ ] src/ui/widgets/texture_menu_button.gd
+- [ ] src/ui/widgets/others_label.tscn
+- [ ] src/ui/gameplay/pause.gd
+- [ ] src/ui/gameplay/pause.tscn
+- [x] src/ui/widgets/crt_effect.gd — documented in [[technical/main-system]]
+- [x] src/ui/widgets/crt_effect.tscn — documented in [[technical/main-system]]
+- [ ] src/ui/gameplay/settings.gd
+- [ ] src/ui/gameplay/settings.tscn
+- [ ] src/ui/gameplay/game_over.gd
+- [ ] src/ui/gameplay/game_over.tscn
+- [x] src/ui/gameplay/hud.gd — documented in [[technical/ui/arcade-hud]]
+- [x] src/ui/gameplay/hud.tscn — documented in [[technical/ui/arcade-hud]]
+- [x] src/ui/widgets/time_display.gd — documented in [[technical/ui/arcade-hud]]
+- [x] src/scripts/components/run_timer.gd — documented in [[technical/ui/arcade-hud]]
+- [x] src/ui/gameplay/bonus_popup.gd — documented in [[technical/ui/arcade-hud]]
+- [x] src/ui/gameplay/bonus_popup.tscn — documented in [[technical/ui/arcade-hud]]
+- [x] src/ui/themes/default_theme.tres — documented in [[technical/ui/index]]
+- [x] src/ui/themes/gameplay_theme.tres — documented in [[technical/ui/arcade-hud]]
+- [x] src/ui/themes/practice_theme.tres — documented in [[technical/ui/index]]
 
 ## Effects
 
@@ -136,8 +145,8 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 - [ ] src/scenes/effects/hit_stop.tscn
 - [ ] src/scenes/effects/screen_shake.gd
 - [ ] src/scenes/effects/screen_shake.tscn
-- [ ] src/scenes/effects/transition_wipe.gd
-- [ ] src/scenes/effects/transition_wipe.tscn
+- [x] src/scenes/effects/transition_wipe.gd — documented in [[technical/effects]]
+- [x] src/scenes/effects/transition_wipe.tscn — documented in [[technical/effects]]
 
 ## Powerups
 
@@ -168,6 +177,7 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 - [ ] src/scripts/components/patterns/command.gd
 - [ ] src/scripts/resources/arcade_config.gd
 - [ ] src/scripts/resources/audio_bus_config.gd
+- [ ] src/scripts/resources/bonus_popup_config.gd — documented in [[technical/ui/arcade-hud]]
 - [ ] src/scripts/resources/campaign_level_library.gd
 - [ ] src/scripts/resources/level_code_parser.gd
 - [ ] src/scripts/resources/medal_config.gd

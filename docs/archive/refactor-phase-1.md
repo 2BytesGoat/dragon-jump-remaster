@@ -63,7 +63,7 @@ Phase 1 execution plan. Each task is small enough to hand to a freelancer or to 
 - [x] Audit `project.godot` autoload roster; remove any singleton that is not a cross-scene concern
 - [x] Audit each file in `src/scripts/singletons/` for scene-local state leaks; move scene state into owning scenes
 - [x] Convert cross-scene communication to signals; remove direct node manipulation from autoloads
-- [x] Audit SubViewport usage in `src/ui/components/`; remove from latency-sensitive HUD if present
+- [x] Audit SubViewport usage in `src/ui/widgets/`; remove from latency-sensitive HUD if present
 - [x] Reconfigure unavoidable SubViewports: smallest size, no `stretch=true` + manual resize, `UPDATE_WHEN_VISIBLE`/`UPDATE_ONCE`
 - [x] Verify `TileMap.clear()` is called before every symbol-based level rebuild in `level.gd` / parser
 - [x] Verify TileMap bounds match playable area; eliminate oversized empty tile layers

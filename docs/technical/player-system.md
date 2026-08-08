@@ -31,6 +31,7 @@ The Player system represents the main character in the game, handling movement, 
 | `jump_time_to_peak` | float | Actual time to reach jump peak (affected by speed modifier) |
 | `state_machine` | StateMachine | Reference to the state machine managing player states |
 | `active_controller` | PlayerCharacterController | Currently active controller |
+| `has_jumped` | bool | True once the player has used a jump during the current airtime; grants one free air jump per arc |
 | `flippable_container` | Node2D | Container for sprite that handles flipping |
 | `animation_player` | AnimationPlayer | Handles player animations |
 | `grappling_hook` | Node2D | Reference to grappling hook system |
@@ -60,20 +61,29 @@ The Player system represents the main character in the game, handling movement, 
 
 ### Signals and Connections
 
-| Signal | Emitted When | Purpose |
-|--------|--------------|---------|
-| `picked_powerup` | When player collects a power-up | Notifies systems of power-up collection |
-| `used_powerup` | When player uses a power-up | Notifies systems of power-up usage |
-| `has_resetted` | After player reset | Notifies systems of player reset |
+| Signal | Parameters | Emitted When | Purpose |
+|--------|-----------|--------------|---------|
+| `picked_powerup` | powerup_name: String, id: int, pickup_global_position: Vector2 | When player collects a power-up | Notifies systems of power-up collection |
+| `used_powerup` | id: int | When player uses a power-up | Notifies systems of power-up usage |
+| `powerup_consumed` | type: String | When a power-up is consumed | Notifies card/card-container UI |
+| `has_resetted` | — | After player reset | Notifies systems of player reset (level object reset, AI controller, observer) |
+| `run_started` | player: Player | On the player's first input after a spawn | Starts the run timer |
+| `run_restarted` | player: Player | Every time the player resets (death respawn, manual restart) | Resets the run timer and emits `new_run_attempt` via main |
+| `run_finished` | player: Player | When the player exits the level | Stops the timer; drives end screen / arcade progression |
+| `died` | player: Player | At the end of the death sequence | Drives arcade game-over handling |
 
 ### Integration Points with Other Systems
 
 - Connects to `StateMachine` for state management
 - Interacts with `Level` system through `level_reference`
-- Communicates with `SignalBus` for game events
+- Communicates cross-scene via `SignalBus` (attempts, time submissions) and local player signals consumed by `main.gd` / HUD
 - Integrates with `Powerup` system via collision detection
 - Works with `SaveManager` for saving player state
 - Uses `Utils` for scene instantiation
+
+### Forgiving Air Jump
+
+The player gets **one free jump per airtime**. `has_jumped` is set by `JumpState.enter()` and cleared in `Player._physics_process` after `move_and_slide()` when grounded (and on `reset()`). `FallState` lets the player transition to `Jump` for free while `has_jumped` is false, so walking off a ledge or leaving a wall without jumping still allows a jump — consuming nothing. Once `has_jumped` is true, only the powerup branch in `FallState` grants further air jumps (burning a powerup). This gives fall → free jump → powerup jump sequences without ever wasting a powerup.
 
 ## Scene Components (`*.tscn`)
 
@@ -95,7 +105,7 @@ The Player scene is organized as follows:
 5. **HurtBox** (Area2D) - Collision area for damage sources
 6. **ControllerContainer** (Node) - Container for controllers
 7. **StateMachine** (Node) - Manages player states with child nodes:
-   - **Idle**, **Move**, **Fall**, **Jump**, **Walled**, **DoubleJump**, **Stomp**, **Dash**, **Grapple**, **Bounce**
+   - **Idle**, **Move**, **Fall**, **Jump**, **Walled**, **DoubleJump**, **Stomp**, **Dash**, **Grapple**, **Bounce**, **Die**, **Celebrate**
 8. **AnimationPlayer** (AnimationPlayer) - Handles player animations
 9. **StateLabel** (Label) - Debug label showing current state
 
@@ -124,7 +134,7 @@ The player scene uses a layered approach:
 ### Signal-based Communication Patterns
 
 The Player system communicates through:
-1. **SignalBus** - For global events like player finished run, player restarted run
+1. **Direct player signals** (`run_started`, `run_restarted`, `run_finished`, `died`, `picked_powerup`, `has_resetted`) — consumed by `main.gd`, the HUD timer, and the AI controller
 2. **Area2D collision** - For power-up collection and interaction detection
 3. **State machine transitions** - For internal state changes and communication with states
 

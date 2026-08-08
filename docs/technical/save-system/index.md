@@ -30,6 +30,7 @@ Initializes the SaveManager by loading existing game data and connecting to rele
 - Calls `load_game()` to load existing save data
 - Connects to `SignalBus.new_run_attempt` signal for tracking new attempts
 - Connects to `SignalBus.new_time_submission` signal for handling time submissions
+- Connects to `SignalBus.play_time_elapsed` signal for accumulating "time played" retention counters
 
 #### `func unlock_level(level_name: String)`
 Unlocks a specific level by creating and adding a new LevelData entry for it in the current_data.levels dictionary if it doesn't already exist.
@@ -62,7 +63,10 @@ Updates progress tracking for a level based on the best time compared to milesto
 Handles new run attempts by incrementing the attempt count for a level and saving the data.
 
 #### `func _on_new_time_submission(level_name: String, time: float) -> void`
-Handles new time submissions by updating the best time if it's better than the current best, updating progress, unlocking the next level, and emitting a leaderboard submission signal.
+Handles new time submissions by updating the best time if it's better than the current best, updating progress, unlocking the next level, and emitting a leaderboard submission signal. It no longer accumulates "time played" — that is handled by `_on_time_elapsed` so deaths and restarts count toward retention time.
+
+#### `func _on_time_elapsed(seconds: float) -> void`
+Accumulates active play time into the total/daily/weekly "time played" retention counters, refreshes periodic counters, and saves to disk. Fired by `SignalBus.play_time_elapsed`, which the time container emits on run restart, run finish, and node exit (and periodically during a run), so a player's time counts even if they die or restart.
 
 #### `func _on_player_name_changed(value) -> void`
 Handles player name changes by updating the current_player_name property, clearing current_data, and reloading the game data with the new player name.
@@ -70,6 +74,7 @@ Handles player name changes by updating the current_player_name property, cleari
 ### Signals and Connections
 - `SignalBus.new_run_attempt` - Connected to `_on_new_run_attempt()` method
 - `SignalBus.new_time_submission` - Connected to `_on_new_time_submission()` method
+- `SignalBus.play_time_elapsed` - Connected to `_on_time_elapsed()` method
 
 ## System Integration
 
@@ -77,7 +82,7 @@ The SaveManager works as a singleton that integrates with other systems through:
 1. Signal-based communication with the SignalBus
 2. Integration with Constants for level definitions and time milestones
 3. Interaction with GameData and LevelData resources for data storage
-4. Post-launch: connection to a `LeaderboardManager` via a reserved `SignalBus.new_leaderboard_submission` signal (deferred; see [[technical/architecture]])
+4. Post-launch: connection to a `LeaderboardManager` via a SignalBus leaderboard signal (signal not yet defined; deferred, see [[technical/architecture]])
 
 ## Design Patterns
 
@@ -94,8 +99,9 @@ Follows Godot's event-driven architecture by connecting to and emitting signals 
 
 1. **Initialization**: SaveManager loads existing data or creates new save on startup
 2. **New Run Attempt**: When a player starts a level, `new_run_attempt` signal is emitted → `_on_new_run_attempt()` increments attempts and saves
-3. **Time Submission**: When a player completes a level, `new_time_submission` signal is emitted → `_on_new_time_submission()` updates best times, progress, unlocks next level, and submits to leaderboard
-4. **Data Persistence**: All changes are saved to disk using `save_to_disk()`
+3. **Play Time**: While a run is active, `play_time_elapsed` is emitted on restart/finish/exit → `_on_time_elapsed()` accumulates total/daily/weekly time played and saves
+4. **Time Submission**: When a player completes a level, `new_time_submission` signal is emitted → `_on_new_time_submission()` updates best times, progress, unlocks next level, and submits to leaderboard
+5. **Data Persistence**: All changes are saved to disk using `save_to_disk()`
 
 ## File Structure
 

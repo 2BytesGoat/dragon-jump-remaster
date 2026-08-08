@@ -1,0 +1,180 @@
+[gd_scene format=3 uid="uid://0c7hrkqyixn1"]
+
+[ext_resource type="Texture2D" uid="uid://ctojsl0e08r07" path="res://assets/logos/Logo2.png" id="1_wuc7m"]
+[ext_resource type="Script" uid="uid://l72nox7uj843" path="res://src/ui/menu/main_menu.gd" id="2_hcfgv"]
+[ext_resource type="PackedScene" uid="uid://bnxudkobrdgtb" path="res://src/ui/widgets/menu_button.tscn" id="2_xaiw4"]
+[ext_resource type="Texture2D" uid="uid://co5wvuoqku1ke" path="res://assets/ui/icons/github.png" id="5_52atu"]
+[ext_resource type="Texture2D" uid="uid://d2kcrysq5lr7d" path="res://assets/sprites/player/player_v3.png" id="5_playerv3"]
+[ext_resource type="Texture2D" uid="uid://cgmtfbedo37kc" path="res://assets/ui/icons/11.png" id="6_4ty6e"]
+[ext_resource type="Texture2D" uid="uid://bxtiadl1t08hm" path="res://assets/ui/icons/discord.png" id="6_b3hne"]
+[ext_resource type="AudioStream" uid="uid://c77tp4o0gqjbv" path="res://assets/sfx/swoosh.ogg" id="6_sfx_jump"]
+[ext_resource type="Texture2D" uid="uid://dxx5qhb5hikm0" path="res://assets/ui/icons/steam.png" id="7_q32vd"]
+[ext_resource type="PackedScene" uid="uid://dws2c5qkd8x6q" path="res://src/ui/gameplay/settings.tscn" id="9_b3hne"]
+[ext_resource type="Script" uid="uid://ds7cn684ytdg3" path="res://src/ui/widgets/texture_menu_button.gd" id="10_tmb"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y3puo"]
+atlas = ExtResource("5_playerv3")
+region = Rect2(320, 0, 32, 32)
+
+[node name="MainMenu" type="MarginContainer" unique_id=602409232]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 16
+script = ExtResource("2_hcfgv")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=641493598]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="GameLogo" type="TextureRect" parent="VBoxContainer" unique_id=1119043928]
+z_index = 1
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+texture = ExtResource("1_wuc7m")
+stretch_mode = 2
+
+[node name="StartContainer" type="MarginContainer" parent="VBoxContainer" unique_id=1955987025]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/StartContainer" unique_id=1541825385]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = -4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/StartContainer/VBoxContainer" unique_id=1400636051]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 28
+
+[node name="PlayerMock" type="TextureRect" parent="VBoxContainer/StartContainer/VBoxContainer/HBoxContainer" unique_id=1006698313]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = SubResource("AtlasTexture_y3puo")
+stretch_mode = 2
+
+[node name="Placeholder" type="Control" parent="VBoxContainer/StartContainer/VBoxContainer/HBoxContainer" unique_id=1477967385]
+layout_mode = 2
+
+[node name="PressKeyLabel" type="Label" parent="VBoxContainer/StartContainer/VBoxContainer" unique_id=1837159860]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Press JUMP to Start"
+
+[node name="SelectionContainer" type="MarginContainer" parent="VBoxContainer" unique_id=1948782625]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/SelectionContainer" unique_id=475538559]
+custom_minimum_size = Vector2(96, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+alignment = 1
+
+[node name="PlayButton" parent="VBoxContainer/SelectionContainer/VBoxContainer" unique_id=2468351 instance=ExtResource("2_xaiw4")]
+unique_name_in_owner = true
+layout_mode = 2
+text = "PLAY"
+
+[node name="PracticeButton" parent="VBoxContainer/SelectionContainer/VBoxContainer" unique_id=1319238658 instance=ExtResource("2_xaiw4")]
+unique_name_in_owner = true
+layout_mode = 2
+text = "PRACTICE"
+
+[node name="CreateButton" parent="VBoxContainer/SelectionContainer/VBoxContainer" unique_id=1660428569 instance=ExtResource("2_xaiw4")]
+layout_mode = 2
+disabled = true
+text = "CREATE"
+
+[node name="CreditsButton" parent="VBoxContainer/SelectionContainer/VBoxContainer" unique_id=1271898267 instance=ExtResource("2_xaiw4")]
+unique_name_in_owner = true
+layout_mode = 2
+text = "CREDITS"
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/SelectionContainer/VBoxContainer" unique_id=2055760054]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+
+[node name="QuitButton" parent="VBoxContainer/SelectionContainer/VBoxContainer" unique_id=1888916522 instance=ExtResource("2_xaiw4")]
+layout_mode = 2
+text = "QUIT"
+
+[node name="FooterContainer" type="HBoxContainer" parent="VBoxContainer/SelectionContainer" unique_id=1610117265]
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="GithubButton" type="TextureButton" parent="VBoxContainer/SelectionContainer/FooterContainer" unique_id=1851276372]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+texture_normal = ExtResource("5_52atu")
+ignore_texture_size = true
+stretch_mode = 5
+script = ExtResource("10_tmb")
+
+[node name="DiscordButton" type="TextureButton" parent="VBoxContainer/SelectionContainer/FooterContainer" unique_id=1200816860]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+texture_normal = ExtResource("6_b3hne")
+ignore_texture_size = true
+stretch_mode = 5
+script = ExtResource("10_tmb")
+
+[node name="SteamButton" type="TextureButton" parent="VBoxContainer/SelectionContainer/FooterContainer" unique_id=1459836198]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+texture_normal = ExtResource("7_q32vd")
+ignore_texture_size = true
+stretch_mode = 5
+script = ExtResource("10_tmb")
+
+[node name="SettingsButton" type="TextureButton" parent="VBoxContainer/SelectionContainer/FooterContainer" unique_id=557374631]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_horizontal = 10
+texture_normal = ExtResource("6_4ty6e")
+stretch_mode = 0
+script = ExtResource("10_tmb")
+
+[node name="SettingsMenu" parent="." unique_id=435797117 instance=ExtResource("9_b3hne")]
+visible = false
+z_index = 1
+layout_mode = 2
+size_flags_vertical = 2
+theme_override_constants/margin_bottom = -32
+
+[node name="JumpSFX" type="AudioStreamPlayer" parent="." unique_id=1200816861]
+stream = ExtResource("6_sfx_jump")
+volume_db = -12.0
+bus = &"SFX"
+
+[connection signal="pressed" from="VBoxContainer/SelectionContainer/VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/SelectionContainer/VBoxContainer/PracticeButton" to="." method="_on_practice_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/SelectionContainer/VBoxContainer/CreditsButton" to="." method="_on_credits_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/SelectionContainer/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/SelectionContainer/FooterContainer/GithubButton" to="." method="_on_github_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/SelectionContainer/FooterContainer/DiscordButton" to="." method="_on_discord_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/SelectionContainer/FooterContainer/SteamButton" to="." method="_on_steam_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/SelectionContainer/FooterContainer/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="close_me" from="SettingsMenu" to="." method="_on_settings_menu_close_me"]

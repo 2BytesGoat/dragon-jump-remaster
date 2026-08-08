@@ -21,6 +21,7 @@ func _ready() -> void:
 	load_game() # Try to load existing data first
 	SignalBus.new_run_attempt.connect(_on_new_run_attempt)
 	SignalBus.new_time_submission.connect(_on_new_time_submission)
+	SignalBus.play_time_elapsed.connect(_on_time_elapsed)
 
 
 func unlock_level(level_name: String):
@@ -292,9 +293,16 @@ func _on_new_time_submission(level_name: String, time: float) -> void:
 		current_data.levels[level_name].best_time = time
 		update_level_progress(level_name)
 		unlock_next_level(level_name)
-	current_data.total_time_played_seconds += time
-	current_data.daily_time_played_seconds += time
-	current_data.weekly_time_played_seconds += time
+	current_data.refresh_periodic_counters()
+	save_to_disk()
+
+
+func _on_time_elapsed(seconds: float) -> void:
+	if seconds <= 0.0:
+		return
+	current_data.total_time_played_seconds += seconds
+	current_data.daily_time_played_seconds += seconds
+	current_data.weekly_time_played_seconds += seconds
 	current_data.refresh_periodic_counters()
 	save_to_disk()
 

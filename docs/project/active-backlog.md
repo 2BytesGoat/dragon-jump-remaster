@@ -26,7 +26,7 @@ This backlog is ordered by priority. The rule is: **ship the reproducible arcade
 |---|------|-------|----------|
 | 52 | Fix arcade exit bug — mode-aware routing | `main.gd:183` `_on_exit_button_pressed()` hardcoded to level_select; arcade should go to `main_menu.tscn`, practice to `level_select.tscn` | High |
 | 53 | Fix arcade "stuck at end" — no end screen shown | `main.gd:138` `_show_arcade_game_over()` is a no-op TODO; `main.gd:206` silent return on last level | High |
-| 54 | Wire arcade game-over to reuse existing end_screen | Reuse `end_screen.tscn` with arcade-appropriate text (score, Try Again / Exit); no new scene, no leaderboard | High |
+| 54 | Wire arcade game-over to reuse existing end_screen | Reuse `end.tscn` with arcade-appropriate text (score, Try Again / Exit); no new scene, no leaderboard | High |
 | 67 | Verify CI web export produces a playable HTML5 build | `.github/workflows/build-and-publish.yml` already pushes to itch via butler; verify the web artifact boots and plays in a browser (boot, arcade mode, play, die, retry, exit) | High |
 | 68 | Research: can Emulation Station on the modded Switch run an HTML5 web build at all? | CFW (SX OS / Atmosphere / RetroArch), browser core / standalone HTML5 loader options. Output: a yes/no + the specific launcher mechanism. Research only — ~1.5h. | High |
 
@@ -95,7 +95,7 @@ This backlog is ordered by priority. The rule is: **ship the reproducible arcade
 | 105 | ML starter code and tutorials (external blog) | Cross-promotion with the ML audience. | Medium |
 | 55 | Arcade victory screen — clearing level 1-17 | "YOU DID IT!", final score, lives remaining, top-10 leaderboard | Medium |
 | 56 | Heart pickup scene + scoring + pickup animation | `heart_pickup.tscn` + `.gd`; +1 life if <3, +500pts if full; auto-spawn in secret islands in arcade mode | Medium |
-| 57 | Arcade HUD — integrate `arcade_hud.tscn` | Lives, score, level badge; draft exists at [[technical/ui/arcade-hud]] | Medium |
+| 57 | Arcade HUD — integrate `arcade_hud.tscn` | Lives, score, level badge; planned (not built) — see [[technical/ui/arcade-hud]] | Medium |
 | 58 | Local arcade top-10 leaderboard | Extend `GameData` with `arcade_top_runs: Array`; persist via SaveManager; display on game-over/victory screens | Medium |
 | 74 | Inter-level score tracking + game juice | Ensure `ArcadeDirector.score` persists across level transitions; level-finish transition animation, score popup, screen shake | Medium |
 | 75 | Hidden areas in remaining 11 levels | Levels 1-4, 1-5, 1-6, 1-7, 1-10, 1-11, 1-12, 1-13, 1-14, 1-15, 1-16 need M-tiles (level design, small chunks) | Medium |

@@ -4,15 +4,15 @@ extends Node
 ## Loads the main menu scene, waits a frame, and verifies the root node is the
 ## expected MainMenu container with a visible PlayButton.
 
-const MAIN_MENU_SCENE := preload("res://src/ui/menus/main_menu.tscn")
+const MAIN_MENU_SCENE := preload("res://src/ui/menu/main_menu.tscn")
 
 
 func run() -> bool:
-	var main_menu: MarginContainer = MAIN_MENU_SCENE.instantiate()
+	var main_menu: Control = MAIN_MENU_SCENE.instantiate()
 	add_child(main_menu)
 
 	var play_button := main_menu.get_node_or_null(
-		"SubViewportContainer/SubViewport/HBoxContainer/MarginContainer/VBoxContainer2/Panel/VBoxContainer/PlayButton"
+		"VBoxContainer/SelectionContainer/VBoxContainer/PlayButton"
 	)
 	var passed := main_menu.name == "MainMenu" and play_button != null
 	if not passed:

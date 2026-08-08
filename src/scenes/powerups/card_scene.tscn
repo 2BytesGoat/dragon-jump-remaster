@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://cldij6xkdi5rh"]
 
+[ext_resource type="Theme" uid="uid://hax2p5a7h3e6" path="res://src/ui/themes/gameplay_theme.tres" id="1_5dk5w"]
 [ext_resource type="Script" uid="uid://1ela5ki2cm8j" path="res://src/scenes/powerups/card_scene.gd" id="1_uqjuy"]
 [ext_resource type="Texture2D" uid="uid://b5un0qnotkur2" path="res://assets/sprites/cards/joker blank.png" id="2_el3mm"]
 [ext_resource type="Texture2D" uid="uid://gmas1ccvaejt" path="res://assets/sprites/cards/card_print.png" id="3_pltcw"]
-[ext_resource type="Theme" uid="uid://se7xk3lcwng8" path="res://src/ui/components/themes/main_theme.tres" id="3_ydyeq"]
 [ext_resource type="Shader" uid="uid://bky8smkanpdp" path="res://assets/shaders/card_disolve.gdshader" id="4_5t3j1"]
 [ext_resource type="Curve" uid="uid://bsv80ebrv1lmc" path="res://resources/curves/card_position_curve.tres" id="5_abc12"]
 [ext_resource type="Curve" uid="uid://c2v70q2q1v3x8" path="res://resources/curves/card_scale_curve.tres" id="6_def34"]
@@ -29,8 +29,8 @@ shader_parameter/noiseTexture = SubResource("NoiseTexture2D_5dk5w")
 shader_parameter/burnColor = Color(0.8509804, 0.81960785, 0.8, 1)
 
 [sub_resource type="Gradient" id="Gradient_5dk5w"]
-offsets = PackedFloat32Array(0, 0.4048583, 0.902834)
-colors = PackedColorArray(0.03529412, 0.043137256, 0.08235294, 1, 0.03876, 0.03876, 0.07846785, 0.82500005, 0.03876, 0.03876, 0.07846785, 0)
+offsets = PackedFloat32Array(0, 0.16384181, 0.902834)
+colors = PackedColorArray(0.03876, 0.03876, 0.07846785, 0.82500005, 0.03876, 0.03876, 0.07846785, 0.7914428, 0.03876, 0.03876, 0.07846785, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_s752x"]
 gradient = SubResource("Gradient_5dk5w")
@@ -50,6 +50,7 @@ offset_right = -5.0
 offset_bottom = -9.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_5dk5w")
 script = ExtResource("1_uqjuy")
 draw_duration = 0.4
 dissolve_duration = 1.0
@@ -63,10 +64,11 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -106.66669
-offset_right = 80.0
+offset_top = -95.0
+offset_right = 88.0
+offset_bottom = 11.666687
 grow_vertical = 0
-theme_override_constants/margin_left = 8
+scale = Vector2(0.85, 0.85)
 
 [node name="CardTexture" type="TextureRect" parent="MarginContainer" unique_id=1894720491]
 self_modulate = Color(0.9019608, 0.27058825, 0.22352941, 1)
@@ -87,10 +89,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 0
-theme_override_constants/margin_top = 0
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 0
 
 [node name="BackgroundTexture" type="TextureRect" parent="MarginContainer/CardTexture/MarginContainer" unique_id=848816854]
 use_parent_material = true
@@ -119,26 +117,22 @@ texture = ExtResource("7_5dk5w")
 expand_mode = 4
 stretch_mode = 5
 
-[node name="CardLabel_TopLeft" type="Label" parent="MarginContainer/CardTexture" unique_id=1391871676]
+[node name="CardLabel_TopLeft" type="Label" parent="MarginContainer/CardTexture" unique_id=981983341]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(10, 44)
-layout_mode = 0
-offset_left = 4.0
-offset_top = 7.666687
-offset_right = 14.0
-offset_bottom = 51.666687
-theme = ExtResource("3_ydyeq")
-theme_override_colors/font_color = Color(0.96862745, 0.92941177, 0.9019608, 1)
-theme_override_colors/font_outline_color = Color(0.03529412, 0.043137256, 0.08235294, 1)
-theme_override_constants/line_spacing = 1
+layout_mode = 1
+offset_left = 3.5294118
+offset_top = 8.235294
+offset_right = 13.529411
+offset_bottom = 60.235294
+size_flags_horizontal = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
-theme_override_font_sizes/font_size = 8
-text = "UNK"
+text = "STOMP"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 1
 autowrap_trim_flags = 64
-clip_text = true
 uppercase = true
 
 [node name="CardLabel_BottomRight" type="Label" parent="MarginContainer/CardTexture" unique_id=1614009277]
@@ -151,13 +145,9 @@ offset_right = 83.0
 offset_bottom = 138.66669
 rotation = 3.1415927
 size_flags_horizontal = 0
-theme = ExtResource("3_ydyeq")
-theme_override_colors/font_color = Color(0.96862745, 0.92941177, 0.9019608, 1)
-theme_override_colors/font_outline_color = Color(0.03529412, 0.043137256, 0.08235294, 1)
-theme_override_constants/line_spacing = 1
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
-theme_override_font_sizes/font_size = 8
-text = "UNK"
+text = "STOMP"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 1

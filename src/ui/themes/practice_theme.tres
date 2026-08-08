@@ -1,0 +1,98 @@
+[gd_resource type="Theme" format=3 uid="uid://bwn751d5rabh2"]
+
+[ext_resource type="Texture2D" uid="uid://bytr34g6pcbqd" path="res://assets/ui/bars/grabber.png" id="2_21hnu"]
+[ext_resource type="FontFile" uid="uid://cmbpqj0hto83m" path="res://assets/fonts/Awesome 9.ttf" id="2_header_font"]
+[ext_resource type="Texture2D" uid="uid://ts8fmvnii13q" path="res://assets/ui/bars/grabber_pressed.png" id="3_21hnu"]
+[ext_resource type="Texture2D" uid="uid://b2n5b8sf8uefu" path="res://assets/ui/bars/h_bar_bg.png" id="5_fbh6w"]
+[ext_resource type="Texture2D" uid="uid://bojohplp4tink" path="res://assets/ui/bars/pbar_bg.png" id="6_u71yl"]
+[ext_resource type="Texture2D" uid="uid://4np5vpta8wsa" path="res://assets/ui/bars/pbar_fg.png" id="7_20l4y"]
+[ext_resource type="Texture2D" uid="uid://cq7tlo06l8n2m" path="res://assets/ui/bars/v_scroll_bg.png" id="7_21hnu"]
+[ext_resource type="Texture2D" uid="uid://b5qrw46bpuvfr" path="res://assets/ui/bars/v_scroll_fg.png" id="8_fbh6w"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_focus"]
+bg_color = Color(0.2901961, 0.15294118, 0.16862746, 0.15)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.18039216, 0.24705882, 0.31764707, 1)
+expand_margin_left = 2.0
+expand_margin_right = 2.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_21hnu"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slider_highlight"]
+bg_color = Color(0.2901961, 0.15294118, 0.16862746, 0.15)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.18039216, 0.24705882, 0.31764707, 1)
+expand_margin_left = 4.0
+expand_margin_right = 10.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vuvqd"]
+texture = ExtResource("5_fbh6w")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7fj0r"]
+texture = ExtResource("6_u71yl")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+expand_margin_left = 2.0
+expand_margin_right = 2.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1eem0"]
+texture = ExtResource("7_20l4y")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fbh6w"]
+texture = ExtResource("8_fbh6w")
+texture_margin_left = 2.0
+texture_margin_top = 2.0
+texture_margin_right = 2.0
+texture_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_usmvp"]
+texture = ExtResource("7_21hnu")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+
+[resource]
+Button/colors/font_color = Color(0.18039216, 0.24705882, 0.31764707, 1)
+Button/colors/font_focus_color = Color(0.18039216, 0.24705882, 0.31764707, 1)
+Button/colors/font_hover_color = Color(0.18039216, 0.24705882, 0.31764707, 1)
+Button/font_sizes/font_size = 16
+Button/fonts/font = ExtResource("2_header_font")
+Button/styles/focus = SubResource("StyleBoxFlat_focus")
+CheckBox/colors/checkbox_checked_color = Color(0.5686275, 0.4, 0.35686275, 1)
+CheckBox/colors/font_color = Color(0.18039216, 0.24705882, 0.31764707, 1)
+CheckBox/colors/font_focus_color = Color(0.18039216, 0.24705882, 0.31764707, 1)
+CheckBox/colors/font_hover_color = Color(0.18039216, 0.24705882, 0.31764707, 1)
+CheckBox/colors/font_hover_pressed_color = Color(0.18039216, 0.24705882, 0.31764707, 1)
+CheckBox/colors/font_pressed_color = Color(0.18039216, 0.24705882, 0.31764707, 1)
+CheckBox/icons/checked = null
+HSlider/icons/grabber = ExtResource("2_21hnu")
+HSlider/icons/grabber_disabled = ExtResource("2_21hnu")
+HSlider/icons/grabber_highlight = ExtResource("3_21hnu")
+HSlider/icons/grabber_icon = ExtResource("3_21hnu")
+HSlider/icons/grabber_icon_pressed = ExtResource("3_21hnu")
+HSlider/styles/grabber_area = SubResource("StyleBoxEmpty_21hnu")
+HSlider/styles/grabber_area_highlight = SubResource("StyleBoxFlat_slider_highlight")
+HSlider/styles/slider = SubResource("StyleBoxTexture_vuvqd")
+HeaderLabel/font_sizes/font_size = 18
+Label/colors/font_color = Color(0.18039216, 0.24705882, 0.31764707, 1)
+Label/colors/font_outline_color = Color(0.18039216, 0.24705882, 0.31764707, 1)
+Label/font_sizes/font_size = 16
+Label/fonts/font = ExtResource("2_header_font")
+ProgressBar/constants/outline_size = 0
+ProgressBar/styles/background = SubResource("StyleBoxTexture_7fj0r")
+ProgressBar/styles/fill = SubResource("StyleBoxTexture_1eem0")
+VScrollBar/styles/grabber = SubResource("StyleBoxTexture_fbh6w")
+VScrollBar/styles/scroll = SubResource("StyleBoxTexture_usmvp")

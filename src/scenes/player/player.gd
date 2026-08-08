@@ -58,7 +58,7 @@ var is_done: bool = false
 signal picked_powerup(powerup_name: String, id: int, pickup_global_position: Vector2)
 signal used_powerup(id: int)
 signal powerup_consumed(type: String)
-signal has_resetted
+signal has_resetted(player: Player)
 signal run_started(player: Player)
 signal run_restarted(player: Player)
 signal run_finished(player: Player)
@@ -84,6 +84,7 @@ var is_paused: bool = false
 var is_dead: bool = false
 var wants_to_jump: bool = false
 var needs_to_release: bool = false
+var has_jumped: bool = false
 var modifiers: Dictionary = {}
 var powerups: Array = []
 var starting_position: Vector2 = Vector2.ZERO : set = _on_starting_position_changed
@@ -135,6 +136,9 @@ func _physics_process(delta: float) -> void:
 	_update_facing_direction()
 	
 	move_and_slide()
+	
+	if is_on_floor():
+		has_jumped = false
 
 
 func set_controller(controller: PlayerCharacterController) -> void:
@@ -216,6 +220,7 @@ func reset() -> void:
 		started_walking = false
 	wants_to_jump = false
 	needs_to_release = false
+	has_jumped = false
 	show_afterimage = false
 	modifiers = {}
 	last_agent_input = false
@@ -226,7 +231,7 @@ func reset() -> void:
 	velocity = Vector2.ZERO
 	global_position = starting_position
 	state_machine.transition_to(initial_state.name)
-	has_resetted.emit()
+	has_resetted.emit(self)
 
 	_update_facing_direction()
 	animation_player.play("Spawn")
@@ -417,7 +422,7 @@ func _on_interact_box_area_entered(area: Area2D) -> void:
 	elif area.is_in_group("Exit"):
 		is_done = true
 		show_afterimage = false
-		animation_player.play("Idle")
+		state_machine.transition_to("Celebrate")
 		run_finished.emit(self)
 
 

@@ -1,89 +1,70 @@
-# Arcade HUD integration draft
+# Arcade HUD and Run Timer
 
-## What changed and why
+## Fonts
 
-The current HUD (`TimeContainer`) is a single small timer at the top center. The power-up cards are rendered by `CardContainerContainer`, which spreads panels across the whole screen using a `VBoxContainer`. That layout works for a mouse-driven RTS but is hard to read quickly and is not controller friendly.
+The live HUD (`ArcadeRankHud`) renders in `PressStart2P-Regular.ttf` via `src/ui/themes/gameplay_theme.tres`, applied to the HUD's root node in `hud.tscn`. Menus and other in-game overlays (pause, end, game-over, powerup cards) keep `Awesome 9` (global theme, `default_theme.tres`). See [[project/decisions]] (two-font UI system) for the rationale.
 
-This draft introduces `ArcadeHud`:
-- a bold top bar with **level badge**, **big centered timer**, and **lives counter**;
-- a bottom power-up bar with three fixed 40×40 slots;
-- a small script that mirrors the existing `TimeContainer` + `CardContainerContainer` API so integration is minimal.
+## Live HUD (`hud.tscn`)
 
-## Files added
+`ArcadeRankHud` is the on-screen HUD during gameplay (main.tscn:58), a `MarginContainer` inside the gameplay `CanvasLayer`, containing the lives counter, the run timer, the medal/rank bar, score, and death/clear SFX. Bonus popups are spawned as children of that same `CanvasLayer` (which is in the `"GameplayHud"` group), not of the HUD container. It is **not** the `ArcadeHud` described below — that was a design draft and was never built. The medal bar and its medal icon (same sprite as the level-select buttons, `assets/sprites/ui/medals.png`) hide once the run time passes the bronze threshold, replaced by a "NO BONUS" label; all three reappear on level reset. The medal icon, medal bar, and "NO BONUS" label share a single parent (`MedalRow`, the inner `HBoxContainer` marked `unique_name_in_owner`) and all scale/pulse animations are applied to that shared parent, so the trio always pops together.
 
-- `src/ui/components/arcade_hud.tscn` — the new HUD scene.
-- `src/ui/components/arcade_hud.gd` — HUD logic.
+- Script: `src/ui/gameplay/hud.gd` (score roll, rank bands, medals, popups)
+- Scene: `src/ui/gameplay/hud.tscn`
+- Node path in `main.tscn`: `SubViewportContainer/SubViewport/CanvasLayer/ArcadeRankHud`
 
-## Suggested wiring in `main.tscn`
+### Bonus popups (`bonus_popup.tscn`)
 
-1. Add an `ArcadeHud` instance under `SubViewportContainer/SubViewport/CanvasLayer`.
-2. Keep `PauseScreen` and `EndScreen` as they are; only hide or remove `TimeContainer` and `CardContainerContainer` when you are ready to switch.
+The "+bonus" popup shown at level clear is a **reusable, one-shot component**, not a static HUD child:
 
-Example node path after integration:
+- Component: `src/ui/gameplay/bonus_popup.gd` + `bonus_popup.tscn` (`class_name BonusPopup`)
+- Tuning: `resources/bonus_popup_config.tres` (`drift`, `pop_in_time`, `fade_out_time`, `lifetime`, `position_offset`) — the single shared source of truth for every spawned popup.
+- `BonusPopup.spawn(parent, text, color, world_position)` instantiates a popup, parents it under the gameplay HUD `CanvasLayer` (main.tscn's `CanvasLayer` node), animates it (pop in → drift up → fade out) **above the given world position** (mapped to screen via `get_canvas_transform()`), then frees itself. Concurrent bonuses stack because each spawn is independent. The HUD container itself must not be the parent — container layout would overwrite the popup's position.
+- The gameplay `CanvasLayer` is in the `"GameplayHud"` group (main.tscn), so world-side callers (future secret-area bonuses) can spawn via `BonusPopup.find_hud()` without a hard reference.
+- `ArcadeRankHud` spawns it on `level_rank_awarded`; `main.gd` sets `pending_popup_world_position` to the player's finish position just before `ArcadeDirector.on_level_finished()` (whose `level_rank_awarded` emit is synchronous), so the popup appears above the player at the exit.
+
+### `ArcadeHud` design draft
+There was previously a design draft proposing a new `ArcadeHud` (bigger timer, lives counter, fixed power-up slots). **It was never implemented** — the draft file was rewritten into this doc, and the live HUD is `ArcadeRankHud` above. Do not mistake any past references to "`ArcadeHud` draft" for current code; it is backlog work (see `docs/project/active-backlog.md`).
+
+## Run Timer (`run_timer.gd` + `time_display.gd`)
+
+The run clock is split into two parts:
+
+- **`RunTimer`** (`src/scripts/components/run_timer.gd`, `class_name RunTimer`) — a plain `Node` at the **main scene root** (`main.tscn` → `Main/RunTimer`, exported to `main.gd` as `run_timer`). It owns all timer state and logic. **This is the single source of truth for run time.**
+- **`TimeDisplay`** (`src/ui/widgets/time_display.gd`, `class_name TimeDisplay`) — the `TimeContainer` MarginContainer inside `ArcadeRankHud` (hud.tscn). It is **display-only**: it renders whatever time it is told via `set_time()` and holds no clock state. `main.tscn` connects `RunTimer.time_changed` → `TimeDisplay.set_time`.
+
+`main.gd` wires everything: it connects player lifecycle signals to the timer via `run_timer.track_player(player)` (initialize_players) and hands the timer to the HUD with `arcade_rank_hud.run_timer = run_timer`. `ArcadeRankHud` reads `run_timer.total_time` / `run_timer.race_started` for medal-pace and rank-band visuals.
+
+### What the timer does
+
+- **Display timer** (`total_time`): counts up while the race is active (first jump → finish). `time_changed` fires each accumulated frame so the HUD label stays in sync.
+- **Session accumulator** (`session_elapsed`): accumulates the same active-run time but **survives `reset()`** (deaths and restarts). It is flushed to `SignalBus.play_time_elapsed`, which `SaveManager` adds to the total/daily/weekly "time played" retention counters. So time on failed runs and restarts is recorded even though it never appears on the timer.
+- **Race gating**: time accumulates only when `race_started && !race_paused`. Paused time and pre-first-jump reading time are excluded. The `game_paused` signal (main.tscn) drives the pause gate via `_on_main_game_paused`.
+
+### Signals consumed (from `Player`)
+
+| Signal | Handler effect |
+|--------|----------------|
+| `run_started` | Starts the race (and the accumulator) |
+| `run_restarted` | Flushes accumulated time to the bus, then resets the display timer |
+| `run_finished` | Stops the race and flushes remaining time |
+
+### Flush points for `SignalBus.play_time_elapsed`
+
+- Every ~10 s of active play (see `FLUSH_INTERVAL_SEC`)
+- On `run_restarted` (covers death respawn + manual restart)
+- On `run_finished`
+- On `reset()` (covers run resets that don't pass through `run_restarted`)
+
+### Flow
 
 ```
-SubViewportContainer/SubViewport/CanvasLayer
-├── ArcadeHud        <-- new
-├── PauseScreen
-├── EndScreen
+Player signals ──> RunTimer ──┬─> time_changed ──> TimeDisplay (HUD label)
+                              └─> SignalBus.play_time_elapsed ──> SaveManager._on_time_elapsed ──> GameData total/daily/weekly_time_played_seconds
 ```
 
-If you want to try it side-by-side first, set `TimeContainer.visible = false` and `CardContainerContainer.visible = false` instead of deleting them.
+## See Also
 
-## Suggested wiring in `main.gd`
-
-Add an export for the new HUD and remove / deprecate the old ones:
-
-```gdscript
-@export var arcade_hud: MarginContainer
-# @export var time_container: MarginContainer   # can be removed later
-# @export var card_container: VBoxContainer     # can be removed later
-```
-
-In `_ready`:
-
-```gdscript
-arcade_hud.set_level_name(level_name)
-arcade_hud.set_lives(3)   # or however many lives you use
-```
-
-In `initialize_players`:
-
-```gdscript
-arcade_hud.track_player(player)
-# time_container.track_player(player)   # remove
-# card_container.map_player_signals(player_nodes)  # remove
-```
-
-To drive the timer, add a `_process` to `main.gd`:
-
-```gdscript
-func _process(delta: float) -> void:
-	if not race_finished:
-		arcade_hud.update_time(delta)
-```
-
-`ArcadeHud.reset()` is already wired to player restart signals, so `reset_ui` can be simplified to:
-
-```gdscript
-func reset_ui():
-	set_game_paused(false)
-	arcade_hud.reset()
-	race_finished = false
-	end_screen.visible = false
-```
-
-## Controller / arcade considerations
-
-- All text uses large font sizes (20–24 px) for cabinet screens.
-- The power-up slots are fixed left-to-right slots, making it easy to show a selection highlight or button prompt later.
-- The top bar spans the full width so it is readable at a glance.
-- If you add a selected-slot indicator, add a `TextureRect` or `Panel` highlight under `PowerupContainer` and animate its `position` based on the active slot index.
-
-## Next steps / optional polish
-
-1. Apply your existing `level_select_theme.tres` to `ArcadeHud` so fonts and colors match the rest of the game.
-2. Style the `Panel` nodes with `StyleBoxFlat` fills (dark background + bright border) for an arcade bezel look.
-3. Add a `HIGH SCORE` / `BEST` label next to the timer if you want classic arcade flavor.
-4. If you support two players locally, duplicate the bottom bar or stack two rows.
-5. Replace the placeholder `Panel` slots with your existing `card_scene.tscn` sizing so the power-up icons feel consistent.
+- [[technical/save-system/index]] — retention counters and `_on_time_elapsed`
+- [[technical/signal-bus]] — `play_time_elapsed` signal
+- [[technical/player-system]] — player lifecycle signals
+- [[technical/main-system]] — timer wiring in `main.gd` / `main.tscn`

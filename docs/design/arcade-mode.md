@@ -117,10 +117,10 @@ time_bonus = max(0, max_time_bonus_per_level - floor(level_clear_time * time_bon
 
 - `src/scenes/level/tiles/heart_pickup.tscn` + `heart_pickup.gd`
 - `src/scripts/singletons/arcade_director.gd` — autoload, manages arcade run state and level transitions
-- `src/ui/components/arcade_hud.tscn` + `arcade_hud.gd` — HUD from existing draft
-- `src/ui/menus/arcade_title_screen.tscn` + `arcade_title_screen.gd`
-- `src/ui/menus/arcade_game_over_screen.tscn` + `arcade_game_over_screen.gd`
-- `src/ui/menus/arcade_victory_screen.tscn` + `arcade_victory_screen.gd`
+- `src/ui/widgets/arcade_hud.tscn` + `arcade_hud.gd` — HUD from existing draft
+- `src/ui/menu/arcade_title_screen.tscn` + `arcade_title_screen.gd`
+- `src/ui/menu/game_over.tscn` + `game_over.gd`
+- `src/ui/menu/arcade_victory_screen.tscn` + `arcade_victory_screen.gd`
 
 ### Modified scenes/scripts
 

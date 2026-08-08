@@ -93,18 +93,6 @@ func draw(type: String, exists: bool = false, from_position: Vector2 = Vector2.Z
 func shift_by(offsets: Array):
 	if is_dissolving:
 		return
-	
-	var margin_names := [
-		"margin_left",
-		"margin_top",
-		"margin_right",
-		"margin_bottom"
-		]
-	
-	for i in range(4):
-		var current = container.get_theme_constant(margin_names[i])
-		var new_value = current + offsets[i]
-		container.add_theme_constant_override(margin_names[i], new_value)
 
 
 func play_draw_new_animation(pickup_position: Vector2 = Vector2.ZERO):
@@ -125,32 +113,8 @@ func play_draw_new_animation(pickup_position: Vector2 = Vector2.ZERO):
 
 
 func _to_card_local(pickup_position: Vector2) -> Vector2:
-	var sub_viewport := _find_gameplay_sub_viewport()
-	if sub_viewport == null:
-		return self.get_global_transform().affine_inverse() * pickup_position
-	
-	# pickup_position is in the SubViewport's world/canvas space.
-	# Convert it to the SubViewport's viewport coordinates (i.e. where it appears
-	# on the rendered sub-viewport), which map 1:1 to the root viewport's canvas
-	# coordinates where this card UI lives.
-	var viewport_position: Vector2 = sub_viewport.get_canvas_transform() * pickup_position
+	var viewport_position: Vector2 = get_viewport().get_canvas_transform() * pickup_position
 	return self.get_global_transform().affine_inverse() * viewport_position
-
-
-func _find_gameplay_sub_viewport() -> SubViewport:
-	var current_scene := get_tree().current_scene
-	if current_scene == null:
-		return null
-	
-	var sub_viewport_container := current_scene.get_node_or_null("SubViewportContainer")
-	if sub_viewport_container == null:
-		return null
-	
-	for child in sub_viewport_container.get_children():
-		if child is SubViewport:
-			return child
-	
-	return null
 
 
 func play_draw_same_animation():

@@ -1,9 +1,7 @@
-[gd_resource type="Resource" script_class="MedalConfig" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="MedalConfig" format=3 uid="uid://dw2er884j6nom"]
 
-[ext_resource type="Script" path="res://src/scripts/resources/medal_config.gd" id="1_a1b2c"]
+[ext_resource type="Script" uid="uid://bqwesslfieh60" path="res://src/scripts/resources/medal_config.gd" id="1_a1b2c"]
 
 [resource]
 script = ExtResource("1_a1b2c")
-medal_names = Array[String](["BRONZE", "SILVER", "GOLD"])
-medal_colors = Array[Color]([Color(0.804, 0.502, 0.196, 1), Color(0.753, 0.753, 0.753, 1), Color(0.996, 0.843, 0, 1)])
-cosmetics_by_milestone = Array[String](["", "silver_crown", "golden_dragon"])
+medal_colors = Array[Color]([Color(0.8, 0.54, 0.28000003, 1), Color(0.753, 0.753, 0.753, 1), Color(1, 0.90250003, 0.35000002, 1)])

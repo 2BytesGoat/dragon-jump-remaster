@@ -37,6 +37,7 @@ func start_arcade_run() -> void:
 	_reset_run_state()
 	GameSession.set_game_mode(GameSession.GameModes.ARCADE)
 	GameSession.level_name = config.starting_level_id
+	GameSession.custom_level_code = ""
 
 
 func can_start_run() -> bool:

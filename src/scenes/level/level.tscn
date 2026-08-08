@@ -12,7 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://dds3jyqkjdevf" path="res://assets/sprites/world/backgrounds/bg2.png" id="10_4iyit"]
 [ext_resource type="Script" uid="uid://bas5rdqvcwnqw" path="res://src/scenes/level/level_wall_blend.gd" id="10_n7bl3"]
 [ext_resource type="Texture2D" uid="uid://jll2n6qu6oke" path="res://assets/sprites/world/backgrounds/bg1.png" id="11_yr4yg"]
-[ext_resource type="Script" uid="uid://dq7aqp5hw0mlf" path="res://src/scenes/level/parallax_auto_fit.gd" id="12_25vab"]
+[ext_resource type="Script" uid="uid://lhz0wtyy2fd3x" path="res://src/scenes/level/parallax_auto_fit.gd" id="12_25vab"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_n86tn"]
 texture = ExtResource("3_lxq08")

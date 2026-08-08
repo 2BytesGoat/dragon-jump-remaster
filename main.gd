@@ -10,21 +10,19 @@ extends Node
 @export var pause_screen: MarginContainer
 @export var end_screen: MarginContainer
 @export var arcade_game_over_screen: MarginContainer
-@export var time_container: MarginContainer
+@export var time_container: TimeDisplay
 @export var transition_wipe: TransitionWipe
 @export var arcade_rank_hud: ArcadeRankHud
+@export var run_timer: RunTimer
 
 @onready var player_scene = preload("res://src/scenes/player/player.tscn")
 @onready var camera_scene = preload("res://src/scenes/camera_2d.tscn")
 @onready var portal_scene = preload("res://src/scenes/level/tiles/portal.tscn")
-var level_scene_path = "res://src/ui/menus/level_select.tscn"
+var level_scene_path = "res://src/ui/menu/main_screen.tscn"
 
 var race_finished: bool = false
 var is_game_paused: bool = false
 var first_pickup: bool = true
-var total_time: float = 0.0
-var delta_time: float = 0.0
-var update_interval: float = 0.2
 
 var level_name = "tmp"
 var player_speed_modifier = 1.0 
@@ -36,12 +34,17 @@ const TMP_PREVIEW_PATH := "res://resources/level_data/_editor_preview.tres"
 
 
 func _ready():
+	AudioManager.stop_music()
 	level_name = GameSession.level_name if GameSession.level_name else level_name
 	player_speed_modifier = GameSession.speed_modifier if GameSession.speed_modifier != 1.0 else player_speed_modifier
 	
-	var level_data := CampaignLevelLibrary.get_level(level_name)
-	level.load_level(level_data)
+	if GameSession.custom_level_code != "":
+		level.set_level(GameSession.custom_level_code)
+	else:
+		var level_data := CampaignLevelLibrary.get_level(level_name)
+		level.load_level(level_data)
 	initialize_players()
+	arcade_rank_hud.run_timer = run_timer
 	
 	pause_screen.set_pause_active(false)
 	end_screen.visible = false
@@ -59,6 +62,7 @@ func update_level(level_data: CampaignLevelData):
 func reset_ui():
 	set_game_paused(false)
 	time_container.reset()
+	run_timer.reset()
 	race_finished = false
 	end_screen.visible = false
 	arcade_game_over_screen.visible = false
@@ -100,7 +104,7 @@ func initialize_players() -> void:
 	player.hit_stop = hit_stop
 	player.transition_wipe = transition_wipe
 	player.camera = camera
-	time_container.track_player(player)
+	run_timer.track_player(player)
 	
 	card_container.map_player_signals(player_nodes)
 
@@ -127,6 +131,8 @@ func _on_player_restarted_run(_player: Player):
 	if race_finished:
 		return
 	reset_ui()
+	if arcade_rank_hud != null:
+		arcade_rank_hud.reset_medal_bar()
 	SignalBus.new_run_attempt.emit(level_name)
 	TelemetrySystem.run_restarted(level_name)
 
@@ -136,7 +142,7 @@ func _on_player_finished_run(player: Player) -> void:
 		GameSession.GameModes.PRACTICE:
 			_on_player_finished_practice_run(player)
 		GameSession.GameModes.ARCADE:
-			_on_arcade_level_finished()
+			_on_arcade_level_finished(player.global_position)
 
 
 func _on_player_died(_player: Player) -> void:
@@ -163,12 +169,12 @@ func _show_arcade_game_over() -> void:
 
 
 func _on_player_finished_practice_run(_player: Player) -> void:
-	SignalBus.new_time_submission.emit(level_name, total_time)
-	TelemetrySystem.level_finished(level_name, total_time)
+	SignalBus.new_time_submission.emit(level_name, run_timer.total_time)
+	TelemetrySystem.level_finished(level_name, run_timer.total_time)
 	
 	var stats = {
 		"level_name": level_name,
-		"time": total_time,
+		"time": run_timer.total_time,
 		"restarts": 1
 	}
 	end_screen.update_stats(stats)
@@ -184,7 +190,7 @@ func _on_resume_button_pressed() -> void:
 	set_game_paused(false)
 
 
-func _on_pause_screen_restart_button_pressed() -> void:
+func _on_restart_button_pressed() -> void:
 	reset_ui()
 	for player: Player in player_container.get_children():
 		player.is_done = false
@@ -207,17 +213,20 @@ func _on_next_button_pressed() -> void:
 	_progress_to_next_level()
 
 
-func _on_arcade_level_finished() -> void:
+func _on_arcade_level_finished(finish_position: Vector2) -> void:
 	var finished_level = level_name
-	var clear_time = time_container.total_time
+	var clear_time = run_timer.total_time
 	SignalBus.new_time_submission.emit(finished_level, clear_time)
+	# The bonus popup spawns above the player at the exit. Set the position
+	# before on_level_finished() because its level_rank_awarded emit is
+	# synchronous and the HUD reads it immediately.
+	if arcade_rank_hud != null:
+		arcade_rank_hud.pending_popup_world_position = finish_position
 	level_name = ArcadeDirector.on_level_finished(clear_time)
 	
 	# Let the +bonus popup and score roll play out over the finished level
 	# before advancing — reset_ui() would otherwise kill them same-frame.
-	var popup_delay := 1.3
-	if arcade_rank_hud != null:
-		popup_delay = arcade_rank_hud.bonus_popup_lifetime + 0.2
+	var popup_delay := BonusPopup.CONFIG.lifetime + 0.2
 	for p in player_container.get_children():
 		p.is_paused = true
 	await get_tree().create_timer(popup_delay).timeout
@@ -230,7 +239,6 @@ func _on_arcade_level_finished() -> void:
 	
 	var level_data := CampaignLevelLibrary.get_level(level_name)
 	update_level(level_data)
-	reset_ui()
 
 
 func _progress_to_next_level() -> void:
@@ -241,4 +249,3 @@ func _progress_to_next_level() -> void:
 	
 	var level_data := CampaignLevelLibrary.get_level(level_name)
 	update_level(level_data)
-	reset_ui()
