@@ -65,16 +65,6 @@ System relationships and dependencies: This system integrates with player system
 - **Signals**: `closed` — emitted on `ui_cancel` so the host can return to the main menu
 - **Integration points**: `CampaignLevelLibrary` (level list), `SaveManager` (per-level stats), `GameSession` (run start), `SceneLoader` (navigation), `TelemetrySystem` (menu telemetry)
 
-### `custom_levels_menu.gd` / `custom_levels_menu.tscn`
-- **Purpose**: Browse imported custom levels, import new ones by pasting a level code (name + code via `LevelCodeParser` validation), play them, or delete them. Levels persist via `CustomLevelStore` (`user://custom_levels.json`).
-- **Main methods**:
-  - `_ready()`: Refreshes the level list and focuses import
-  - `_on_play_button_pressed()`: Calls `GameSession.start_custom_run(code)` and navigates to the game scene
-  - `_on_import_confirm_pressed()`: Validates and stores an imported level
-  - `_on_delete_button_pressed()`: Removes the selected level
-  - `_on_back_button_pressed()`: Returns to the main menu
-- **Integration points**: `CustomLevelStore` (persistence), `LevelCodeParser` (validation), `GameSession` (custom run), `SceneLoader`
-
 ### `credits_screen.gd` / `credits_screen.tscn`
 - **Purpose**: Full-screen overlay with a Star Wars-style rolling text crawl. Closes on any key / joypad button / mouse click, or automatically once the crawl has fully scrolled past the top of the screen (after a short `END_HOLD_DURATION` hold).
 - **Main methods**:
@@ -94,10 +84,6 @@ System relationships and dependencies: This system integrates with player system
   - `_fade_out(screen, then)` / `_fade_in(screen, focus)`: Shared transition helpers. `_fade_out` tweens `modulate:a` to 0 (`SCREEN_FADE_IN_DURATION`, SINE/EASE_IN), hides the screen, resets its alpha, then calls `then`. `_fade_in` resets alpha to 0, shows the screen, tweens it to 1 (SINE/EASE_OUT), then calls `focus`. Every screen switch runs through these, so all menu transitions fade. A `_transitioning` guard ignores re-entrant requests while a switch is in flight
 - **Integration points**: `main_menu.gd` (signals incl. `title_sequence_finished`), `practice_menu.gd` (signals), `credits_screen.gd` (signals), `AudioManager` (menu music — `res://assets/music/Groovy booty.ogg`)
 
-### `custom_level_store.gd`
-- **Purpose**: Static helper (not an autoload) that persists player-imported custom levels to `user://custom_levels.json` as `{ id: { "name", "code" } }`.
-- **Main methods**: `get_all()`, `get_level(id)`, `has_level(id)`, `add_level(id, name, code)`, `remove_level(id)`
-
 ### `end_screen.gd`
 - **Purpose**: Displays game statistics when a run is completed
 - **Key properties**:
@@ -111,7 +97,7 @@ System relationships and dependencies: This system integrates with player system
 
 ### `run_timer.gd` / `time_display.gd` / `arcade_rank_hud.tscn`
 - **Purpose**: The run clock (`RunTimer`, `src/scripts/components/run_timer.gd`) lives at the main scene root and is the single source of truth for run time. `TimeDisplay` (`src/ui/components/time_display.gd`) is the display-only timer label inside the HUD (`TimeContainer`), fed by `RunTimer.time_changed`.
-- Documented in [[technical/ui/arcade-hud]]. See that doc for the player-signal flow and flush points; `src/ui/components/time_container.tscn` is a stale, unused draft.
+- Documented in [[technical/ui/arcade-hud]]. See that doc for the player-signal flow and flush points.
 
 ### `bonus_popup.gd` / `bonus_popup.tscn` / `bonus_popup_config.tres`
 - **Purpose**: Reusable one-shot "+bonus" popup that animates above a world position and frees itself. Spawned by `ArcadeRankHud` at level clear and by `BonusPopup.spawn()` from anywhere; timing tuned via `resources/bonus_popup_config.tres`.
@@ -155,9 +141,8 @@ Progress-bar mode was cut for V1.0 (see [[technical/architecture]]). No such fil
 ### `progress_bar.tscn` *(removed)*
 No such file exists in the repo.
 
-### `arcade_rank_hud.tscn` / `time_container.tscn`
+### `arcade_rank_hud.tscn`
 - **Purpose**: `arcade_rank_hud.tscn` (in `src/ui/hud/`) is the live gameplay HUD (lives, timer label, rank bar, score). Its nested `TimeContainer` runs `time_display.gd` (display-only); the clock itself is `RunTimer` at the main root — see the Script Components section above.
-- `time_container.tscn` is a **stale, unused** draft scene; the live timer is inside `arcade_rank_hud.tscn`.
 
 ## System Integration
 - How the system interacts with other components: UI components connect to various game systems through signals and data passing, providing visual feedback for player actions and game events

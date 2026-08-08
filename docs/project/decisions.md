@@ -76,7 +76,7 @@ This document captures high-level decisions as the project evolves.
 - **Decided the practice menu is a full-rect sibling of `MainMenu` inside `main_screen.tscn`**, driven by a new `practice_menu.gd` (adapted from `level_select.gd`, minus leaderboard and START/BACK buttons). The standalone `src/ui/menus/practice_menu.tscn` is the same subtree with the script attached.
 - **JUMP starts the run directly** — no confirmation screen. `player_one_jump` calls `GameSession.start_run(level, 0.75 + slider * 0.25)` then `SceneLoader.go_to("res://main.tscn")`; `ui_cancel` emits `closed` back to the main menu.
 - **Main menu PRACTICE button is now wired** (`practice_requested` signal → `main_screen.gd` shows the practice menu and focuses its first level).
-- **`main.gd` exit path now returns to `main_screen.tscn`** instead of `level_select.tscn`. `level_select.gd/.tscn` remain in the repo until removed.
+- **`main.gd` exit path now returns to `main_screen.tscn`** instead of `level_select.tscn`. `level_select.gd/.tscn` have been removed.
 
 ---
 

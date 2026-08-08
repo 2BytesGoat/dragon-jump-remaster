@@ -101,39 +101,29 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 - [x] src/ui/menus/main_screen.tscn — documented in [[technical/ui/index]]
 - [x] src/ui/menus/practice_menu.gd — documented in [[technical/ui/index]]
 - [x] src/ui/menus/practice_menu.tscn — documented in [[technical/ui/index]]
-- [x] src/ui/screens/custom_levels_menu.gd — documented in [[technical/ui/index]]
-- [x] src/ui/screens/custom_levels_menu.tscn — documented in [[technical/ui/index]]
-- [x] src/ui/screens/credits_screen.gd — documented in [[technical/ui/index]]
-- [x] src/ui/screens/credits_screen.tscn — documented in [[technical/ui/index]]
-- [x] src/scripts/resources/custom_level_store.gd — documented in [[technical/ui/index]]
-- [x] src/ui/menus/end_screen.gd — documented in [[technical/ui/index]]
-- [x] src/ui/menus/end_screen.tscn — documented in [[technical/ui/index]]
-- [ ] src/ui/menus/level_select.gd
-- [ ] src/ui/menus/level_select.tscn
-- [ ] src/ui/menus/level_button.gd
-- [ ] src/ui/menus/level_button.tscn
-- [ ] src/ui/menus/tag_screen.gd
-- [ ] src/ui/menus/tag_screen.tscn
-- [ ] src/ui/menus/speed_slider_label.gd
-- [ ] src/ui/menus/menu_button.gd
-- [ ] src/ui/menus/menu_button.tscn
-- [ ] src/ui/menus/others_label.tscn
-- [ ] src/ui/menus/pause_screen.gd
-- [ ] src/ui/menus/pause_screen.tscn
-- [ ] src/ui/menus/crt_screen_effect.tscn
-- [ ] src/ui/menus/settings_menu.gd
-- [ ] src/ui/menus/settings_menu.tscn
-- [ ] src/ui/menus/stats_screen.gd
-- [ ] src/ui/menus/stats_screen.tscn
-- [ ] src/ui/menus/arcade_game_over_screen.gd
-- [ ] src/ui/menus/arcade_game_over_screen.tscn
+- [x] src/ui/menus/credits_screen.gd — documented in [[technical/ui/index]]
+- [x] src/ui/menus/credits_screen.tscn — documented in [[technical/ui/index]]
+- [x] src/ui/screens/end_screen.gd — documented in [[technical/ui/index]]
+- [x] src/ui/screens/end_screen.tscn — documented in [[technical/ui/index]]
+- [ ] src/ui/components/level_button.gd
+- [ ] src/ui/components/level_button.tscn
+- [ ] src/ui/components/speed_slider_label.gd
+- [ ] src/ui/components/menu_button.gd
+- [ ] src/ui/components/menu_button.tscn
+- [ ] src/ui/components/others_label.tscn
+- [ ] src/ui/screens/pause_screen.gd
+- [ ] src/ui/screens/pause_screen.tscn
+- [ ] src/ui/components/crt_screen_effect.tscn
+- [ ] src/ui/screens/settings_menu.gd
+- [ ] src/ui/screens/settings_menu.tscn
+- [ ] src/ui/screens/arcade_game_over_screen.gd
+- [ ] src/ui/screens/arcade_game_over_screen.tscn
 - [x] src/ui/hud/arcade_rank_hud.gd — documented in [[technical/ui/arcade-hud]]
 - [x] src/ui/hud/arcade_rank_hud.tscn — documented in [[technical/ui/arcade-hud]]
 - [x] src/ui/components/time_display.gd — documented in [[technical/ui/arcade-hud]]
 - [x] src/scripts/components/run_timer.gd — documented in [[technical/ui/arcade-hud]]
 - [x] src/ui/hud/bonus_popup.gd — documented in [[technical/ui/arcade-hud]]
 - [x] src/ui/hud/bonus_popup.tscn — documented in [[technical/ui/arcade-hud]]
-- [ ] src/ui/components/time_container.tscn
 - [x] src/ui/themes/default_theme.tres — documented in [[technical/ui/index]]
 - [x] src/ui/themes/gameplay_theme.tres — documented in [[technical/ui/arcade-hud]]
 - [x] src/ui/themes/practice_theme.tres — documented in [[technical/ui/index]]
@@ -178,7 +168,6 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 - [x] src/scripts/singletons/telemetry_system.gd — Local analytics abstraction; V1.0 autoload
 - [x] src/scripts/singletons/audio_manager.gd — V1.0 autoload
 - [x] src/scripts/singletons/game_session.gd — V1.0 autoload
-- [x] src/scripts/resources/custom_level_store.gd — documented in [[technical/ui/index]]
 - [x] src/scripts/singletons/settings.gd — V1.0 autoload
 - [ ] src/scripts/components/states/state.gd
 - [ ] src/scripts/components/states/state_machine.gd

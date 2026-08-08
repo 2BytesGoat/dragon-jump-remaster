@@ -33,7 +33,7 @@ System relationships and dependencies: This system is a presentation layer. It d
   - `_ready()`: Shows the V1.0 placeholder
   - `update_leaderboard(level_name: String)`: Shows the V1.0 placeholder (no-op in V1.0)
 - **Integration points with other systems**:
-  - Consumed by `level_select.gd` and `end_screen.gd` via `%Leaderboard`
+  - Consumed by `end_screen.gd` via `%Leaderboard`
   - Post-launch: expects a leaderboard manager wired to SignalBus (signal names are not yet defined in V1.0)
 - **RAG metadata**: Placeholder-driven UI; rendering path for real entries already scaffolded but unused in V1.0.
 
@@ -66,7 +66,7 @@ System relationships and dependencies: This system is a presentation layer. It d
   - Horizontal layout for player name and score display
 
 ## System Integration
-- How the system interacts with other components: In V1.0 the leaderboard is a self-contained UI stub invoked by `level_select.gd` and `end_screen.gd`
+- How the system interacts with other components: In V1.0 the leaderboard is a self-contained UI stub invoked by `end_screen.gd`
 - Signal-based communication patterns: No active signal usage in V1.0; leaderboard signals are reserved for post-launch (not yet defined)
 - Data flow and control flow: Post-launch: Player data → SaveManager → LeaderboardManager → SilentWolf → cache → UI update
 - Cross-system relationships for RAG linking: Related to SaveManager (player data), UI components (menus), ArcadeDirector (local run summary)

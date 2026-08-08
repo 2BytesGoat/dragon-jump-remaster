@@ -93,6 +93,7 @@ text = "PRACTICE"
 
 [node name="CreateButton" parent="VBoxContainer/SelectionContainer/VBoxContainer" unique_id=1660428569 instance=ExtResource("2_xaiw4")]
 layout_mode = 2
+disabled = true
 text = "CREATE"
 
 [node name="CreditsButton" parent="VBoxContainer/SelectionContainer/VBoxContainer" unique_id=1271898267 instance=ExtResource("2_xaiw4")]
