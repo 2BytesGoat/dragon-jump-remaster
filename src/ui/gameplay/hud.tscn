@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://brluo13ccn1u1"]
 
 [ext_resource type="Theme" uid="uid://hax2p5a7h3e6" path="res://src/ui/themes/gameplay_theme.tres" id="2_5xjdt"]
-[ext_resource type="Script" uid="uid://b6vbx63crken4" path="res://src/ui/hud/arcade_rank_hud.gd" id="2_script"]
-[ext_resource type="Script" uid="uid://u12281ncqv4x" path="res://src/ui/components/time_display.gd" id="10_ycdy4"]
+[ext_resource type="Script" uid="uid://b6vbx63crken4" path="res://src/ui/gameplay/hud.gd" id="2_script"]
+[ext_resource type="Script" uid="uid://u12281ncqv4x" path="res://src/ui/widgets/time_display.gd" id="10_ycdy4"]
 [ext_resource type="AudioStream" uid="uid://35l4xnse0nlc" path="res://assets/sfx/SoundBonus.wav" id="11_sfx_bonus"]
 [ext_resource type="AudioStream" uid="uid://bo175m0kiuwev" path="res://assets/sfx/heavenly.ogg" id="12_sfx_gold"]
 [ext_resource type="AudioStream" uid="uid://djubut3dgdmkp" path="res://assets/sfx/SoundSlide.wav" id="13_sfx_death"]

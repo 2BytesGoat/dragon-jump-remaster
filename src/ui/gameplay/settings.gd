@@ -3,9 +3,10 @@ extends MarginContainer
 ## SettingsMenu
 ## Pop-up menu for adjusting Master, Music, and SFX volume levels.
 
-@onready var master_slider: HSlider = $Panel/MarginContainer/VBoxContainer/MasterVolumeRow/MasterSlider
-@onready var music_slider: HSlider = $Panel/MarginContainer/VBoxContainer/MusicVolumeRow/MusicSlider
-@onready var sfx_slider: HSlider = $Panel/MarginContainer/VBoxContainer/SFXVolumeRow/SFXSlider
+@onready var master_slider: HSlider = %MasterSlider
+@onready var music_slider: HSlider = %MusicSlider
+@onready var sfx_slider: HSlider = %SFXSlider
+signal close_me
 
 
 func _ready() -> void:
@@ -30,4 +31,4 @@ func _on_sfx_slider_value_changed(value: float) -> void:
 
 
 func _on_close_button_pressed() -> void:
-	visible = false
+	close_me.emit()

@@ -83,10 +83,10 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 
 ## Leaderboard System
 
-- [x] src/ui/components/leaderboard.gd — documented in [[technical/leaderboard]]
-- [x] src/ui/components/leaderboard.tscn — documented in [[technical/leaderboard]]
-- [x] src/ui/components/leaderboard_entry.gd — documented in [[technical/leaderboard]]
-- [x] src/ui/components/leaderboard_entry.tscn — documented in [[technical/leaderboard]]
+- [x] src/ui/widgets/leaderboard.gd — documented in [[technical/leaderboard]]
+- [x] src/ui/widgets/leaderboard.tscn — documented in [[technical/leaderboard]]
+- [x] src/ui/widgets/leaderboard_entry.gd — documented in [[technical/leaderboard]]
+- [x] src/ui/widgets/leaderboard_entry.tscn — documented in [[technical/leaderboard]]
 
 ## RL Integration System
 
@@ -95,35 +95,35 @@ This document tracks all `.gd` and `.tscn` files in the repository, organized by
 
 ## UI Components
 
-- [x] src/ui/menus/main_menu.gd — documented in [[technical/ui/index]]
-- [x] src/ui/menus/main_menu.tscn — documented in [[technical/ui/index]]
-- [x] src/ui/menus/main_screen.gd — documented in [[technical/ui/index]]
-- [x] src/ui/menus/main_screen.tscn — documented in [[technical/ui/index]]
-- [x] src/ui/menus/practice_menu.gd — documented in [[technical/ui/index]]
-- [x] src/ui/menus/practice_menu.tscn — documented in [[technical/ui/index]]
-- [x] src/ui/menus/credits_screen.gd — documented in [[technical/ui/index]]
-- [x] src/ui/menus/credits_screen.tscn — documented in [[technical/ui/index]]
-- [x] src/ui/screens/end_screen.gd — documented in [[technical/ui/index]]
-- [x] src/ui/screens/end_screen.tscn — documented in [[technical/ui/index]]
-- [ ] src/ui/components/level_button.gd
-- [ ] src/ui/components/level_button.tscn
-- [ ] src/ui/components/speed_slider_label.gd
-- [ ] src/ui/components/menu_button.gd
-- [ ] src/ui/components/menu_button.tscn
-- [ ] src/ui/components/others_label.tscn
-- [ ] src/ui/screens/pause_screen.gd
-- [ ] src/ui/screens/pause_screen.tscn
-- [ ] src/ui/components/crt_screen_effect.tscn
-- [ ] src/ui/screens/settings_menu.gd
-- [ ] src/ui/screens/settings_menu.tscn
-- [ ] src/ui/screens/arcade_game_over_screen.gd
-- [ ] src/ui/screens/arcade_game_over_screen.tscn
-- [x] src/ui/hud/arcade_rank_hud.gd — documented in [[technical/ui/arcade-hud]]
-- [x] src/ui/hud/arcade_rank_hud.tscn — documented in [[technical/ui/arcade-hud]]
-- [x] src/ui/components/time_display.gd — documented in [[technical/ui/arcade-hud]]
+- [x] src/ui/menu/main_menu.gd — documented in [[technical/ui/index]]
+- [x] src/ui/menu/main_menu.tscn — documented in [[technical/ui/index]]
+- [x] src/ui/menu/main_screen.gd — documented in [[technical/ui/index]]
+- [x] src/ui/menu/main_screen.tscn — documented in [[technical/ui/index]]
+- [x] src/ui/menu/practice_menu.gd — documented in [[technical/ui/index]]
+- [x] src/ui/menu/practice_menu.tscn — documented in [[technical/ui/index]]
+- [x] src/ui/menu/credits.gd — documented in [[technical/ui/index]]
+- [x] src/ui/menu/credits.tscn — documented in [[technical/ui/index]]
+- [x] src/ui/gameplay/end.gd — documented in [[technical/ui/index]]
+- [x] src/ui/gameplay/end.tscn — documented in [[technical/ui/index]]
+- [ ] src/ui/widgets/level_button.gd
+- [ ] src/ui/widgets/level_button.tscn
+- [ ] src/ui/widgets/speed_slider_label.gd
+- [ ] src/ui/widgets/menu_button.gd
+- [ ] src/ui/widgets/menu_button.tscn
+- [ ] src/ui/widgets/others_label.tscn
+- [ ] src/ui/gameplay/pause.gd
+- [ ] src/ui/gameplay/pause.tscn
+- [ ] src/ui/widgets/crt_effect.tscn
+- [ ] src/ui/gameplay/settings.gd
+- [ ] src/ui/gameplay/settings.tscn
+- [ ] src/ui/gameplay/game_over.gd
+- [ ] src/ui/gameplay/game_over.tscn
+- [x] src/ui/gameplay/hud.gd — documented in [[technical/ui/arcade-hud]]
+- [x] src/ui/gameplay/hud.tscn — documented in [[technical/ui/arcade-hud]]
+- [x] src/ui/widgets/time_display.gd — documented in [[technical/ui/arcade-hud]]
 - [x] src/scripts/components/run_timer.gd — documented in [[technical/ui/arcade-hud]]
-- [x] src/ui/hud/bonus_popup.gd — documented in [[technical/ui/arcade-hud]]
-- [x] src/ui/hud/bonus_popup.tscn — documented in [[technical/ui/arcade-hud]]
+- [x] src/ui/gameplay/bonus_popup.gd — documented in [[technical/ui/arcade-hud]]
+- [x] src/ui/gameplay/bonus_popup.tscn — documented in [[technical/ui/arcade-hud]]
 - [x] src/ui/themes/default_theme.tres — documented in [[technical/ui/index]]
 - [x] src/ui/themes/gameplay_theme.tres — documented in [[technical/ui/arcade-hud]]
 - [x] src/ui/themes/practice_theme.tres — documented in [[technical/ui/index]]

@@ -2,21 +2,21 @@
 
 ## Fonts
 
-The live HUD (`ArcadeRankHud`) renders in `PressStart2P-Regular.ttf` via `src/ui/themes/gameplay_theme.tres`, applied to the HUD's root node in `arcade_rank_hud.tscn`. Menus and other in-game overlays (pause, end, game-over, powerup cards) keep `Awesome 9` (global theme, `default_theme.tres`). See [[project/decisions]] (two-font UI system) for the rationale.
+The live HUD (`ArcadeRankHud`) renders in `PressStart2P-Regular.ttf` via `src/ui/themes/gameplay_theme.tres`, applied to the HUD's root node in `hud.tscn`. Menus and other in-game overlays (pause, end, game-over, powerup cards) keep `Awesome 9` (global theme, `default_theme.tres`). See [[project/decisions]] (two-font UI system) for the rationale.
 
-## Live HUD (`arcade_rank_hud.tscn`)
+## Live HUD (`hud.tscn`)
 
 `ArcadeRankHud` is the on-screen HUD during gameplay (main.tscn:58), a `MarginContainer` inside the gameplay `CanvasLayer`, containing the lives counter, the run timer, the medal/rank bar, score, and death/clear SFX. Bonus popups are spawned as children of that same `CanvasLayer` (which is in the `"GameplayHud"` group), not of the HUD container. It is **not** the `ArcadeHud` described below — that was a design draft and was never built. The medal bar and its medal icon (same sprite as the level-select buttons, `assets/sprites/ui/medals.png`) hide once the run time passes the bronze threshold, replaced by a "NO BONUS" label; all three reappear on level reset. The medal icon, medal bar, and "NO BONUS" label share a single parent (`MedalRow`, the inner `HBoxContainer` marked `unique_name_in_owner`) and all scale/pulse animations are applied to that shared parent, so the trio always pops together.
 
-- Script: `src/ui/hud/arcade_rank_hud.gd` (score roll, rank bands, medals, popups)
-- Scene: `src/ui/hud/arcade_rank_hud.tscn`
+- Script: `src/ui/gameplay/hud.gd` (score roll, rank bands, medals, popups)
+- Scene: `src/ui/gameplay/hud.tscn`
 - Node path in `main.tscn`: `SubViewportContainer/SubViewport/CanvasLayer/ArcadeRankHud`
 
 ### Bonus popups (`bonus_popup.tscn`)
 
 The "+bonus" popup shown at level clear is a **reusable, one-shot component**, not a static HUD child:
 
-- Component: `src/ui/hud/bonus_popup.gd` + `bonus_popup.tscn` (`class_name BonusPopup`)
+- Component: `src/ui/gameplay/bonus_popup.gd` + `bonus_popup.tscn` (`class_name BonusPopup`)
 - Tuning: `resources/bonus_popup_config.tres` (`drift`, `pop_in_time`, `fade_out_time`, `lifetime`, `position_offset`) — the single shared source of truth for every spawned popup.
 - `BonusPopup.spawn(parent, text, color, world_position)` instantiates a popup, parents it under the gameplay HUD `CanvasLayer` (main.tscn's `CanvasLayer` node), animates it (pop in → drift up → fade out) **above the given world position** (mapped to screen via `get_canvas_transform()`), then frees itself. Concurrent bonuses stack because each spawn is independent. The HUD container itself must not be the parent — container layout would overwrite the popup's position.
 - The gameplay `CanvasLayer` is in the `"GameplayHud"` group (main.tscn), so world-side callers (future secret-area bonuses) can spawn via `BonusPopup.find_hud()` without a hard reference.
@@ -30,7 +30,7 @@ There was previously a design draft proposing a new `ArcadeHud` (bigger timer, l
 The run clock is split into two parts:
 
 - **`RunTimer`** (`src/scripts/components/run_timer.gd`, `class_name RunTimer`) — a plain `Node` at the **main scene root** (`main.tscn` → `Main/RunTimer`, exported to `main.gd` as `run_timer`). It owns all timer state and logic. **This is the single source of truth for run time.**
-- **`TimeDisplay`** (`src/ui/components/time_display.gd`, `class_name TimeDisplay`) — the `TimeContainer` MarginContainer inside `ArcadeRankHud` (arcade_rank_hud.tscn). It is **display-only**: it renders whatever time it is told via `set_time()` and holds no clock state. `main.tscn` connects `RunTimer.time_changed` → `TimeDisplay.set_time`.
+- **`TimeDisplay`** (`src/ui/widgets/time_display.gd`, `class_name TimeDisplay`) — the `TimeContainer` MarginContainer inside `ArcadeRankHud` (hud.tscn). It is **display-only**: it renders whatever time it is told via `set_time()` and holds no clock state. `main.tscn` connects `RunTimer.time_changed` → `TimeDisplay.set_time`.
 
 `main.gd` wires everything: it connects player lifecycle signals to the timer via `run_timer.track_player(player)` (initialize_players) and hands the timer to the HUD with `arcade_rank_hud.run_timer = run_timer`. `ArcadeRankHud` reads `run_timer.total_time` / `run_timer.race_started` for medal-pace and rank-band visuals.
 

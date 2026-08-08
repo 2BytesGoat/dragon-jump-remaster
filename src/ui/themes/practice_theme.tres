@@ -60,7 +60,10 @@ texture_margin_right = 8.0
 texture_margin_bottom = 8.0
 
 [resource]
-Button/font_sizes/font_size = 12
+Button/colors/font_color = Color(0.18039216, 0.24705882, 0.31764707, 1)
+Button/colors/font_focus_color = Color(0.18039216, 0.24705882, 0.31764707, 1)
+Button/colors/font_hover_color = Color(0.18039216, 0.24705882, 0.31764707, 1)
+Button/font_sizes/font_size = 16
 Button/fonts/font = ExtResource("2_header_font")
 Button/styles/focus = SubResource("StyleBoxFlat_focus")
 HSlider/icons/grabber = ExtResource("2_21hnu")
@@ -72,6 +75,7 @@ HSlider/styles/focus = SubResource("StyleBoxEmpty_u71yl")
 HSlider/styles/grabber_area = SubResource("StyleBoxEmpty_21hnu")
 HSlider/styles/grabber_area_highlight = SubResource("StyleBoxEmpty_fbh6w")
 HSlider/styles/slider = SubResource("StyleBoxTexture_vuvqd")
+HeaderLabel/font_sizes/font_size = 18
 Label/colors/font_color = Color(0.18039216, 0.24705882, 0.31764707, 1)
 Label/colors/font_outline_color = Color(0.18039216, 0.24705882, 0.31764707, 1)
 Label/font_sizes/font_size = 16

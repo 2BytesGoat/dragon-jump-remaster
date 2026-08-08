@@ -71,8 +71,8 @@ severity. Each item lists the concrete location and a recommended action.
   - `src/scripts/singletons/runtime_secrets.gd` — gitignored/absent
   - `src/scenes/training/main_multiplayer.gd` / `.tscn` — do not exist
   - `src/scenes/training/multiplayer_world.gd` / `.tscn` — do not exist
-  - `src/ui/end_screen.gd` — does not exist (actual: `src/ui/menus/end_screen.gd`)
-  - `src/ui/components/progress_bar.gd` — does not exist
+  - `src/ui/end.gd` — does not exist (actual: `src/ui/menu/end.gd`)
+  - `src/ui/widgets/progress_bar.gd` — does not exist
 - The architecture doc and backlog say multiplayer/leaderboard systems were
   removed for V1.0, but the tracking file still lists them as "documented".
 - **Fix:** prune `documentation_tracking.md` to reflect the current file tree.

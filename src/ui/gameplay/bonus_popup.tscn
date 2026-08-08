@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dy48oppkgt4rs"]
 
-[ext_resource type="Script" uid="uid://c7nlprvv0ihdf" path="res://src/ui/hud/bonus_popup.gd" id="1_bonus_popup"]
+[ext_resource type="Script" uid="uid://c7nlprvv0ihdf" path="res://src/ui/gameplay/bonus_popup.gd" id="1_bonus_popup"]
 [ext_resource type="Theme" uid="uid://hax2p5a7h3e6" path="res://src/ui/themes/gameplay_theme.tres" id="2_theme"]
 
 [node name="BonusPopup" type="Label" unique_id=302418970]

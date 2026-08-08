@@ -73,7 +73,7 @@ This document captures high-level decisions as the project evolves.
 
 **Context:** The old `level_select` flow (a separate scene with leaderboard toggles and START/BACK buttons) is being retired. The revamped main screen already embedded a practice-menu subtree; it needed the level-select behavior (level list, preview, stats, speed slider) without the leaderboard.
 
-- **Decided the practice menu is a full-rect sibling of `MainMenu` inside `main_screen.tscn`**, driven by a new `practice_menu.gd` (adapted from `level_select.gd`, minus leaderboard and START/BACK buttons). The standalone `src/ui/menus/practice_menu.tscn` is the same subtree with the script attached.
+- **Decided the practice menu is a full-rect sibling of `MainMenu` inside `main_screen.tscn`**, driven by a new `practice_menu.gd` (adapted from `level_select.gd`, minus leaderboard and START/BACK buttons). The standalone `src/ui/menu/practice_menu.tscn` is the same subtree with the script attached.
 - **JUMP starts the run directly** — no confirmation screen. `player_one_jump` calls `GameSession.start_run(level, 0.75 + slider * 0.25)` then `SceneLoader.go_to("res://main.tscn")`; `ui_cancel` emits `closed` back to the main menu.
 - **Main menu PRACTICE button is now wired** (`practice_requested` signal → `main_screen.gd` shows the practice menu and focuses its first level).
 - **`main.gd` exit path now returns to `main_screen.tscn`** instead of `level_select.tscn`. `level_select.gd/.tscn` have been removed.
@@ -85,9 +85,9 @@ This document captures high-level decisions as the project evolves.
 **Context:** The whole game — menus *and* the live HUD — rendered in `Awesome 9`, a chunky decorative font that reads poorly at small sizes. During gameplay (timer, score, rank band) it was distracting and hurt legibility.
 
 - **Decided the game uses two fonts:** `Awesome 9` stays the global theme font (`project.godot` → `src/ui/themes/default_theme.tres`) for menus, and `PressStart2P-Regular.ttf` becomes the in-game font via a new `src/ui/themes/gameplay_theme.tres`.
-- **Scoped to the live HUD only:** the theme is applied to the `ArcadeRankHud` root node in `arcade_rank_hud.tscn` (plus its children and spawned bonus popups), so only real-time gameplay text uses PressStart2P. Pause, end, game-over, and powerup-card overlays keep `Awesome 9` like the menus.
+- **Scoped to the live HUD only:** the theme is applied to the `ArcadeRankHud` root node in `hud.tscn` (plus its children and spawned bonus popups), so only real-time gameplay text uses PressStart2P. Pause, end, game-over, and powerup-card overlays keep `Awesome 9` like the menus.
 - **PressStart2P was already in `assets/fonts/`** (unused) and was the proposed "big chunky labels" font in the menu-revamp direction ([[design/arcade-mode]]); it keeps the retro identity while reading cleaner than Awesome 9 at HUD sizes.
-- **`TimeLabel` font size dropped 24 → 16** (`arcade_rank_hud.tscn`) since PressStart2P renders larger at the same size.
+- **`TimeLabel` font size dropped 24 → 16** (`hud.tscn`) since PressStart2P renders larger at the same size.
 
 ---
 
@@ -96,16 +96,16 @@ This document captures high-level decisions as the project evolves.
 **Context:** The run timer lived inside the `ArcadeRankHud` scene (`single_time_container.gd`), and `main.gd` reached across scenes to call `track_player()` on it. The `time_container` export was never wired in `main.tscn`, producing a Nil crash — a symptom of the timer being gameplay state stranded in a UI scene.
 
 - **Decided the clock is a dedicated `RunTimer` component** (`src/scripts/components/run_timer.gd`, `class_name RunTimer`) at the **Main root** of `main.tscn`. It owns `total_time`, race gating, player-signal wiring, and session-time flushing to `SignalBus.play_time_elapsed`. It is the single source of truth for run time.
-- **The HUD timer is display-only:** `single_time_container.gd` became `src/ui/components/time_display.gd` (`class_name TimeDisplay`) — a label fed by `RunTimer.time_changed` → `set_time()`. No clock state, no player references, no signals in the UI.
+- **The HUD timer is display-only:** `single_time_container.gd` became `src/ui/widgets/time_display.gd` (`class_name TimeDisplay`) — a label fed by `RunTimer.time_changed` → `set_time()`. No clock state, no player references, no signals in the UI.
 - **Dependency direction is now `main → HUD`:** `main.gd` wires the player to the timer (`run_timer.track_player()`), hands the timer to the HUD (`arcade_rank_hud.run_timer = run_timer`), and the HUD only *reads* `run_timer.total_time` / `race_started` for medal-pace visuals.
 - **Fixed a latent bug:** practice-mode finish submitted main's own `total_time`, which was never set (always `0.0`); it now submits `run_timer.total_time`.
-- **Deleted the stale draft** `src/ui/components/arcade_rank_hud.tscn` (referenced a removed script).
+- **Deleted the stale draft** `src/ui/widgets/hud.tscn` (referenced a removed script).
 
 ---
 
 ## 2026-08-06 — Main menu start-flow animation
 
-**Context:** The revamped main menu (`src/ui/menus/main_menu.tscn`) needed a title-screen moment before the button column, matching the arcade-mode "Pulsing PRESS JUMP TO START" pillar ([[design/arcade-mode]]).
+**Context:** The revamped main menu (`src/ui/menu/main_menu.tscn`) needed a title-screen moment before the button column, matching the arcade-mode "Pulsing PRESS JUMP TO START" pillar ([[design/arcade-mode]]).
 
 - **Decided the title screen shows a blinking "Press JUMP to Start" label** next to a `PlayerMock` (the real player sprite, idle frame) that, on `player_one_jump` input, switches to the jump frame and arcs off-screen along the **real jump physics** (jump gravity to peak, then fall gravity — same constants as `PhysicsParams`), fading out as it leaves the bottom of the screen.
 - **The jump plays the same SFX as the in-game jump** (`swoosh.ogg` on the SFX bus, `-12 dB`), via a local `JumpSFX` `AudioStreamPlayer` — one-shots live in scenes, per the AudioManager convention.
@@ -119,7 +119,7 @@ This document captures high-level decisions as the project evolves.
 
 **Context:** The "+bonus" level-clear popup was a single Label hard-coded inside `ArcadeRankHud`, animated in place. Future secret-area bonuses (backlog item #56) would need the same popup in multiple places simultaneously.
 
-- **Decided the bonus popup is a reusable, one-shot component** (`BonusPopup`, `src/ui/hud/bonus_popup.gd/.tscn`) that spawns above a world position and frees itself — not a single recycled label. Concurrent bonuses stack because each spawn is independent.
+- **Decided the bonus popup is a reusable, one-shot component** (`BonusPopup`, `src/ui/gameplay/bonus_popup.gd/.tscn`) that spawns above a world position and frees itself — not a single recycled label. Concurrent bonuses stack because each spawn is independent.
 - **Tuning lives in one shared place:** `resources/bonus_popup_config.tres` (drift / pop-in / fade-out / lifetime / position-offset), matching the "tunable values live in Resource assets" convention.
 - **Scoring stays with the caller:** `ArcadeDirector` was not touched (only `level_rank_awarded`-independent scoring); the HUD owns the rank→color mapping, and `main.gd` feeds the player's finish position in via `pending_popup_world_position` (relies on `on_level_finished()` emitting synchronously).
 - **The gameplay `CanvasLayer` (main.tscn) is in the `"GameplayHud"` group** so world-side callers can spawn via `BonusPopup.find_hud()` without a hard scene reference. Popups parent to that `CanvasLayer`, not to the HUD container — a container parent would overwrite the popup's position via layout.

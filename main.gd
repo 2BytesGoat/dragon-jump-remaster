@@ -18,7 +18,7 @@ extends Node
 @onready var player_scene = preload("res://src/scenes/player/player.tscn")
 @onready var camera_scene = preload("res://src/scenes/camera_2d.tscn")
 @onready var portal_scene = preload("res://src/scenes/level/tiles/portal.tscn")
-var level_scene_path = "res://src/ui/menus/main_screen.tscn"
+var level_scene_path = "res://src/ui/menu/main_screen.tscn"
 
 var race_finished: bool = false
 var is_game_paused: bool = false
@@ -190,7 +190,7 @@ func _on_resume_button_pressed() -> void:
 	set_game_paused(false)
 
 
-func _on_pause_screen_restart_button_pressed() -> void:
+func _on_restart_button_pressed() -> void:
 	reset_ui()
 	for player: Player in player_container.get_children():
 		player.is_done = false

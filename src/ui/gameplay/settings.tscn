@@ -1,0 +1,124 @@
+[gd_scene format=3 uid="uid://dws2c5qkd8x6q"]
+
+[ext_resource type="Theme" uid="uid://bwn751d5rabh2" path="res://src/ui/themes/practice_theme.tres" id="2_2gi5n"]
+[ext_resource type="PackedScene" uid="uid://bnxudkobrdgtb" path="res://src/ui/widgets/menu_button.tscn" id="3_a1b2c"]
+[ext_resource type="Texture2D" uid="uid://c3uc7io8c0u8u" path="res://assets/ui/containers/2.png" id="3_ku66l"]
+[ext_resource type="Script" uid="uid://cacq8yntdv5sc" path="res://src/ui/gameplay/settings.gd" id="4_a1b2c"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ym5em"]
+texture = ExtResource("3_ku66l")
+expand_margin_left = 100.0
+expand_margin_top = 80.0
+expand_margin_right = 115.0
+expand_margin_bottom = 56.0
+
+[node name="SettingsMenu" type="MarginContainer" unique_id=435797117]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -175.0
+offset_top = -120.0
+offset_right = 175.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("2_2gi5n")
+script = ExtResource("4_a1b2c")
+
+[node name="Panel" type="Panel" parent="." unique_id=1062042454]
+custom_minimum_size = Vector2(350, 240)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxTexture_ym5em")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=949847741]
+layout_mode = 2
+theme_override_constants/margin_right = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=177500750]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1564831644]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "SOUND SETTINGS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer" unique_id=394889007]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=335725911]
+layout_mode = 2
+
+[node name="MasterVolumeRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=1856263853]
+layout_mode = 2
+
+[node name="MasterLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/MasterVolumeRow" unique_id=2026342565]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "MASTER"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MasterSlider" type="HSlider" parent="MarginContainer/VBoxContainer/VBoxContainer/MasterVolumeRow" unique_id=1350385040]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.1
+value = 1.0
+
+[node name="MusicVolumeRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=1887029749]
+layout_mode = 2
+
+[node name="MusicLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/MusicVolumeRow" unique_id=1436365862]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "MUSIC"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MusicSlider" type="HSlider" parent="MarginContainer/VBoxContainer/VBoxContainer/MusicVolumeRow" unique_id=1762169226]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.1
+value = 1.0
+
+[node name="SFXVolumeRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=1563633285]
+layout_mode = 2
+
+[node name="SFXLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/SFXVolumeRow" unique_id=34988860]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "SFX"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SFXSlider" type="HSlider" parent="MarginContainer/VBoxContainer/VBoxContainer/SFXVolumeRow" unique_id=1254152921]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.1
+value = 1.0
+
+[node name="CloseButton" parent="MarginContainer/VBoxContainer" unique_id=1508080711 instance=ExtResource("3_a1b2c")]
+custom_minimum_size = Vector2(145, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "CLOSE"
+
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/VBoxContainer/MasterVolumeRow/MasterSlider" to="." method="_on_master_slider_value_changed"]
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/VBoxContainer/MusicVolumeRow/MusicSlider" to="." method="_on_music_slider_value_changed"]
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/VBoxContainer/SFXVolumeRow/SFXSlider" to="." method="_on_sfx_slider_value_changed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/CloseButton" to="." method="_on_close_button_pressed"]

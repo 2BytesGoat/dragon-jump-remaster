@@ -18,7 +18,7 @@ const GAME_SCENE_PATH := "res://main.tscn"
 @onready var level_progress_medal = %LevelProgressMedalLabel
 @onready var level_attempts_label = %LevelAttemptsLabel
 
-@onready var level_button_scene = preload("res://src/ui/components/level_button.tscn")
+@onready var level_button_scene = preload("res://src/ui/widgets/level_button.tscn")
 
 var selected_level_name = ""
 

@@ -20,7 +20,7 @@ Legend: `[x]` shipped · `[ ]` pending · `[~]` partial / known issue.
 
 | Status | Item | Notes |
 |---|---|---|
-| [x] | Score count-up roll | `arcade_rank_hud.gd` `_roll_score` (0.6s ease-out). **Known issue:** never plays on clear — reset kills the tween (see P0-1). |
+| [x] | Score count-up roll | `hud.gd` `_roll_score` (0.6s ease-out). **Known issue:** never plays on clear — reset kills the tween (see P0-1). |
 | [x] | Floating "+N" popup | Drifts up from rank card. **Known issue:** overlaps the rank card; merge into it (P3-1). |
 | [x] | Screen flash on clear | Rank-colored full-screen tint. **Known issue:** same reset-kill problem (P0-1). |
 | [x] | Medal drain bar + heartbeat pulse | Drains across the band; pulses below 50% fill, faster as it empties. **Known issue:** no band threshold markers on the bar (P1-2). |
@@ -75,6 +75,6 @@ Current top-center stack is three disconnected fragments with inverted hierarchy
 
 ## Open questions
 
-- **SFX sourcing:** only 2 SFX exist (`SoundBonus.wav`, `SoundSlide.wav`). Real clear/gold/death sounds need a source decision (freesound / opengameart, see `assets/sfx/sources.txt`). SFX calls remain commented out in `arcade_rank_hud.gd` until then (decision 2026-08-04: keep muted).
+- **SFX sourcing:** only 2 SFX exist (`SoundBonus.wav`, `SoundSlide.wav`). Real clear/gold/death sounds need a source decision (freesound / opengameart, see `assets/sfx/sources.txt`). SFX calls remain commented out in `hud.gd` until then (decision 2026-08-04: keep muted).
 - **Flash intensity:** full-screen tint vs. edge vignette — tune after playtest.
 - **Clear pause length:** P0-1 uses a fixed 1.3s. Tune after playtest; the alternative is awaiting the rank-card tween (~1.6s).

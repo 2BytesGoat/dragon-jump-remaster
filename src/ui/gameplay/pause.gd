@@ -1,9 +1,8 @@
 extends MarginContainer
 
-
-@onready var resume_button: Button = $Panel/VBoxContainer/ResumeButton
-@onready var settings_button: Button = $Panel/VBoxContainer/SettingsButton
-@onready var pause_panel: Panel = $Panel
+@onready var pause_panel: MarginContainer = %PauseMenu
+@onready var resume_button: Button = %ResumeButton 
+@onready var settings_button: Button = %SettingsButton
 @onready var settings_menu: MarginContainer = $SettingsMenu
 
 
@@ -45,3 +44,7 @@ func close_settings_if_open() -> bool:
 		_on_settings_menu_closed()
 		return true
 	return false
+
+
+func _on_settings_menu_close_me() -> void:
+	close_settings_if_open()

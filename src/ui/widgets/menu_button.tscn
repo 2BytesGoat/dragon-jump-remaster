@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bnxudkobrdgtb"]
 
-[ext_resource type="Script" uid="uid://yn68lcq8oefy" path="res://src/ui/components/menu_button.gd" id="2_3838x"]
+[ext_resource type="Script" uid="uid://yn68lcq8oefy" path="res://src/ui/widgets/menu_button.gd" id="2_3838x"]
 
 [node name="MenuButton" type="Button" unique_id=2468351]
 offset_right = 40.0

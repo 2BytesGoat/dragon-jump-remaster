@@ -4,7 +4,7 @@ extends Node
 ## Loads the main menu scene, waits a frame, and verifies the root node is the
 ## expected MainMenu container with a visible PlayButton.
 
-const MAIN_MENU_SCENE := preload("res://src/ui/menus/main_menu.tscn")
+const MAIN_MENU_SCENE := preload("res://src/ui/menu/main_menu.tscn")
 
 
 func run() -> bool:

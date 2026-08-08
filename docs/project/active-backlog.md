@@ -26,7 +26,7 @@ This backlog is ordered by priority. The rule is: **ship the reproducible arcade
 |---|------|-------|----------|
 | 52 | Fix arcade exit bug — mode-aware routing | `main.gd:183` `_on_exit_button_pressed()` hardcoded to level_select; arcade should go to `main_menu.tscn`, practice to `level_select.tscn` | High |
 | 53 | Fix arcade "stuck at end" — no end screen shown | `main.gd:138` `_show_arcade_game_over()` is a no-op TODO; `main.gd:206` silent return on last level | High |
-| 54 | Wire arcade game-over to reuse existing end_screen | Reuse `end_screen.tscn` with arcade-appropriate text (score, Try Again / Exit); no new scene, no leaderboard | High |
+| 54 | Wire arcade game-over to reuse existing end_screen | Reuse `end.tscn` with arcade-appropriate text (score, Try Again / Exit); no new scene, no leaderboard | High |
 | 67 | Verify CI web export produces a playable HTML5 build | `.github/workflows/build-and-publish.yml` already pushes to itch via butler; verify the web artifact boots and plays in a browser (boot, arcade mode, play, die, retry, exit) | High |
 | 68 | Research: can Emulation Station on the modded Switch run an HTML5 web build at all? | CFW (SX OS / Atmosphere / RetroArch), browser core / standalone HTML5 loader options. Output: a yes/no + the specific launcher mechanism. Research only — ~1.5h. | High |
 

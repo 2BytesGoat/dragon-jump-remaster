@@ -206,7 +206,7 @@ func _on_quit_button_pressed() -> void:
 
 
 func _exit_to_menu() -> void:
-	SceneLoader.go_to("res://src/ui/menus/main_menu.tscn")
+	SceneLoader.go_to("res://src/ui/menu/main_menu.tscn")
 
 
 func _start_hint_blink() -> void:

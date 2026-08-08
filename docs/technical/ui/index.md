@@ -65,7 +65,7 @@ System relationships and dependencies: This system integrates with player system
 - **Signals**: `closed` — emitted on `ui_cancel` so the host can return to the main menu
 - **Integration points**: `CampaignLevelLibrary` (level list), `SaveManager` (per-level stats), `GameSession` (run start), `SceneLoader` (navigation), `TelemetrySystem` (menu telemetry)
 
-### `credits_screen.gd` / `credits_screen.tscn`
+### `credits.gd` / `credits.tscn`
 - **Purpose**: Full-screen overlay with a Star Wars-style rolling text crawl. Closes on any key / joypad button / mouse click, or automatically once the crawl has fully scrolled past the top of the screen (after a short `END_HOLD_DURATION` hold).
 - **Main methods**:
   - `reset_crawl()`: Restarts the crawl from below the screen
@@ -80,11 +80,11 @@ System relationships and dependencies: This system integrates with player system
   - `_on_title_sequence_finished()`: Starts the menu music via `AudioManager.play_music(GROOVY_BOOTY, MUSIC_FADE_IN_DURATION, MUSIC_VOLUME_DB)` (idempotent — no-op while already playing); triggers once the mock has left the screen, with a 1.5 s ease-in fade. `MUSIC_VOLUME_DB` is `-15.0`, matching the in-game track's `volume_db` (`main.tscn`)
   - `_on_practice_requested()`: Fades the main menu out, then fades the practice menu in and focuses its first level
   - `_on_practice_closed()`: Fades the practice menu out, then fades the main menu back in and restores focus to the practice button
-  - `_on_credits_requested()` / `_on_credits_closed()`: Fade the credits overlay in/out (see `credits_screen.gd`); closing fades the main menu back in
+  - `_on_credits_requested()` / `_on_credits_closed()`: Fade the credits overlay in/out (see `credits.gd`); closing fades the main menu back in
   - `_fade_out(screen, then)` / `_fade_in(screen, focus)`: Shared transition helpers. `_fade_out` tweens `modulate:a` to 0 (`SCREEN_FADE_IN_DURATION`, SINE/EASE_IN), hides the screen, resets its alpha, then calls `then`. `_fade_in` resets alpha to 0, shows the screen, tweens it to 1 (SINE/EASE_OUT), then calls `focus`. Every screen switch runs through these, so all menu transitions fade. A `_transitioning` guard ignores re-entrant requests while a switch is in flight
-- **Integration points**: `main_menu.gd` (signals incl. `title_sequence_finished`), `practice_menu.gd` (signals), `credits_screen.gd` (signals), `AudioManager` (menu music — `res://assets/music/Groovy booty.ogg`)
+- **Integration points**: `main_menu.gd` (signals incl. `title_sequence_finished`), `practice_menu.gd` (signals), `credits.gd` (signals), `AudioManager` (menu music — `res://assets/music/Groovy booty.ogg`)
 
-### `end_screen.gd`
+### `end.gd`
 - **Purpose**: Displays game statistics when a run is completed
 - **Key properties**:
   - None specific to the component
@@ -95,8 +95,8 @@ System relationships and dependencies: This system integrates with player system
   - Connected to game completion events
 - **RAG metadata**: Visual design patterns include simple panel layout with labeled statistics
 
-### `run_timer.gd` / `time_display.gd` / `arcade_rank_hud.tscn`
-- **Purpose**: The run clock (`RunTimer`, `src/scripts/components/run_timer.gd`) lives at the main scene root and is the single source of truth for run time. `TimeDisplay` (`src/ui/components/time_display.gd`) is the display-only timer label inside the HUD (`TimeContainer`), fed by `RunTimer.time_changed`.
+### `run_timer.gd` / `time_display.gd` / `hud.tscn`
+- **Purpose**: The run clock (`RunTimer`, `src/scripts/components/run_timer.gd`) lives at the main scene root and is the single source of truth for run time. `TimeDisplay` (`src/ui/widgets/time_display.gd`) is the display-only timer label inside the HUD (`TimeContainer`), fed by `RunTimer.time_changed`.
 - Documented in [[technical/ui/arcade-hud]]. See that doc for the player-signal flow and flush points.
 
 ### `bonus_popup.gd` / `bonus_popup.tscn` / `bonus_popup_config.tres`
@@ -128,7 +128,7 @@ Progress-bar mode was cut for V1.0 (see [[technical/architecture]]). No such fil
   - Includes responsive UI elements
 - **RAG metadata**: Visual design patterns include layered containers, responsive layouts
 
-### `end_screen.tscn`
+### `end.tscn`
 - **Scene hierarchy and organization**: Simple Panel with labeled statistics (time, resets, crowns dropped)
 - **Key connections between elements**:
   - Displays data passed from game logic
@@ -141,8 +141,8 @@ Progress-bar mode was cut for V1.0 (see [[technical/architecture]]). No such fil
 ### `progress_bar.tscn` *(removed)*
 No such file exists in the repo.
 
-### `arcade_rank_hud.tscn`
-- **Purpose**: `arcade_rank_hud.tscn` (in `src/ui/hud/`) is the live gameplay HUD (lives, timer label, rank bar, score). Its nested `TimeContainer` runs `time_display.gd` (display-only); the clock itself is `RunTimer` at the main root — see the Script Components section above.
+### `hud.tscn`
+- **Purpose**: `hud.tscn` (in `src/ui/gameplay/`) is the live gameplay HUD (lives, timer label, rank bar, score). Its nested `TimeContainer` runs `time_display.gd` (display-only); the clock itself is `RunTimer` at the main root — see the Script Components section above.
 
 ## System Integration
 - How the system interacts with other components: UI components connect to various game systems through signals and data passing, providing visual feedback for player actions and game events

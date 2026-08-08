@@ -1,9 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://b6arc4d3d0v01"]
+[gd_scene load_steps=3 format=3 uid="uid://b6arc4d3d0v01"]
 
-[ext_resource type="PackedScene" uid="uid://bnxudkobrdgtb" path="res://src/ui/components/menu_button.tscn" id="2_okcpe"]
-[ext_resource type="Script" uid="uid://j5tjx5p6hq1i" path="res://src/ui/screens/arcade_game_over_screen.gd" id="3_ogos"]
+[ext_resource type="Theme" uid="uid://bwn751d5rabh2" path="res://src/ui/themes/practice_theme.tres" id="1_theme"]
+[ext_resource type="PackedScene" uid="uid://bnxudkobrdgtb" path="res://src/ui/widgets/menu_button.tscn" id="2_okcpe"]
+[ext_resource type="Script" uid="uid://j5tjx5p6hq1i" path="res://src/ui/gameplay/game_over.gd" id="3_ogos"]
 
 [node name="ArcadeGameOverScreen" type="MarginContainer"]
+theme = ExtResource("1_theme")
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5

@@ -63,14 +63,14 @@ The web build is the itch build and doubles as the arcade build. Most exposed ta
 
 - [ ] `src/scripts/singletons/runtime_secrets.gd.template`: add `var BUILD_ID := "DEV"` field
 - [ ] `.github/workflows/build-and-publish.yml`: in "Inject runtime secrets" step (lines 72-80), add `const BUILD_ID = "${{ steps.meta.outputs.tag }}"` to the generated `runtime_secrets.gd`
-- [ ] Create `src/ui/menus/attribution_splash.tscn` + `.gd`: full-screen ColorRect + Label "Dragon Jump Remaster — play at 2bytesgoat.itch.io/dragon-jump. Playing elsewhere? It's a stolen copy." + smaller "Build ${BUILD_ID}" label, auto-fade ~1.5s, transition to main menu
+- [ ] Create `src/ui/menu/attribution_splash.tscn` + `.gd`: full-screen ColorRect + Label "Dragon Jump Remaster — play at 2bytesgoat.itch.io/dragon-jump. Playing elsewhere? It's a stolen copy." + smaller "Build ${BUILD_ID}" label, auto-fade ~1.5s, transition to main menu
 - [ ] `main.gd`: route boot through attribution splash → main menu. Skip on arcade builds via build flag (e.g. `RuntimeSecrets.BUILD_ID == "ARCADE"` or separate `IS_ARCADE` constant)
 - [ ] Optional: persist `user://attribution_shown_<build_id>` flag so splash shows once per build, not every launch
 
 ## Phase 4 — Origin-lock for web build (~30 min)
 
-- [ ] Create `src/scripts/singletons/origin_lock.gd` (or function in `main.gd`): if `OS.has_feature("web")`, read `JavaScriptBridge.eval("window.location.hostname", true)`, check against `["itch.io", "html-classic.itch.zone", "html.itch.zone"]`, mismatch → `change_scene_to_file("res://src/ui/menus/piracy_screen.tscn")`. Desktop builds skip via `OS.has_feature` check.
-- [ ] Create `src/ui/menus/piracy_screen.tscn` + `.gd`: full-screen "This is a pirated copy. Play the official version at 2bytesgoat.itch.io/dragon-jump." with no way to proceed.
+- [ ] Create `src/scripts/singletons/origin_lock.gd` (or function in `main.gd`): if `OS.has_feature("web")`, read `JavaScriptBridge.eval("window.location.hostname", true)`, check against `["itch.io", "html-classic.itch.zone", "html.itch.zone"]`, mismatch → `change_scene_to_file("res://src/ui/menu/piracy_screen.tscn")`. Desktop builds skip via `OS.has_feature` check.
+- [ ] Create `src/ui/menu/piracy_screen.tscn` + `.gd`: full-screen "This is a pirated copy. Play the official version at 2bytesgoat.itch.io/dragon-jump." with no way to proceed.
 - [ ] Wire origin_lock into boot sequence (after attribution splash, before main menu)
 - [ ] Verify arcade machine (loads from itch.io) passes the origin-lock — must not break the arcade build
 

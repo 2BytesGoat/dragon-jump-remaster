@@ -9,7 +9,7 @@ extends Label
 ## world positions map to screen coordinates via get_canvas_transform(). The
 ## CanvasLayer itself is in the "GameplayHud" group (see main.tscn).
 
-const BONUS_POPUP_SCENE := preload("res://src/ui/hud/bonus_popup.tscn")
+const BONUS_POPUP_SCENE := preload("res://src/ui/gameplay/bonus_popup.tscn")
 const CONFIG := preload("res://resources/bonus_popup_config.tres")
 
 const HUD_GROUP := "GameplayHud"
