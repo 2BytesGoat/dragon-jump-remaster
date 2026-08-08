@@ -63,6 +63,18 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("ui_cancel"):
 		get_viewport().set_input_as_handled()
 		closed.emit()
+	elif event.is_action_pressed("ui_left"):
+		get_viewport().set_input_as_handled()
+		_step_speed(-1)
+	elif event.is_action_pressed("ui_right"):
+		get_viewport().set_input_as_handled()
+		_step_speed(1)
+
+
+func _step_speed(direction: int) -> void:
+	var step = speed_slider.step
+	var new_value := clampf(speed_slider.value + direction * step, speed_slider.min_value, speed_slider.max_value)
+	speed_slider.value = new_value
 
 
 func focus_first_level() -> void:

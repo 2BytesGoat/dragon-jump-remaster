@@ -61,12 +61,16 @@ func _focus_play_button() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if GameSession.menu_started:
+	if not GameSession.menu_started:
+		if event.is_action_pressed("player_one_jump"):
+			get_viewport().set_input_as_handled()
+			GameSession.start_menu()
+			_start_jump_sequence()
 		return
-	if event.is_action_pressed("player_one_jump"):
-		get_viewport().set_input_as_handled()
-		GameSession.start_menu()
-		_start_jump_sequence()
+	if selection_container.visible and get_viewport().gui_get_focus_owner() == null:
+		if event.is_action_pressed("ui_up") or event.is_action_pressed("ui_down"):
+			get_viewport().set_input_as_handled()
+			play_button.grab_focus()
 
 
 func _start_blink() -> void:
@@ -156,6 +160,10 @@ func _on_credits_button_pressed() -> void:
 
 func _on_practice_button_pressed() -> void:
 	practice_requested.emit()
+
+
+func _on_quit_button_pressed() -> void:
+	get_tree().quit()
 
 
 func focus_credits_button() -> void:

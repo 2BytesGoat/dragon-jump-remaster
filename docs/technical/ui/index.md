@@ -28,7 +28,7 @@ System relationships and dependencies: This system integrates with player system
 - **Layout** (compact arcade style): primary column of PLAY / PRACTICE / CREATE, then a footer row of small buttons: SETTINGS / CREDITS / DISCORD / WEB / QUIT
 - **Main methods**:
   - `_ready()`: Shows the start container, hides the selection container, duplicates the mock's atlas texture, and starts the label blink tween. If `GameSession.menu_started` is already true (the player pressed JUMP earlier this session), it skips the title sequence and shows the selection container directly
-  - `_unhandled_input()`: On `player_one_jump` (space / joypad A), calls `GameSession.start_menu()` (sets `menu_started` and emits the `menu_started_changed` signal) and starts the jump sequence
+  - `_unhandled_input()`: On `player_one_jump` (space / joypad A), calls `GameSession.start_menu()` (sets `menu_started` and emits the `menu_started_changed` signal) and starts the jump sequence. Once the menu is started, if the selection container is visible and no control has focus (e.g. the cursor left a button, which releases focus), pressing `ui_up` / `ui_down` re-grabs focus on the Play button so arrow-key navigation keeps working
   - `_set_player_frame(coords)`: Swaps the mock's atlas region to the given sprite-sheet coordinates (`IDLE_COORDS` / `JUMP_COORDS` / `FALL_COORDS`)
   - `_start_jump_sequence()`: Kills the blink, plays the jump SFX, switches the mock to the jump frame, and tweens it along the real jump arc (jump gravity to peak, then fall gravity) while drifting horizontally at the player's move speed, until it leaves the screen, fading it out near the bottom
   - `_jump_arc_step(t)`: Integrates the arc analytically; switches the mock to the fall frame once past the peak and moves it horizontally at `PhysicsParams.max_speed`
@@ -36,6 +36,7 @@ System relationships and dependencies: This system integrates with player system
   - `_on_play_button_pressed()`: Starts an arcade run via `ArcadeDirector.start_arcade_run()` and navigates to `res://main.tscn` via `SceneLoader`
   - `_on_credits_button_pressed()`: Emits `credits_requested` so the host (`main_screen.gd`) can show the credits overlay
   - `_on_practice_button_pressed()`: Emits `practice_requested` so the host (`main_screen.gd`) can show the practice menu
+  - `_on_quit_button_pressed()`: Quits the game via `get_tree().quit()`
   - `focus_credits_button()`: Restores keyboard focus to the credits button after the overlay closes
   - `focus_practice_button()`: Restores keyboard focus to the practice button after the practice menu closes
 - **Integration points with other systems**:
@@ -52,11 +53,11 @@ System relationships and dependencies: This system integrates with player system
 - **Key properties**:
   - `level_button_container`: `VBoxContainer` rebuilt at runtime from `CampaignLevelLibrary` (hidden levels skipped, unplayed levels disabled, labels formatted `level_id - Name`, e.g. `1-1 - Your Turn`)
   - `level_node`: the `Level` instance inside the preview `SubViewport`, loaded on selection/hover
-  - `speed_slider`: player speed multiplier (0.75–1.0, mapped `0.75 + value * 0.25`)
+  - `speed_slider`: player speed multiplier (0.75–1.0, mapped `0.75 + value * 0.25`). Not focusable (`focus_mode = 0`) so up/down navigation stays confined to the level list; it is changed with left/right instead
   - `selected_level_name`: the currently selected campaign level id
 - **Main methods**:
   - `_ready()`: Emits `TelemetrySystem.menu_opened("practice")`, rebuilds the level button list, selects and focuses the first level (without starting a run)
-  - `_unhandled_input()`: While visible, `player_one_jump` starts the run (`GameSession.start_run` + `SceneLoader.go_to("res://main.tscn")`) and `ui_cancel` emits `closed`
+  - `_unhandled_input()`: While visible, `player_one_jump` starts the run (`GameSession.start_run` + `SceneLoader.go_to("res://main.tscn")`), `ui_cancel` emits `closed`, and `ui_left` / `ui_right` step the speed slider by its `step` (clamped to its range) via `_step_speed()` — so left/right changes the difficulty from anywhere in the menu, independent of focus
   - `_on_level_button_clicked(level_name)`: Sets `selected_level_name`, updates the display, and starts the run — mouse clicks and keyboard accept both launch the run directly
   - `_on_level_button_hovered(level_name)`: Sets `selected_level_name` and updates the preview and stats on hover or focus (via `_update_level_display`). Mouse hover grabs focus, so mouse and controller/keyboard navigation share the same focus-driven path; the focused level is always the run target
   - `_update_level_display(level_name)`: Loads the level preview and updates best time / attempts / progress bar / medal / selected label from `SaveManager`. The progress bar's fill texture is tinted with the unlocked medal color (`tint_progress` from `MedalConfig.medal_colors`), leaving the under/over textures untouched
@@ -134,6 +135,7 @@ Progress-bar mode was cut for V1.0 (see [[technical/architecture]]). No such fil
   - `PlayerMock` is a `TextureRect` on an `AtlasTexture` of `player_v3.png`; the script swaps the atlas region between idle / jump / fall coordinates on jump input
   - `StartContainer`, `SelectionContainer`, `PlayerMock`, `PressKeyLabel`, and `PlayButton` are unique-name nodes referenced by `main_menu.gd`
   - Connects to button press signals for navigation
+  - `QuitButton` connects `pressed` to `_on_quit_button_pressed()`, which quits the game
   - Uses the `SceneLoader` autoload for scene transitions
 - **Visual layout considerations**: 
   - Uses MarginContainer for proper positioning

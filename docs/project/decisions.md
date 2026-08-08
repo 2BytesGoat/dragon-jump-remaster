@@ -4,6 +4,24 @@ This document captures high-level decisions as the project evolves.
 
 ---
 
+## 2026-08-08 — Main menu: up/down re-focuses Play when nothing is focused
+
+**Context:** Moving the cursor over a menu button grabbed focus, but moving it off released focus (`menu_button.gd` `_on_mouse_exited` → `release_focus`). With no focused control, Godot's built-in up/down focus navigation had nothing to act on, so arrow keys stopped working until the cursor re-entered a button.
+
+- **Decided up/down re-grabs focus on Play when nothing is focused.** `main_menu.gd` `_unhandled_input` now, once the menu is started and the selection container is visible, checks `get_viewport().gui_get_focus_owner() == null`; on `ui_up` / `ui_down` it grabs focus on the Play button. When a button already has focus, the button consumes the event and normal navigation is unchanged.
+- **`menu_button.gd` unchanged:** releasing focus on mouse exit is fine now that the fallback restores it.
+
+---
+
+## 2026-08-08 — Practice menu: up/down scrolls levels, left/right changes difficulty
+
+**Context:** The practice menu's speed slider was focusable, so pressing up from the first level button moved focus to the slider (leaving the level list), and left/right only worked while the slider had focus.
+
+- **Decided up/down only scrolls the level list.** The `SpeedSlider` is no longer focusable (`focus_mode = 0`), so up/down navigation stays within the level buttons (focus holds at the first/last button at the ends). Mouse clicking/dragging the slider still works.
+- **Decided left/right changes the difficulty from anywhere in the menu.** `_unhandled_input` handles `ui_left` / `ui_right` and steps `speed_slider.value` by its `step` (clamped to range) via `_step_speed()`, independent of focus. The existing `value_changed` → label path updates the slow/warmup/classic display.
+
+---
+
 ## 2026-08-07 — Practice menu theme: Awesome 9 headers, PressStart2P body, silver slider skins
 
 **Context:** The practice menu used the global menu theme (Awesome 9 only). The revamp needs visual hierarchy — section headers and stat labels in the display font (Awesome 9), everything else (values, level buttons, list items) in the body font (PressStart2P) — plus a skinned slider instead of Godot's default.

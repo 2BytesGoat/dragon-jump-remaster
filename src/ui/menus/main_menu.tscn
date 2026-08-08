@@ -138,3 +138,4 @@ bus = &"SFX"
 [connection signal="pressed" from="VBoxContainer/SelectionContainer/VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/SelectionContainer/VBoxContainer/PracticeButton" to="." method="_on_practice_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/SelectionContainer/VBoxContainer/CreditsButton" to="." method="_on_credits_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/SelectionContainer/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
