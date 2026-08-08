@@ -87,9 +87,10 @@ System relationships and dependencies: This system integrates with player system
 - **Main methods**:
   - `_ready()`: Connects `main_menu.credits_requested` / `main_menu.practice_requested` and `credits_screen.closed` / `practice_menu.closed`; connects `main_menu.title_sequence_finished` (and fires it immediately if already started, covering scene reloads after a run)
   - `_on_title_sequence_finished()`: Starts the menu music via `AudioManager.play_music(GROOVY_BOOTY, MUSIC_FADE_IN_DURATION, MUSIC_VOLUME_DB)` (idempotent — no-op while already playing); triggers once the mock has left the screen, with a 1.5 s ease-in fade. `MUSIC_VOLUME_DB` is `-15.0`, matching the in-game track's `volume_db` (`main.tscn`)
-  - `_on_practice_requested()`: Hides the main menu, shows the practice menu, and focuses its first level
-  - `_on_practice_closed()`: Hides the practice menu, shows the main menu, and restores focus to the practice button
-  - `_on_credits_requested()` / `_on_credits_closed()`: Fade the credits overlay in/out (see `credits_screen.gd`)
+  - `_on_practice_requested()`: Fades the main menu out, then fades the practice menu in and focuses its first level
+  - `_on_practice_closed()`: Fades the practice menu out, then fades the main menu back in and restores focus to the practice button
+  - `_on_credits_requested()` / `_on_credits_closed()`: Fade the credits overlay in/out (see `credits_screen.gd`); closing fades the main menu back in
+  - `_fade_out(screen, then)` / `_fade_in(screen, focus)`: Shared transition helpers. `_fade_out` tweens `modulate:a` to 0 (`SCREEN_FADE_IN_DURATION`, SINE/EASE_IN), hides the screen, resets its alpha, then calls `then`. `_fade_in` resets alpha to 0, shows the screen, tweens it to 1 (SINE/EASE_OUT), then calls `focus`. Every screen switch runs through these, so all menu transitions fade. A `_transitioning` guard ignores re-entrant requests while a switch is in flight
 - **Integration points**: `main_menu.gd` (signals incl. `title_sequence_finished`), `practice_menu.gd` (signals), `credits_screen.gd` (signals), `AudioManager` (menu music — `res://assets/music/Groovy booty.ogg`)
 
 ### `custom_level_store.gd`
