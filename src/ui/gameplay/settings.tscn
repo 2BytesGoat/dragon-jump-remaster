@@ -118,6 +118,7 @@ self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 
 [node name="CloseButton" parent="MarginContainer/VBoxContainer" unique_id=1508080711 instance=ExtResource("3_a1b2c")]
+unique_name_in_owner = true
 layout_mode = 2
 text = "CLOSE"
 

@@ -10,7 +10,7 @@ const DEFAULT_PLAYER_NAME := "UNK"
 ## Social links shown in the main menu footer. Replace with real URLs before launch.
 const GITHUB_URL := "https://github.com/2BytesGoat/PLaiGROUND"
 const DISCORD_URL := "https://discord.gg/FsKQPupcVs"
-const STEAM_URL := "https://store.steampowered.com/app/2471710/Dragon_Jump/"
+const  STEAM_URL := "https://store.steampowered.com/app/2471710/Dragon_Jump/"
 const WEBSITE_URL := "https://your-website.example"
 
 const PHYSICS_PARAMS := preload("res://resources/physics_params.tres")

@@ -18,6 +18,7 @@ script = ExtResource("1_credits")
 
 [node name="Background" type="ColorRect" parent="." unique_id=842228429]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 color = Color(0, 0, 0, 0.88)
 

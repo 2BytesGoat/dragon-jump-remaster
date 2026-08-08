@@ -38,6 +38,7 @@ var _start_y := 0.0
 var _start_x := 0.0
 var _fade_start_y := 0.0
 var _transitioning := false
+var _focusable_controls: Array[Control] = []
 
 
 func _ready() -> void:
@@ -55,11 +56,19 @@ func _ready() -> void:
 func _skip_title_sequence() -> void:
 	start_container.visible = false
 	selection_container.visible = true
-	call_deferred("_focus_play_button")
+	call_deferred("focus_play_button")
 
 
-func _focus_play_button() -> void:
+func focus_play_button() -> void:
 	play_button.grab_focus()
+
+
+func is_settings_open() -> bool:
+	return settings_menu.visible
+
+
+func is_selection_visible() -> bool:
+	return selection_container.visible
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -68,11 +77,6 @@ func _unhandled_input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			GameSession.start_menu()
 			_start_jump_sequence()
-		return
-	if selection_container.visible and get_viewport().gui_get_focus_owner() == null:
-		if event.is_action_pressed("ui_up") or event.is_action_pressed("ui_down"):
-			get_viewport().set_input_as_handled()
-			play_button.grab_focus()
 
 
 func _start_blink() -> void:
@@ -179,13 +183,20 @@ func _on_settings_button_pressed() -> void:
 func _on_settings_menu_close_me() -> void:
 	_set_selection_focusable(true)
 	settings_menu.visible = false
-	settings_button.grab_focus()
+	focus_play_button()
 
 
 func _set_selection_focusable(enabled: bool) -> void:
-	for child in selection_container.find_children("*", "Control", true, false):
-		if child.focus_mode != Control.FOCUS_NONE:
-			child.focus_mode = Control.FOCUS_ALL if enabled else Control.FOCUS_NONE
+	if enabled:
+		for child in _focusable_controls:
+			child.focus_mode = Control.FOCUS_ALL
+		_focusable_controls.clear()
+	else:
+		_focusable_controls.clear()
+		for child in selection_container.find_children("*", "Control", true, false):
+			if child.focus_mode != Control.FOCUS_NONE:
+				_focusable_controls.append(child)
+				child.focus_mode = Control.FOCUS_NONE
 
 
 func _on_github_button_pressed() -> void:

@@ -64,6 +64,15 @@ func _on_credits_closed() -> void:
 		_fade_in(main_menu, main_menu.focus_credits_button))
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	if not main_menu.is_selection_visible() or main_menu.is_settings_open():
+		return
+	if get_viewport().gui_get_focus_owner() == null:
+		if event.is_action_pressed("ui_up") or event.is_action_pressed("ui_down"):
+			get_viewport().set_input_as_handled()
+			main_menu.focus_play_button()
+
+
 func _fade_out(screen: Control, then: Callable) -> void:
 	var tween := create_tween()
 	tween.tween_property(screen, "modulate:a", 0.0, SCREEN_FADE_IN_DURATION).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)

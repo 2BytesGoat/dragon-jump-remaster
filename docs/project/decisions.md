@@ -4,7 +4,20 @@ This document captures high-level decisions as the project evolves.
 
 ---
 
-## 2026-08-08 — Slider focus highlight via grabber_area_highlight, not focus stylebox
+## 2026-08-08 — Settings menu: focus follows the cursor, pointing-hand cursor
+
+**Context:** In the settings menu, keyboard/controller focus and mouse hover were separate paths. Sliders and the CRT checkbox showed no focus ring on hover (only the Close button did, via `MenuButtonBase`), and the cursor stayed the default arrow over interactive items.
+
+- **Decided focus follows the cursor in the settings menu.** `settings.gd` `_setup_hover_focus()` connects `mouse_entered` → `grab_focus()` and `mouse_exited` → `release_focus()` on the three sliders and the CRT checkbox, so the focus ring appears on the hovered item and disappears when the cursor leaves. The Close button already grabs/releases focus on hover via `MenuButtonBase`, so it is left alone.
+- **Decided interactive settings items show a pointing-hand cursor.** All five controls (sliders, checkbox, Close button) set `mouse_default_cursor_shape = CURSOR_POINTING_HAND`.
+- **`main_menu.gd` up/down re-focus fallback is now guarded by `not settings_menu.visible`** so arrow keys can't ring-focus a button behind the overlay when the cursor has left a settings item (focus null).
+- **Settings up/down re-focus fallback:** when the cursor leaves every settings item (focus null), `settings.gd` `_unhandled_input` re-grabs focus on the Master slider on `ui_up` / `ui_down`, so arrow-key navigation keeps working after focus is fully lost.
+- **Main screen up/down re-focus fallback:** the same fallback now lives at the `main_screen.gd` level. When the main menu's selection container is visible, settings is closed, and no control has focus, `ui_up` / `ui_down` re-grab focus on the Play button via `main_menu.focus_play_button()`. `main_menu.gd` exposes `focus_play_button()` / `is_settings_open()` / `is_selection_visible()` for this; its own `_unhandled_input` no longer handles the fallback.
+- **Closing settings focuses Play.** `_on_settings_menu_close_me()` calls `focus_play_button()` after hiding the overlay. Restoring focus to the footer settings button kept a focus owner on the footer, so arrow keys navigated from Quit/Credits instead of Play; releasing focus entirely left the ring off until the first up/down press. Focusing Play directly gives immediate, predictable keyboard/controller state after closing.
+- **`_set_selection_focusable` tracks the original focusable set.** The first implementation restored `FOCUS_ALL` to any control whose `focus_mode != FOCUS_NONE` — but after disabling, every control is `FOCUS_NONE`, so the restore was a no-op and PlayButton stayed non-focusable after closing settings (the up/down fallback's `grab_focus()` warned "This control can't grab focus"). It now records the focusable controls in `_focusable_controls` when disabling and restores `FOCUS_ALL` to exactly those when enabling.
+- **Shared `settings.tscn`** means the pause-menu settings overlay gets the same behavior automatically.
+
+---
 
 **Context:** The settings sliders (Master / Music / SFX) showed no visible focus highlight when navigated with the keyboard/controller. An initial attempt set `HSlider/styles/focus` to a `StyleBoxFlat`, which did nothing — Godot's `Slider` never draws a `focus` stylebox in its `NOTIFICATION_DRAW` (only Buttons do). When a slider is focused or hovered it instead swaps the grabber to `grabber_highlight` and draws `grabber_area_highlight` over the filled track.
 
