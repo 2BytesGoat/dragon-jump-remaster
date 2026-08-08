@@ -6,13 +6,16 @@
 [ext_resource type="PackedScene" uid="uid://bvm718ddfisd7" path="res://src/scenes/level/level.tscn" id="3_xj0kg"]
 [ext_resource type="Script" uid="uid://etwvvclap1my" path="res://src/scenes/level_select_camera_2d.gd" id="4_4sl2a"]
 [ext_resource type="Texture2D" uid="uid://eqrs1o0gl021" path="res://assets/ui/book/1.png" id="4_tocm5"]
+[ext_resource type="Texture2D" uid="uid://baah26rss22x0" path="res://assets/ui/doodles/wizard-doodle.png" id="5_jqvlu"]
 [ext_resource type="Script" uid="uid://ck17rvoje8kjt" path="res://src/ui/menus/practice_menu.gd" id="5_practice"]
+[ext_resource type="Texture2D" uid="uid://drcs3s1pkrlts" path="res://assets/ui/doodles/s-doodle.png" id="6_fw2ti"]
 [ext_resource type="Texture2D" uid="uid://wgeqav5mlpca" path="res://assets/ui/containers/page_container.png" id="6_khj0t"]
 [ext_resource type="Theme" uid="uid://bwn751d5rabh2" path="res://src/ui/themes/practice_theme.tres" id="6_theme"]
 [ext_resource type="Texture2D" uid="uid://oaxj8utued2l" path="res://assets/ui/containers/page_container_2.png" id="8_7xfnp"]
 [ext_resource type="Texture2D" uid="uid://bojohplp4tink" path="res://assets/ui/bars/pbar_bg.png" id="9_xohi3"]
 [ext_resource type="Texture2D" uid="uid://cqimaaa11col4" path="res://assets/ui/bars/pbar_over.png" id="10_pmgpx"]
 [ext_resource type="Texture2D" uid="uid://4np5vpta8wsa" path="res://assets/ui/bars/pbar_fg.png" id="11_i0d8y"]
+[ext_resource type="Texture2D" uid="uid://bax21npspwol2" path="res://assets/ui/doodles/skull-doodle.png" id="15_0rvid"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4sl2a"]
 texture = ExtResource("3_7xfnp")
@@ -78,6 +81,51 @@ theme_override_constants/margin_bottom = 24
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_1v0ao")
 
+[node name="WizzDoodleContainer" type="MarginContainer" parent="MarginContainer" unique_id=33362527]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_constants/margin_left = -67
+theme_override_constants/margin_top = 55
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/WizzDoodleContainer" unique_id=676538128]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+texture = ExtResource("5_jqvlu")
+expand_mode = 1
+
+[node name="SDoodleContainer" type="MarginContainer" parent="MarginContainer" unique_id=1796956585]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+theme_override_constants/margin_right = 26
+theme_override_constants/margin_bottom = 36
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/SDoodleContainer" unique_id=1236628875]
+custom_minimum_size = Vector2(32, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("6_fw2ti")
+expand_mode = 1
+
+[node name="SkullDoodleContainer" type="MarginContainer" parent="MarginContainer" unique_id=741044423]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/margin_left = -435
+theme_override_constants/margin_top = 235
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/SkullDoodleContainer" unique_id=1105204169]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("15_0rvid")
+expand_mode = 1
+
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=208693933]
 layout_mode = 2
 theme_override_constants/separation = 2
@@ -107,7 +155,7 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 3.0
+size_flags_stretch_ratio = 2.5
 max_value = 1.0
 step = 0.5
 value = 1.0
@@ -119,7 +167,7 @@ ticks_position = 3
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/outline_size = 0
-text = "Fast"
+text = "CLASSIC"
 uppercase = true
 script = ExtResource("1_1e5ff")
 
@@ -145,8 +193,8 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 9
-theme_override_constants/margin_right = 1
-theme_override_constants/margin_bottom = 8
+theme_override_constants/margin_right = -2
+theme_override_constants/margin_bottom = 9
 
 [node name="LevelButtons" type="ScrollContainer" parent="MarginContainer/HBoxContainer/LevelSelectContainer/VBoxContainer/MarginContainer2/MarginContainer" unique_id=2037041515]
 unique_name_in_owner = true
@@ -156,7 +204,7 @@ follow_focus = true
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/LevelSelectContainer/VBoxContainer/MarginContainer2/MarginContainer/LevelButtons" unique_id=1225423259]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/margin_left = 1
+theme_override_constants/margin_left = 3
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = -3
 theme_override_constants/margin_bottom = 5
