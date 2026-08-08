@@ -34,6 +34,7 @@ const TMP_PREVIEW_PATH := "res://resources/level_data/_editor_preview.tres"
 
 
 func _ready():
+	AudioManager.stop_music()
 	level_name = GameSession.level_name if GameSession.level_name else level_name
 	player_speed_modifier = GameSession.speed_modifier if GameSession.speed_modifier != 1.0 else player_speed_modifier
 	

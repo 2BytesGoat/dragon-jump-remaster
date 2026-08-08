@@ -28,11 +28,11 @@ System relationships and dependencies: This system integrates with player system
 - **Layout** (compact arcade style): primary column of PLAY / PRACTICE / CREATE, then a footer row of small buttons: SETTINGS / CREDITS / DISCORD / WEB / QUIT
 - **Main methods**:
   - `_ready()`: Shows the start container, hides the selection container, duplicates the mock's atlas texture, and starts the label blink tween. If `GameSession.menu_started` is already true (the player pressed JUMP earlier this session), it skips the title sequence and shows the selection container directly
-  - `_unhandled_input()`: On `player_one_jump` (space / joypad A), sets `GameSession.menu_started = true` and starts the jump sequence
+  - `_unhandled_input()`: On `player_one_jump` (space / joypad A), calls `GameSession.start_menu()` (sets `menu_started` and emits the `menu_started_changed` signal) and starts the jump sequence
   - `_set_player_frame(coords)`: Swaps the mock's atlas region to the given sprite-sheet coordinates (`IDLE_COORDS` / `JUMP_COORDS` / `FALL_COORDS`)
   - `_start_jump_sequence()`: Kills the blink, plays the jump SFX, switches the mock to the jump frame, and tweens it along the real jump arc (jump gravity to peak, then fall gravity) while drifting horizontally at the player's move speed, until it leaves the screen, fading it out near the bottom
   - `_jump_arc_step(t)`: Integrates the arc analytically; switches the mock to the fall frame once past the peak and moves it horizontally at `PhysicsParams.max_speed`
-  - `_on_jump_sequence_finished()`: Hides the start container and fades the selection container in (`FADE_IN_DURATION`), then focuses the Play button (only runs once the mock's bottom edge is `EXIT_MARGIN` px past the bottom of the screen)
+  - `_on_jump_sequence_finished()`: Hides the start container, fades the selection container in (`FADE_IN_DURATION`), then focuses the Play button (only runs once the mock's bottom edge is `EXIT_MARGIN` px past the bottom of the screen). Emits `title_sequence_finished` so the host can start the menu music once the mock has left the screen
   - `_on_play_button_pressed()`: Starts an arcade run via `ArcadeDirector.start_arcade_run()` and navigates to `res://main.tscn` via `SceneLoader`
   - `_on_credits_button_pressed()`: Emits `credits_requested` so the host (`main_screen.gd`) can show the credits overlay
   - `_on_practice_button_pressed()`: Emits `practice_requested` so the host (`main_screen.gd`) can show the practice menu
@@ -83,13 +83,14 @@ System relationships and dependencies: This system integrates with player system
 - **Integration points**: Embedded in `main_screen.tscn` as a full-rect sibling of `MainMenu`; shown/hidden by `main_screen.gd` (fade-in on `credits_requested`, focus restored on `closed`). Its `_unhandled_input` ignores input while hidden so it never swallows the title-screen jump key.
 
 ### `main_screen.gd` / `main_screen.tscn`
-- **Purpose**: Root of the main menu. Hosts `MainMenu`, `PracticeMenu`, and the `CreditsScreen` overlay, toggling between them.
+- **Purpose**: Root of the main menu. Hosts `MainMenu`, `PracticeMenu`, and the `CreditsScreen` overlay, toggling between them. Plays the menu music track once the title sequence has been started.
 - **Main methods**:
-  - `_ready()`: Connects `main_menu.credits_requested` / `main_menu.practice_requested` and `credits_screen.closed` / `practice_menu.closed`
+  - `_ready()`: Connects `main_menu.credits_requested` / `main_menu.practice_requested` and `credits_screen.closed` / `practice_menu.closed`; connects `main_menu.title_sequence_finished` (and fires it immediately if already started, covering scene reloads after a run)
+  - `_on_title_sequence_finished()`: Starts the menu music via `AudioManager.play_music(GROOVY_BOOTY, MUSIC_FADE_IN_DURATION, MUSIC_VOLUME_DB)` (idempotent — no-op while already playing); triggers once the mock has left the screen, with a 1.5 s ease-in fade. `MUSIC_VOLUME_DB` is `-15.0`, matching the in-game track's `volume_db` (`main.tscn`)
   - `_on_practice_requested()`: Hides the main menu, shows the practice menu, and focuses its first level
   - `_on_practice_closed()`: Hides the practice menu, shows the main menu, and restores focus to the practice button
   - `_on_credits_requested()` / `_on_credits_closed()`: Fade the credits overlay in/out (see `credits_screen.gd`)
-- **Integration points**: `main_menu.gd` (signals), `practice_menu.gd` (signals), `credits_screen.gd` (signals)
+- **Integration points**: `main_menu.gd` (signals incl. `title_sequence_finished`), `practice_menu.gd` (signals), `credits_screen.gd` (signals), `AudioManager` (menu music — `res://assets/music/Groovy booty.ogg`)
 
 ### `custom_level_store.gd`
 - **Purpose**: Static helper (not an autoload) that persists player-imported custom levels to `user://custom_levels.json` as `{ id: { "name", "code" } }`.

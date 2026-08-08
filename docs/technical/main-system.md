@@ -45,6 +45,7 @@ The `main.gd` script manages the core gameplay loop by:
 
 #### `_ready()`
 Initializes the game by:
+- Stopping menu music via `AudioManager.stop_music()` (the menu's "Groovy booty" track runs through the persistent `AudioManager`; the game's own `AudioStreamPlayer` takes over from here)
 - Loading level data via the `SceneLoader` autoload; if `GameSession.custom_level_code` is set, loads the level directly from the code string instead of a campaign resource (custom levels, see [[technical/ui/index]] § custom_levels_menu)
 - Setting up the player with appropriate starting position and speed modifier
 - Connecting signal handlers for player events

@@ -14,6 +14,13 @@ var game_mode: GameModes = GameModes.PRACTICE
 var custom_level_code: String = ""
 var menu_started: bool = false
 
+signal menu_started_changed
+
+
+func start_menu() -> void:
+	menu_started = true
+	menu_started_changed.emit()
+
 
 func set_game_mode(mode: GameModes) -> void:
 	game_mode = mode

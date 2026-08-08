@@ -16,6 +16,7 @@ const FALL_COORDS = Vector2(416, 0)
 
 signal credits_requested
 signal practice_requested
+signal title_sequence_finished
 
 @onready var start_container = %StartContainer
 @onready var selection_container = %SelectionContainer
@@ -64,7 +65,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if event.is_action_pressed("player_one_jump"):
 		get_viewport().set_input_as_handled()
-		GameSession.menu_started = true
+		GameSession.start_menu()
 		_start_jump_sequence()
 
 
@@ -131,6 +132,7 @@ func _on_jump_sequence_finished() -> void:
 	start_container.modulate.a = 1.0
 	selection_container.visible = true
 	selection_container.modulate.a = 0.0
+	title_sequence_finished.emit()
 	var tween := create_tween()
 	tween.tween_property(selection_container, "modulate:a", 1.0, FADE_IN_DURATION).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	tween.tween_callback(_on_selection_faded_in)

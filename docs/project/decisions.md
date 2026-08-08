@@ -47,6 +47,7 @@ This document captures high-level decisions as the project evolves.
 
 - **Decided the title sequence plays once per app session.** `GameSession.menu_started` is set on the first `player_one_jump` press; `main_menu.gd` skips the title sequence and shows the selection container directly when it is already true.
 - **The flag lives in `GameSession`** (ephemeral session state) and is reset by `GameSession.clear()`, so a fresh app launch replays the title.
+- **Menu music starts with the title sequence.** `main_menu.gd` emits `title_sequence_finished` once the mock has jumped off-screen; `main_screen.gd` starts "Groovy booty" on that signal (or immediately if the flag is already true when the menu scene loads), with a 1.5 s ease-in fade via `AudioManager.play_music(stream, crossfade, volume_db)`. The track plays at `-15 dB` to match the in-game "Streetlights" player (`main.tscn`). `main.gd` stops the track on game start so it never overlaps in-game music.
 
 ---
 
