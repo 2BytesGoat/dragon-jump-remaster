@@ -96,6 +96,7 @@ func _update_level_display(level_name: String) -> void:
 	level_attempts_label.text = str(level_data.attempts)
 
 	level_progress_bar.value = level_data.progress_percentage
+	level_progress_bar.tint_progress = _medal_config.medal_colors[level_data.progress_milestone]
 	level_progress_medal.text = _medal_config.medal_names[level_data.progress_milestone]
 
 	selected_level_label.text = "%s - %s" % [level_name, campaign_level.display_name.capitalize()]
