@@ -9,7 +9,6 @@
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_x3myx"]
 texture = ExtResource("2_0g18k")
 expand_margin_left = 16.0
-expand_margin_top = 16.0
 expand_margin_right = 16.0
 expand_margin_bottom = 16.0
 
@@ -41,7 +40,7 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_x3myx")
 [node name="MarginContainer" type="MarginContainer" parent="PauseMenu" unique_id=1169856936]
 layout_mode = 2
 theme_override_constants/margin_left = 217
-theme_override_constants/margin_top = 77
+theme_override_constants/margin_top = 94
 theme_override_constants/margin_right = 226
 theme_override_constants/margin_bottom = 45
 
@@ -61,8 +60,7 @@ layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PauseMenu/MarginContainer/VBoxContainer2" unique_id=1477663131]
 layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = -8
+size_flags_vertical = 6
 alignment = 1
 
 [node name="ResumeButton" parent="PauseMenu/MarginContainer/VBoxContainer2/VBoxContainer" unique_id=143245348 instance=ExtResource("3_golrs")]
@@ -88,7 +86,6 @@ text = "SETTINGS"
 [node name="HSeparator2" type="HSeparator" parent="PauseMenu/MarginContainer/VBoxContainer2/VBoxContainer" unique_id=551424076]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
-theme_override_constants/separation = 12
 
 [node name="ExitButton" parent="PauseMenu/MarginContainer/VBoxContainer2/VBoxContainer" unique_id=1642251570 instance=ExtResource("3_golrs")]
 layout_mode = 2
